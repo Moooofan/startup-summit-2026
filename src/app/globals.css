@@ -1,26 +1,168 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ==========================================================================
+   Design tokens — derived from 2026 主視覺方案 C（流動光軌與環形結構）
+   KV 原稿為冷白淺底；此站為深色版，光軌色相保留、明度反轉為發光體。
+   ========================================================================== */
+@theme {
+  /* --- surface ladder --- */
+  --color-bg: #05070f;
+  --color-bg-soft: #080d1c;
+  --color-surface: #0c1224;
+  --color-surface-2: #121a33;
+  --color-surface-3: #1a2444;
+  --color-line: #232e52;
+  --color-line-soft: #18203c;
+
+  /* --- brand（KV 靛藍 #324997 在深底上提亮）--- */
+  --color-brand: #324997;
+  --color-brand-lift: #4c68d4;
+  --color-brand-bright: #6a86ff;
+  --color-brand-glow: #8fa3ff;
+
+  /* --- orbit：KV 光軌取樣 --- */
+  --color-orbit-blue: #84a3cf;
+  --color-orbit-sky: #5eaedc;
+  --color-orbit-violet: #b6b9dc;
+  --color-orbit-lilac: #d7cade;
+  --color-orbit-rose: #d7bbca;
+  --color-coral: #e8a08c;
+  --color-magenta: #b0447a;
+
+  /* --- text --- */
+  --color-ink: #ffffff;
+  --color-ink-2: #c9d3e8;
+  --color-ink-3: #8f9cba;
+  --color-ink-4: #5d6885;
+
+  /* --- type --- */
+  --font-sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+  --font-display: var(--font-montserrat), "Noto Sans TC", sans-serif;
+
+  /* --- radius：KV badge 是圓角矩形，全站沿用柔性圓角 --- */
+  --radius-card: 16px;
+  --radius-pill: 999px;
+
+  /* --- motion --- */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 88px;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--color-brand-bright);
+    color: #fff;
+  }
+  h1, h2, h3, h4 {
+    text-wrap: balance;
+    letter-spacing: 0.01em;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* 玻璃卡片 — 呼應 KV 的半透明環形玻璃體 */
+  .glass {
+    background: linear-gradient(
+      160deg,
+      rgb(255 255 255 / 0.07) 0%,
+      rgb(255 255 255 / 0.02) 40%,
+      rgb(255 255 255 / 0.04) 100%
+    );
+    backdrop-filter: blur(14px);
+    border: 1px solid rgb(255 255 255 / 0.08);
+  }
+  .glass-strong {
+    background: linear-gradient(160deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.03));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgb(255 255 255 / 0.12);
+  }
+
+  /* 漸層文字 — 光軌色帶 */
+  .text-orbit {
+    background: linear-gradient(
+      104deg,
+      var(--color-orbit-sky) 0%,
+      var(--color-brand-glow) 42%,
+      var(--color-orbit-lilac) 78%,
+      var(--color-orbit-rose) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-fade {
+    background: linear-gradient(180deg, #fff 30%, rgb(201 211 232 / 0.55) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* 巨型英文背景標 */
+  .ghost-head {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 0.85;
+    background: linear-gradient(
+      106deg,
+      rgb(106 134 255 / 0.16) -10%,
+      rgb(143 163 255 / 0.42) 46%,
+      rgb(215 202 222 / 0.12) 102%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    user-select: none;
+  }
+
+  /* 光暈 */
+  .glow-brand { box-shadow: 0 0 48px rgb(106 134 255 / 0.22); }
+  .glow-soft  { box-shadow: 0 0 80px rgb(143 163 255 / 0.14); }
+
+  /* 細噪點，避免深色大面積漸層產生色帶 */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+
+  /* 區塊上下的水平細線 */
+  .hairline {
+    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.12), transparent);
+  }
+
+  .shell { width: 100%; margin-inline: auto; max-width: 1240px; padding-inline: 20px; }
+  @media (min-width: 768px) { .shell { padding-inline: 40px; } }
+}
+
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes sheen {
+  0% { transform: translateX(-120%); }
+  100% { transform: translateX(220%); }
 }
