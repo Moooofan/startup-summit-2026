@@ -1,4 +1,5 @@
 import { Hero } from "@/components/home/Hero";
+import { ScrollSnapController } from "@/components/home/ScrollSnapController";
 import { About } from "@/components/home/About";
 import { FounderNote } from "@/components/home/FounderNote";
 import { Speakers } from "@/components/home/Speakers";
@@ -23,6 +24,7 @@ export default function HomePage() {
       />
       <FaqJsonLd />
 
+      <ScrollSnapController />
       <Hero />
       <About />
       <FounderNote />

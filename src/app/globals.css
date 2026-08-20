@@ -52,6 +52,10 @@
     scroll-behavior: smooth;
     scroll-padding-top: 88px;
   }
+  /* 節點吸附改由 JS（ScrollSnapController）獨佔掌控，不再用 CSS scroll-snap：
+     CSS 吸附會與 JS 跳轉互相打架 → 「先卡一下再跳／體感像兩個節點」，也會把「回上一頁」
+     還原的位置吸走。.snap-start / .snap-panel 保留，只當作 JS 查詢節點用的標記
+     （其 scroll-snap-* 在沒有 scroll-snap-type 時無作用）。 */
   body {
     background: var(--color-bg);
     color: var(--color-ink);
@@ -86,12 +90,13 @@
       rgb(255 255 255 / 0.02) 40%,
       rgb(255 255 255 / 0.04) 100%
     );
-    backdrop-filter: blur(14px);
+    /* 捲動每幀成本主因是模糊半徑；14→8 明顯降耗、霜面感幾乎不變 */
+    backdrop-filter: blur(8px);
     border: 1px solid rgb(255 255 255 / 0.08);
   }
   .glass-strong {
     background: linear-gradient(160deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.03));
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(11px);
     border: 1px solid rgb(255 255 255 / 0.12);
   }
 
@@ -152,6 +157,10 @@
   .hairline {
     background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.12), transparent);
   }
+
+  /* 頁面級吸附點：整段講者頁的每一頁都用同一條（頁面）捲動條吸附，
+     搭配 html 的 scroll-snap-type: y proximity。scroll-snap-stop: always → 不會一次滑過多頁。 */
+  .snap-panel { scroll-snap-align: start; scroll-snap-stop: always; }
 
   .shell { width: 100%; margin-inline: auto; max-width: 1240px; padding-inline: 20px; }
   @media (min-width: 768px) { .shell { padding-inline: 40px; } }

@@ -20,7 +20,7 @@ export function MobileCta() {
   return (
     <div
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-bg/90 backdrop-blur-xl transition-transform duration-400 md:hidden",
+        "fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-bg/95 backdrop-blur-md transition-transform duration-400 md:hidden",
         show ? "translate-y-0" : "translate-y-full"
       )}
     >

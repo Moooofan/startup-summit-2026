@@ -1,4 +1,4 @@
-import { MapPin, Users, LayoutGrid, UtensilsCrossed } from "lucide-react";
+import { MapPin, Users, LayoutGrid, UtensilsCrossed, ArrowUpRight } from "lucide-react";
 import { event } from "@/data/event";
 import { venueZones } from "@/data/sponsors";
 import { SectionHead } from "@/components/ui/SectionHead";
@@ -8,9 +8,11 @@ const zoneIcons = [LayoutGrid, UtensilsCrossed, Users];
 
 export function Venue() {
   return (
-    <section id="venue" className="relative scroll-mt-24 py-24 md:py-32">
-      <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
-      <div className="shell">
+    <section
+      id="venue"
+      className="relative flex min-h-[100svh] snap-start items-center pb-16 pt-24 [scroll-margin-top:-88px]"
+    >
+      <div className="shell w-full">
         <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-20">
           <Reveal>
             <SectionHead
@@ -37,6 +39,17 @@ export function Venue() {
                     <span className="text-ink-3">
                       完整地址與交通指引將於報名開放時公布。
                     </span>
+                  )}
+                  {event.venue.mapUrl && (
+                    <a
+                      href={event.venue.mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-2 flex w-fit items-center gap-1.5 text-sm text-orbit-sky underline-offset-4 transition-colors hover:text-brand-glow hover:underline"
+                    >
+                      在 Google 地圖開啟
+                      <ArrowUpRight size={14} className="shrink-0" />
+                    </a>
                   )}
                 </dd>
               </div>

@@ -7,7 +7,7 @@ import { Reveal } from "@/components/ui/Reveal";
 
 export function About() {
   return (
-    <section id="about" className="relative scroll-mt-24 py-24 md:py-32">
+    <section id="about" className="relative scroll-mt-24 snap-start py-24 md:py-32">
       <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
       <div className="shell">
         <Reveal>

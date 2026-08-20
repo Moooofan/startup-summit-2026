@@ -6,12 +6,13 @@ import { Reveal } from "@/components/ui/Reveal";
 
 export function Faq() {
   return (
-    <section id="faq" className="relative scroll-mt-24 py-24 md:py-32">
+    <section id="faq" className="relative snap-start py-20 md:py-24">
       <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
       <div className="shell">
-        <div className="grid gap-12 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-20">
-          <Reveal>
-            <div className="lg:sticky lg:top-32">
+        <div className="lg:grid lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-20">
+          {/* 左：整段釘住、垂直置中，右側 FAQ 捲動時左側不動 */}
+          <div className="lg:sticky lg:top-0 lg:flex lg:h-[100svh] lg:flex-col lg:justify-center lg:self-start lg:py-[88px]">
+            <Reveal>
               <SectionHead eyebrow="FAQ" ghost="FAQ" title="常見問題" />
               <p className="mt-6 text-[15px] leading-[1.9] text-ink-2">
                 找不到答案？歡迎來信{" "}
@@ -23,10 +24,10 @@ export function Faq() {
                 </a>
                 ，我們會盡快回覆。
               </p>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
 
-          <Reveal delay={0.1}>
+          <Reveal delay={0.1} className="mt-12 lg:mt-0">
             <ul className="divide-y divide-white/8 border-y border-white/8">
               {faqs.map((f) => (
                 <li key={f.q}>

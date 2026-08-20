@@ -9,15 +9,20 @@ interface Props {
   lead?: React.ReactNode;
   align?: "left" | "center";
   className?: string;
+  /** 覆寫巨型背景字的定位（例如某些置中裁切的區塊要把 ghost 往下移，避免被切掉）*/
+  ghostClassName?: string;
 }
 
-export function SectionHead({ as: Heading = "h2", eyebrow, ghost, title, lead, align = "left", className }: Props) {
+export function SectionHead({ as: Heading = "h2", eyebrow, ghost, title, lead, align = "left", className, ghostClassName }: Props) {
   return (
     <header className={cn("relative", align === "center" && "text-center", className)}>
       {ghost && (
         <span
           aria-hidden
-          className="ghost-head pointer-events-none absolute -top-10 left-0 hidden text-[clamp(4rem,10vw,8.5rem)] md:block"
+          className={cn(
+            "ghost-head pointer-events-none absolute -top-10 left-0 hidden text-[clamp(4rem,10vw,8.5rem)] md:block",
+            ghostClassName
+          )}
           style={align === "center" ? { left: "50%", transform: "translateX(-50%)" } : undefined}
         >
           {ghost}

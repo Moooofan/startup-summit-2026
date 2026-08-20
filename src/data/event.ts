@@ -26,9 +26,9 @@ export const event = {
   venue: {
     name: "華南金控國際會議中心",
     detail: "2F 國際會議廳 A / B / C（三廳打通）",
-    // TODO: 簡報未載明完整地址與交通資訊，需主辦方提供
+    // TODO: 簡報未載明完整文字地址與交通資訊，需主辦方提供（地圖連結由主辦提供）
     address: "",
-    mapUrl: "",
+    mapUrl: "https://share.google/ZpR8ISQOa1v8tthaV",
   },
 
   capacity: {

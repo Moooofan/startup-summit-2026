@@ -37,25 +37,25 @@ export function Tickets() {
   return (
     <section
       id="tickets"
-      className="grain relative scroll-mt-24 overflow-hidden bg-bg-soft py-24 md:py-32"
+      className="grain relative flex min-h-[100svh] snap-start items-center overflow-hidden bg-bg-soft pb-16 pt-24 [scroll-margin-top:-88px]"
     >
-      <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
       <div
         aria-hidden
         className="pointer-events-none absolute right-[-10%] top-0 h-[40vw] max-h-[540px] w-[40vw] max-w-[540px] rounded-full bg-[radial-gradient(circle,rgb(106_134_255/0.18)_0%,transparent_65%)]"
       />
-      <div className="shell relative">
+      <div className="shell relative w-full">
         <Reveal>
           <SectionHead
             eyebrow="REGISTRATION"
             ghost="TICKETS"
+            ghostClassName="top-0"
             align="center"
             title="報名資訊"
             lead={`${event.dateLabelLong}，${event.timeLabel}。兩日論壇於同一場地舉行。`}
           />
         </Reveal>
 
-        <div className="mx-auto mt-16 grid max-w-3xl gap-6 sm:grid-cols-2">
+        <div className="mx-auto mt-10 grid max-w-3xl gap-6 sm:grid-cols-2">
           {plans.map((p, i) => (
             <Reveal key={p.key} delay={0.08 + i * 0.08}>
               <div
@@ -97,7 +97,7 @@ export function Tickets() {
         </div>
 
         <Reveal delay={0.22}>
-          <div className="mx-auto mt-10 max-w-3xl">
+          <div className="mx-auto mt-8 max-w-3xl">
             <ul className="grid gap-3 sm:grid-cols-2">
               {included.map((item) => (
                 <li key={item} className="flex items-center gap-2.5 text-sm text-ink-2">
@@ -107,7 +107,7 @@ export function Tickets() {
               ))}
             </ul>
 
-            <div className="mt-10 text-center">
+            <div className="mt-8 text-center">
               <Cta href={REGISTER_URL} size="lg">
                 {REGISTER_READY ? "前往報名" : "報名即將開放"}
               </Cta>
@@ -128,7 +128,7 @@ export function Tickets() {
               )}
             </div>
 
-            <p className="mt-8 text-center text-[13px] text-ink-4">
+            <p className="mt-6 text-center text-[13px] text-ink-4">
               {forums.map((f) => `${f.dateLabel.replace(/ /g, "")} ${f.name}`).join("　|　")}
             </p>
           </div>

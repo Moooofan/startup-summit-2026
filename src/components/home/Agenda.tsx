@@ -21,30 +21,44 @@ const formatLabel: Record<string, string> = {
 
 export function Agenda() {
   return (
-    <section id="agenda" className="relative scroll-mt-24 py-24 md:py-32">
+    <section id="agenda" className="relative scroll-mt-24">
       <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
-      <div className="shell">
-        <Reveal>
-          <SectionHead
-            eyebrow="PROGRAM"
-            ghost="AGENDA"
-            title="兩天，十二條主題軌"
-            lead="10/14 從創業實戰走到技術分軌，10/15 從機構投資人的資本配置談到 AI 與生醫的投資判準。"
-          />
-        </Reveal>
 
-        <Reveal delay={0.08}>
-          <p className="mt-8 inline-flex items-start gap-2.5 rounded-card border border-white/8 bg-white/[0.03] px-5 py-4 text-[13px] leading-relaxed text-ink-3">
-            <Info size={15} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
-            目前公布的是主題軌與講者歸屬，逐時段完整議程表將於活動前公布。議程時間將依現場流程與講者安排保留調整彈性。
-          </p>
-        </Reveal>
+      {forums.map((f, fi) => {
+        const dayTracks = tracksByDay(f.key);
+        return (
+          // 每一天各自是一個節點。Day 1（含標題、內容多）→ 長節點順滑捲動；
+          // Day 2（內容少）→ 置中節點，落點內容在畫面中間、一滑跳下一個。
+          <div
+            key={f.key}
+            className={
+              fi === 0
+                ? "snap-start pt-14 pb-20"
+                : "flex min-h-[100svh] snap-start items-center pb-16 pt-24 [scroll-margin-top:-88px]"
+            }
+          >
+            <div className="shell w-full">
+              {fi === 0 && (
+                <>
+                  <Reveal>
+                    <SectionHead
+                      eyebrow="PROGRAM"
+                      ghost="AGENDA"
+                      title="兩天，十二條主題軌"
+                      lead="10/14 從創業實戰走到技術分軌，10/15 從機構投資人的資本配置談到 AI 與生醫的投資判準。"
+                    />
+                  </Reveal>
 
-        <div className="mt-14 space-y-16">
-          {forums.map((f) => {
-            const dayTracks = tracksByDay(f.key);
-            return (
-              <div key={f.key}>
+                  <Reveal delay={0.08}>
+                    <p className="mt-8 inline-flex items-start gap-2.5 rounded-card border border-white/8 bg-white/[0.03] px-5 py-4 text-[13px] leading-relaxed text-ink-3">
+                      <Info size={15} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
+                      目前公布的是主題軌與講者歸屬，逐時段完整議程表將於活動前公布。議程時間將依現場流程與講者安排保留調整彈性。
+                    </p>
+                  </Reveal>
+                </>
+              )}
+
+              <div className={fi === 0 ? "mt-14" : ""}>
                 <Reveal>
                   <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-white/8 pb-5">
                     <span className="font-display text-xs tracking-[0.2em] text-ink-4">
@@ -107,10 +121,10 @@ export function Agenda() {
                   })}
                 </ul>
               </div>
-            );
-          })}
-        </div>
-      </div>
+            </div>
+          </div>
+        );
+      })}
     </section>
   );
 }

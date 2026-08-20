@@ -9,6 +9,7 @@ import { trackMap } from "@/data/tracks";
 import { event, forums } from "@/data/event";
 import { Reveal } from "@/components/ui/Reveal";
 import { Cta } from "@/components/ui/Cta";
+import { BackLink } from "@/components/site/BackLink";
 import { PersonJsonLd } from "@/components/site/JsonLd";
 
 export function generateStaticParams() {
@@ -74,13 +75,13 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
 
         <div className="shell relative">
           <Reveal y={12}>
-            <Link
-              href="/#speakers"
+            <BackLink
+              fallbackHref="/#speakers"
               className="inline-flex items-center gap-2 text-[13px] text-ink-3 transition-colors hover:text-ink"
             >
               <ArrowLeft size={14} />
               回到講者陣容
-            </Link>
+            </BackLink>
           </Reveal>
 
           <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)] lg:gap-16">

@@ -15,52 +15,54 @@ export function FounderNote() {
   return (
     <section
       id="founder"
-      className="grain relative scroll-mt-24 overflow-hidden bg-bg-soft py-24 md:py-32"
+      /* snap-start + snap-always：從上一段（About 黑底）吸過來時一次到位。
+         scroll-margin-top:-88px 抵銷全域 scroll-padding-top，讓深藍底吸到視窗最頂、
+         填滿導覽列後方 → 與上一段無區隔。整段高度 > 一頁 → 屬「大吸附區」，
+         內部（右欄）可平順捲動，不會被中途吸附。 */
+      className="grain relative snap-start snap-always bg-bg-soft [scroll-margin-top:-88px]"
     >
-      <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-[15%] top-1/4 h-[38vw] max-h-[520px] w-[38vw] max-w-[520px] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.16)_0%,transparent_65%)]"
-      />
+      <div aria-hidden className="hairline absolute inset-x-0 top-0 z-10 h-px" />
 
       <div className="shell relative">
-        <div className="grid gap-14 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-20">
-          {/* 人像 */}
-          <Reveal>
-            <figure className="relative mx-auto max-w-[340px] lg:sticky lg:top-32 lg:mx-0 lg:max-w-none">
-              <div
-                aria-hidden
-                className="absolute -inset-3 rounded-[22px] bg-gradient-to-br from-orbit-sky/25 via-transparent to-orbit-rose/25 blur-xl"
-              />
-              <div className="relative overflow-hidden rounded-[18px] border border-white/10">
-                <Image
-                  src={founderProfile.photo}
-                  alt={`${founderProfile.name}｜${founderProfile.title}`}
-                  width={1462}
-                  height={2047}
-                  sizes="(max-width: 1024px) 340px, 380px"
-                  className="h-auto w-full object-cover"
-                />
+        <div className="pt-[104px] lg:grid lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-20 lg:pt-0">
+          {/* 左：整段釘住、垂直置中 —— 到位後圖片與名銜不再移動 */}
+          <div className="mx-auto max-w-[340px] lg:mx-0 lg:sticky lg:top-0 lg:flex lg:h-[100svh] lg:max-w-none lg:flex-col lg:justify-center lg:self-start lg:py-[88px]">
+            <Reveal>
+              <figure className="relative">
                 <div
                   aria-hidden
-                  className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg-soft/90 to-transparent"
+                  className="absolute -inset-3 rounded-[22px] bg-gradient-to-br from-orbit-sky/25 via-transparent to-orbit-rose/25 blur-xl"
                 />
-              </div>
-              <figcaption className="relative -mt-12 px-6 pb-2">
-                <p className="text-lg font-bold text-ink">
-                  {founderProfile.name}
-                  <span className="font-display ml-2 text-sm font-medium text-ink-3">
-                    {founderProfile.nameEn}
-                  </span>
-                </p>
-                <p className="mt-1 text-[13px] text-ink-3">{founderProfile.title}</p>
-                <p className="text-[13px] text-ink-3">{founderProfile.subtitle}</p>
-              </figcaption>
-            </figure>
-          </Reveal>
+                <div className="relative overflow-hidden rounded-[18px] border border-white/10">
+                  <Image
+                    src={founderProfile.photo}
+                    alt={`${founderProfile.name}｜${founderProfile.title}`}
+                    width={1462}
+                    height={2047}
+                    sizes="(max-width: 1024px) 340px, 380px"
+                    className="h-auto w-full object-cover"
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg-soft/90 to-transparent"
+                  />
+                </div>
+                <figcaption className="relative -mt-12 px-6 pb-2">
+                  <p className="text-lg font-bold text-ink">
+                    {founderProfile.name}
+                    <span className="font-display ml-2 text-sm font-medium text-ink-3">
+                      {founderProfile.nameEn}
+                    </span>
+                  </p>
+                  <p className="mt-1 text-[13px] text-ink-3">{founderProfile.title}</p>
+                  <p className="text-[13px] text-ink-3">{founderProfile.subtitle}</p>
+                </figcaption>
+              </figure>
+            </Reveal>
+          </div>
 
-          {/* 內文 */}
-          <div>
+          {/* 右：正常流動的內文 —— 平順上下捲動，不吸附。到底再滾一下就吸去講者頁。 */}
+          <div className="pb-[16vh] pt-12 lg:pb-[18vh] lg:pt-[calc(88px+7vh)]">
             <Reveal delay={0.08}>
               <p className="mb-4 flex items-center gap-3 text-[11px] tracking-[0.24em] text-orbit-sky">
                 <span aria-hidden className="h-px w-8 bg-orbit-sky/50" />
