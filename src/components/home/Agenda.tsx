@@ -31,9 +31,10 @@ export function Agenda() {
           // Day 2（內容少）→ 置中節點，落點內容在畫面中間、一滑跳下一個。
           <div
             key={f.key}
+            id={f.key}
             className={
               fi === 0
-                ? "snap-start pt-14 pb-20"
+                ? "snap-start pb-20 pt-24 md:pt-40 [scroll-margin-top:-88px]"
                 : "flex min-h-[100svh] snap-start items-center pb-16 pt-24 [scroll-margin-top:-88px]"
             }
           >

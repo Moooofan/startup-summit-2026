@@ -6,10 +6,10 @@ const cols = [
   {
     title: "活動",
     links: [
-      { href: "/#about", label: "關於年會" },
+      { href: "/about", label: "關於年會" },
       { href: "/speakers", label: "講者陣容" },
       { href: "/agenda", label: "論壇主題" },
-      { href: "/#venue", label: "活動場地" },
+      { href: "/about#venue", label: "活動場地" },
     ],
   },
   {
@@ -18,7 +18,7 @@ const cols = [
       { href: "/tickets", label: "報名資訊" },
       { href: "/sponsor", label: "贊助方案" },
       { href: "/review", label: "歷屆回顧" },
-      { href: "/#faq", label: "常見問題" },
+      { href: "/about#faq", label: "常見問題" },
     ],
   },
 ];

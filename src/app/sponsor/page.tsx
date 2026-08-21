@@ -315,7 +315,7 @@ export default function SponsorPage() {
                 <Mail size={16} className="mr-1" aria-hidden />
                 來信洽談贊助
               </Cta>
-              <Cta href="/#about" variant="ghost" size="lg">
+              <Cta href="/about" variant="ghost" size="lg">
                 了解年會
               </Cta>
             </div>

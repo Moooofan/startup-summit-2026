@@ -1,0 +1,516 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Check,
+  Mail,
+  Handshake,
+  Users,
+  ArrowUpRight,
+  Info,
+} from "lucide-react";
+import { event, forums } from "@/data/event";
+import { REGISTER_URL, REGISTER_READY, SPONSOR_CONTACT } from "@/lib/config";
+import { Cta } from "@/components/ui/Cta";
+import { cn } from "@/lib/utils";
+
+/* ==========================================================================
+   TicketsGallery — /tickets 的橫向三頁「相框畫廊」（平面版，無 WebGL）
+   靈感：pmndrs image-gallery（相框、點擊/滑動切換、大小＋左右位移），
+   但去掉 3D 前後景深、改純 CSS 平面切換。
+   頁1 標題＋說明 → 頁2 票種相框（早鳥／全天，點擊或滑動切換）→ 頁3 聯絡資訊。
+   邊緣箭頭帶「上一頁／下一頁 + 目的頁名」小字提示；支援鍵盤 ←→ 與觸控滑動。
+   ========================================================================== */
+
+const PAGE_NAMES = ["報名資訊", "票種資訊", "聯絡資訊"] as const;
+
+const included = [
+  "兩日論壇全場次入場",
+  "現場茶敘與交流時段",
+  "品牌攤位區自由參觀",
+  "活動紀念手冊",
+];
+
+const plans = [
+  {
+    key: "early",
+    name: "早鳥票",
+    nameEn: "Early Bird",
+    price: event.tickets.earlyBird,
+    original: event.tickets.full,
+    note: event.tickets.note,
+    featured: true,
+  },
+  {
+    key: "full",
+    name: "全天票",
+    nameEn: "Full Pass",
+    price: event.tickets.full,
+    original: null as number | null,
+    note: "報名開放期間皆可購買",
+    featured: false,
+  },
+];
+
+const FB_GROUP = "https://www.facebook.com/groups/1169347120648777/";
+const channels = [
+  { icon: Mail, label: "一般 / 報名洽詢", value: event.contact.email, href: `mailto:${event.contact.email}`, external: false },
+  { icon: Handshake, label: "贊助洽談", value: event.contact.sponsorEmail, href: SPONSOR_CONTACT, external: false },
+  { icon: Users, label: "社群", value: event.organizer.name, href: FB_GROUP, external: true },
+];
+
+// 三張聯絡卡右上角漸層（各自飽和、都讀得出來）：紫 / 藍紫 / 淺藍
+const cornerBlob = [
+  "radial-gradient(circle, rgb(147 97 226 / 0.55) 0%, rgb(147 97 226 / 0.16) 45%, transparent 70%)",
+  "radial-gradient(circle, rgb(108 122 236 / 0.52) 0%, rgb(108 122 236 / 0.15) 45%, transparent 70%)",
+  "radial-gradient(circle, rgb(84 160 232 / 0.52) 0%, rgb(84 160 232 / 0.15) 45%, transparent 70%)",
+];
+
+/* -------------------------------------------------------------------------- */
+
+export function TicketsGallery() {
+  const [page, setPage] = useState(0); // 0 intro / 1 tickets / 2 contact
+  const [ticket, setTicket] = useState(0); // 0 早鳥 / 1 全天
+
+  const clamp = (n: number) => Math.max(0, Math.min(2, n));
+  const go = (n: number) => setPage(clamp(n));
+
+  // 深連結：/tickets?p=1 直接開到票種頁（也方便截圖驗證）
+  useEffect(() => {
+    const p = Number(new URLSearchParams(window.location.search).get("p"));
+    if (p >= 1 && p <= 2) setPage(p);
+  }, []);
+
+  // 鍵盤 ←→ 切頁
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement | null)?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+      if (e.key === "ArrowRight") setPage((p) => clamp(p + 1));
+      else if (e.key === "ArrowLeft") setPage((p) => clamp(p - 1));
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  // 觸控/滑鼠 水平滑動切頁（滑到票種卡上的手勢由卡片自行處理並 stopPropagation）
+  const start = useRef<{ x: number; y: number } | null>(null);
+  const onPointerDown = (e: React.PointerEvent) => {
+    start.current = { x: e.clientX, y: e.clientY };
+  };
+  const onPointerUp = (e: React.PointerEvent) => {
+    const s = start.current;
+    start.current = null;
+    if (!s) return;
+    const dx = e.clientX - s.x;
+    const dy = e.clientY - s.y;
+    if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy)) return;
+    setPage((p) => clamp(p + (dx < 0 ? 1 : -1)));
+  };
+  const onPointerCancel = () => {
+    start.current = null;
+  };
+
+  // trackpad 水平滑動切頁（只吃 deltaX，垂直捲動留給頁面 → footer）
+  const wheelLock = useRef(false);
+  const onWheel = (e: React.WheelEvent) => {
+    if (Math.abs(e.deltaX) < 30 || Math.abs(e.deltaX) < Math.abs(e.deltaY)) return;
+    if (wheelLock.current) return;
+    wheelLock.current = true;
+    setPage((p) => clamp(p + (e.deltaX > 0 ? 1 : -1)));
+    window.setTimeout(() => (wheelLock.current = false), 700);
+  };
+
+  return (
+    <section
+      id="tickets"
+      className="relative h-[100svh] overflow-hidden"
+      style={{ touchAction: "pan-y" }} // 垂直留給頁面捲動；橫向手勢交給 JS 切頁
+      onPointerDown={onPointerDown}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerCancel}
+      onWheel={onWheel}
+    >
+      {/* 柔光背景 */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-[-8%] top-[8%] h-[42vw] max-h-[560px] w-[42vw] max-w-[560px] rounded-full bg-[radial-gradient(circle,rgb(106_134_255/0.16)_0%,transparent_65%)]"
+      />
+
+      {/* 橫向三頁軌道 */}
+      <div
+        className="flex h-full w-full transition-transform duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+        style={{ transform: `translateX(-${page * 100}%)` }}
+      >
+        <IntroPanel active={page === 0} onNext={() => go(1)} />
+        <TicketsPanel ticket={ticket} setTicket={setTicket} />
+        <ContactPanel />
+      </div>
+
+      {/* 邊緣導覽箭頭（帶目的頁小字） */}
+      {page > 0 && (
+        <NavArrow dir="left" kicker="上一頁" label={PAGE_NAMES[page - 1]} onClick={() => go(page - 1)} />
+      )}
+      {page < 2 && (
+        <NavArrow dir="right" kicker="下一頁" label={PAGE_NAMES[page + 1]} onClick={() => go(page + 1)} />
+      )}
+
+      {/* 底部控制列：頁碼點；手機另夾 ‹ › 箭頭（側邊箭頭在手機隱藏） */}
+      <div className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-3">
+        <button
+          onClick={() => go(page - 1)}
+          disabled={page === 0}
+          aria-label={page > 0 ? `上一頁：${PAGE_NAMES[page - 1]}` : "上一頁"}
+          className="grid h-9 w-9 place-items-center rounded-full border border-line bg-white/70 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
+        >
+          <ChevronLeft size={18} aria-hidden />
+        </button>
+        <div className="flex items-center gap-2.5">
+          {PAGE_NAMES.map((name, i) => (
+            <button
+              key={name}
+              onClick={() => go(i)}
+              aria-label={name}
+              className={cn(
+                "h-2 rounded-full transition-all duration-300",
+                i === page ? "w-7 bg-brand-lift" : "w-2 bg-ink/20 hover:bg-ink/40"
+              )}
+            />
+          ))}
+        </div>
+        <button
+          onClick={() => go(page + 1)}
+          disabled={page === 2}
+          aria-label={page < 2 ? `下一頁：${PAGE_NAMES[page + 1]}` : "下一頁"}
+          className="grid h-9 w-9 place-items-center rounded-full border border-line bg-white/70 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
+        >
+          <ChevronRight size={18} aria-hidden />
+        </button>
+      </div>
+    </section>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+function NavArrow({
+  dir,
+  kicker,
+  label,
+  onClick,
+}: {
+  dir: "left" | "right";
+  kicker: string;
+  label: string;
+  onClick: () => void;
+}) {
+  const Icon = dir === "left" ? ChevronLeft : ChevronRight;
+  return (
+    <button
+      onClick={onClick}
+      aria-label={`${kicker}：${label}`}
+      className={cn(
+        // 手機隱藏側邊箭頭（會壓到卡片）→ 改用底部控制列；sm+ 才顯示
+        "group absolute top-1/2 z-30 hidden -translate-y-1/2 items-center gap-3 sm:flex",
+        dir === "left" ? "left-4 sm:left-6" : "right-4 sm:right-6 flex-row-reverse"
+      )}
+    >
+      <span
+        className={cn(
+          "grid h-12 w-12 place-items-center rounded-full border border-line bg-white/70 text-ink-3 shadow-[0_6px_20px_-8px_rgba(24,34,66,0.3)] backdrop-blur-sm transition-all duration-300",
+          "group-hover:border-brand-lift group-hover:bg-brand-lift group-hover:text-white group-hover:shadow-[0_0_28px_rgb(106_134_255/0.5)]",
+          dir === "left" ? "animate-nudge-l" : "animate-nudge-r"
+        )}
+      >
+        <Icon size={22} aria-hidden />
+      </span>
+      <span
+        className={cn(
+          "hidden select-none sm:block",
+          dir === "left" ? "text-left" : "text-right"
+        )}
+      >
+        <span className="block text-[10px] tracking-[0.2em] text-ink-4/70">{kicker}</span>
+        <span className="block text-[13px] font-medium text-ink-3 transition-colors group-hover:text-brand-lift">
+          {label}
+        </span>
+      </span>
+    </button>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+function PanelShell({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex h-full w-full shrink-0 items-center justify-center overflow-hidden px-5 pb-24 pt-[80px] sm:px-20 sm:pb-16 sm:pt-[88px]">
+      {children}
+    </div>
+  );
+}
+
+function IntroPanel({ active, onNext }: { active: boolean; onNext: () => void }) {
+  return (
+    <PanelShell>
+      <div
+        className={cn(
+          "relative max-w-2xl text-center transition-all duration-700",
+          active ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
+        )}
+      >
+        {/* 大字報 + 金字：大字報置中，金字釘在它的左上角（與其他頁一致），標題貼底 */}
+        <div className="relative inline-block">
+          <span
+            aria-hidden
+            className="ghost-head pointer-events-none block text-[clamp(3.2rem,15vw,9rem)] leading-[0.8]"
+          >
+            TICKETS
+          </span>
+          <span className="absolute left-1 top-1.5 flex items-center gap-2 text-[11px] font-medium tracking-[0.24em] text-gold md:left-2 md:top-2.5">
+            <span aria-hidden className="h-px w-6 bg-gold/60" />
+            REGISTRATION
+          </span>
+        </div>
+        <h1 className="relative -mt-3 text-[clamp(2rem,5vw,3.25rem)] font-bold leading-tight text-ink md:-mt-5">
+          報名資訊
+        </h1>
+        <p className="mx-auto mt-6 max-w-xl text-[15px] leading-[1.9] text-ink-2">
+          {event.dateLabelLong}，{event.timeLabel}。兩日論壇於同一場地舉行。
+        </p>
+
+        {/* 向右瀏覽提示：文字 + 金色能量段向右掃，前端帶箭頭 → 明確暗示右邊還有內容 */}
+        <button
+          onClick={onNext}
+          aria-label="向右瀏覽票種與聯絡資訊"
+          className="group mx-auto mt-11 block w-[min(90vw,680px)]"
+        >
+          <span className="block text-[13px] font-medium tracking-wide text-ink-3 transition-colors group-hover:text-gold">
+            向右瀏覽票種與聯絡資訊
+          </span>
+          <span className="relative mt-3 block h-8 w-full overflow-hidden">
+            {/* 靜態底軌 */}
+            <span
+              aria-hidden
+              className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-gold/15"
+            />
+            {/* 移動能量：漸層拖尾 + 前端大箭頭，一起向右掃 → 明確指向右方 */}
+            <span
+              aria-hidden
+              className="animate-track-right absolute inset-y-0 left-0 flex w-1/2 items-center"
+            >
+              <span className="h-[3px] flex-1 rounded-full bg-gradient-to-r from-transparent to-gold" />
+              <ChevronRight size={30} strokeWidth={3} className="-ml-1 shrink-0 text-gold" />
+            </span>
+          </span>
+        </button>
+      </div>
+    </PanelShell>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+function TicketsPanel({
+  ticket,
+  setTicket,
+}: {
+  ticket: number;
+  setTicket: (n: number) => void;
+}) {
+  // 切票種：手機用底下頁籤、桌機另可點側邊卡；橫向滑動一律留給「切頁」（不在此攔截）
+  return (
+    <PanelShell>
+      <div className="w-full max-w-4xl">
+        {/* 相框切換舞台 */}
+        <div className="relative mx-auto flex h-[58vh] max-h-[560px] min-h-[360px] items-center justify-center sm:min-h-[420px]">
+          {plans.map((p, i) => {
+            const isActive = i === ticket;
+            const side = i < ticket ? -1 : i > ticket ? 1 : 0; // 非作用中往自己那側 peek
+            return (
+              <div
+                key={p.key}
+                onClick={() => !isActive && setTicket(i)}
+                aria-hidden={!isActive}
+                className={cn(
+                  // 手機縮窄 → 側邊卡露出可點；桌機固定寬
+                  "absolute w-[76vw] max-w-[360px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] sm:w-[360px]",
+                  isActive
+                    ? "z-20 scale-100 opacity-100"
+                    : "z-10 scale-[0.82] cursor-pointer opacity-40 hover:opacity-60"
+                )}
+                style={{
+                  transform: `translateX(${side * 58}%) scale(${isActive ? 1 : 0.82})`,
+                }}
+              >
+                <TicketCard plan={p} interactive={isActive} />
+              </div>
+            );
+          })}
+        </div>
+
+        {/* 票種切換頁籤 */}
+        <div className="mt-7 flex items-center justify-center gap-2">
+          {plans.map((p, i) => (
+            <button
+              key={p.key}
+              onClick={() => setTicket(i)}
+              className={cn(
+                "rounded-pill px-4 py-2 text-[13px] font-medium transition-all duration-300",
+                i === ticket
+                  ? "bg-brand-lift text-white shadow-[0_0_20px_rgb(106_134_255/0.4)]"
+                  : "border border-line bg-white/60 text-ink-3 hover:text-ink"
+              )}
+            >
+              {p.name}
+            </button>
+          ))}
+        </div>
+      </div>
+    </PanelShell>
+  );
+}
+
+function TicketCard({
+  plan,
+  interactive,
+}: {
+  plan: (typeof plans)[number];
+  interactive: boolean;
+}) {
+  return (
+    // 相框：平面（無玻璃）— 外框 + 內襯，呼應畫廊相框
+    <div
+      className={cn(
+        "rounded-[20px] border bg-white/85 p-2.5 shadow-[0_28px_70px_-28px_rgba(24,34,66,0.4)] sm:p-3",
+        plan.featured ? "border-brand-lift/45" : "border-line"
+      )}
+    >
+      <div
+        className={cn(
+          "relative overflow-hidden rounded-[13px] border p-5 sm:p-7",
+          plan.featured ? "border-brand-lift/25 bg-brand/[0.03]" : "border-line-soft bg-black/[0.015]"
+        )}
+      >
+        {plan.featured && (
+          <span className="absolute right-4 top-4 rounded-pill bg-brand-lift px-3 py-1 text-[11px] font-medium text-white shadow-[0_0_16px_rgb(106_134_255/0.45)] sm:right-5 sm:top-5">
+            限量
+          </span>
+        )}
+        <p className="text-sm font-medium text-ink">{plan.name}</p>
+        <p className="font-display text-xs tracking-[0.16em] text-ink-4">
+          {plan.nameEn.toUpperCase()}
+        </p>
+
+        <p className="mt-5 flex items-baseline gap-2 sm:mt-6">
+          <span className="font-display text-[2.1rem] font-semibold leading-none text-ink sm:text-[2.6rem]">
+            {event.tickets.currency}
+            {plan.price.toLocaleString()}
+          </span>
+        </p>
+        {plan.original && (
+          <p className="mt-2 text-sm text-ink-4">
+            原價{" "}
+            <span className="line-through">
+              {event.tickets.currency}
+              {plan.original.toLocaleString()}
+            </span>
+          </p>
+        )}
+        <p className="mt-3 text-[13px] leading-relaxed text-ink-3">{plan.note}</p>
+
+        <ul className="mt-4 grid gap-2 border-t border-line-soft pt-4 sm:mt-5 sm:pt-5">
+          {included.map((item) => (
+            <li key={item} className="flex items-center gap-2 text-[13px] text-ink-2">
+              <Check size={14} className="shrink-0 text-brand-lift" aria-hidden />
+              {item}
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-5 sm:mt-6">
+          <Cta
+            href={REGISTER_URL}
+            size="md"
+            className={interactive ? "" : "pointer-events-none"}
+          >
+            {REGISTER_READY ? "前往報名" : "報名即將開放"}
+          </Cta>
+        </div>
+
+        <p className="mt-4 text-[12px] text-ink-4">
+          {forums.map((f) => `${f.dateLabel.replace(/ /g, "")} ${f.name}`).join("　|　")}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+function ContactPanel() {
+  return (
+    <PanelShell>
+      <div className="w-full max-w-3xl">
+        <div className="relative text-center">
+          {/* 大字報 + 金字：金字釘在大字報左上角，標題貼底 */}
+          <div className="relative inline-block">
+            <span
+              aria-hidden
+              className="ghost-head pointer-events-none block text-[clamp(2.8rem,13vw,7rem)] leading-[0.8]"
+            >
+              CONTACT
+            </span>
+            <span className="absolute left-1 top-1.5 flex items-center gap-2 text-[11px] font-medium tracking-[0.24em] text-gold md:left-2 md:top-2">
+              <span aria-hidden className="h-px w-6 bg-gold/60" />
+              CONTACT
+            </span>
+          </div>
+          <h2 className="relative -mt-3 text-[clamp(1.75rem,4.2vw,2.6rem)] font-bold leading-tight text-ink md:-mt-4">
+            聯絡資訊
+          </h2>
+          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-[1.9] text-ink-2">
+            報名、贊助或任何合作洽談，歡迎透過以下方式與我們聯繫。
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4">
+          {channels.map(({ icon: Icon, label, value, href, external }, i) => (
+            <a
+              key={label}
+              href={href}
+              {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              className="group relative block h-full overflow-hidden rounded-[16px] border border-line bg-white/45 p-2 shadow-[0_18px_50px_-24px_rgba(24,34,66,0.35)] transition-colors duration-300 hover:border-brand-lift/45"
+            >
+              <span
+                aria-hidden
+                className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full blur-xl"
+                style={{ background: cornerBlob[i] }}
+              />
+              {/* 相框內襯（比照早鳥票的外框＋內襯，但更透明） */}
+              <div className="relative flex h-full flex-row items-center gap-4 rounded-[10px] border border-line-soft bg-white/25 p-4 sm:flex-col sm:items-start sm:gap-0 sm:p-5">
+                <span className="shrink-0 text-brand-lift">
+                  <Icon size={26} aria-hidden />
+                </span>
+                <span className="min-w-0 sm:mt-5">
+                  <span className="block text-[12px] tracking-[0.14em] text-gold">{label}</span>
+                  <span className="mt-1 flex items-center gap-1.5 text-[14px] font-medium text-ink transition-colors group-hover:text-brand-lift sm:mt-1.5">
+                    {value}
+                    <ArrowUpRight size={14} className="shrink-0 text-ink-4 transition-colors group-hover:text-brand-lift" />
+                  </span>
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <p className="mt-7 flex items-start justify-center gap-2 text-center text-[13px] leading-relaxed text-ink-3 sm:mt-8">
+          <Info size={14} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
+          主辦單位｜{event.organizer.name}（{event.organizer.members}）・
+          {event.organizer.host}　{event.organizer.hostTitle}
+        </p>
+      </div>
+    </PanelShell>
+  );
+}

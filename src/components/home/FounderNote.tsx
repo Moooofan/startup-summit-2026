@@ -26,7 +26,7 @@ export function FounderNote() {
       <div className="shell relative">
         <div className="pt-[104px] lg:grid lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] lg:gap-20 lg:pt-0">
           {/* 左：整段釘住、垂直置中 —— 到位後圖片與名銜不再移動 */}
-          <div className="mx-auto max-w-[340px] lg:mx-0 lg:sticky lg:top-0 lg:flex lg:h-[100svh] lg:max-w-none lg:flex-col lg:justify-center lg:self-start lg:py-[88px]">
+          <div className="mx-auto max-w-[340px] lg:mx-0 lg:sticky lg:top-0 lg:flex lg:h-[100svh] lg:max-w-[340px] lg:flex-col lg:justify-center lg:self-start lg:pb-14 lg:pt-[128px]">
             <Reveal>
               <figure className="relative">
                 <div
@@ -42,12 +42,8 @@ export function FounderNote() {
                     sizes="(max-width: 1024px) 340px, 380px"
                     className="h-auto w-full object-cover"
                   />
-                  <div
-                    aria-hidden
-                    className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-bg-soft/90 to-transparent"
-                  />
                 </div>
-                <figcaption className="relative -mt-12 px-6 pb-2">
+                <figcaption className="mt-5 px-1">
                   <p className="text-lg font-bold text-ink">
                     {founderProfile.name}
                     <span className="font-display ml-2 text-sm font-medium text-ink-3">

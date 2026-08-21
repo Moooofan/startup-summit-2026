@@ -19,7 +19,7 @@ export const event = {
   /** ISO 8601（台北時間）— 給倒數計時與 Event JSON-LD 用 */
   startDate: "2026-10-14T09:00:00+08:00",
   endDate: "2026-10-15T17:00:00+08:00",
-  dateLabel: "10.14 ⟶ 15",
+  dateLabel: "10.14 ⟶ 10.15",
   dateLabelLong: "2026 年 10 月 14 日（三）— 10 月 15 日（四）",
   timeLabel: "09:00 – 17:00",
 

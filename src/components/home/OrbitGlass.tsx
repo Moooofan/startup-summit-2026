@@ -51,22 +51,25 @@ const SPIN_MID = 0.095;
 const SPIN_DOME = 0.15;
 
 // 玻璃材質參數（三群組共用一組值，但各自一份實例 → 各自的 transmission buffer）
+// 參考 pmndrs「inter-epoxy-resin」的環氧樹脂配方（ior 1.5 / roughness≈0 / 高色散 / body 染色），
+// 換成本站藍色調；並刻意「降低透明度」：transmission 調低 + 縮短 attenuationDistance 且上藍色
+// → 厚處吸光染藍，讀起來像有實體的染色玻璃，而非全透明薄殼。
 const MATERIAL_PROPS = {
-  transmission: 0.96,
-  thickness: 0.6,
-  roughness: 0.045,
-  ior: 1.3,
-  chromaticAberration: 0.4,
+  transmission: 0.94, // 提高透明度（保留 resin 質感靠 ior/色散，不靠壓低透明度）
+  thickness: 0.9, // ↑ 0.6（更厚 → 折射更明顯）
+  roughness: 0.08,
+  ior: 1.5, // resin
+  chromaticAberration: 0.85, // ↑ 0.4（樹脂邊緣色散，藍調不過度）
   anisotropicBlur: 0.1,
-  distortion: 0.18,
-  distortionScale: 0.3,
+  distortion: 0.2,
+  distortionScale: 0.28,
   temporalDistortion: 0,
-  samples: 3,
-  resolution: 144,
-  backsideThickness: 0.2,
-  color: "#ffffff",
-  attenuationColor: "#ffffff",
-  attenuationDistance: 12,
+  samples: 3, // 保持效能預算（先前使用者抱怨捲動卡 → 別調高）
+  resolution: 144, // 同上，維持 144
+  backsideThickness: 0.3,
+  color: "#e3e9ff", // 微冷白 body tint
+  attenuationColor: "#4c68d4", // brand-lift 藍 → 厚處淡淡染藍
+  attenuationDistance: 8, // 拉長 → 吸收變弱 → 更通透（僅厚處帶一點藍）
 };
 
 // 種子亂數（mulberry32）→ 排列可重現、好微調
@@ -165,13 +168,13 @@ function buildGroups(): { outer: BufferGeometry; mid: BufferGeometry; dome: Buff
   // 主環 → outer 群組：內外緣都對齊、幾乎共面、近乎不傾斜 → 切齊、不穿出
   for (let i = 0; i < N; i++) {
     if (SKIP.has(i)) continue;
-    const mid = (i / N) * Math.PI * 2 + lerp(-0.1, 0.1);
+    const mid = (i / N) * Math.PI * 2 + lerp(-0.05, 0.05); // 角度抖動收小 → 不擠到鄰塊
     const router = R_OUT + lerp(-0.012, 0.012);
     const rinner = R_IN + lerp(-0.012, 0.012);
     const rt = router - rinner;
     const rmid = (router + rinner) / 2;
     const depth = lerp(0.18, 0.26);
-    const span = lerp(14, 38) * (Math.PI / 180);
+    const span = lerp(12, 28) * (Math.PI / 180); // 弧長縮短（< 36° pitch）→ 外環不再重疊
     const z = lerp(-0.025, 0.025);
     addPiece(outerParts, mid, rmid, rt, span, depth, z, lerp(-0.025, 0.025), lerp(-0.03, 0.03));
   }

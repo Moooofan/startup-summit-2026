@@ -59,7 +59,11 @@ ${editions
 詳見 [歷屆回顧](${site.url}/review)。
 
 ## 主要頁面
-- [首頁](${site.url}/)：活動總覽、講者、主題軌、報名資訊
+- [首頁](${site.url}/)：活動主視覺與入口
+- [關於年會](${site.url}/about)：活動總覽、創辦人的話、會場地點、常見問題
+- [講者陣容](${site.url}/speakers)：${speakers.length} 位講者
+- [論壇主題](${site.url}/agenda)：兩天十二條主題軌
+- [報名資訊](${site.url}/tickets)：票價與權益
 - [贊助方案](${site.url}/sponsor)：五級贊助方案與展位規格
 - [歷屆回顧](${site.url}/review)：第三屆完整議程、媒體報導與合作夥伴
 

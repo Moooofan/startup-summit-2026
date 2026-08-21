@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { event, forums, stats } from "@/data/event";
+import { event, forums } from "@/data/event";
 import { tracksByDay } from "@/data/tracks";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Reveal } from "@/components/ui/Reveal";
 
 export function About() {
   return (
-    <section id="about" className="relative snap-start pb-24 pt-16 md:pb-28 md:pt-20">
+    <section
+      id="about"
+      className="relative snap-start pb-24 pt-24 md:pb-28 md:pt-40 [scroll-margin-top:-88px]"
+    >
       <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
       <div className="shell">
         <Reveal>
@@ -31,25 +34,8 @@ export function About() {
           />
         </Reveal>
 
-        {/* 數據 */}
-        <Reveal delay={0.1}>
-          <dl className="mt-16 grid grid-cols-2 gap-px overflow-hidden rounded-card border border-line-soft bg-line-soft md:grid-cols-4">
-            {stats.map((s) => (
-              <div key={s.label} className="bg-bg-soft px-6 py-8 text-center md:py-10">
-                <dt className="sr-only">{s.label}</dt>
-                <dd>
-                  <span className="font-display text-orbit block text-[clamp(1.9rem,4.5vw,2.75rem)] font-semibold">
-                    {s.value}
-                  </span>
-                  <span className="mt-2 block text-[13px] text-ink-3">{s.label}</span>
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </Reveal>
-
         {/* 兩天論壇 */}
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <div className="mt-14 grid gap-6 md:mt-16 lg:grid-cols-2">
           {forums.map((f, i) => {
             const dayTracks = tracksByDay(f.key);
             return (
@@ -60,7 +46,7 @@ export function About() {
                     className={`pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full blur-3xl transition-opacity duration-500 group-hover:opacity-80 ${
                       f.accent === "sky"
                         ? "bg-orbit-sky/20 opacity-50"
-                        : "bg-orbit-violet/20 opacity-50"
+                        : "bg-[rgb(150_115_225)]/40 opacity-90"
                     }`}
                   />
                   <div className="relative">
@@ -75,7 +61,7 @@ export function About() {
                     </div>
 
                     <h3 className="mt-6 text-2xl font-bold text-ink md:text-[1.75rem]">{f.name}</h3>
-                    <p className="font-display mt-1.5 text-xs tracking-[0.14em] text-ink-4">
+                    <p className="font-display mt-1.5 text-xs font-semibold tracking-[0.14em] text-gold">
                       {f.nameEn.toUpperCase()}
                     </p>
 

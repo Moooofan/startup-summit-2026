@@ -66,7 +66,12 @@ export function Venue() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="glass overflow-hidden rounded-card">
+            <div className="glass relative overflow-hidden rounded-card">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -right-14 -top-14 h-44 w-44 rounded-full bg-orbit-violet/35 blur-3xl"
+              />
+              <div className="relative">
               <div className="border-b border-black/8 px-7 py-5">
                 <h3 className="text-sm font-medium text-ink">會場分區</h3>
               </div>
@@ -75,20 +80,21 @@ export function Venue() {
                   const Icon = zoneIcons[i] ?? LayoutGrid;
                   return (
                     <li key={z.zone} className="flex items-start gap-5 px-7 py-6">
-                      <span className="font-display grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-black/10 bg-black/[0.04] text-xs font-semibold text-orbit-sky">
-                        {z.zone}
-                      </span>
+                      <Icon
+                        size={26}
+                        strokeWidth={1.5}
+                        aria-hidden
+                        className="mt-0.5 shrink-0 text-orbit-sky"
+                      />
                       <div className="min-w-0">
-                        <p className="flex items-center gap-2 text-[15px] font-medium text-ink">
-                          <Icon size={15} className="text-ink-4" aria-hidden />
-                          {z.name}
-                        </p>
+                        <p className="text-[15px] font-medium text-ink">{z.name}</p>
                         <p className="mt-1.5 text-sm leading-relaxed text-ink-3">{z.detail}</p>
                       </div>
                     </li>
                   );
                 })}
               </ul>
+              </div>
             </div>
           </Reveal>
         </div>

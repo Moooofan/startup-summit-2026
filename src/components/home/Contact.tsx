@@ -53,8 +53,8 @@ export function Contact() {
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="glass group flex flex-col rounded-card p-7 transition-colors duration-500 hover:border-black/20"
               >
-                <span className="grid h-11 w-11 place-items-center rounded-lg border border-black/10 bg-black/[0.03] text-brand-lift">
-                  <Icon size={18} aria-hidden />
+                <span className="text-brand-lift">
+                  <Icon size={26} aria-hidden />
                 </span>
                 <p className="mt-5 text-[13px] tracking-[0.14em] text-ink-4">{label}</p>
                 <p className="mt-1.5 flex items-center gap-1.5 text-[15px] font-medium text-ink transition-colors group-hover:text-brand-lift">
@@ -68,7 +68,7 @@ export function Contact() {
 
         <Reveal delay={0.16}>
           <p className="mt-8 text-sm leading-relaxed text-ink-3">
-            主辦單位｜{event.organizer.name}（{event.organizer.members}）・
+            主辦單位｜{event.organizer.name}・
             {event.organizer.host}　{event.organizer.hostTitle}
           </p>
         </Reveal>

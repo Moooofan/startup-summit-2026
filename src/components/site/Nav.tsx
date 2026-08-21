@@ -8,10 +8,9 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { event } from "@/data/event";
 import { useCountdown } from "@/lib/useCountdown";
-import { REGISTER_URL } from "@/lib/config";
 
 const links = [
-  { href: "/#about", label: "關於年會" },
+  { href: "/about", label: "關於年會" },
   { href: "/speakers", label: "講者陣容" },
   { href: "/agenda", label: "論壇主題" },
   { href: "/tickets", label: "報名資訊" },
@@ -104,7 +103,7 @@ export function Nav() {
         <div className="flex items-center gap-4">
           <NavCountdown />
           <Link
-            href={REGISTER_URL}
+            href="/tickets"
             className="hidden rounded-pill bg-brand-lift px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-brand-bright hover:shadow-[0_0_28px_rgb(106_134_255/0.45)] md:inline-flex"
           >
             立即報名
@@ -141,7 +140,7 @@ export function Nav() {
           ))}
           <li className="pt-5">
             <Link
-              href={REGISTER_URL}
+              href="/tickets"
               className="block rounded-pill bg-brand-lift py-3.5 text-center text-[15px] font-medium text-white"
             >
               立即報名

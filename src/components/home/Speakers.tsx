@@ -146,11 +146,20 @@ export function Speakers() {
         <div className="shell relative w-full">
           <Reveal>
             <SectionHead
+              className="mt-16"
               eyebrow="SPEAKERS"
               ghost="LINE-UP"
               title={`${speakerCount} 位講者，兩天分場登台`}
               lead="從剛掛牌的創業家、Edge AI 與半導體團隊，到管理國際基金的機構投資人。點開任何一位，看他們正在解的題目。"
             />
+          </Reveal>
+
+          {/* 向下滑提示（與 ForumNode 同款、淺藍色） */}
+          <Reveal delay={0.15}>
+            <span className="mt-12 inline-flex flex-col items-start gap-2 text-[12px] tracking-[0.24em] text-orbit-sky">
+              向下滑看兩天陣容
+              <ChevronDown size={20} aria-hidden className="animate-bounce motion-reduce:animate-none" />
+            </span>
           </Reveal>
         </div>
       </div>

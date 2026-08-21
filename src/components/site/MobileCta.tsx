@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { event } from "@/data/event";
-import { REGISTER_URL } from "@/lib/config";
 
 /** 手機版底部固定報名列 —— 滑過 Hero 後才出現。 */
 export function MobileCta() {
@@ -30,7 +29,7 @@ export function MobileCta() {
           <p className="text-[11px] text-ink-3">早鳥 {event.tickets.currency}{event.tickets.earlyBird.toLocaleString()}</p>
         </div>
         <Link
-          href={REGISTER_URL}
+          href="/tickets"
           className="rounded-pill bg-brand-lift px-6 py-3 text-sm font-medium text-white"
         >
           立即報名

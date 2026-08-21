@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 type Props = {
   href: string;
   children: React.ReactNode;
-  variant?: "solid" | "ghost";
+  variant?: "solid" | "ghost" | "gradient";
   size?: "sm" | "md" | "lg";
   className?: string;
 };
@@ -22,11 +22,14 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
       "bg-brand-lift text-white hover:bg-brand-bright hover:shadow-[0_0_36px_rgb(106_134_255/0.45)]",
     ghost:
       "glass text-ink hover:border-black/25 hover:bg-black/10",
+    // 漸層底由呼叫端用 className 指定（例：Hero 左藍→紫、右紫→藍）；此處只給共用樣式
+    gradient:
+      "text-white hover:shadow-[0_0_36px_rgb(106_134_255/0.45)]",
   };
 
   return (
     <Link href={href} className={cn(base, sizes[size], variants[variant], className)}>
-      {variant === "solid" && (
+      {variant !== "ghost" && (
         <span
           aria-hidden
           className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-20deg] bg-black/25 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:[animation:sheen_0.9s_ease-out]"

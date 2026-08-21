@@ -13,10 +13,7 @@ export default function AgendaPage() {
   return (
     <>
       <ScrollSnapController />
-      {/* 獨立頁的第一段是頂端對齊的標題，補上固定 Nav 的高度避免被蓋 */}
-      <div className="pt-[72px] md:pt-[88px]">
-        <Agenda />
-      </div>
+      <Agenda />
     </>
   );
 }

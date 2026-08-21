@@ -2,13 +2,21 @@
 
 Next.js 15 App Router + TypeScript + Tailwind v4 + motion。純繁體中文，無 i18n。
 
-## 指令
+## ⚠️ 鐵則（使用者定案，勿違反）
+
+- **部署一律由使用者本人執行**。Claude **不得自行部署**（不觸發 Vercel、不 push 上線）。
+- **Claude 不要自己跑 `npm run dev`、`npm run build` 或 `next start`／起任何 server**。build／執行／部署都由使用者做。
+- Claude 只做：改程式 + 靜態檢查 `npx tsc --noEmit`、`npm run lint`。
+- **需要看畫面（截圖驗證）時，開口請使用者截圖給你**，不要自己 build＋起 server 截圖。
+- 若不慎跑了 build／server，**用完立刻清乾淨**：停 server → `Remove-Item -Recurse -Force .next`。
+
+## 指令（給使用者參考；Claude 只用 tsc/lint）
 
 ```bash
-npm run dev     # 開發（port 3000 常被其他專案占用，用 .claude/launch.json 的 autoPort）
-npm run build   # 正式建置（會預先渲染 34 個講者頁）
-npm run lint
-npx tsc --noEmit
+npm run build   # 正式建置（會預先渲染 34 個講者頁）— 由「使用者」執行
+npm run lint    # Claude 可用
+npx tsc --noEmit # Claude 可用
+# npm run dev / next start ← Claude 不要用
 ```
 
 ## 資料流

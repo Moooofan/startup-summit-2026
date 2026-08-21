@@ -1,39 +1,14 @@
 "use client";
 
 import { useRef } from "react";
+import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
-import { ArrowDown, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { event, forums } from "@/data/event";
 import { speakerCount } from "@/data/speakers";
-import { REGISTER_URL } from "@/lib/config";
-import { useCountdown } from "@/lib/useCountdown";
 import { Cta } from "@/components/ui/Cta";
 import { OrbitRing } from "@/components/home/OrbitRing";
-
-function Countdown() {
-  const t = useCountdown(event.startDate);
-  const cells = [
-    { v: t?.days, l: "天" },
-    { v: t?.hours, l: "時" },
-    { v: t?.minutes, l: "分" },
-    { v: t?.seconds, l: "秒" },
-  ];
-  return (
-    <div className="flex items-center gap-3 sm:gap-4">
-      {cells.map((c, i) => (
-        <div key={c.l} className="flex items-center gap-3 sm:gap-4">
-          <div className="text-center">
-            <div className="font-display min-w-[46px] text-2xl font-semibold tabular-nums text-ink sm:text-3xl">
-              {c.v === undefined ? "––" : String(c.v).padStart(2, "0")}
-            </div>
-            <div className="mt-1 text-[11px] tracking-[0.2em] text-ink-4">{c.l}</div>
-          </div>
-          {i < cells.length - 1 && <span className="pb-5 text-xl text-ink-4">:</span>}
-        </div>
-      ))}
-    </div>
-  );
-}
+import { FlipClock } from "@/components/home/FlipClock";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -106,7 +81,7 @@ export function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-gold" />
             </span>
-            <span className="font-display text-[clamp(0.95rem,2.3vw,1.45rem)] font-medium tracking-[0.3em] text-ink-2">
+            <span className="font-display text-[clamp(0.95rem,2.3vw,1.45rem)] font-medium tracking-[0.3em] text-gold">
               {event.editionLabel}・{event.subtitle}
             </span>
           </motion.div>
@@ -119,7 +94,17 @@ export function Hero() {
             custom={1}
             className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2"
           >
-            <span className="font-display text-orbit text-[clamp(2.2rem,6vw,3.5rem)] font-semibold tracking-[0.22em]">
+            <span
+              className="font-display text-[clamp(2.2rem,6vw,3.5rem)] font-semibold tracking-[0.22em]"
+              style={{
+                // 斜向、偏淡的光軌漸層（獨立於全站 .text-orbit）
+                backgroundImage:
+                  "linear-gradient(118deg,#6d8bd6 0%,#8f7fd0 55%,#c58bb0 100%)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
+            >
               2026
             </span>
             <span className="font-display text-[clamp(1.1rem,3.4vw,1.6rem)] font-medium tracking-wide text-ink-2">
@@ -167,7 +152,12 @@ export function Hero() {
             {forums.map((f, i) => (
               <span key={f.key}>
                 {i > 0 && "、"}
-                <span className="text-ink">{f.dateLabel.replace(/ /g, "")} {f.name}</span>
+                <Link
+                  href={`/agenda#${f.key}`}
+                  className="font-bold text-ink underline-offset-4 transition-colors hover:text-brand-lift hover:underline"
+                >
+                  {f.dateLabel.replace(/ /g, "")} {f.name}
+                </Link>
               </span>
             ))}
             ，{speakerCount} 位創業家與機構投資人同場。
@@ -186,7 +176,7 @@ export function Hero() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 underline-offset-4 transition-colors hover:text-ink-2 hover:underline"
             >
-              <MapPin size={15} className="shrink-0" />
+              <MapPin size={15} className="shrink-0 text-gold" />
               <span>
                 {event.venue.name}　{event.venue.detail}
               </span>
@@ -200,11 +190,21 @@ export function Hero() {
             custom={5}
             className="mt-5 flex flex-wrap items-center gap-4"
           >
-            <Cta href={REGISTER_URL} size="lg">
-              立即報名
+            <Cta
+              href="/about"
+              variant="gradient"
+              size="lg"
+              className="[background-image:linear-gradient(110deg,#4c68d4_0%,#8b6ed8_100%)]"
+            >
+              查看詳情
             </Cta>
-            <Cta href="/speakers" variant="ghost" size="lg">
-              查看講者陣容
+            <Cta
+              href="/tickets"
+              variant="gradient"
+              size="lg"
+              className="[background-image:linear-gradient(110deg,#8b6ed8_0%,#4c68d4_100%)]"
+            >
+              立即報名
             </Cta>
           </motion.div>
 
@@ -215,23 +215,11 @@ export function Hero() {
             custom={6}
             className="mt-6 border-t border-black/8 pt-4"
           >
-            <p className="mb-2 text-[11px] tracking-[0.24em] text-ink-4">距離開幕</p>
-            <Countdown />
+            <p className="mb-3 text-[11px] tracking-[0.24em] text-ink-4">距離開幕</p>
+            <FlipClock target={event.startDate} />
           </motion.div>
         </div>
       </motion.div>
-
-      <motion.a
-        href="#about"
-        aria-label="向下捲動"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-ink-4 transition-colors hover:text-ink-2 lg:flex"
-      >
-        <span className="font-display text-[10px] tracking-[0.3em]">SCROLL</span>
-        <ArrowDown size={14} className="animate-bounce" />
-      </motion.a>
     </section>
   );
 }

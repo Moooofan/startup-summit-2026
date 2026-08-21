@@ -4,6 +4,8 @@ import { REGISTER_URL, REGISTER_READY } from "@/lib/config";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Reveal } from "@/components/ui/Reveal";
 import { Cta } from "@/components/ui/Cta";
+import { Reflective } from "@/components/home/Reflective";
+import { GlassBlock } from "@/components/home/GlassBlock";
 
 const included = [
   "兩日論壇全場次入場",
@@ -59,38 +61,48 @@ export function Tickets() {
           {plans.map((p, i) => (
             <Reveal key={p.key} delay={0.08 + i * 0.08}>
               <div
-                className={`relative h-full overflow-hidden rounded-card p-8 ${
+                className={`group relative h-full overflow-hidden rounded-card border p-8 ${
                   p.featured
-                    ? "glass-strong glow-brand border-brand-lift/40"
-                    : "glass"
+                    ? "glow-brand border-brand-lift/40"
+                    : "border-line"
                 }`}
               >
-                {p.featured && (
-                  <span className="absolute right-6 top-6 rounded-pill bg-brand-lift px-3 py-1 text-[11px] font-medium text-white">
-                    限量
-                  </span>
-                )}
-                <p className="text-sm font-medium text-ink">{p.name}</p>
-                <p className="font-display text-xs tracking-[0.16em] text-ink-4">
-                  {p.nameEn.toUpperCase()}
-                </p>
+                {/* 真玻璃板（MeshTransmissionMaterial）；不支援時回退 CSS 玻璃 */}
+                <GlassBlock featured={p.featured} />
+                {/* 玻璃頂緣高光 —— 讓 BLOCK 更透光、更立體 */}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent"
+                />
 
-                <p className="mt-7 flex items-baseline gap-2">
-                  <span className="font-display text-[2.5rem] font-semibold leading-none text-ink">
-                    {event.tickets.currency}
-                    {p.price.toLocaleString()}
-                  </span>
-                </p>
-                {p.original && (
-                  <p className="mt-2 text-sm text-ink-4">
-                    原價{" "}
-                    <span className="line-through">
+                <div className="relative">
+                  {p.featured && (
+                    <span className="absolute right-0 top-0 rounded-pill bg-brand-lift px-3 py-1 text-[11px] font-medium text-white shadow-[0_0_18px_rgb(106_134_255/0.5)]">
+                      限量
+                    </span>
+                  )}
+                  <p className="text-sm font-medium text-ink">{p.name}</p>
+                  <p className="font-display text-xs tracking-[0.16em] text-ink-4">
+                    {p.nameEn.toUpperCase()}
+                  </p>
+
+                  <p className="mt-7 flex items-baseline gap-2">
+                    <span className="font-display text-[2.5rem] font-semibold leading-none text-ink">
                       {event.tickets.currency}
-                      {p.original.toLocaleString()}
+                      {p.price.toLocaleString()}
                     </span>
                   </p>
-                )}
-                <p className="mt-4 text-[13px] leading-relaxed text-ink-3">{p.note}</p>
+                  {p.original && (
+                    <p className="mt-2 text-sm text-ink-4">
+                      原價{" "}
+                      <span className="line-through">
+                        {event.tickets.currency}
+                        {p.original.toLocaleString()}
+                      </span>
+                    </p>
+                  )}
+                  <p className="mt-4 text-[13px] leading-relaxed text-ink-3">{p.note}</p>
+                </div>
               </div>
             </Reveal>
           ))}
@@ -108,23 +120,33 @@ export function Tickets() {
             </ul>
 
             <div className="mt-8 text-center">
-              <Cta href={REGISTER_URL} size="lg">
-                {REGISTER_READY ? "前往報名" : "報名即將開放"}
-              </Cta>
+              {/* three.js 反光質感的報名按鈕 */}
+              <span className="relative inline-flex overflow-hidden rounded-pill">
+                <Cta href={REGISTER_URL} size="lg">
+                  {REGISTER_READY ? "前往報名" : "報名即將開放"}
+                </Cta>
+                <Reflective mode="fill" radius={1} intensity={0.5} />
+              </span>
+
               {!REGISTER_READY && (
-                <p className="mt-5 inline-flex items-start gap-2 text-left text-[13px] leading-relaxed text-ink-3">
-                  <Info size={14} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
-                  報名連結尚未開放。開放後將同步公布於本頁與{" "}
-                  <a
-                    href="https://www.facebook.com/groups/1169347120648777/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-orbit-sky underline-offset-4 hover:underline"
-                  >
-                    台灣新創投資社團
-                  </a>
-                  。
-                </p>
+                <div className="glass relative mx-auto mt-5 max-w-xl overflow-hidden rounded-card px-5 py-4 text-left">
+                  <Reflective mode="fill" radius={0.28} intensity={0.32} />
+                  <p className="relative inline-flex items-start gap-2 text-[13px] leading-relaxed text-ink-3">
+                    <Info size={14} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
+                    <span>
+                      報名連結尚未開放。開放後將同步公布於本頁與{" "}
+                      <a
+                        href="https://www.facebook.com/groups/1169347120648777/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-orbit-sky underline-offset-4 hover:underline"
+                      >
+                        台灣新創投資社團
+                      </a>
+                      。
+                    </span>
+                  </p>
+                </div>
               )}
             </div>
 
