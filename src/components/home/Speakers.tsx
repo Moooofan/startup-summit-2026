@@ -18,7 +18,7 @@ const accent: Record<Forum["accent"], { text: string; glow: string; line: string
     line: "via-orbit-sky/70",
   },
   violet: {
-    text: "text-orbit-violet",
+    text: "text-[#6d47c4]",
     glow: "rgb(182 185 220 / 0.10)",
     line: "via-orbit-violet/70",
   },
@@ -40,10 +40,6 @@ function SpeakerCard({ s, index }: { s: Speaker; index: number }) {
             style={{ objectPosition: photoFocus(s.slug) }}
             className="object-cover transition-transform duration-500 group-hover:scale-[1.07]"
             loading={index < 8 ? "eager" : "lazy"}
-          />
-          <div
-            aria-hidden
-            className="absolute inset-0 bg-gradient-to-t from-bg/85 via-transparent to-transparent"
           />
           {s.status === "pending" && (
             <span className="absolute right-3 top-3 rounded-pill bg-bg/80 px-2.5 py-1 text-[10px] text-ink-3 backdrop-blur">
@@ -86,7 +82,7 @@ function ForumNode({ f, order, count }: { f: Forum; order: number; count: number
         <div className="relative px-6 text-center">
           <span
             aria-hidden
-            className="ghost-head pointer-events-none absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-[58%] text-[clamp(9rem,30vw,24rem)] leading-none opacity-[0.14]"
+            className="ghost-head pointer-events-none absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-[58%] text-[clamp(9rem,30vw,24rem)] leading-none opacity-[0.38]"
           >
             {String(order).padStart(2, "0")}
           </span>
@@ -153,15 +149,18 @@ export function Speakers() {
               lead="從剛掛牌的創業家、Edge AI 與半導體團隊，到管理國際基金的機構投資人。點開任何一位，看他們正在解的題目。"
             />
           </Reveal>
-
-          {/* 向下滑提示（與 ForumNode 同款、淺藍色） */}
-          <Reveal delay={0.15}>
-            <span className="mt-12 inline-flex flex-col items-start gap-2 text-[12px] tracking-[0.24em] text-orbit-sky">
-              向下滑看兩天陣容
-              <ChevronDown size={20} aria-hidden className="animate-bounce motion-reduce:animate-none" />
-            </span>
-          </Reveal>
         </div>
+
+        {/* 向下滑提示：頁面中間下方（與 ForumNode 同款、淺藍色） */}
+        <Reveal
+          delay={0.2}
+          className="pointer-events-none absolute inset-x-0 bottom-8 flex justify-center"
+        >
+          <span className="inline-flex flex-col items-center gap-2 text-[12px] tracking-[0.24em] text-orbit-sky">
+            向下滑看兩天陣容
+            <ChevronDown size={20} aria-hidden className="animate-bounce motion-reduce:animate-none" />
+          </span>
+        </Reveal>
       </div>
 
       {forums.map((f, fi) => {

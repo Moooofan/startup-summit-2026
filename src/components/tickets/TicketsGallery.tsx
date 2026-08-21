@@ -14,6 +14,7 @@ import {
 import { event, forums } from "@/data/event";
 import { REGISTER_URL, REGISTER_READY, SPONSOR_CONTACT } from "@/lib/config";
 import { Cta } from "@/components/ui/Cta";
+import { SectionHead } from "@/components/ui/SectionHead";
 import { cn } from "@/lib/utils";
 
 /* ==========================================================================
@@ -260,25 +261,19 @@ function IntroPanel({ active, onNext }: { active: boolean; onNext: () => void })
           active ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
         )}
       >
-        {/* 大字報 + 金字：大字報置中，金字釘在它的左上角（與其他頁一致），標題貼底 */}
-        <div className="relative inline-block">
-          <span
-            aria-hidden
-            className="ghost-head pointer-events-none block text-[clamp(3.2rem,15vw,9rem)] leading-[0.8]"
-          >
-            TICKETS
-          </span>
-          <span className="absolute left-1 top-1.5 flex items-center gap-2 text-[11px] font-medium tracking-[0.24em] text-gold md:left-2 md:top-2.5">
-            <span aria-hidden className="h-px w-6 bg-gold/60" />
-            REGISTRATION
-          </span>
-        </div>
-        <h1 className="relative -mt-3 text-[clamp(2rem,5vw,3.25rem)] font-bold leading-tight text-ink md:-mt-5">
-          報名資訊
-        </h1>
-        <p className="mx-auto mt-6 max-w-xl text-[15px] leading-[1.9] text-ink-2">
-          {event.dateLabelLong}，{event.timeLabel}。兩日論壇於同一場地舉行。
-        </p>
+        {/* 與其他頁一致的大字報設計，只是置中（手機端大字報自動隱藏） */}
+        <SectionHead
+          as="h1"
+          align="center"
+          eyebrow="REGISTRATION"
+          ghost="TICKETS"
+          title="報名資訊"
+          lead={
+            <>
+              {event.dateLabelLong}，{event.timeLabel}。兩日論壇於同一場地舉行。
+            </>
+          }
+        />
 
         {/* 向右瀏覽提示：文字 + 金色能量段向右掃，前端帶箭頭 → 明確暗示右邊還有內容 */}
         <button
@@ -298,7 +293,7 @@ function IntroPanel({ active, onNext }: { active: boolean; onNext: () => void })
             {/* 移動能量：漸層拖尾 + 前端大箭頭，一起向右掃 → 明確指向右方 */}
             <span
               aria-hidden
-              className="animate-track-right absolute inset-y-0 left-0 flex w-1/2 items-center"
+              className="animate-track-right absolute inset-y-0 left-0 flex w-1/3 items-center"
             >
               <span className="h-[3px] flex-1 rounded-full bg-gradient-to-r from-transparent to-gold" />
               <ChevronRight size={30} strokeWidth={3} className="-ml-1 shrink-0 text-gold" />
@@ -319,12 +314,33 @@ function TicketsPanel({
   ticket: number;
   setTicket: (n: number) => void;
 }) {
-  // 切票種：手機用底下頁籤、桌機另可點側邊卡；橫向滑動一律留給「切頁」（不在此攔截）
+  // 票卡舞台上「橫向滑動」→ 切票種，並 stopPropagation 讓外層不切頁；
+  // 舞台以外的橫向滑動仍由外層 section 處理 → 切頁。桌機點側邊卡（onClick）照舊。
+  const swipeX = useRef<number | null>(null);
+  const clampT = (n: number) => Math.max(0, Math.min(plans.length - 1, n));
+  const onStageDown = (e: React.PointerEvent) => {
+    swipeX.current = e.clientX;
+    e.stopPropagation();
+  };
+  const onStageUp = (e: React.PointerEvent) => {
+    e.stopPropagation();
+    const s = swipeX.current;
+    swipeX.current = null;
+    if (s == null) return;
+    const dx = e.clientX - s;
+    if (Math.abs(dx) < 40) return; // 位移太小 → 視為點擊，交給卡片 onClick
+    setTicket(clampT(ticket + (dx < 0 ? 1 : -1)));
+  };
   return (
     <PanelShell>
       <div className="w-full max-w-4xl">
-        {/* 相框切換舞台 */}
-        <div className="relative mx-auto flex h-[58vh] max-h-[560px] min-h-[360px] items-center justify-center sm:min-h-[420px]">
+        {/* 相框切換舞台（橫向滑動切票種） */}
+        <div
+          className="relative mx-auto flex h-[58vh] max-h-[560px] min-h-[360px] items-center justify-center sm:min-h-[420px]"
+          onPointerDown={onStageDown}
+          onPointerUp={onStageUp}
+          onPointerCancel={() => (swipeX.current = null)}
+        >
           {plans.map((p, i) => {
             const isActive = i === ticket;
             const side = i < ticket ? -1 : i > ticket ? 1 : 0; // 非作用中往自己那側 peek
@@ -453,27 +469,13 @@ function ContactPanel() {
   return (
     <PanelShell>
       <div className="w-full max-w-3xl">
-        <div className="relative text-center">
-          {/* 大字報 + 金字：金字釘在大字報左上角，標題貼底 */}
-          <div className="relative inline-block">
-            <span
-              aria-hidden
-              className="ghost-head pointer-events-none block text-[clamp(2.8rem,13vw,7rem)] leading-[0.8]"
-            >
-              CONTACT
-            </span>
-            <span className="absolute left-1 top-1.5 flex items-center gap-2 text-[11px] font-medium tracking-[0.24em] text-gold md:left-2 md:top-2">
-              <span aria-hidden className="h-px w-6 bg-gold/60" />
-              CONTACT
-            </span>
-          </div>
-          <h2 className="relative -mt-3 text-[clamp(1.75rem,4.2vw,2.6rem)] font-bold leading-tight text-ink md:-mt-4">
-            聯絡資訊
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-[1.9] text-ink-2">
-            報名、贊助或任何合作洽談，歡迎透過以下方式與我們聯繫。
-          </p>
-        </div>
+        <SectionHead
+          align="center"
+          eyebrow="CONTACT"
+          ghost="CONTACT"
+          title="聯絡資訊"
+          lead="報名、贊助或任何合作洽談，歡迎透過以下方式與我們聯繫。"
+        />
 
         <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-3 sm:gap-4">
           {channels.map(({ icon: Icon, label, value, href, external }, i) => (
@@ -507,7 +509,7 @@ function ContactPanel() {
 
         <p className="mt-7 flex items-start justify-center gap-2 text-center text-[13px] leading-relaxed text-ink-3 sm:mt-8">
           <Info size={14} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
-          主辦單位｜{event.organizer.name}（{event.organizer.members}）・
+          主辦單位｜{event.organizer.name}・
           {event.organizer.host}　{event.organizer.hostTitle}
         </p>
       </div>

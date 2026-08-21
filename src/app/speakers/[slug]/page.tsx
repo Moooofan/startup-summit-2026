@@ -205,6 +205,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
               {prev ? (
                 <Link
                   href={`/speakers/${prev.slug}`}
+                  replace
                   className="glass group flex items-center gap-4 rounded-card p-5 transition-colors hover:border-black/20"
                 >
                   <ArrowLeft size={16} className="shrink-0 text-ink-4" />
@@ -222,6 +223,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
               {next && (
                 <Link
                   href={`/speakers/${next.slug}`}
+                  replace
                   className="glass group flex items-center justify-end gap-4 rounded-card p-5 text-right transition-colors hover:border-black/20 sm:col-start-2"
                 >
                   <span className="min-w-0">

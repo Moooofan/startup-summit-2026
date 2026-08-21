@@ -52,7 +52,8 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    /* 不用 scroll-behavior: smooth —— 會讓「回上一頁」還原位置時從頂端平滑滑過去（先跳最上方再導航）。
+       節點跳頁改由 ScrollSnapController 用各自的 scrollIntoView({behavior:"smooth"}) 處理。 */
     scroll-padding-top: 88px;
   }
   /* 節點吸附改由 JS（ScrollSnapController）獨佔掌控，不再用 CSS scroll-snap：
@@ -177,8 +178,8 @@
   50% { transform: translateY(-14px); }
 }
 @keyframes sheen {
-  0% { transform: translateX(-120%); }
-  100% { transform: translateX(220%); }
+  from { transform: translateX(-250%) skewX(-12deg); }
+  to   { transform: translateX(400%) skewX(-12deg); }
 }
 /* 橫向瀏覽箭頭的持續微動（暗示可往該方向切頁）；reduced-motion 於 base 層已全域關閉 */
 @keyframes nudge-r { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
@@ -193,7 +194,7 @@
 @layer utilities {
   .animate-nudge-r { animation: nudge-r 1.8s var(--ease-out-soft) infinite; }
   .animate-nudge-l { animation: nudge-l 1.8s var(--ease-out-soft) infinite; }
-  .animate-track-right { animation: track-right 3s var(--ease-out-soft) infinite; }
+  .animate-track-right { animation: track-right 5s var(--ease-out-soft) infinite; }
 }
 
 /* ===== 翻牌時鐘（倒數）—— 單張牌 .flip 內含 .front / .back，牌面上下半由 ::before/::after 拆開，

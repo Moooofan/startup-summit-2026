@@ -32,7 +32,7 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
       {variant !== "ghost" && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-20deg] bg-black/25 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:[animation:sheen_0.9s_ease-out]"
+          className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/35 to-transparent [transform:translateX(-250%)_skewX(-12deg)] group-hover:[animation:sheen_0.85s_ease-out]"
         />
       )}
       <span className="relative">{children}</span>
