@@ -50,7 +50,7 @@ export function Agenda() {
                   </Reveal>
 
                   <Reveal delay={0.08}>
-                    <p className="mt-8 inline-flex items-start gap-2.5 rounded-card border border-white/8 bg-white/[0.03] px-5 py-4 text-[13px] leading-relaxed text-ink-3">
+                    <p className="mt-8 inline-flex items-start gap-2.5 rounded-card border border-black/8 bg-black/[0.03] px-5 py-4 text-[13px] leading-relaxed text-ink-3">
                       <Info size={15} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
                       目前公布的是主題軌與講者歸屬，逐時段完整議程表將於活動前公布。議程時間將依現場流程與講者安排保留調整彈性。
                     </p>
@@ -60,7 +60,7 @@ export function Agenda() {
 
               <div className={fi === 0 ? "mt-14" : ""}>
                 <Reveal>
-                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-white/8 pb-5">
+                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-black/8 pb-5">
                     <span className="font-display text-xs tracking-[0.2em] text-ink-4">
                       {f.label}
                     </span>
@@ -76,7 +76,7 @@ export function Agenda() {
                     const list = speakersByTrack(t.key);
                     return (
                       <Reveal key={t.key} delay={0.04 * i}>
-                        <li className="glass h-full rounded-card p-7 transition-colors duration-500 hover:border-white/20">
+                        <li className="glass h-full rounded-card p-7 transition-colors duration-500 hover:border-black/20">
                           <div className="flex items-start justify-between gap-4">
                             <div className="min-w-0">
                               <div className="flex items-center gap-3">
@@ -102,7 +102,7 @@ export function Agenda() {
                                 <li key={s.slug}>
                                   <Link
                                     href={`/speakers/${s.slug}`}
-                                    className="inline-flex items-center gap-1.5 rounded-pill border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[12.5px] text-ink-2 transition-colors hover:border-white/25 hover:text-ink"
+                                    className="inline-flex items-center gap-1.5 rounded-pill border border-black/10 bg-black/[0.04] px-3 py-1.5 text-[12.5px] text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
                                   >
                                     {s.name}
                                     {s.role === "moderator" && (

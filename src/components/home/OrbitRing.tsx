@@ -37,8 +37,8 @@ export function OrbitRing({ className = "" }: { className?: string }) {
     let cancelled = false;
     const decide = () => {
       if (cancelled) return;
-      const wide = window.matchMedia("(min-width: 768px)").matches;
-      setMode(!reduce && wide && hasWebGL() ? "gl" : "css");
+      // 手機也開 WebGL 玻璃環：只要支援 WebGL 且未關動效就掛（不再限制桌機寬度）
+      setMode(!reduce && hasWebGL() ? "gl" : "css");
     };
     if (typeof window.requestIdleCallback === "function") {
       const id = window.requestIdleCallback(decide, { timeout: 1200 });

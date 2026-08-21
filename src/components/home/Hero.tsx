@@ -60,7 +60,7 @@ export function Hero() {
       >
         {/* 底層光暈 */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -right-[10%] top-[-14%] h-[70vw] max-h-[900px] w-[70vw] max-w-[900px] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.34)_0%,transparent_62%)]" />
+          <div className="absolute -right-[10%] top-[-14%] h-[70vw] max-h-[900px] w-[70vw] max-w-[900px] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.12)_0%,transparent_62%)]" />
           <div className="absolute -left-[18%] bottom-[-22%] h-[60vw] max-h-[760px] w-[60vw] max-w-[760px] rounded-full bg-[radial-gradient(circle,rgb(176_68_122/0.20)_0%,transparent_65%)]" />
           <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-bg to-transparent" />
         </div>
@@ -103,8 +103,8 @@ export function Hero() {
             className="flex items-center gap-3"
           >
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orbit-sky opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-orbit-sky" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-60" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-gold" />
             </span>
             <span className="font-display text-[clamp(0.95rem,2.3vw,1.45rem)] font-medium tracking-[0.3em] text-ink-2">
               {event.editionLabel}・{event.subtitle}
@@ -127,16 +127,32 @@ export function Hero() {
             </span>
           </motion.div>
 
-          {/* 3. 台灣新創投資年會 —— 放大加長、可與圓圈重疊（z-10 壓在圓圈上，圓圈掠過會漸淡漸深） */}
-          <motion.h1
+          {/* 3. 台灣新創投資年會 —— 標題後方加圓弧霧面玻璃（玻璃環 z-5 之上、文字之下），
+              環的邊緣掠過標題時，透過這片霧面看起來像被稍微阻擋。radial 遮罩讓邊緣柔化成弧形透鏡。 */}
+          <motion.div
             variants={rise}
             initial="hidden"
             animate="show"
             custom={2}
-            className="mt-3 whitespace-nowrap text-[clamp(2.1rem,7vw,4.9rem)] font-black leading-[1.02] tracking-[0.18em]"
+            className="relative mt-3 w-fit"
           >
-            <span className="text-fade">台灣新創投資年會</span>
-          </motion.h1>
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-x-12 -inset-y-6 -z-[1] rounded-full"
+              style={{
+                // 半透明霧面片：在文字之下、玻璃環之上 → 遮住後方的環，
+                // 環的邊緣轉到標題後方時被擋住、轉出去再顯現。backdrop-blur 為加成（部分情境有效）。
+                background:
+                  "radial-gradient(72% 62% at 50% 50%, rgba(214,226,255,0.20) 0%, rgba(214,226,255,0.11) 46%, rgba(214,226,255,0.03) 74%, transparent 100%)",
+                backdropFilter: "blur(9px)",
+                WebkitBackdropFilter: "blur(9px)",
+                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
+              }}
+            />
+            <h1 className="relative whitespace-nowrap text-[clamp(2.1rem,7vw,4.9rem)] font-black leading-[1.02] tracking-[0.18em] text-ink">
+              <span>台灣新創投資年會</span>
+            </h1>
+          </motion.div>
 
           <motion.p
             variants={rise}
@@ -187,7 +203,7 @@ export function Hero() {
             <Cta href={REGISTER_URL} size="lg">
               立即報名
             </Cta>
-            <Cta href="#speakers" variant="ghost" size="lg">
+            <Cta href="/speakers" variant="ghost" size="lg">
               查看講者陣容
             </Cta>
           </motion.div>
@@ -197,7 +213,7 @@ export function Hero() {
             initial="hidden"
             animate="show"
             custom={6}
-            className="mt-6 border-t border-white/8 pt-4"
+            className="mt-6 border-t border-black/8 pt-4"
           >
             <p className="mb-2 text-[11px] tracking-[0.24em] text-ink-4">距離開幕</p>
             <Countdown />

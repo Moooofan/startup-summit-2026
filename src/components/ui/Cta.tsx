@@ -21,7 +21,7 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
     solid:
       "bg-brand-lift text-white hover:bg-brand-bright hover:shadow-[0_0_36px_rgb(106_134_255/0.45)]",
     ghost:
-      "glass text-ink hover:border-white/25 hover:bg-white/10",
+      "glass text-ink hover:border-black/25 hover:bg-black/10",
   };
 
   return (
@@ -29,7 +29,7 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
       {variant === "solid" && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-20deg] bg-white/25 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:[animation:sheen_0.9s_ease-out]"
+          className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-20deg] bg-black/25 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:[animation:sheen_0.9s_ease-out]"
         />
       )}
       <span className="relative">{children}</span>

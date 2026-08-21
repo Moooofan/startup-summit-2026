@@ -67,15 +67,15 @@ export function Venue() {
 
           <Reveal delay={0.1}>
             <div className="glass overflow-hidden rounded-card">
-              <div className="border-b border-white/8 px-7 py-5">
+              <div className="border-b border-black/8 px-7 py-5">
                 <h3 className="text-sm font-medium text-ink">會場分區</h3>
               </div>
-              <ul className="divide-y divide-white/5">
+              <ul className="divide-y divide-black/5">
                 {venueZones.map((z, i) => {
                   const Icon = zoneIcons[i] ?? LayoutGrid;
                   return (
                     <li key={z.zone} className="flex items-start gap-5 px-7 py-6">
-                      <span className="font-display grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/[0.04] text-xs font-semibold text-orbit-sky">
+                      <span className="font-display grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-black/10 bg-black/[0.04] text-xs font-semibold text-orbit-sky">
                         {z.zone}
                       </span>
                       <div className="min-w-0">

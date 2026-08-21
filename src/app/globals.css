@@ -5,14 +5,14 @@
    KV 原稿為冷白淺底；此站為深色版，光軌色相保留、明度反轉為發光體。
    ========================================================================== */
 @theme {
-  /* --- surface ladder --- */
-  --color-bg: #05070f;
-  --color-bg-soft: #080d1c;
-  --color-surface: #0c1224;
-  --color-surface-2: #121a33;
-  --color-surface-3: #1a2444;
-  --color-line: #232e52;
-  --color-line-soft: #18203c;
+  /* --- surface ladder（淺色版：半透明白霧，覆在背景圖上 → 霧化）--- */
+  --color-bg: rgb(243 245 251 / 0.45); /* 仍給 Nav 用（固定列需要底） */
+  --color-bg-soft: transparent; /* 區塊不再自帶霧底 → 全站只吃同一層全域白霧 = 統一 */
+  --color-surface: rgb(255 255 255 / 0.55);
+  --color-surface-2: rgb(255 255 255 / 0.68);
+  --color-surface-3: rgb(255 255 255 / 0.8);
+  --color-line: rgb(24 34 66 / 0.14);
+  --color-line-soft: rgb(24 34 66 / 0.08);
 
   /* --- brand（KV 靛藍 #324997 在深底上提亮）--- */
   --color-brand: #324997;
@@ -20,20 +20,23 @@
   --color-brand-bright: #6a86ff;
   --color-brand-glow: #8fa3ff;
 
-  /* --- orbit：KV 光軌取樣 --- */
-  --color-orbit-blue: #84a3cf;
-  --color-orbit-sky: #5eaedc;
+  /* --- gold：呼應背景水墨的金線細節（點綴用）--- */
+  --color-gold: #a17832;
+
+  /* --- orbit：KV 光軌取樣（淺底上加深以保可讀）--- */
+  --color-orbit-blue: #5f7ba6;
+  --color-orbit-sky: #2f7fb0;
   --color-orbit-violet: #b6b9dc;
   --color-orbit-lilac: #d7cade;
   --color-orbit-rose: #d7bbca;
   --color-coral: #e8a08c;
   --color-magenta: #b0447a;
 
-  /* --- text --- */
-  --color-ink: #ffffff;
-  --color-ink-2: #c9d3e8;
-  --color-ink-3: #8f9cba;
-  --color-ink-4: #5d6885;
+  /* --- text（淺色版：深藍→石板→冷灰階；muted 加深以保可讀）--- */
+  --color-ink: #16213a;
+  --color-ink-2: #2c3850;
+  --color-ink-3: #44506a;
+  --color-ink-4: #59637f;
 
   /* --- type --- */
   --font-sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
@@ -57,7 +60,8 @@
      還原的位置吸走。.snap-start / .snap-panel 保留，只當作 JS 查詢節點用的標記
      （其 scroll-snap-* 在沒有 scroll-snap-type 時無作用）。 */
   body {
-    background: var(--color-bg);
+    /* 背景交由 layout 的固定背景圖層（霧化）處理，body 本身透明 */
+    background: transparent;
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
@@ -86,35 +90,35 @@
   .glass {
     background: linear-gradient(
       160deg,
-      rgb(255 255 255 / 0.07) 0%,
-      rgb(255 255 255 / 0.02) 40%,
-      rgb(255 255 255 / 0.04) 100%
+      rgb(255 255 255 / 0.62) 0%,
+      rgb(255 255 255 / 0.44) 40%,
+      rgb(255 255 255 / 0.55) 100%
     );
     /* 捲動每幀成本主因是模糊半徑；14→8 明顯降耗、霜面感幾乎不變 */
     backdrop-filter: blur(8px);
-    border: 1px solid rgb(255 255 255 / 0.08);
+    border: 1px solid rgb(24 34 66 / 0.1);
   }
   .glass-strong {
-    background: linear-gradient(160deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.03));
+    background: linear-gradient(160deg, rgb(255 255 255 / 0.8), rgb(255 255 255 / 0.62));
     backdrop-filter: blur(11px);
-    border: 1px solid rgb(255 255 255 / 0.12);
+    border: 1px solid rgb(24 34 66 / 0.14);
   }
 
   /* 漸層文字 — 光軌色帶 */
   .text-orbit {
     background: linear-gradient(
       104deg,
-      var(--color-orbit-sky) 0%,
-      var(--color-brand-glow) 42%,
-      var(--color-orbit-lilac) 78%,
-      var(--color-orbit-rose) 100%
+      #2f6fb0 0%,
+      #4c68d4 40%,
+      #7b5ea8 76%,
+      #b0447a 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   .text-fade {
-    background: linear-gradient(180deg, #fff 30%, rgb(201 211 232 / 0.55) 100%);
+    background: linear-gradient(180deg, #16213f 25%, rgb(58 70 112 / 0.82) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -128,9 +132,9 @@
     line-height: 0.85;
     background: linear-gradient(
       106deg,
-      rgb(106 134 255 / 0.16) -10%,
-      rgb(143 163 255 / 0.42) 46%,
-      rgb(215 202 222 / 0.12) 102%
+      rgb(44 63 134 / 0.12) -10%,
+      rgb(76 104 212 / 0.2) 46%,
+      rgb(24 34 66 / 0.08) 102%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -155,7 +159,7 @@
 
   /* 區塊上下的水平細線 */
   .hairline {
-    background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.12), transparent);
+    background: linear-gradient(90deg, transparent, rgb(24 34 66 / 0.14), transparent);
   }
 
   /* 頁面級吸附點：整段講者頁的每一頁都用同一條（頁面）捲動條吸附，

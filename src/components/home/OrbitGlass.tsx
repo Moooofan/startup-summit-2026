@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Lightformer, MeshTransmissionMaterial } from "@react-three/drei";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import * as THREE from "three";
 import type { Group, BufferGeometry } from "three";
@@ -35,13 +34,13 @@ const BANDS: { r: number; count: number; z: number }[] = [
 
 // 每條的漸層色停（淺色 KV 光軌調）；不同條配不同色對 → 每塊顏色不一
 const CPAIRS: [string, string][] = [
-  ["#bfeaff", "#6a86ff"],
-  ["#7fb2ff", "#b4adff"],
-  ["#c9b8ff", "#ff9ecb"],
-  ["#ffd3a8", "#ff9ec2"],
-  ["#a6e8ff", "#8f9bff"],
-  ["#d7cafe", "#8fb8ff"],
-  ["#ffc0e6", "#9ec8ff"],
+  ["#dcf4ff", "#a9c0ff"],
+  ["#b3d3ff", "#d3ccff"],
+  ["#e4dbff", "#ffcbe6"],
+  ["#ffe6cd", "#ffcbdd"],
+  ["#cef2ff", "#c2c8ff"],
+  ["#e8e1ff", "#c7dcff"],
+  ["#ffdcf1", "#cde0ff"],
 ];
 
 // 傾斜（上下鏡射）
@@ -228,7 +227,7 @@ function GlassGroup({
 function Ring({ onReady }: { onReady?: () => void }) {
   const groups = useMemo(buildGroups, []);
   // 玻璃折射看到的底色：拉亮成藍調 → 玻璃本體更淺、更通透
-  const bg = useMemo(() => new THREE.Color("#243357"), []);
+  const bg = useMemo(() => new THREE.Color("#a9c1ea"), []);
   const frames = useRef(0);
   useFrame(() => {
     // 等畫出第一格後才通知就緒 → 淡入時不會露出空畫布
@@ -284,16 +283,8 @@ export default function OrbitGlass({
       <directionalLight position={[4, 6, 5]} intensity={1.4} />
       <Ring onReady={onReady} />
       <Lights />
-      {/* Bloom：讓玻璃亮邊發光。門檻放低 → 更多亮部泛光、更 airy */}
-      <EffectComposer multisampling={2}>
-        <Bloom
-          mipmapBlur
-          intensity={0.85}
-          luminanceThreshold={0.35}
-          luminanceSmoothing={0.3}
-          radius={0.75}
-        />
-      </EffectComposer>
+      {/* 不用 EffectComposer/Bloom：套後製會讓整個 canvas 方形輸出成不透明 → 玻璃盤周圍出現方塊色差；
+          移除後 canvas 恢復透明（只剩玻璃盤），也順帶再省效能。玻璃亮邊由 Lightformer 提供。 */}
     </Canvas>
   );
 }

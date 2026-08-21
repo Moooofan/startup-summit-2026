@@ -7,7 +7,7 @@ import { Reveal } from "@/components/ui/Reveal";
 
 export function About() {
   return (
-    <section id="about" className="relative scroll-mt-24 snap-start py-24 md:py-32">
+    <section id="about" className="relative snap-start pb-24 pt-16 md:pb-28 md:pt-20">
       <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
       <div className="shell">
         <Reveal>
@@ -54,7 +54,7 @@ export function About() {
             const dayTracks = tracksByDay(f.key);
             return (
               <Reveal key={f.key} delay={0.12 + i * 0.08}>
-                <article className="glass group relative h-full overflow-hidden rounded-card p-8 transition-colors duration-500 hover:border-white/20 md:p-10">
+                <article className="glass group relative h-full overflow-hidden rounded-card p-8 transition-colors duration-500 hover:border-black/20 md:p-10">
                   <div
                     aria-hidden
                     className={`pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full blur-3xl transition-opacity duration-500 group-hover:opacity-80 ${
@@ -90,7 +90,7 @@ export function About() {
                       {dayTracks.map((t) => (
                         <li
                           key={t.key}
-                          className="rounded-pill border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-ink-2"
+                          className="rounded-pill border border-black/10 bg-black/[0.04] px-3 py-1.5 text-xs text-ink-2"
                         >
                           {t.title}
                         </li>
@@ -98,7 +98,7 @@ export function About() {
                     </ul>
 
                     <Link
-                      href="#agenda"
+                      href="/agenda"
                       className="mt-8 inline-flex items-center gap-1.5 text-sm text-orbit-sky transition-colors hover:text-ink"
                     >
                       查看 {f.name}主題

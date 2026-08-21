@@ -31,7 +31,7 @@ function SpeakerCard({ s, index }: { s: Speaker; index: number }) {
         href={`/speakers/${s.slug}`}
         className="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-glow"
       >
-        <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-white/8 bg-surface">
+        <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-black/8 bg-surface">
           <Image
             src={s.photo}
             alt={`${s.name}｜${s.org} ${s.title}`}
@@ -167,7 +167,7 @@ export function Speakers() {
             <div className="snap-panel min-h-[100svh] pb-16 pt-6">
               <div className="shell">
                 <Reveal>
-                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-white/8 pb-5">
+                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-black/8 pb-5">
                     <span className="font-display text-xs tracking-[0.2em] text-ink-4">
                       {f.label}
                     </span>

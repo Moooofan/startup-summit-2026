@@ -32,11 +32,11 @@ export function SectionHead({ as: Heading = "h2", eyebrow, ghost, title, lead, a
         {eyebrow && (
           <p
             className={cn(
-              "mb-4 flex items-center gap-3 text-[11px] tracking-[0.24em] text-orbit-sky",
+              "mb-4 flex items-center gap-3 text-[11px] font-medium tracking-[0.24em] text-gold",
               align === "center" && "justify-center"
             )}
           >
-            <span aria-hidden className="h-px w-8 bg-orbit-sky/50" />
+            <span aria-hidden className="h-px w-8 bg-gold/60" />
             {eyebrow}
           </p>
         )}

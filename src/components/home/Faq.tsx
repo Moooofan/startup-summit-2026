@@ -10,8 +10,8 @@ export function Faq() {
       <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
       <div className="shell">
         <div className="lg:grid lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-20">
-          {/* 左：整段釘住、垂直置中，右側 FAQ 捲動時左側不動 */}
-          <div className="lg:sticky lg:top-0 lg:flex lg:h-[100svh] lg:flex-col lg:justify-center lg:self-start lg:py-[88px]">
+          {/* 左：整段釘住、靠上對齊（貼齊右側 FAQ 頂端），右側 FAQ 捲動時左側不動 */}
+          <div className="lg:sticky lg:top-0 lg:flex lg:h-[100svh] lg:flex-col lg:justify-start lg:self-start lg:pt-[120px]">
             <Reveal>
               <SectionHead eyebrow="FAQ" ghost="FAQ" title="常見問題" />
               <p className="mt-6 text-[15px] leading-[1.9] text-ink-2">
@@ -28,7 +28,7 @@ export function Faq() {
           </div>
 
           <Reveal delay={0.1} className="mt-12 lg:mt-0">
-            <ul className="divide-y divide-white/8 border-y border-white/8">
+            <ul className="divide-y divide-black/8 border-y border-black/8">
               {faqs.map((f) => (
                 <li key={f.q}>
                   <details className="group">

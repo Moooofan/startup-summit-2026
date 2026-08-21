@@ -67,7 +67,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
         />
       </head>
-      <body className="bg-bg text-ink antialiased">
+      <body className="text-ink antialiased">
+        {/* 全站背景：淺色流動水墨圖，模糊霧化 + 一層白霧提升文字可讀性（固定不隨捲動） */}
+        <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
+          {/* 統一淺色霧面：白霧覆蓋整張圖 → 全站均勻淺色，任何區塊都不透出深墨浪 */}
+          <div className="absolute inset-0 scale-110 bg-[url('/bg.jpg')] bg-cover bg-center blur-[26px]" />
+          <div className="absolute inset-0 bg-white/64" />
+        </div>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-brand-bright focus:px-4 focus:py-2 focus:text-white"

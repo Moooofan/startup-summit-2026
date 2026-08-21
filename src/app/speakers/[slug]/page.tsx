@@ -76,7 +76,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
         <div className="shell relative">
           <Reveal y={12}>
             <BackLink
-              fallbackHref="/#speakers"
+              fallbackHref="/speakers"
               className="inline-flex items-center gap-2 text-[13px] text-ink-3 transition-colors hover:text-ink"
             >
               <ArrowLeft size={14} />
@@ -93,7 +93,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                     aria-hidden
                     className="absolute -inset-2.5 rounded-[20px] bg-gradient-to-br from-orbit-sky/25 via-transparent to-orbit-rose/25 blur-lg"
                   />
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-[16px] border border-white/10 bg-surface">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-[16px] border border-black/10 bg-surface">
                     <Image
                       src={s.photo}
                       alt={`${s.name}｜${s.org} ${s.title}`}
@@ -134,8 +134,8 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
               <Reveal delay={0.06}>
                 {track && (
                   <Link
-                    href="/#agenda"
-                    className="inline-flex items-center gap-2 rounded-pill border border-white/10 bg-white/[0.04] px-4 py-1.5 text-[12.5px] text-ink-2 transition-colors hover:border-white/25 hover:text-ink"
+                    href="/agenda"
+                    className="inline-flex items-center gap-2 rounded-pill border border-black/10 bg-black/[0.04] px-4 py-1.5 text-[12.5px] text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
                   >
                     {track.title}
                     {s.role === "moderator" && <span className="text-ink-4">・主持人</span>}
@@ -155,7 +155,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                 <p className="mt-1 text-[15px] text-ink-2">{s.title}</p>
 
                 {s.status === "pending" && (
-                  <p className="mt-5 inline-block rounded-lg border border-white/8 bg-white/[0.03] px-4 py-2 text-[12.5px] text-ink-3">
+                  <p className="mt-5 inline-block rounded-lg border border-black/8 bg-black/[0.03] px-4 py-2 text-[12.5px] text-ink-3">
                     出席確認中，最終陣容以官方公告為準
                   </p>
                 )}
@@ -165,7 +165,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                     {s.tags.map((t) => (
                       <li
                         key={t}
-                        className="rounded-pill border border-white/8 px-3 py-1 text-[12px] text-ink-3"
+                        className="rounded-pill border border-black/8 px-3 py-1 text-[12px] text-ink-3"
                       >
                         {t}
                       </li>
@@ -175,7 +175,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
               </Reveal>
 
               <Reveal delay={0.12}>
-                <div className="mt-10 space-y-5 border-t border-white/8 pt-10">
+                <div className="mt-10 space-y-5 border-t border-black/8 pt-10">
                   {paragraphs.length > 0 ? (
                     paragraphs.map((p, i) => (
                       <p key={i} className="text-[15px] leading-[2] text-ink-2 md:text-base">
@@ -189,8 +189,8 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
               </Reveal>
 
               <Reveal delay={0.18}>
-                <div className="mt-12 border-t border-white/8 pt-10">
-                  <Cta href="/#tickets">報名參加{forum?.name}</Cta>
+                <div className="mt-12 border-t border-black/8 pt-10">
+                  <Cta href="/tickets">報名參加{forum?.name}</Cta>
                 </div>
               </Reveal>
             </div>
@@ -200,12 +200,12 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
           <Reveal delay={0.1}>
             <nav
               aria-label="其他講者"
-              className="mt-20 grid gap-4 border-t border-white/8 pt-10 sm:grid-cols-2"
+              className="mt-20 grid gap-4 border-t border-black/8 pt-10 sm:grid-cols-2"
             >
               {prev ? (
                 <Link
                   href={`/speakers/${prev.slug}`}
-                  className="glass group flex items-center gap-4 rounded-card p-5 transition-colors hover:border-white/20"
+                  className="glass group flex items-center gap-4 rounded-card p-5 transition-colors hover:border-black/20"
                 >
                   <ArrowLeft size={16} className="shrink-0 text-ink-4" />
                   <span className="min-w-0">
@@ -222,7 +222,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
               {next && (
                 <Link
                   href={`/speakers/${next.slug}`}
-                  className="glass group flex items-center justify-end gap-4 rounded-card p-5 text-right transition-colors hover:border-white/20 sm:col-start-2"
+                  className="glass group flex items-center justify-end gap-4 rounded-card p-5 text-right transition-colors hover:border-black/20 sm:col-start-2"
                 >
                   <span className="min-w-0">
                     <span className="block text-[11px] text-ink-4">下一位</span>

@@ -51,7 +51,7 @@ export default function ReviewPage() {
                 <a
                   key={e.no}
                   href={`#edition-${e.no}`}
-                  className="glass rounded-pill px-5 py-2.5 text-sm text-ink-2 transition-colors hover:border-white/25 hover:text-ink"
+                  className="glass rounded-pill px-5 py-2.5 text-sm text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
                 >
                   第{["一", "二", "三", "四"][e.no - 1]}屆
                   <span className="font-display ml-2 text-ink-4">{e.year}</span>
@@ -120,7 +120,7 @@ export default function ReviewPage() {
                 {latest.photos.map((src, i) => (
                   <figure
                     key={src}
-                    className={`group relative overflow-hidden rounded-card border border-white/8 ${
+                    className={`group relative overflow-hidden rounded-card border border-black/8 ${
                       i === 0 ? "sm:col-span-2 lg:col-span-2 lg:row-span-2" : ""
                     }`}
                   >
@@ -151,7 +151,7 @@ export default function ReviewPage() {
                 {latest.forums.map((f, i) => (
                   <Reveal key={f.day} delay={0.08 + i * 0.06}>
                     <div className="glass rounded-card p-6 md:p-8">
-                      <header className="mb-6 border-b border-white/8 pb-5">
+                      <header className="mb-6 border-b border-black/8 pb-5">
                         <p className="font-display text-xs tracking-[0.2em] text-ink-4">
                           DAY {f.day}
                         </p>
@@ -217,7 +217,7 @@ export default function ReviewPage() {
                         href={m.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="glass group flex items-start justify-between gap-4 rounded-card p-5 transition-colors hover:border-white/20"
+                        className="glass group flex items-start justify-between gap-4 rounded-card p-5 transition-colors hover:border-black/20"
                       >
                         <span className="min-w-0">
                           <span className="block text-[14px] leading-relaxed text-ink-2 transition-colors group-hover:text-ink">
@@ -295,7 +295,7 @@ export default function ReviewPage() {
                   )}
 
                   {!e.dataComplete && (
-                    <p className="mt-6 rounded-lg border border-white/8 bg-white/[0.03] px-4 py-3 text-[13px] leading-relaxed text-ink-4">
+                    <p className="mt-6 rounded-lg border border-black/8 bg-black/[0.03] px-4 py-3 text-[13px] leading-relaxed text-ink-4">
                       這一屆的公開紀錄較少，資料整理中。
                     </p>
                   )}
@@ -319,11 +319,11 @@ export default function ReviewPage() {
               {event.dateLabelLong}｜{event.venue.name}
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-4">
-              <Cta href="/#tickets" size="lg">
+              <Cta href="/tickets" size="lg">
                 查看本屆資訊
               </Cta>
               <Link
-                href="/#speakers"
+                href="/speakers"
                 className="inline-flex items-center gap-1.5 px-2 py-4 text-sm text-ink-2 transition-colors hover:text-ink"
               >
                 本屆講者陣容

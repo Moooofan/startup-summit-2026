@@ -210,7 +210,7 @@ export default function SponsorPage() {
                   </header>
                   <p className="mt-4 text-[14px] leading-relaxed text-ink-2">{t.tagline}</p>
                   {t.limited && <p className="mt-2 text-[12px] text-ink-4">{t.limited}</p>}
-                  <dl className="mt-5 divide-y divide-white/6 border-t border-white/6">
+                  <dl className="mt-5 divide-y divide-black/6 border-t border-black/6">
                     {benefitRows.map((row) => {
                       const v = t.benefits[row.key];
                       if (v === false) return null;

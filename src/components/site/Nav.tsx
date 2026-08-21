@@ -12,8 +12,9 @@ import { REGISTER_URL } from "@/lib/config";
 
 const links = [
   { href: "/#about", label: "關於年會" },
-  { href: "/#speakers", label: "講者陣容" },
-  { href: "/#agenda", label: "論壇主題" },
+  { href: "/speakers", label: "講者陣容" },
+  { href: "/agenda", label: "論壇主題" },
+  { href: "/tickets", label: "報名資訊" },
   { href: "/sponsor", label: "贊助方案" },
   { href: "/review", label: "歷屆回顧" },
 ];
@@ -63,7 +64,7 @@ export function Nav() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         scrolled
-          ? "border-b border-white/8 bg-bg/90 backdrop-blur-md"
+          ? "border-b border-black/8 bg-bg/90 backdrop-blur-md"
           : "border-b border-transparent bg-gradient-to-b from-bg/90 to-transparent"
       )}
     >
@@ -123,7 +124,7 @@ export function Nav() {
       {/* 手機選單 */}
       <div
         className={cn(
-          "overflow-hidden border-t border-white/8 bg-bg/95 backdrop-blur-md transition-[max-height] duration-500 lg:hidden",
+          "overflow-hidden border-t border-black/8 bg-bg/95 backdrop-blur-md transition-[max-height] duration-500 lg:hidden",
           open ? "max-h-[420px]" : "max-h-0 border-t-transparent"
         )}
       >
@@ -132,7 +133,7 @@ export function Nav() {
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="block border-b border-white/5 py-4 text-[15px] text-ink-2 transition-colors hover:text-ink"
+                className="block border-b border-black/5 py-4 text-[15px] text-ink-2 transition-colors hover:text-ink"
               >
                 {l.label}
               </Link>

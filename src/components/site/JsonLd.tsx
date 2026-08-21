@@ -96,7 +96,7 @@ export function EventJsonLd({
             availability: REGISTER_READY
               ? "https://schema.org/InStock"
               : "https://schema.org/PreOrder",
-            url: REGISTER_READY ? REGISTER_URL : `${site.url}/#tickets`,
+            url: REGISTER_READY ? REGISTER_URL : `${site.url}/tickets`,
             validThrough: event.startDate,
           },
           {
@@ -107,7 +107,7 @@ export function EventJsonLd({
             availability: REGISTER_READY
               ? "https://schema.org/InStock"
               : "https://schema.org/PreOrder",
-            url: REGISTER_READY ? REGISTER_URL : `${site.url}/#tickets`,
+            url: REGISTER_READY ? REGISTER_URL : `${site.url}/tickets`,
             validThrough: event.startDate,
           },
         ],
