@@ -57,7 +57,7 @@ function DayNode({
   return (
     <div
       id={id}
-      className="snap-panel relative flex min-h-[100svh] scroll-mt-[88px] items-center justify-center"
+      className="snap-panel relative flex min-h-[100svh] items-center justify-center"
     >
       <div
         aria-hidden
