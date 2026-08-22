@@ -221,7 +221,7 @@ function NavArrow({
       <span
         className={cn(
           "grid h-12 w-12 place-items-center rounded-full border border-line bg-white/70 text-ink-3 shadow-[0_6px_20px_-8px_rgba(24,34,66,0.3)] backdrop-blur-sm transition-all duration-300",
-          "group-hover:border-brand-lift group-hover:bg-brand-lift group-hover:text-white group-hover:shadow-[0_0_28px_rgb(106_134_255/0.5)]",
+          "group-hover:border-orbit-sky group-hover:bg-orbit-sky/12 group-hover:text-orbit-sky group-hover:shadow-[0_0_20px_rgb(47_127_176/0.28)]",
           dir === "left" ? "animate-nudge-l" : "animate-nudge-r"
         )}
       >
@@ -296,7 +296,7 @@ function IntroPanel({ active, onNext }: { active: boolean; onNext: () => void })
               className="animate-track-right absolute inset-y-0 left-0 flex w-1/3 items-center"
             >
               <span className="h-[3px] flex-1 rounded-full bg-gradient-to-r from-transparent to-gold" />
-              <ChevronRight size={30} strokeWidth={3} className="-ml-1 shrink-0 text-gold" />
+              <ChevronRight size={30} strokeWidth={3} className="-ml-3 shrink-0 text-gold" />
             </span>
           </span>
         </button>
@@ -367,16 +367,16 @@ function TicketsPanel({
         </div>
 
         {/* 票種切換頁籤 */}
-        <div className="mt-7 flex items-center justify-center gap-2">
+        <div className="mt-9 flex items-center justify-center gap-3">
           {plans.map((p, i) => (
             <button
               key={p.key}
               onClick={() => setTicket(i)}
               className={cn(
-                "rounded-pill px-4 py-2 text-[13px] font-medium transition-all duration-300",
+                "rounded-pill border-2 px-5 py-2 text-sm font-bold transition-all duration-300",
                 i === ticket
-                  ? "bg-brand-lift text-white shadow-[0_0_20px_rgb(106_134_255/0.4)]"
-                  : "border border-line bg-white/60 text-ink-3 hover:text-ink"
+                  ? "border-brand-lift bg-brand-lift/15 text-brand-lift"
+                  : "border-line bg-white/50 text-ink-3 hover:border-brand-lift/50 hover:text-brand-lift"
               )}
             >
               {p.name}
@@ -405,12 +405,12 @@ function TicketCard({
     >
       <div
         className={cn(
-          "relative overflow-hidden rounded-[13px] border p-5 sm:p-7",
-          plan.featured ? "border-brand-lift/25 bg-brand/[0.03]" : "border-line-soft bg-black/[0.015]"
+          "relative overflow-hidden rounded-[13px] border bg-gradient-to-br from-orbit-sky/18 via-white/45 to-[#6d47c4]/18 p-5 sm:p-7",
+          plan.featured ? "border-brand-lift/30" : "border-line-soft"
         )}
       >
         {plan.featured && (
-          <span className="absolute right-4 top-4 rounded-pill bg-brand-lift px-3 py-1 text-[11px] font-medium text-white shadow-[0_0_16px_rgb(106_134_255/0.45)] sm:right-5 sm:top-5">
+          <span className="absolute right-4 top-4 inline-flex items-center rounded-pill border-2 border-gold/60 bg-gold/15 px-3 py-1 text-[11px] font-bold text-gold sm:right-5 sm:top-5">
             限量
           </span>
         )}
@@ -436,7 +436,7 @@ function TicketCard({
         )}
         <p className="mt-3 text-[13px] leading-relaxed text-ink-3">{plan.note}</p>
 
-        <ul className="mt-4 grid gap-2 border-t border-line-soft pt-4 sm:mt-5 sm:pt-5">
+        <ul className="mt-3.5 grid gap-1.5 border-t border-line-soft pt-3.5 sm:mt-4 sm:pt-4">
           {included.map((item) => (
             <li key={item} className="flex items-center gap-2 text-[13px] text-ink-2">
               <Check size={14} className="shrink-0 text-brand-lift" aria-hidden />
@@ -445,17 +445,18 @@ function TicketCard({
           ))}
         </ul>
 
-        <div className="mt-5 sm:mt-6">
+        <div className="mt-4 sm:mt-5">
           <Cta
             href={REGISTER_URL}
             size="md"
+            variant="outline"
             className={interactive ? "" : "pointer-events-none"}
           >
             {REGISTER_READY ? "前往報名" : "報名即將開放"}
           </Cta>
         </div>
 
-        <p className="mt-4 text-[12px] text-ink-4">
+        <p className="mt-3 text-[12px] text-ink-4">
           {forums.map((f) => `${f.dateLabel.replace(/ /g, "")} ${f.name}`).join("　|　")}
         </p>
       </div>

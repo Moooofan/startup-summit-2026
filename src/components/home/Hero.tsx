@@ -19,12 +19,14 @@ export function Hero() {
   const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -60]);
   const copyOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
 
+  // 進場更俐落：縮短 stagger 與 duration → 最後元素約 1.1s 就收尾（原本 1.57s）。
+  // 這同時把玻璃環能安全掛載的「閘門」往前移 → 玻璃盤更早出現而不搶幀（見 OrbitRing 1150ms）。
   const rise = {
-    hidden: { opacity: 0, y: 24 },
+    hidden: { opacity: 0, y: 22 },
     show: (i: number) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: 0.12 * i, duration: 0.85, ease: [0.22, 1, 0.36, 1] as const },
+      transition: { delay: 0.08 * i, duration: 0.62, ease: [0.22, 1, 0.36, 1] as const },
     }),
   };
 

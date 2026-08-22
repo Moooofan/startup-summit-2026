@@ -20,11 +20,19 @@ const accent: Record<Forum["accent"], { text: string; glow: string; line: string
   violet: {
     text: "text-[#6d47c4]",
     glow: "rgb(182 185 220 / 0.10)",
-    line: "via-orbit-violet/70",
+    line: "via-[#6d47c4]/60",
   },
 };
 
-function SpeakerCard({ s, index }: { s: Speaker; index: number }) {
+function SpeakerCard({
+  s,
+  index,
+  tone,
+}: {
+  s: Speaker;
+  index: number;
+  tone: { text: string; line: string };
+}) {
   return (
     <li>
       <Link
@@ -48,7 +56,10 @@ function SpeakerCard({ s, index }: { s: Speaker; index: number }) {
           )}
           <span
             aria-hidden
-            className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-orbit-sky/70 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            className={cn(
+              "absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100",
+              tone.line
+            )}
           />
         </div>
         <div className="mt-3.5">
@@ -60,7 +71,7 @@ function SpeakerCard({ s, index }: { s: Speaker; index: number }) {
               className="shrink-0 text-ink-4 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
             />
           </p>
-          <p className="mt-1 text-[12.5px] leading-snug text-orbit-sky">{s.org}</p>
+          <p className={cn("mt-1 text-[12.5px] font-medium leading-snug", tone.text)}>{s.org}</p>
           <p className="mt-0.5 text-[12.5px] leading-snug text-ink-3">{s.title}</p>
         </div>
       </Link>
@@ -151,20 +162,18 @@ export function Speakers() {
           </Reveal>
         </div>
 
-        {/* 向下滑提示：頁面中間下方（與 ForumNode 同款、淺藍色） */}
-        <Reveal
-          delay={0.2}
-          className="pointer-events-none absolute inset-x-0 bottom-8 flex justify-center"
-        >
+        {/* 向下滑提示：頁面中間下方（常駐，不用 whileInView 門檻，否則初次落在視窗邊界不顯示） */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-8 flex justify-center">
           <span className="inline-flex flex-col items-center gap-2 text-[12px] tracking-[0.24em] text-orbit-sky">
             向下滑看兩天陣容
             <ChevronDown size={20} aria-hidden className="animate-bounce motion-reduce:animate-none" />
           </span>
-        </Reveal>
+        </div>
       </div>
 
       {forums.map((f, fi) => {
         const list = speakers.filter((s) => s.day === f.key);
+        const a = accent[f.accent];
         const isLast = fi === forums.length - 1;
         return (
           <Fragment key={f.key}>
@@ -176,7 +185,7 @@ export function Speakers() {
               <div className="shell">
                 <Reveal>
                   <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-black/8 pb-5">
-                    <span className="font-display text-xs tracking-[0.2em] text-ink-4">
+                    <span className={cn("font-display text-xs font-semibold tracking-[0.2em]", a.text)}>
                       {f.label}
                     </span>
                     <h3 className="text-xl font-bold text-ink md:text-2xl">{f.name}</h3>
@@ -190,7 +199,7 @@ export function Speakers() {
                 <Reveal delay={0.08}>
                   <ul className="mt-8 grid grid-cols-2 gap-x-5 gap-y-9 sm:grid-cols-3 lg:grid-cols-5">
                     {list.map((s, i) => (
-                      <SpeakerCard key={s.slug} s={s} index={fi === 0 ? i : i + 100} />
+                      <SpeakerCard key={s.slug} s={s} index={fi === 0 ? i : i + 100} tone={a} />
                     ))}
                   </ul>
                 </Reveal>

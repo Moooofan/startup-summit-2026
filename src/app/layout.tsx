@@ -5,7 +5,6 @@ import { site } from "@/lib/config";
 import { event } from "@/data/event";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
-import { MobileCta } from "@/components/site/MobileCta";
 
 /**
  * 中文字型走 CDN <link> 而非 next/font：
@@ -83,7 +82,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         <main id="main">{children}</main>
         <Footer />
-        <MobileCta />
       </body>
     </html>
   );

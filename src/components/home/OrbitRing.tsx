@@ -32,25 +32,24 @@ export function OrbitRing({ className = "" }: { className?: string }) {
   const [active, setActive] = useState(true); // 捲離 Hero → 暫停 render loop
   const wrapRef = useRef<HTMLDivElement>(null);
 
-  // 延到瀏覽器閒置才決定並掛載 WebGL → 先讓頁面內容與互動就緒，不被 three.js 初始化卡住
+  // 決定並掛載玻璃環。關鍵時序：Hero 進場動畫（文字/按鈕/翻牌鐘，最後一個約 1.5s 才結束）
+  // 期間若開始造幾何，會每幀搶走主執行緒時間 → 那些進場動畫卡頓。所以 WebGL 路徑刻意延到
+  // 進場動畫跑完（~1.7s）之後、且瀏覽器閒置時才掛 → 進場全程順，玻璃盤本就最後淡入（可接受）。
   useEffect(() => {
     let cancelled = false;
-    const decide = () => {
-      if (cancelled) return;
-      // 手機也開 WebGL 玻璃環：只要支援 WebGL 且未關動效就掛（不再限制桌機寬度）
-      setMode(!reduce && hasWebGL() ? "gl" : "css");
-    };
-    if (typeof window.requestIdleCallback === "function") {
-      const id = window.requestIdleCallback(decide, { timeout: 1200 });
-      return () => {
-        cancelled = true;
-        window.cancelIdleCallback(id);
-      };
+    // 關動效或不支援 WebGL → 直接用輕量 CSS 版（無造幾何、不會搶幀），不需延遲
+    if (reduce || !hasWebGL()) {
+      setMode("css");
+      return;
     }
-    const id = window.setTimeout(decide, 300);
+    // 進場動畫（縮短後最後元素約 1.1s）一結束就掛，不再多等 idle → 玻璃盤盡早出現。
+    // 造幾何是分幀的，此刻動畫已收尾，不會搶幀。閘門與 Hero 的 rise 時序連動，勿各改各的。
+    const startId = window.setTimeout(() => {
+      if (!cancelled) setMode("gl");
+    }, 1150);
     return () => {
       cancelled = true;
-      clearTimeout(id);
+      clearTimeout(startId);
     };
   }, [reduce]);
 
@@ -87,7 +86,7 @@ export function OrbitRing({ className = "" }: { className?: string }) {
       {/* WebGL 真玻璃：初始化期間只露出上面的光暈，畫出第一格後才淡入 */}
       {mode === "gl" && (
         <div
-          className={`absolute inset-0 transition-opacity duration-700 ${ready ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 transition-opacity duration-[400ms] ${ready ? "opacity-100" : "opacity-0"}`}
         >
           <OrbitGlass active={active} onReady={() => setReady(true)} />
         </div>

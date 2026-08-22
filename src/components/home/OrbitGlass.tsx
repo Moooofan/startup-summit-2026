@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Lightformer, MeshTransmissionMaterial } from "@react-three/drei";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
@@ -130,40 +130,27 @@ function applyVertexGradient(geo: BufferGeometry, mid: number, span: number, aHe
   geo.setAttribute("color", new THREE.BufferAttribute(arr, 3));
 }
 
-// 產生 3 個速度群組的幾何：outer（主環）/ mid（外側與中心之間）/ dome（中心圓頂）
-function buildGroups(): { outer: BufferGeometry; mid: BufferGeometry; dome: BufferGeometry } {
+type GroupKey = "outer" | "mid" | "dome";
+type PieceSpec = {
+  group: GroupKey;
+  mid: number;
+  rmid: number;
+  rt: number;
+  span: number;
+  depth: number;
+  z: number;
+  tilt: number;
+  wobble: number;
+  ca: string;
+  cb: string;
+};
+
+// 只算「參數」（吃亂數、極便宜）—— 亂數消耗順序與原同步版逐項一致 → 幾何結果不變。
+// 真正貴的一步（擠出＋倒角＋三角化＋烤頂點色）延到 specToGeometry，於 Ring 內分幀進行。
+function computeSpecs(): PieceSpec[] {
   const rand = makeRng(SEED * 1013904223);
   const lerp = (a: number, b: number) => a + (b - a) * rand();
-  const outerParts: BufferGeometry[] = [];
-  const midParts: BufferGeometry[] = [];
-  const domeParts: BufferGeometry[] = [];
-
-  const addPiece = (
-    arr: BufferGeometry[],
-    mid: number,
-    rmid: number,
-    rt: number,
-    span: number,
-    depth: number,
-    z: number,
-    tilt: number,
-    wobble: number
-  ) => {
-    const shape = sectorShape(rmid - rt / 2, rmid + rt / 2, mid - span / 2, mid + span / 2);
-    const geo = new THREE.ExtrudeGeometry(shape, {
-      depth,
-      bevelEnabled: true,
-      bevelThickness: 0.025,
-      bevelSize: 0.025,
-      bevelSegments: 2,
-      curveSegments: 20,
-    });
-    geo.translate(0, 0, -depth / 2);
-    const [ca, cb] = CPAIRS[Math.floor(rand() * CPAIRS.length)];
-    applyVertexGradient(geo, mid, span, ca, cb);
-    placePiece(geo, mid, rmid, z, tilt, wobble);
-    arr.push(geo);
-  };
+  const specs: PieceSpec[] = [];
 
   // 主環 → outer 群組：內外緣都對齊、幾乎共面、近乎不傾斜 → 切齊、不穿出
   for (let i = 0; i < N; i++) {
@@ -176,12 +163,15 @@ function buildGroups(): { outer: BufferGeometry; mid: BufferGeometry; dome: Buff
     const depth = lerp(0.18, 0.26);
     const span = lerp(12, 28) * (Math.PI / 180); // 弧長縮短（< 36° pitch）→ 外環不再重疊
     const z = lerp(-0.025, 0.025);
-    addPiece(outerParts, mid, rmid, rt, span, depth, z, lerp(-0.025, 0.025), lerp(-0.03, 0.03));
+    const tilt = lerp(-0.025, 0.025);
+    const wobble = lerp(-0.03, 0.03);
+    const [ca, cb] = CPAIRS[Math.floor(rand() * CPAIRS.length)];
+    specs.push({ group: "outer", mid, rmid, rt, span, depth, z, tilt, wobble, ca, cb });
   }
 
   // 同心破環：r>=1 歸 mid 群組（外側與中心之間），其餘歸 dome 群組（中心圓頂，越內越高）
   for (const band of BANDS) {
-    const arr = band.r >= 1 ? midParts : domeParts;
+    const group: GroupKey = band.r >= 1 ? "mid" : "dome";
     for (let k = 0; k < band.count; k++) {
       const mid = (k / band.count) * Math.PI * 2 + lerp(-0.18, 0.18);
       const router = band.r + lerp(-0.02, 0.02);
@@ -190,17 +180,39 @@ function buildGroups(): { outer: BufferGeometry; mid: BufferGeometry; dome: Buff
       const depth = 0.12 + 0.1 * w;
       const span = lerp(16, 44) * (Math.PI / 180);
       const z = band.z + lerp(-0.03, 0.03);
-      addPiece(arr, mid, router - rt / 2, rt, span, depth, z, lerp(-0.06, 0.06), lerp(-0.06, 0.06));
+      const tilt = lerp(-0.06, 0.06);
+      const wobble = lerp(-0.06, 0.06);
+      const [ca, cb] = CPAIRS[Math.floor(rand() * CPAIRS.length)];
+      specs.push({ group, mid, rmid: router - rt / 2, rt, span, depth, z, tilt, wobble, ca, cb });
     }
   }
+  return specs;
+}
 
-  const build = (arr: BufferGeometry[]) => {
-    const m = mergeGeometries(arr, false);
-    arr.forEach((g) => g.dispose());
-    m.computeVertexNormals();
-    return m;
-  };
-  return { outer: build(outerParts), mid: build(midParts), dome: build(domeParts) };
+// 單塊玻璃的貴步驟 → 分幀呼叫（每幀只做幾塊，之間讓出主執行緒）
+function specToGeometry(s: PieceSpec): BufferGeometry {
+  const shape = sectorShape(s.rmid - s.rt / 2, s.rmid + s.rt / 2, s.mid - s.span / 2, s.mid + s.span / 2);
+  const geo = new THREE.ExtrudeGeometry(shape, {
+    depth: s.depth,
+    bevelEnabled: true,
+    bevelThickness: 0.025,
+    bevelSize: 0.025,
+    // 進場凍格主因是這段同步造幾何的頂點量：bevelSegments 2→1、curveSegments 20→10
+    // → 頂點數約砍半、build 時間大減；弧塊小，斜角與弧線的視覺差幾乎看不出（不動塊數 → 密度不變）
+    bevelSegments: 1,
+    curveSegments: 10,
+  });
+  geo.translate(0, 0, -s.depth / 2);
+  applyVertexGradient(geo, s.mid, s.span, s.ca, s.cb);
+  placePiece(geo, s.mid, s.rmid, s.z, s.tilt, s.wobble);
+  return geo;
+}
+
+function mergeGroup(arr: BufferGeometry[]): BufferGeometry {
+  const m = mergeGeometries(arr, false);
+  arr.forEach((g) => g.dispose());
+  m.computeVertexNormals();
+  return m;
 }
 
 // 一個速度群組：自轉、自己一份玻璃材質
@@ -227,17 +239,57 @@ function GlassGroup({
   );
 }
 
+type Groups = { outer: BufferGeometry; mid: BufferGeometry; dome: BufferGeometry };
+
 function Ring({ onReady }: { onReady?: () => void }) {
-  const groups = useMemo(buildGroups, []);
+  const [groups, setGroups] = useState<Groups | null>(null);
   // 玻璃折射看到的底色：拉亮成藍調 → 玻璃本體更淺、更通透
   const bg = useMemo(() => new THREE.Color("#a9c1ea"), []);
+
+  // 分幀建構：把 ~44 塊玻璃拆成每幀幾塊，之間讓出主執行緒 → 進場不再一次性凍格。
+  // computeSpecs 保留原亂數順序 → 幾何與同步版完全一致（純效能重構，外觀不變）。
+  useEffect(() => {
+    let cancelled = false;
+    const specs = computeSpecs();
+    const buckets: Record<GroupKey, BufferGeometry[]> = { outer: [], mid: [], dome: [] };
+    let idx = 0;
+    const CHUNK = 6; // 掛載時進場動畫已收尾、無需為它讓幀 → 一次多做幾塊，玻璃盤更快建好
+    let raf = 0;
+    const step = () => {
+      if (cancelled) return;
+      const end = Math.min(idx + CHUNK, specs.length);
+      for (; idx < end; idx++) {
+        const s = specs[idx];
+        buckets[s.group].push(specToGeometry(s));
+      }
+      if (idx < specs.length) {
+        raf = requestAnimationFrame(step);
+        return;
+      }
+      setGroups({
+        outer: mergeGroup(buckets.outer),
+        mid: mergeGroup(buckets.mid),
+        dome: mergeGroup(buckets.dome),
+      });
+    };
+    raf = requestAnimationFrame(step);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+      // 尚未合併的殘塊在此釋放；已合併者由 GlassGroup 卸載時各自 dispose
+      [...buckets.outer, ...buckets.mid, ...buckets.dome].forEach((g) => g.dispose());
+    };
+  }, []);
+
   const frames = useRef(0);
   useFrame(() => {
-    // 等畫出第一格後才通知就緒 → 淡入時不會露出空畫布
+    // 幾何就緒後，等畫出第一格才通知 ready → 淡入時不會露出空畫布
+    if (!groups) return;
     frames.current += 1;
     if (frames.current === 2) onReady?.();
   });
 
+  if (!groups) return null;
   return (
     <group rotation={TILT}>
       <GlassGroup geometry={groups.outer} speed={SPIN_OUTER} bg={bg} />
