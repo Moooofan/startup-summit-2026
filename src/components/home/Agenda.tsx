@@ -57,7 +57,7 @@ function DayNode({
   return (
     <div
       id={id}
-      className="snap-panel relative flex min-h-[100svh] items-center justify-center"
+      className="snap-panel relative flex items-center justify-center overflow-hidden md:min-h-[100svh]"
     >
       <div
         aria-hidden
@@ -118,11 +118,11 @@ export function Agenda() {
   return (
     <section id="agenda" className="relative">
       {/* 開場大字報頁（同講者陣容） */}
-      <div className="snap-panel relative flex min-h-[100svh] items-center overflow-hidden">
+      <div className="snap-panel relative flex items-center overflow-hidden pt-24 md:min-h-[100svh] md:pt-0">
         <div className="shell relative w-full">
           <Reveal>
             <SectionHead
-              className="mt-14"
+              className="md:mt-14"
               eyebrow="PROGRAM"
               ghost="AGENDA"
               title="兩天，十二條主題軌"
@@ -139,7 +139,7 @@ export function Agenda() {
         </div>
 
         {/* 向下滑提示 */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-8 flex justify-center">
+        <div className="pointer-events-none absolute inset-x-0 bottom-8 hidden justify-center md:flex">
           <span className="inline-flex flex-col items-center gap-2 text-[12px] tracking-[0.24em] text-orbit-sky">
             向下滑看兩天議程
             <ChevronDown size={20} aria-hidden className="animate-bounce motion-reduce:animate-none" />
@@ -156,7 +156,7 @@ export function Agenda() {
             <DayNode f={f} order={fi + 1} tracks={dayTracks} id={f.key} />
 
             {/* 課程格 */}
-            <div className="snap-panel min-h-[100svh] pb-16 pt-6">
+            <div className="snap-panel pb-16 pt-6 md:min-h-[100svh]">
               <div className="shell">
                 <Reveal>
                   <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-black/8 pb-5">

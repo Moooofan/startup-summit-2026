@@ -18,6 +18,9 @@ import { useEffect } from "react";
 export function ScrollSnapController() {
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // 手機／觸控裝置：不做 JS 跳頁（preventDefault + scrollIntoView 會與原生慣性捲動打架 → 卡頓）。
+    // 交還原生捲動；節點頁在手機上直接自然捲過（桌機仍一頁一頁）。
+    if (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768) return;
 
     const getTargets = () =>
       Array.from(document.querySelectorAll<HTMLElement>(".snap-start, .snap-panel"));

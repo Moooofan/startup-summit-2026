@@ -10,7 +10,7 @@ export function Venue() {
   return (
     <section
       id="venue"
-      className="relative flex min-h-[100svh] snap-start items-center pb-16 pt-24 [scroll-margin-top:-88px]"
+      className="relative flex snap-start items-center pb-16 pt-24 md:min-h-[100svh] [scroll-margin-top:-88px]"
     >
       <div className="shell w-full">
         <div className="grid gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-20">

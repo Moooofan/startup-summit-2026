@@ -83,7 +83,7 @@ function SpeakerCard({
 function ForumNode({ f, order, count }: { f: Forum; order: number; count: number }) {
   const a = accent[f.accent];
   return (
-    <div className="snap-panel relative flex min-h-[100svh] items-center justify-center">
+    <div className="snap-panel relative flex items-center justify-center overflow-hidden md:min-h-[100svh]">
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-1/2 h-[70vw] max-h-[720px] w-[70vw] max-w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full"
@@ -145,7 +145,7 @@ export function Speakers() {
       <div aria-hidden className="hairline absolute inset-x-0 top-0 z-10 h-px" />
 
       {/* 第一頁：開場標題 */}
-      <div className="snap-panel relative flex min-h-[100svh] items-center overflow-hidden">
+      <div className="snap-panel relative flex items-center overflow-hidden pt-24 md:min-h-[100svh] md:pt-0">
         <div
           aria-hidden
           className="pointer-events-none absolute -right-[10%] top-[12%] h-[34vw] max-h-[440px] w-[34vw] max-w-[440px] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.08)_0%,transparent_66%)]"
@@ -153,7 +153,7 @@ export function Speakers() {
         <div className="shell relative w-full">
           <Reveal>
             <SectionHead
-              className="mt-16"
+              className="md:mt-16"
               eyebrow="SPEAKERS"
               ghost="LINE-UP"
               title={`${speakerCount} 位講者，兩天分場登台`}
@@ -163,7 +163,7 @@ export function Speakers() {
         </div>
 
         {/* 向下滑提示：頁面中間下方（常駐，不用 whileInView 門檻，否則初次落在視窗邊界不顯示） */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-8 flex justify-center">
+        <div className="pointer-events-none absolute inset-x-0 bottom-8 hidden justify-center md:flex">
           <span className="inline-flex flex-col items-center gap-2 text-[12px] tracking-[0.24em] text-orbit-sky">
             向下滑看兩天陣容
             <ChevronDown size={20} aria-hidden className="animate-bounce motion-reduce:animate-none" />
@@ -181,7 +181,7 @@ export function Speakers() {
             <ForumNode f={f} order={fi + 1} count={list.length} />
 
             {/* 講者網格頁：標題吸到最上方（靠 html scroll-padding-top 避開導覽列），內容比一頁高時自由捲動 */}
-            <div className="snap-panel min-h-[100svh] pb-16 pt-6">
+            <div className="snap-panel pb-16 pt-6 md:min-h-[100svh]">
               <div className="shell">
                 <Reveal>
                   <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-black/8 pb-5">
