@@ -81,7 +81,11 @@ export function Nav() {
             <span className="block text-[17px] font-bold tracking-wide text-ink md:text-sm">
               台灣新創投資年會
             </span>
-            <span className="font-display block text-[16px] tracking-[0.18em] text-ink-3">
+            {/* ⚠️ 這行刻意不吃全站字級級距，維持原始的 10px。
+                它是 logo 的副標，字級一旦追上上方主標（17px）就變成階層倒置 ——
+                全站字級曾整條上調（10→12→14→16），這行被一起帶上去後又調了回來。
+                下次再做全域字級調整時，請把這行排除。 */}
+            <span className="font-display block text-[10px] tracking-[0.18em] text-ink-3">
               2026 · 4TH
             </span>
           </span>
@@ -120,14 +124,18 @@ export function Nav() {
         </div>
       </nav>
 
-      {/* 手機選單 */}
+      {/* 手機選單
+          展開高度用 grid-template-rows 0fr → 1fr，不用 max-h 的魔術數字：
+          ⚠️ 原本寫死 max-h-[420px]，字級一調大（六個連結 + 報名鈕約 467px）就把最後的
+             「立即報名」裁掉。0fr/1fr 由內容自己撐開，往後改字級或加選單項都不會再爆。
+             子層必須有 min-h-0 + overflow-hidden，收合時才塌得回 0。 */}
       <div
         className={cn(
-          "overflow-hidden border-t border-black/8 bg-bg/95 backdrop-blur-md transition-[max-height] duration-500 lg:hidden",
-          open ? "max-h-[420px]" : "max-h-0 border-t-transparent"
+          "grid border-t border-black/8 bg-bg/95 backdrop-blur-md transition-[grid-template-rows] duration-500 lg:hidden",
+          open ? "grid-rows-[1fr]" : "grid-rows-[0fr] border-t-transparent"
         )}
       >
-        <ul className="shell flex flex-col py-4">
+        <ul className="shell flex min-h-0 flex-col overflow-hidden py-4">
           {links.map((l) => (
             <li key={l.href}>
               <Link

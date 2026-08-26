@@ -247,10 +247,19 @@ function NavArrow({
 
 /* -------------------------------------------------------------------------- */
 
+/**
+ * 單頁外殼。外層負責捲動、內層負責置中 —— 兩層不能合併：
+ * ⚠️ 直接在同一層寫 flex + items-center + overflow-y-auto，內容比容器高時
+ *    上緣會被切掉且捲不回去（flex 置中的老問題）。拆成「外層捲動 + 內層 min-h-full 置中」
+ *    才能做到「放得下就置中、放不下就往下捲」。
+ * 這頁是 h-[100svh] 的固定高橫向畫廊，字級一調大票卡就撐破一頁 —— 原本是 overflow-hidden
+ * 直接裁掉，改成可捲動後矮螢幕也看得完整張卡。
+ * 垂直捲動不會被外層 section 攔走：那邊的 onWheel 只吃 deltaX，touchAction 也留了 pan-y。
+ */
 function PanelShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-full w-full shrink-0 items-center justify-center overflow-hidden px-5 pb-24 pt-[80px] sm:px-20 sm:pb-16 sm:pt-[88px]">
-      {children}
+    <div className="h-full w-full shrink-0 overflow-y-auto overflow-x-hidden px-5 pb-24 pt-[80px] sm:px-20 sm:pb-16 sm:pt-[88px]">
+      <div className="flex min-h-full items-center justify-center">{children}</div>
     </div>
   );
 }
@@ -337,13 +346,27 @@ function TicketsPanel({
   return (
     <PanelShell>
       <div className="w-full max-w-4xl">
-        {/* 相框切換舞台（橫向滑動切票種） */}
+        {/* 相框切換舞台（橫向滑動切票種）
+            ⚠️ 高度不再寫死。原本是 h-[58vh] max-h-[560px] min-h-[420px]，而所有票卡都是
+               absolute（不撐高度）—— 字級一調大，卡片（約 520px）就撐破舞台被裁掉。
+               改用下面那張隱形卡當「高度撐架」：舞台永遠等於最高那張卡的高度，
+               切換票種時也不會跳動（兩張卡差一列「原價」）。 */}
         <div
-          className="relative mx-auto flex h-[58vh] max-h-[560px] min-h-[360px] items-center justify-center sm:min-h-[420px]"
+          className="relative mx-auto flex items-center justify-center"
           onPointerDown={onStageDown}
           onPointerUp={onStageUp}
           onPointerCancel={() => (swipeX.current = null)}
         >
+          {/* 高度撐架：唯一在流內的卡片，只佔位不顯示。
+              plans[0] 是早鳥票（多一列「原價」）＝ 最高的一張；調動 plans 順序時要一起改。
+              visibility:hidden → 不進 tab 順序、不被螢幕閱讀器讀到。 */}
+          <div
+            aria-hidden
+            className="pointer-events-none invisible w-[76vw] max-w-[360px] sm:w-[360px]"
+          >
+            <TicketCard plan={plans[0]} interactive={false} />
+          </div>
+
           {plans.map((p, i) => {
             const isActive = i === ticket;
             const side = i < ticket ? -1 : i > ticket ? 1 : 0; // 非作用中往自己那側 peek
