@@ -51,7 +51,7 @@ export default function ReviewPage() {
                 <a
                   key={e.no}
                   href={`#edition-${e.no}`}
-                  className="glass rounded-pill px-5 py-2.5 text-sm text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
+                  className="glass btn-glass rounded-pill px-5 py-2.5 text-sm text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
                 >
                   第{["一", "二", "三", "四"][e.no - 1]}屆
                   <span className="font-display ml-2 text-ink-4">{e.year}</span>
@@ -75,7 +75,7 @@ export default function ReviewPage() {
                 <h2 className="mt-4 text-[clamp(1.9rem,4.6vw,3rem)] font-bold leading-tight text-ink">
                   {latest.theme}
                 </h2>
-                <p className="mt-4 text-[15px] leading-relaxed text-ink-3">
+                <p className="mt-4 text-[18px] leading-relaxed text-ink-3">
                   {latest.dateLabel}
                   <br />
                   {latest.venue}
@@ -95,7 +95,7 @@ export default function ReviewPage() {
                     <span className="font-display text-orbit block text-[clamp(1.4rem,3.4vw,2rem)] font-semibold">
                       {s.value}
                     </span>
-                    <span className="mt-1.5 block text-[12px] text-ink-3">{s.label}</span>
+                    <span className="mt-1.5 block text-[17px] text-ink-3">{s.label}</span>
                   </dd>
                 </div>
               ))}
@@ -106,7 +106,7 @@ export default function ReviewPage() {
           <Reveal delay={0.12}>
             <ul className="mt-12 grid gap-4 md:grid-cols-2">
               {latest.highlights.map((h) => (
-                <li key={h} className="glass rounded-card p-6 text-[15px] leading-[1.9] text-ink-2">
+                <li key={h} className="glass rounded-card p-6 text-[18px] leading-[1.9] text-ink-2">
                   {h}
                 </li>
               ))}
@@ -156,7 +156,7 @@ export default function ReviewPage() {
                           DAY {f.day}
                         </p>
                         <h4 className="mt-2 text-lg font-bold text-ink">{f.name}</h4>
-                        <p className="font-display mt-1 text-[13px] text-ink-3">{f.date}</p>
+                        <p className="font-display mt-1 text-[17px] text-ink-3">{f.date}</p>
                       </header>
                       <Timeline forum={f} />
                     </div>
@@ -220,10 +220,10 @@ export default function ReviewPage() {
                         className="glass group flex items-start justify-between gap-4 rounded-card p-5 transition-colors hover:border-black/20"
                       >
                         <span className="min-w-0">
-                          <span className="block text-[14px] leading-relaxed text-ink-2 transition-colors group-hover:text-ink">
+                          <span className="block text-[18px] leading-relaxed text-ink-2 transition-colors group-hover:text-ink">
                             {m.title}
                           </span>
-                          <span className="mt-2 block text-[12px] text-ink-4">
+                          <span className="mt-2 block text-[17px] text-ink-4">
                             {m.outlet}
                             {m.date && `　${m.date}`}
                           </span>
@@ -261,7 +261,7 @@ export default function ReviewPage() {
                   <h3 className="mt-3 text-xl font-bold text-ink">
                     第{["一", "二", "三"][e.no - 1]}屆{e.theme ? `・${e.theme}` : ""}
                   </h3>
-                  <p className="mt-4 text-[14px] leading-relaxed text-ink-3">
+                  <p className="mt-4 text-[18px] leading-relaxed text-ink-3">
                     {e.dateLabel}
                     <br />
                     {e.venue}
@@ -271,7 +271,7 @@ export default function ReviewPage() {
                     <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-3">
                       {e.stats.map((s) => (
                         <div key={s.label}>
-                          <dt className="text-[12px] text-ink-4">{s.label}</dt>
+                          <dt className="text-[17px] text-ink-4">{s.label}</dt>
                           <dd className="font-display mt-0.5 text-base font-semibold text-ink-2">
                             {s.value}
                           </dd>
@@ -283,7 +283,7 @@ export default function ReviewPage() {
                   {e.highlights.length > 0 && (
                     <ul className="mt-6 space-y-2.5">
                       {e.highlights.map((h) => (
-                        <li key={h} className="flex gap-2.5 text-[14px] leading-relaxed text-ink-2">
+                        <li key={h} className="flex gap-2.5 text-[18px] leading-relaxed text-ink-2">
                           <span
                             aria-hidden
                             className="mt-2 h-1 w-1 shrink-0 rounded-full bg-orbit-sky"
@@ -295,7 +295,7 @@ export default function ReviewPage() {
                   )}
 
                   {!e.dataComplete && (
-                    <p className="mt-6 rounded-lg border border-black/8 bg-black/[0.03] px-4 py-3 text-[13px] leading-relaxed text-ink-4">
+                    <p className="mt-6 rounded-lg border border-black/8 bg-black/[0.03] px-4 py-3 text-[17px] leading-relaxed text-ink-4">
                       這一屆的公開紀錄較少，資料整理中。
                     </p>
                   )}
@@ -315,7 +315,7 @@ export default function ReviewPage() {
             <h2 className="mt-5 text-[clamp(1.6rem,4vw,2.4rem)] font-bold text-ink">
               {event.fullName}
             </h2>
-            <p className="mt-4 text-[15px] text-ink-2">
+            <p className="mt-4 text-[18px] text-ink-2">
               {event.dateLabelLong}｜{event.venue.name}
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-4">

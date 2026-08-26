@@ -42,7 +42,7 @@ export function SectionHead({
             </span>
           )}
           {eyebrow && (
-            <p className="mb-3 flex items-center justify-center gap-3 text-[11px] font-medium tracking-[0.24em] text-gold md:absolute md:left-1 md:top-2 md:mb-0 md:justify-start">
+            <p className="mb-3 flex items-center justify-center gap-3 text-[16px] font-medium tracking-[0.24em] text-gold md:absolute md:left-1 md:top-2 md:mb-0 md:justify-start">
               <span aria-hidden className="h-px w-8 bg-gold/60" />
               {eyebrow}
             </p>
@@ -57,7 +57,7 @@ export function SectionHead({
           {title}
         </Heading>
         {lead && (
-          <p className="mx-auto mt-5 max-w-2xl text-[15px] leading-[1.9] text-ink-2">{lead}</p>
+          <p className="mx-auto mt-5 max-w-2xl text-[18px] leading-[1.9] text-ink-2">{lead}</p>
         )}
       </header>
     );
@@ -79,7 +79,7 @@ export function SectionHead({
       )}
       <div className="relative">
         {eyebrow && (
-          <p className="relative -left-1 -top-3 mb-3 flex items-center gap-3 text-[11px] font-medium tracking-[0.24em] text-gold">
+          <p className="relative -left-1 -top-3 mb-3 flex items-center gap-3 text-[16px] font-medium tracking-[0.24em] text-gold">
             <span aria-hidden className="h-px w-8 bg-gold/60" />
             {eyebrow}
           </p>
@@ -88,7 +88,7 @@ export function SectionHead({
           {title}
         </Heading>
         {lead && (
-          <p className="mt-5 max-w-2xl text-[15px] leading-[1.9] text-ink-2">{lead}</p>
+          <p className="mt-5 max-w-2xl text-[18px] leading-[1.9] text-ink-2">{lead}</p>
         )}
       </div>
     </header>

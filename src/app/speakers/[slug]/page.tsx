@@ -77,7 +77,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
           <Reveal y={12}>
             <BackLink
               fallbackHref="/speakers"
-              className="inline-flex items-center gap-2 text-[13px] text-ink-3 transition-colors hover:text-ink"
+              className="inline-flex items-center gap-2 text-[17px] text-ink-3 transition-colors hover:text-ink"
             >
               <ArrowLeft size={14} />
               回到講者陣容
@@ -106,7 +106,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                   </div>
                 </div>
 
-                <dl className="mt-8 space-y-4 text-[13px]">
+                <dl className="mt-8 space-y-4 text-[17px]">
                   {forum && (
                     <div className="flex gap-3">
                       <dt className="shrink-0 text-ink-4">
@@ -135,7 +135,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                 {track && (
                   <Link
                     href="/agenda"
-                    className="inline-flex items-center gap-2 rounded-pill border border-black/10 bg-black/[0.04] px-4 py-1.5 text-[12.5px] text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
+                    className="inline-flex items-center gap-2 rounded-pill border border-black/10 bg-black/[0.04] px-4 py-1.5 text-[17px] text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
                   >
                     {track.title}
                     {s.role === "moderator" && <span className="text-ink-4">・主持人</span>}
@@ -152,10 +152,10 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                 </h1>
 
                 <p className="mt-4 text-lg text-orbit-sky">{s.org}</p>
-                <p className="mt-1 text-[15px] text-ink-2">{s.title}</p>
+                <p className="mt-1 text-[18px] text-ink-2">{s.title}</p>
 
                 {s.status === "pending" && (
-                  <p className="mt-5 inline-block rounded-lg border border-black/8 bg-black/[0.03] px-4 py-2 text-[12.5px] text-ink-3">
+                  <p className="mt-5 inline-block rounded-lg border border-black/8 bg-black/[0.03] px-4 py-2 text-[17px] text-ink-3">
                     出席確認中，最終陣容以官方公告為準
                   </p>
                 )}
@@ -165,7 +165,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                     {s.tags.map((t) => (
                       <li
                         key={t}
-                        className="rounded-pill border border-black/8 px-3 py-1 text-[12px] text-ink-3"
+                        className="rounded-pill border border-black/8 px-3 py-1 text-[17px] text-ink-3"
                       >
                         {t}
                       </li>
@@ -178,12 +178,12 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                 <div className="mt-10 space-y-5 border-t border-black/8 pt-10">
                   {paragraphs.length > 0 ? (
                     paragraphs.map((p, i) => (
-                      <p key={i} className="text-[15px] leading-[2] text-ink-2 md:text-base">
+                      <p key={i} className="text-[18px] leading-[2] text-ink-2 md:text-base">
                         {p}
                       </p>
                     ))
                   ) : (
-                    <p className="text-[15px] text-ink-3">講者簡介即將公布。</p>
+                    <p className="text-[18px] text-ink-3">講者簡介即將公布。</p>
                   )}
                 </div>
               </Reveal>
@@ -210,11 +210,11 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                 >
                   <ArrowLeft size={16} className="shrink-0 text-ink-4" />
                   <span className="min-w-0">
-                    <span className="block text-[11px] text-ink-4">上一位</span>
-                    <span className="mt-0.5 block truncate text-[15px] font-medium text-ink">
+                    <span className="block text-[16px] text-ink-4">上一位</span>
+                    <span className="mt-0.5 block truncate text-[18px] font-medium text-ink">
                       {prev.name}
                     </span>
-                    <span className="block truncate text-[12px] text-ink-3">{prev.org}</span>
+                    <span className="block truncate text-[17px] text-ink-3">{prev.org}</span>
                   </span>
                 </Link>
               ) : (
@@ -227,11 +227,11 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                   className="glass group flex items-center justify-end gap-4 rounded-card p-5 text-right transition-colors hover:border-black/20 sm:col-start-2"
                 >
                   <span className="min-w-0">
-                    <span className="block text-[11px] text-ink-4">下一位</span>
-                    <span className="mt-0.5 block truncate text-[15px] font-medium text-ink">
+                    <span className="block text-[16px] text-ink-4">下一位</span>
+                    <span className="mt-0.5 block truncate text-[18px] font-medium text-ink">
                       {next.name}
                     </span>
-                    <span className="block truncate text-[12px] text-ink-3">{next.org}</span>
+                    <span className="block truncate text-[17px] text-ink-3">{next.org}</span>
                   </span>
                   <ArrowRight size={16} className="shrink-0 text-ink-4" />
                 </Link>

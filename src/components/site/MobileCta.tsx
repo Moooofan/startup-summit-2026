@@ -26,7 +26,7 @@ export function MobileCta() {
       <div className="flex items-center justify-between gap-4 px-5 py-3">
         <div className="leading-tight">
           <p className="font-display text-sm font-semibold text-ink">{event.dateLabel}</p>
-          <p className="text-[11px] text-ink-3">早鳥 {event.tickets.currency}{event.tickets.earlyBird.toLocaleString()}</p>
+          <p className="text-[16px] text-ink-3">早鳥 {event.tickets.currency}{event.tickets.earlyBird.toLocaleString()}</p>
         </div>
         <Link
           href="/tickets"

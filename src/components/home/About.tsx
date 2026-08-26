@@ -65,9 +65,9 @@ export function About() {
                       {f.nameEn.toUpperCase()}
                     </p>
 
-                    <p className="mt-5 text-[15px] leading-[1.9] text-ink-2">{f.description}</p>
+                    <p className="mt-5 text-[18px] leading-[1.9] text-ink-2">{f.description}</p>
 
-                    <p className="mt-6 text-[13px] text-ink-3">
+                    <p className="mt-6 text-[17px] text-ink-3">
                       <span className="text-ink-4">主要聽眾｜</span>
                       {f.audience}
                     </p>

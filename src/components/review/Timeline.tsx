@@ -24,27 +24,27 @@ export function Timeline({ forum }: { forum: PastForum }) {
             <div className="flex flex-col gap-1.5 sm:flex-row sm:gap-6">
               <div className="shrink-0 sm:w-32">
                 <p
-                  className={`font-display text-[13px] tabular-nums ${
+                  className={`font-display text-[17px] tabular-nums ${
                     isBreak ? "text-ink-4" : "text-ink-2"
                   }`}
                 >
                   {s.time}
                 </p>
-                {s.duration && <p className="text-[11px] text-ink-4">{s.duration}</p>}
+                {s.duration && <p className="text-[16px] text-ink-4">{s.duration}</p>}
               </div>
               <div className="min-w-0 flex-1">
                 <p
-                  className={`text-[15px] leading-relaxed ${
+                  className={`text-[18px] leading-relaxed ${
                     isBreak ? "text-ink-4" : "font-medium text-ink"
                   }`}
                 >
                   {s.title}
                 </p>
                 {s.speaker && (
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-ink-3">{s.speaker}</p>
+                  <p className="mt-1.5 text-[17px] leading-relaxed text-ink-3">{s.speaker}</p>
                 )}
                 {s.format && !isBreak && s.format !== "keynote" && (
-                  <span className="mt-2.5 inline-block rounded-pill border border-black/10 px-2.5 py-0.5 text-[11px] text-ink-4">
+                  <span className="mt-2.5 inline-block rounded-pill border border-black/10 px-2.5 py-0.5 text-[16px] text-ink-4">
                     {formatLabel[s.format] ?? s.format}
                   </span>
                 )}

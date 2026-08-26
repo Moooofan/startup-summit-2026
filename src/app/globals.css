@@ -42,6 +42,28 @@
   --font-sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --font-display: var(--font-montserrat), "Noto Sans TC", sans-serif;
 
+  /* --- 字級：整組覆寫 Tailwind 內建的 text-xs ~ text-3xl ---
+     原始級距（xs 12 / sm 14 / base 16 / lg 18 / xl 20 / 2xl 24 / 3xl 30）在中文＋白霧底上
+     整體偏小，經三輪上調後定為 16 / 17 / 18 / 20 / 22 / 26 / 32。
+     ⚠️ 是「整條」一起上移，不是只放大小字 —— 只動底部會讓標籤追上內文、階層被壓平。
+     行高改用無單位比例（原生預設是綁定舊尺寸的絕對 rem，換字級後比例會跑掉）。
+     ⚠️ 站內另有 118 處 text-[18px] 這類「任意值」不吃這裡的 token，
+        改字級時兩邊必須一起動，否則級距會錯開。 */
+  --text-xs: 16px;
+  --text-xs--line-height: 1.45;
+  --text-sm: 17px;
+  --text-sm--line-height: 1.5;
+  --text-base: 18px;
+  --text-base--line-height: 1.75;
+  --text-lg: 20px;
+  --text-lg--line-height: 1.6;
+  --text-xl: 22px;
+  --text-xl--line-height: 1.5;
+  --text-2xl: 26px;
+  --text-2xl--line-height: 1.4;
+  --text-3xl: 32px;
+  --text-3xl--line-height: 1.3;
+
   /* --- radius：KV badge 是圓角矩形，全站沿用柔性圓角 --- */
   --radius-card: 16px;
   --radius-pill: 999px;
@@ -103,6 +125,91 @@
     background: linear-gradient(160deg, rgb(255 255 255 / 0.8), rgb(255 255 255 / 0.62));
     backdrop-filter: blur(11px);
     border: 1px solid rgb(24 34 66 / 0.14);
+  }
+
+  /* ===== 玻璃按鈕 =====
+     半透明底 + 霧化 + 上緣鏡面稜線 + 頂部高光帶 + 常駐微光漂移。
+     底色由各 variant 自帶（background-image / background-color），此處只負責「玻璃殼」。
+
+     底色一律是「原色票直接降到 0.82」，不做任何補償。
+     ⚠️ 別再試「把底色調深、再降 alpha」那條路：合成後會變回原本實心按鈕的樣子，
+        等於自己把透明感抵銷掉（已經走過一次）。要變淡，合成後的亮度就得真的上升。
+
+     全站背景合成後約 rgb(238 241 247)，0.82 的合成結果約 rgb(116 146 219)，
+     白字對比 3.08:1 —— 低於 WCAG AA 4.5:1，是使用者知情後選擇保留白字的結果
+     （原本的 3.86:1 本來就已低於 AA）。緩解：font-semibold + text-shadow + 頂部高光帶避開字身。
+     若要真正達標，唯一槓桿是把文字改成 --color-brand 並把 alpha 降到 0.50。 */
+  .btn-glass {
+    position: relative;
+    overflow: hidden;
+    /* 建立堆疊脈絡，讓下面兩個 ::before / ::after 的 z-index:-1 只退到「自己的背景之上」，
+       而不是掉到整頁背後。backdrop-filter 本身已會建立堆疊脈絡，這行是把意圖寫明，
+       同時保住「手機版拿掉 backdrop-filter」時的行為。 */
+    isolation: isolate;
+    /* 按鈕面積遠小於 .glass 卡片，成本可接受。
+       底色 0.82 只讓約 18% 的背景透出來 → 拉高 saturate，讓透出的那一點帶彩度、
+       像有折射的玻璃，而不是一層灰霧。 */
+    backdrop-filter: blur(12px) saturate(1.45);
+    -webkit-backdrop-filter: blur(12px) saturate(1.45);
+    /* border 刻意不寫在這裡 —— ghost / outline 變體各有自己的邊框色，
+       若在此下 border 會與 Tailwind 的 border-* utility 同特異度而變成「看載入順序」。
+       各變體自行用 border-* 決定鏡框顏色。 */
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.55),   /* 上緣鏡面稜線 */
+      inset 0 -1px 0 rgb(255 255 255 / 0.12),  /* 下緣微反光 */
+      0 10px 28px -14px rgb(70 90 190 / 0.5);
+  }
+  /* hover 抬升：inset 高光必須一起重寫，否則整條 box-shadow 被覆蓋 → 鏡面高光會消失 */
+  .btn-glass:hover {
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.58),
+      inset 0 -1px 0 rgb(255 255 255 / 0.16),
+      0 14px 34px -14px rgb(70 90 190 / 0.55);
+  }
+
+  /* 常駐微光：斜向亮帶緩慢左右漂移。只動 transform / opacity → 走合成層，不觸發重排重繪。 */
+  .btn-glass::before {
+    content: "";
+    position: absolute;
+    inset: -40% -25%;
+    pointer-events: none;
+    background: linear-gradient(
+      78deg,
+      transparent 38%,
+      rgb(255 255 255 / 0.38) 50%,
+      transparent 62%
+    );
+    /* 實際亮度 = 這裡的 0.38 × keyframe 的 opacity → 峰值約 0.11。
+       覺得太隱晦／太搶眼，調這兩個數字其中一個即可，全站按鈕會一起變。 */
+    animation: glass-drift 8s var(--ease-out-soft) infinite;
+  }
+
+  /* 頂部高光帶：從頂端往下漸淡，像光打在玻璃上半部。
+     底色 0.82 幾乎透不出背景，玻璃感主要就靠這條 + 上緣稜線撐起來。
+     只蓋上緣 38%（inset 的 bottom 62%）—— 膠囊按鈕的文字垂直置中、大致只佔中間三分之一，
+     高光落在其上方的留白區，因此不會再吃掉本來就吃緊的白字對比。
+     宣告順序必須在 ::before（常駐微光）之後 → 疊在微光之上、文字之下。 */
+  .btn-glass::after {
+    content: "";
+    position: absolute;
+    inset: 0 0 62% 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.13), transparent);
+  }
+
+  /* 兩層環境光都壓到內容之下。
+     ⚠️ 不加這條會出事：絕對定位的偽元素預設畫在「行內文字之上」，而 ::after 又是元素的
+     最後一個子節點 —— 頂部高光帶會蓋在字面上。z-index:-1 讓它們退到背景與文字之間。
+     （掃光的 <span> 不在此列，維持在內容層 → 光掃過整顆按鈕。） */
+  .btn-glass::before,
+  .btn-glass::after {
+    z-index: -1;
+  }
+
+  /* 白字按鈕：半透明底上把白字再穩一點（補回降透明度損失的對比） */
+  .btn-glass-on-dark {
+    color: #fff;
+    text-shadow: 0 1px 2px rgb(18 28 66 / 0.38);
   }
 
   /* 漸層文字 — 光軌色帶 */
@@ -180,6 +287,14 @@
 @keyframes sheen {
   from { transform: translateX(-250%) skewX(-12deg); }
   to   { transform: translateX(400%) skewX(-12deg); }
+}
+/* 玻璃按鈕的常駐微光漂移。
+   0% 與 100% 必須「相同且偏暗」—— base 層的 prefers-reduced-motion 會把 animation-duration
+   壓成 0.01ms、iteration-count 設為 1，動畫等同於瞬間停在 100% 的狀態。兩端一致 →
+   關動效時停在低亮度的靜態高光，不會卡在最亮的位置。 */
+@keyframes glass-drift {
+  0%, 100% { transform: translateX(-26%); opacity: 0.12; }
+  50%      { transform: translateX(26%);  opacity: 0.28; }
 }
 /* 橫向瀏覽箭頭的持續微動（暗示可往該方向切頁）；reduced-motion 於 base 層已全域關閉 */
 @keyframes nudge-r { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }

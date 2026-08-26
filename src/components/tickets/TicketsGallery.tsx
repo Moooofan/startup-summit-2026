@@ -164,7 +164,7 @@ export function TicketsGallery() {
           onClick={() => go(page - 1)}
           disabled={page === 0}
           aria-label={page > 0 ? `上一頁：${PAGE_NAMES[page - 1]}` : "上一頁"}
-          className="grid h-9 w-9 place-items-center rounded-full border border-line bg-white/70 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
+          className="btn-glass grid h-9 w-9 place-items-center rounded-full border border-line bg-white/55 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
         >
           <ChevronLeft size={18} aria-hidden />
         </button>
@@ -176,7 +176,8 @@ export function TicketsGallery() {
               aria-label={name}
               className={cn(
                 "h-2 rounded-full transition-all duration-300",
-                i === page ? "w-7 bg-brand-lift" : "w-2 bg-ink/20 hover:bg-ink/40"
+                // 頁碼點只有 2px 高，掛 .btn-glass 沒有意義（微光會被 overflow 裁掉）→ 只降不透明度
+                i === page ? "w-7 bg-[rgb(76_104_212/0.76)]" : "w-2 bg-ink/20 hover:bg-ink/40"
               )}
             />
           ))}
@@ -185,7 +186,7 @@ export function TicketsGallery() {
           onClick={() => go(page + 1)}
           disabled={page === 2}
           aria-label={page < 2 ? `下一頁：${PAGE_NAMES[page + 1]}` : "下一頁"}
-          className="grid h-9 w-9 place-items-center rounded-full border border-line bg-white/70 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
+          className="btn-glass grid h-9 w-9 place-items-center rounded-full border border-line bg-white/55 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
         >
           <ChevronRight size={18} aria-hidden />
         </button>
@@ -220,8 +221,10 @@ function NavArrow({
     >
       <span
         className={cn(
-          "grid h-12 w-12 place-items-center rounded-full border border-line bg-white/70 text-ink-3 shadow-[0_6px_20px_-8px_rgba(24,34,66,0.3)] backdrop-blur-sm transition-all duration-300",
-          "group-hover:border-orbit-sky group-hover:bg-orbit-sky/12 group-hover:text-orbit-sky group-hover:shadow-[0_0_20px_rgb(47_127_176/0.28)]",
+          "btn-glass grid h-12 w-12 place-items-center rounded-full border border-line bg-white/55 text-ink-3 transition-all duration-300",
+          // hover 光暈要連 inset 高光一起寫，否則整條 box-shadow 被蓋掉 → 玻璃的上緣鏡面線會消失
+          "group-hover:border-orbit-sky group-hover:bg-orbit-sky/12 group-hover:text-orbit-sky",
+          "group-hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.58),inset_0_-1px_0_rgb(255_255_255/0.16),0_0_20px_rgb(47_127_176/0.28)]",
           dir === "left" ? "animate-nudge-l" : "animate-nudge-r"
         )}
       >
@@ -233,8 +236,8 @@ function NavArrow({
           dir === "left" ? "text-left" : "text-right"
         )}
       >
-        <span className="block text-[10px] tracking-[0.2em] text-ink-4/70">{kicker}</span>
-        <span className="block text-[13px] font-medium text-ink-3 transition-colors group-hover:text-brand-lift">
+        <span className="block text-[16px] tracking-[0.2em] text-ink-4/70">{kicker}</span>
+        <span className="block text-[17px] font-medium text-ink-3 transition-colors group-hover:text-brand-lift">
           {label}
         </span>
       </span>
@@ -281,7 +284,7 @@ function IntroPanel({ active, onNext }: { active: boolean; onNext: () => void })
           aria-label="向右瀏覽票種與聯絡資訊"
           className="group mx-auto mt-11 block w-[min(90vw,680px)]"
         >
-          <span className="block text-[13px] font-medium tracking-wide text-ink-3 transition-colors group-hover:text-gold">
+          <span className="block text-[17px] font-medium tracking-wide text-ink-3 transition-colors group-hover:text-gold">
             向右瀏覽票種與聯絡資訊
           </span>
           <span className="relative mt-3 block h-8 w-full overflow-hidden">
@@ -373,10 +376,10 @@ function TicketsPanel({
               key={p.key}
               onClick={() => setTicket(i)}
               className={cn(
-                "rounded-pill border-2 px-5 py-2 text-sm font-bold transition-all duration-300",
+                "btn-glass rounded-pill border-2 px-5 py-2 text-sm font-bold transition-all duration-300",
                 i === ticket
-                  ? "border-brand-lift bg-brand-lift/15 text-brand-lift"
-                  : "border-line bg-white/50 text-ink-3 hover:border-brand-lift/50 hover:text-brand-lift"
+                  ? "border-brand-lift bg-brand-lift/18 text-brand-lift"
+                  : "border-line bg-white/42 text-ink-3 hover:border-brand-lift/50 hover:text-brand-lift"
               )}
             >
               {p.name}
@@ -410,7 +413,7 @@ function TicketCard({
         )}
       >
         {plan.featured && (
-          <span className="absolute right-4 top-4 inline-flex items-center rounded-pill border-2 border-gold/60 bg-gold/15 px-3 py-1 text-[11px] font-bold text-gold sm:right-5 sm:top-5">
+          <span className="absolute right-4 top-4 inline-flex items-center rounded-pill border-2 border-gold/60 bg-gold/15 px-3 py-1 text-[16px] font-bold text-gold sm:right-5 sm:top-5">
             限量
           </span>
         )}
@@ -434,11 +437,11 @@ function TicketCard({
             </span>
           </p>
         )}
-        <p className="mt-3 text-[13px] leading-relaxed text-ink-3">{plan.note}</p>
+        <p className="mt-3 text-[17px] leading-relaxed text-ink-3">{plan.note}</p>
 
         <ul className="mt-3.5 grid gap-1.5 border-t border-line-soft pt-3.5 sm:mt-4 sm:pt-4">
           {included.map((item) => (
-            <li key={item} className="flex items-center gap-2 text-[13px] text-ink-2">
+            <li key={item} className="flex items-center gap-2 text-[17px] text-ink-2">
               <Check size={14} className="shrink-0 text-brand-lift" aria-hidden />
               {item}
             </li>
@@ -456,7 +459,7 @@ function TicketCard({
           </Cta>
         </div>
 
-        <p className="mt-3 text-[12px] text-ink-4">
+        <p className="mt-3 text-[17px] text-ink-4">
           {forums.map((f) => `${f.dateLabel.replace(/ /g, "")} ${f.name}`).join("　|　")}
         </p>
       </div>
@@ -497,8 +500,8 @@ function ContactPanel() {
                   <Icon size={26} aria-hidden />
                 </span>
                 <span className="min-w-0 sm:mt-5">
-                  <span className="block text-[12px] tracking-[0.14em] text-gold">{label}</span>
-                  <span className="mt-1 flex items-center gap-1.5 text-[14px] font-medium text-ink transition-colors group-hover:text-brand-lift sm:mt-1.5">
+                  <span className="block text-[17px] tracking-[0.14em] text-gold">{label}</span>
+                  <span className="mt-1 flex items-center gap-1.5 text-[18px] font-medium text-ink transition-colors group-hover:text-brand-lift sm:mt-1.5">
                     {value}
                     <ArrowUpRight size={14} className="shrink-0 text-ink-4 transition-colors group-hover:text-brand-lift" />
                   </span>
@@ -508,7 +511,7 @@ function ContactPanel() {
           ))}
         </div>
 
-        <p className="mt-7 flex items-start justify-center gap-2 text-center text-[13px] leading-relaxed text-ink-3 sm:mt-8">
+        <p className="mt-7 flex items-start justify-center gap-2 text-center text-[17px] leading-relaxed text-ink-3 sm:mt-8">
           <Info size={14} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
           主辦單位｜{event.organizer.name}・
           {event.organizer.host}　{event.organizer.hostTitle}

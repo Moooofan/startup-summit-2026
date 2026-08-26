@@ -86,7 +86,7 @@ function DayNode({
             {tracks.map((tk) => (
               <li
                 key={tk.key}
-                className="rounded-pill border border-black/10 bg-white/50 px-3.5 py-1.5 text-[13px] text-ink-2"
+                className="rounded-pill border border-black/10 bg-white/50 px-3.5 py-1.5 text-[17px] text-ink-2"
               >
                 {tk.title}
               </li>
@@ -94,7 +94,7 @@ function DayNode({
           </ul>
           <span
             className={cn(
-              "mt-12 inline-flex flex-col items-center gap-2 text-[13px] tracking-[0.24em]",
+              "mt-12 inline-flex flex-col items-center gap-2 text-[17px] tracking-[0.24em]",
               t.text
             )}
           >
@@ -140,7 +140,7 @@ export function Agenda() {
 
         {/* 向下滑提示 */}
         <div className="pointer-events-none absolute inset-x-0 bottom-8 hidden justify-center md:flex">
-          <span className="inline-flex flex-col items-center gap-2 text-[12px] tracking-[0.24em] text-orbit-sky">
+          <span className="inline-flex flex-col items-center gap-2 text-[17px] tracking-[0.24em] text-orbit-sky">
             向下滑看兩天議程
             <ChevronDown size={20} aria-hidden className="animate-bounce motion-reduce:animate-none" />
           </span>
@@ -203,7 +203,7 @@ export function Agenda() {
                               {t.titleEn.toUpperCase()}
                             </p>
 
-                            <p className="mt-4 text-[15px] leading-[1.9] text-ink-2">{t.summary}</p>
+                            <p className="mt-4 text-[18px] leading-[1.9] text-ink-2">{t.summary}</p>
 
                             {list.length > 0 ? (
                               <ul className="mt-6 flex flex-wrap gap-2">
@@ -211,11 +211,11 @@ export function Agenda() {
                                   <li key={s.slug}>
                                     <Link
                                       href={`/speakers/${s.slug}`}
-                                      className="inline-flex items-center gap-1.5 rounded-pill border border-black/10 bg-white/60 px-3.5 py-2 text-[13px] text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
+                                      className="inline-flex items-center gap-1.5 rounded-pill border border-black/10 bg-white/60 px-3.5 py-2 text-[17px] text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
                                     >
                                       {s.name}
                                       {s.role === "moderator" && (
-                                        <span className="text-[11px] text-ink-4">主持</span>
+                                        <span className="text-[16px] text-ink-4">主持</span>
                                       )}
                                     </Link>
                                   </li>

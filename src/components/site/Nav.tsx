@@ -78,10 +78,10 @@ export function Nav() {
             className="h-7 w-auto transition-transform duration-300 group-hover:scale-105 md:h-8"
           />
           <span className="leading-tight">
-            <span className="block text-[13px] font-bold tracking-wide text-ink md:text-sm">
+            <span className="block text-[17px] font-bold tracking-wide text-ink md:text-sm">
               台灣新創投資年會
             </span>
-            <span className="font-display block text-[10px] tracking-[0.18em] text-ink-3">
+            <span className="font-display block text-[16px] tracking-[0.18em] text-ink-3">
               2026 · 4TH
             </span>
           </span>
@@ -104,7 +104,7 @@ export function Nav() {
           <NavCountdown />
           <Link
             href="/tickets"
-            className="hidden rounded-pill bg-brand-lift px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-brand-bright hover:shadow-[0_0_28px_rgb(106_134_255/0.45)] md:inline-flex"
+            className="btn-glass btn-glass-on-dark hidden rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:border-white/55 md:inline-flex"
           >
             立即報名
           </Link>
@@ -132,7 +132,7 @@ export function Nav() {
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="block border-b border-black/5 py-4 text-[15px] text-ink-2 transition-colors hover:text-ink"
+                className="block border-b border-black/5 py-4 text-[18px] text-ink-2 transition-colors hover:text-ink"
               >
                 {l.label}
               </Link>
@@ -141,7 +141,7 @@ export function Nav() {
           <li className="pt-5">
             <Link
               href="/tickets"
-              className="block rounded-pill bg-brand-lift py-3.5 text-center text-[15px] font-medium text-white"
+              className="btn-glass btn-glass-on-dark block rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] py-3.5 text-center text-[18px] font-semibold"
             >
               立即報名
             </Link>

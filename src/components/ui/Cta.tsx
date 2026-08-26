@@ -10,13 +10,37 @@ type Props = {
   className?: string;
 };
 
+/**
+ * 半透明玻璃底色 —— 靖藍 #4c68d4 → 紫 #8b6ed8，alpha 沿橫向由 0.78 遞減到 0.64
+ * （左實右透，像玻璃往邊緣變薄）。
+ *
+ * 這是預設值：實際唯一的使用者是 Hero 的兩顆 CTA，且它們各自用 className 覆寫成
+ * 互為鏡像的正／反向斜坡。改這裡時記得 Hero 那兩行不會跟著變。
+ *
+ * ⚠️ 兩條路已經走過、別再走：
+ *
+ * 1) 「把底色調深、再降 alpha」以保住白字對比 —— 合成後會變回實心按鈕的樣子，
+ *    等於自己把透明感抵銷掉。要看起來變淺，合成後的亮度就得真的上升。
+ *
+ * 2) 在漸層裡加高亮度的青／淺藍停 —— 曾採用 source/button2.png 的色階
+ *    （#8B5FAA → #7C85C0 → #60D2ED），使用者要求撤回。
+ *    若日後又要引入，注意它一旦落到文字底下白字會掉到約 1.9:1，
+ *    屆時漸層就不能再鏡像（見 Hero.tsx 的註解）。
+ *
+ * 全站背景合成後約 rgb(238 241 247)，本組色的白字對比為 2.9–3.4:1。
+ * 低於 WCAG AA 4.5:1，是使用者確認「白字夠明顯」後的知情選擇。
+ * 若日後要真正達標，唯一槓桿是把文字改成深色（--color-brand）。
+ */
+const GRADIENT_GLASS =
+  "[background-image:linear-gradient(110deg,rgb(76_104_212/0.78)_0%,rgb(139_110_216/0.64)_100%)]";
+
 export function Cta({ href, children, variant = "solid", size = "md", className }: Props) {
   // gradient 變體 ＝ 參考 button2.png：左紫 → 右藍的膠囊 + 右端「圓框箭頭」徽章。
   // 文字靠左、箭頭圓貼右緣（pr 很小），圓框近乎撐滿按鈕高度。
   if (variant === "gradient") {
     const pad = {
       sm: "gap-2.5 py-1 pl-5 pr-1 text-sm",
-      md: "gap-3 py-1.5 pl-6 pr-1.5 text-[15px]",
+      md: "gap-3 py-1.5 pl-6 pr-1.5 text-[18px]",
       lg: "gap-4 py-1.5 pl-8 pr-1.5 text-base",
     };
     const circle = { sm: "h-7 w-7", md: "h-9 w-9", lg: "h-11 w-11" };
@@ -25,23 +49,28 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
       <Link
         href={href}
         className={cn(
-          "group relative inline-flex items-center overflow-hidden rounded-pill font-medium text-white transition-all duration-300",
-          "[background-image:linear-gradient(90deg,#8a66c8_0%,#5a7fd6_50%,#38a6de_100%)]",
-          "hover:shadow-[0_12px_30px_-10px_rgb(80_110_220/0.6)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-glow",
+          // font-semibold（非 medium）：淺底上的白字對比只有 3.08:1，加字重是零成本的可讀性補償
+          "btn-glass btn-glass-on-dark group inline-flex items-center rounded-pill border border-white/40 font-semibold transition-all duration-300",
+          GRADIENT_GLASS,
+          "hover:border-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-glow",
           pad[size],
           className
         )}
       >
-        {/* hover 亮面掃過 */}
+        {/* hover 掃光：寬亮帶中夾一條窄鏡面線 —— 兩段亮度一起掠過，像光掃過玻璃曲面。
+            .btn-glass 的 ::before / ::after 已用 z-index:-1 壓到內容層之下，
+            這層維持預設堆疊即可蓋在其上。 */}
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/35 to-transparent [transform:translateX(-250%)_skewX(-12deg)] group-hover:[animation:sheen_0.85s_ease-out]"
+          className="pointer-events-none absolute inset-y-0 left-0 w-1/2 [background-image:linear-gradient(90deg,transparent_0%,rgb(255_255_255/0.16)_34%,rgb(255_255_255/0.55)_50%,rgb(255_255_255/0.16)_66%,transparent_100%)] [transform:translateX(-250%)_skewX(-12deg)] group-hover:[animation:sheen_0.85s_ease-out]"
         />
         <span className="relative">{children}</span>
         <span
           aria-hidden
           className={cn(
-            "relative grid shrink-0 place-items-center rounded-full border-2 border-white/75 bg-white/10 transition-transform duration-300 group-hover:translate-x-0.5",
+            // 圓框落在漸層最透的右端（alpha 0.64，合成後約 rgb(175 157 227)）→
+            // 白框要夠實才立得住。別跟著底色一起調淡。
+            "relative grid shrink-0 place-items-center rounded-full border-2 border-white/85 bg-white/25",
             circle[size]
           )}
         >
@@ -52,19 +81,23 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
   }
 
   const base =
-    "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-pill font-medium transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-glow";
+    "btn-glass group inline-flex items-center justify-center gap-2 rounded-pill font-medium transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-glow";
   const sizes = {
     sm: "px-4 py-2 text-sm",
-    md: "px-6 py-3 text-[15px]",
+    md: "px-6 py-3 text-[18px]",
     lg: "px-8 py-4 text-base",
   };
+  // hover 一律不改底色（使用者指定）—— 回饋交給掃光、邊框提亮與 .btn-glass:hover 的陰影抬升。
   const variants = {
+    // 平塗版：brand-lift #4c68d4 原色降到 0.76（合成後約 rgb(115 137 220)，白字 3.32:1），
+    // 與 Hero 鏡像漸層的兩個端點同色系。
     solid:
-      "bg-brand-lift text-white hover:bg-brand-bright hover:shadow-[0_0_36px_rgb(106_134_255/0.45)]",
-    ghost: "glass text-ink hover:border-black/25 hover:bg-black/10",
+      "btn-glass-on-dark border border-white/35 bg-[rgb(76_104_212/0.76)] font-semibold hover:border-white/55",
+    // .glass 自帶深色細邊框，不再套白色鏡框 → 淺底按鈕維持原本的輕盈感
+    ghost: "glass text-ink hover:border-black/25",
     // 藍色外框 + 淺藍底 + 藍字（報名按鈕）
     outline:
-      "border border-orbit-sky/70 bg-orbit-sky/12 text-orbit-sky hover:border-orbit-sky hover:bg-orbit-sky/20",
+      "border border-orbit-sky/70 bg-orbit-sky/12 text-orbit-sky hover:border-orbit-sky",
   };
 
   return (
@@ -72,10 +105,12 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
       href={href}
       className={cn(base, sizes[size], variants[variant as "solid" | "ghost" | "outline"], className)}
     >
+      {/* 掃光只給深底的 solid —— 白色亮帶掃過 ghost / outline 的淺底幾乎看不見，
+          那兩個變體的光感由 .btn-glass 的常駐微光與上緣高光提供。 */}
       {variant === "solid" && (
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/35 to-transparent [transform:translateX(-250%)_skewX(-12deg)] group-hover:[animation:sheen_0.85s_ease-out]"
+          className="pointer-events-none absolute inset-y-0 left-0 w-1/2 [background-image:linear-gradient(90deg,transparent_0%,rgb(255_255_255/0.16)_34%,rgb(255_255_255/0.55)_50%,rgb(255_255_255/0.16)_66%,transparent_100%)] [transform:translateX(-250%)_skewX(-12deg)] group-hover:[animation:sheen_0.85s_ease-out]"
         />
       )}
       <span className="relative">{children}</span>

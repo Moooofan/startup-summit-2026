@@ -50,8 +50,8 @@ export function FounderNote() {
                       {founderProfile.nameEn}
                     </span>
                   </p>
-                  <p className="mt-1 text-[13px] text-ink-3">{founderProfile.title}</p>
-                  <p className="text-[13px] text-ink-3">{founderProfile.subtitle}</p>
+                  <p className="mt-1 text-[17px] text-ink-3">{founderProfile.title}</p>
+                  <p className="text-[17px] text-ink-3">{founderProfile.subtitle}</p>
                 </figcaption>
               </figure>
             </Reveal>
@@ -60,7 +60,7 @@ export function FounderNote() {
           {/* 右：正常流動的內文 —— 平順上下捲動，不吸附。到底再滾一下就吸去講者頁。 */}
           <div className="pb-[16vh] pt-12 lg:pb-[18vh] lg:pt-[calc(88px+7vh)]">
             <Reveal delay={0.08}>
-              <p className="mb-4 flex items-center gap-3 text-[11px] font-medium tracking-[0.24em] text-gold">
+              <p className="mb-4 flex items-center gap-3 text-[16px] font-medium tracking-[0.24em] text-gold">
                 <span aria-hidden className="h-px w-8 bg-gold/60" />
                 FOUNDER&apos;S NOTE
               </p>
@@ -79,14 +79,14 @@ export function FounderNote() {
                 <p className="text-[clamp(1.15rem,2.6vw,1.5rem)] font-medium leading-[1.75] text-ink">
                   「{founderQuote.text}」
                 </p>
-                <footer className="mt-4 text-[13px] text-ink-4">— {founderQuote.source}</footer>
+                <footer className="mt-4 text-[17px] text-ink-4">— {founderQuote.source}</footer>
               </blockquote>
             </Reveal>
 
             <Reveal delay={0.2}>
               <div className="mt-12 space-y-6">
                 {paragraphs.map((p, i) => (
-                  <p key={i} className="text-[15px] leading-[2] text-ink-2 md:text-base">
+                  <p key={i} className="text-[18px] leading-[2] text-ink-2 md:text-base">
                     {p}
                   </p>
                 ))}
@@ -97,7 +97,7 @@ export function FounderNote() {
               <div className="mt-12 grid gap-4 sm:grid-cols-2">
                 {founderQuotes.map((q) => (
                   <div key={q.source} className="glass rounded-card p-6">
-                    <p className="text-[15px] leading-[1.85] text-ink-2">「{q.text}」</p>
+                    <p className="text-[18px] leading-[1.85] text-ink-2">「{q.text}」</p>
                     <p className="mt-3 text-xs text-ink-4">{q.source}</p>
                   </div>
                 ))}
@@ -109,7 +109,7 @@ export function FounderNote() {
                 <h3 className="text-xs tracking-[0.2em] text-ink-4">經歷</h3>
                 <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
                   {founderProfile.career.map((c) => (
-                    <li key={c} className="flex items-start gap-2.5 text-[14px] text-ink-2">
+                    <li key={c} className="flex items-start gap-2.5 text-[18px] text-ink-2">
                       <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-orbit-sky" />
                       {c}
                     </li>
