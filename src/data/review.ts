@@ -1,3 +1,5 @@
+import { speakers as currentSpeakers } from "./speakers";
+
 // 台灣新創投資年會 — 歷屆回顧資料
 // 資料來源：《第四屆新創投資年會企劃 新增贊助方案.pptx》（投影片 3、34–44）
 //           + 第三屆年會公開資訊（主題／日期／地點／規模）
@@ -41,6 +43,44 @@ export interface SponsorLogo {
   tier: string;
 }
 
+/** 時間軸重點數字。業主指定主打「參與人次」與「講者數量」，另兩項為次要補充。
+ *  值為 null = 尚未取得資料 → 版面顯示「—」，不開天窗。 */
+export interface EditionGrowth {
+  /** 參與人次（業主指定主打指標） */
+  attendees: number | null;
+  /** 講者數量（業主指定主打指標） */
+  speakers: number | null;
+  /** 投資機構家數（次要） */
+  institutions: number | null;
+  /** 論壇天數（次要） */
+  days: number | null;
+}
+
+/** 歷屆講者（區塊 3：點擊屆數展開的議程表用）。 */
+export interface PastSpeaker {
+  name: string;
+  /** 服務單位 */
+  org: string;
+  /** 職稱 */
+  title?: string;
+  /** 講題 */
+  topic?: string;
+  /** 第幾天（單日場免填） */
+  day?: 1 | 2;
+}
+
+/** 過往參與者好評留言。資料未到位前整個區塊不渲染。 */
+export interface Testimonial {
+  quote: string;
+  name: string;
+  title?: string;
+  org?: string;
+  /** 出自哪一屆 */
+  edition: number;
+  /** 是否已取得具名公開引用同意；false → 顯示為匿名 */
+  consent: boolean;
+}
+
 export interface Edition {
   no: number;
   year: number;
@@ -50,6 +90,16 @@ export interface Edition {
   venueAddress?: string;
   stats: { label: string; value: string }[];
   highlights: string[];
+  /** 時間軸右半邊的重點數字 */
+  growth?: EditionGrowth;
+  /** 時間軸右半邊的「精選一張」照片（業主：過去三屆各挑一張） */
+  heroPhoto?: string;
+  /** 一句話定調這一屆 */
+  oneLiner?: string;
+  /** 歷屆講者名單（區塊 3） */
+  pastSpeakers?: PastSpeaker[];
+  /** 這一屆哪些欄位是暫用填充料、待業主補件 */
+  pending?: string[];
   forums?: PastForum[];
   photos?: string[];
   sponsors?: SponsorLogo[];
@@ -663,6 +713,304 @@ export const thirdEditionSponsors: SponsorLogo[] = [
   { name: "TVCA 台灣創業投資商業同業公會", logo: "/review/logos/tvca.png", tier: "新創生態贊助商" },
 ];
 
+/** 第三屆兩日議程 —— 抽成具名常數，供講者名單推導與版面共用。
+ *  內容逐字保留當年議程，未改寫。 */
+const editionThreeForums: PastForum[] = [
+  {
+    day: 1,
+    date: "2025-10-01",
+    name: "創辦人論壇",
+    sessions: [
+      {
+        time: "09:00–09:05",
+        duration: "5 min",
+        title: "主辦人致歡迎辭",
+        speaker: "台灣新創投資年會主辦人林文欽",
+        format: "keynote",
+      },
+      {
+        time: "09:05–09:30",
+        duration: "25 min",
+        title: "開幕演講：我的創業人生",
+        speaker: "商周集團城邦集團聯合創辦人何飛鵬",
+        format: "keynote",
+      },
+      {
+        time: "09:30–09:55",
+        duration: "25 min",
+        title: "台灣軟體公司的全球化佈局，以KDAN為例",
+        speaker: "Kdan凱鈿創辦人兼執行長蘇柏州",
+        format: "keynote",
+      },
+      {
+        time: "09:55–10:35",
+        duration: "40 min",
+        title: "特約演講嘉賓：贏在不確定的年代",
+        speaker: "連續創業家美國 BonHope創投基金經營合夥人蕭一白",
+        format: "keynote",
+      },
+      {
+        time: "10:35–10:45",
+        duration: "10 min",
+        title: "早上場休息時間",
+        format: "break",
+      },
+      {
+        time: "10:45–11:05",
+        duration: "20 min",
+        title: "臺灣IPO新趨勢—創新板助力新創企業成長",
+        speaker: "台灣證交所總經理李愛玲",
+        format: "keynote",
+      },
+      {
+        time: "11:05–11:25",
+        duration: "20 min",
+        title: "Driving Innovation in the AI Era",
+        speaker: "高通業務開發總監暨亞太生態系發展計畫負責人戴郁文",
+        format: "keynote",
+      },
+      {
+        time: "11:25–12:00",
+        duration: "35 min",
+        title: "《新創圈的小欣欣之約》 Panel",
+        speaker: "Panel主持人Addin Venture合夥人蘇祐立 Meet創業小聚執行長AAMA搖籃計劃董事陳素蘭 時代基金會Garage+執行長趙如媛",
+        format: "panel",
+      },
+      {
+        time: "13:00–13:25",
+        duration: "25 min",
+        title: "投資企業與新創的賦能及協同",
+        speaker: "新光三越創投董事長王楠淵William",
+        format: "keynote",
+      },
+      {
+        time: "13:25–13:50",
+        duration: "25 min",
+        title: "Lessons I Learned from Startup Founders",
+        speaker: "基石創投總經理林子樸TP Lin",
+        format: "keynote",
+      },
+      {
+        time: "13:50–14:15",
+        duration: "25 min",
+        title: "台灣創業者的成長挑戰",
+        speaker: "SIC永續影響力投資共同創辦人黃俊傑Amos",
+        format: "keynote",
+      },
+      {
+        time: "14:15–14:40",
+        duration: "25 min",
+        title: "用股權規劃守住創辦人的權力與尊嚴",
+        speaker: "新創律師CIEA跨境創新創業交流協會理事長簡榮宗",
+        format: "keynote",
+      },
+      {
+        time: "14:40–15:05",
+        duration: "25 min",
+        title: "新創出海：不是Plus，是Must",
+        speaker: "LANDED赴美加速器負責人黃聖安Bryan Huang",
+        format: "keynote",
+      },
+      {
+        time: "15:05–15:20",
+        duration: "15 min",
+        title: "下午場休息",
+        format: "break",
+      },
+      {
+        time: "15:20–15:45",
+        duration: "25 min",
+        title: "第三次AI浪潮下，台灣團隊如何勇敢Pivot產品找到PMF？",
+        speaker: "云思維商業模式產品化顧問史耀云",
+        format: "keynote",
+      },
+      {
+        time: "15:45–16:10",
+        duration: "25 min",
+        title: "從硬體思維到智慧零售生態圈",
+        speaker: "CYBERBIZ順立智慧創辦人兼執行長蘇基明",
+        format: "keynote",
+      },
+      {
+        time: "16:10–16:35",
+        duration: "25 min",
+        title: "走向第四次創業：數位健康",
+        speaker: "Flowgreens創辦人海外創業連續成功創業家許晴晏博士",
+        format: "keynote",
+      },
+      {
+        time: "16:35–17:10",
+        duration: "35 min",
+        title: "amazing talker：從0到18億，正往750億邁進",
+        speaker: "Amazing Talker創辦人兼執行長趙捷平Abner",
+        format: "keynote",
+      },
+    ],
+  },
+  {
+    day: 2,
+    date: "2025-10-02",
+    name: "投資人論壇",
+    sessions: [
+      {
+        time: "09:00–09:05",
+        duration: "5 min",
+        title: "年會主辦人致歡迎詞",
+        speaker: "台灣新創投資年會主辦人林文欽Vincent",
+        format: "keynote",
+      },
+      {
+        time: "09:05–09:35",
+        duration: "30 min",
+        title: "不是創投，是VC",
+        speaker: "Venture+管理合夥人莊豐賓Roy",
+        format: "keynote",
+      },
+      {
+        time: "09:35–10:05",
+        duration: "30 min",
+        title: "解鎖雙島新動能：台日新創投資報告",
+        speaker: "中華開發資本創新投資事業群主管董事總經理郭大經",
+        format: "keynote",
+      },
+      {
+        time: "10:05–10:35",
+        duration: "30 min",
+        title: "資本的羅盤：引領新創穿越不確定年代",
+        speaker: "H&Q漢鼎創投董事總經理張英信",
+        format: "keynote",
+      },
+      {
+        time: "10:35–10:45",
+        duration: "10 min",
+        title: "上午場休息時間",
+        format: "break",
+      },
+      {
+        time: "10:45–11:15",
+        duration: "30 min",
+        title: "臺灣新創投資洞察：資本熱潮下的反思",
+        speaker: "台灣經濟研究院研究六所副所長范秉航",
+        format: "keynote",
+      },
+      {
+        time: "11:15–11:55",
+        duration: "40 min",
+        title: "GenAI Investment Trends",
+        speaker: "靖亞資本Eminence Capital創始管理合夥人鄭靖偉Peter",
+        format: "keynote",
+      },
+      {
+        time: "13:00–13:30",
+        duration: "30 min",
+        title: "以永續型創投打造連結產業與資本的創投新路徑",
+        speaker: "能率亞洲資本總經理游智元",
+        format: "keynote",
+      },
+      {
+        time: "13:30–14:00",
+        duration: "30 min",
+        title: "新創投資與其他森林裡有數條過於喧囂的孤獨之路",
+        speaker: "和鼎創投副董事長暨總經理劉奕成IC",
+        format: "keynote",
+      },
+      {
+        time: "14:00–14:30",
+        duration: "30 min",
+        title: "全民資本-成就企業新動能",
+        speaker: "資本圈天使會創辦人李豐源Dennis",
+        format: "keynote",
+      },
+      {
+        time: "14:30–14:45",
+        duration: "15 min",
+        title: "下午場休息時間",
+        format: "break",
+      },
+      {
+        time: "14:45–15:10",
+        duration: "25 min",
+        title: "科絡達：SDV與SDX產業視角與機會",
+        speaker: "Carota科絡達創辦人兼執行長 吳柏儀 Paul Wu",
+        format: "keynote",
+      },
+      {
+        time: "15:10–15:35",
+        duration: "25 min",
+        title: "募資四千萬美金創業者的三個真實故事",
+        speaker: "WeMo執行長劉于遜Davidd",
+        format: "keynote",
+      },
+      {
+        time: "15:35–16:00",
+        duration: "25 min",
+        title: "From MAGA to MTGA",
+        speaker: "Taiwan Global Angels 創辦人詹益鑑",
+        format: "keynote",
+      },
+      {
+        time: "16:00–16:25",
+        duration: "25 min",
+        title: "台灣新創軟體投資的百倍奇蹟之旅",
+        speaker: "新經濟創投NEV管理合夥人溫宏駿",
+        format: "keynote",
+      },
+      {
+        time: "16:25–16:50",
+        duration: "25 min",
+        title: "可以被複製的天使投資方法論",
+        speaker: "DNA Fund創始合伙人 / 大數碼集團董事長王俊傑博士",
+        format: "keynote",
+      },
+      {
+        time: "16:50–17:15",
+        duration: "25 min",
+        title: "Fintech x AI：東南亞SaaS的新商業典範",
+        speaker: "Hive Venture 李彥樞Yanlee",
+        format: "keynote",
+      },
+    ],
+  },
+];
+
+/* ==========================================================================
+   ⚠️ 版面設計用的暫時填充料 —— 全部待業主補件後移除
+   業主指示：先借 2026 的素材把三屆版面做出來，缺料處標註待補。
+   這些常數只被第一、二屆引用；第三屆用的是真實資料。
+   ========================================================================== */
+
+/** 暫用照片：借第三屆現場照，非該屆真實照片。 */
+const PLACEHOLDER_PHOTO = "/review/group-photo.jpg";
+
+/** 暫用講者名單：借 2026 本屆講者，非該屆真實名單。 */
+const PLACEHOLDER_SPEAKERS: PastSpeaker[] = currentSpeakers.slice(0, 8).map((sp) => ({
+  name: sp.name,
+  org: sp.org,
+  title: sp.title,
+  topic: "（講題待補）",
+}));
+
+/** 第三屆講者名單 —— 自當屆 35 場議程推導，排除休息場次。
+ *  原始 speaker 欄位是「單位＋職稱＋姓名」連在一起的字串，無法安全自動拆解，
+ *  因此 org 欄位先放整串原文，name 留空字串由版面判斷 → 待業主校對後再拆。 */
+const thirdEditionSpeakers: PastSpeaker[] = editionThreeForums.flatMap((f) =>
+  f.sessions
+    .filter((x) => x.format !== "break" && x.speaker)
+    .map((x) => ({
+      name: "",
+      org: x.speaker as string,
+      topic: x.title,
+      day: f.day,
+    })),
+);
+
+/** 過往參與者好評留言 —— 版位已保留，待 Vincent 撈取後填入。
+ *  空陣列 → 該區塊整個不渲染。
+ *  每則需要：留言內容、姓名、職稱、公司、哪一屆、是否同意具名引用。 */
+export const testimonials: Testimonial[] = [
+  // TODO: 待業主提供。建議每屆 3–5 則、總共 10–15 則。
+];
+
 export const editions: Edition[] = [
   {
     no: 3,
@@ -688,263 +1036,17 @@ export const editions: Edition[] = [
       "會後累積 64 則媒體露出，涵蓋中央社、經濟日報、工商時報、中時新聞網等主流財經媒體。",
       "26 則公開社群貼文分享年會內容，可監測到 146 次分享。",
     ],
-    forums: [
-    {
-      day: 1,
-      date: "2025-10-01",
-      name: "創辦人論壇",
-      sessions: [
-        {
-          time: "09:00–09:05",
-          duration: "5 min",
-          title: "主辦人致歡迎辭",
-          speaker: "台灣新創投資年會主辦人林文欽",
-          format: "keynote",
-        },
-        {
-          time: "09:05–09:30",
-          duration: "25 min",
-          title: "開幕演講：我的創業人生",
-          speaker: "商周集團城邦集團聯合創辦人何飛鵬",
-          format: "keynote",
-        },
-        {
-          time: "09:30–09:55",
-          duration: "25 min",
-          title: "台灣軟體公司的全球化佈局，以KDAN為例",
-          speaker: "Kdan凱鈿創辦人兼執行長蘇柏州",
-          format: "keynote",
-        },
-        {
-          time: "09:55–10:35",
-          duration: "40 min",
-          title: "特約演講嘉賓：贏在不確定的年代",
-          speaker: "連續創業家美國 BonHope創投基金經營合夥人蕭一白",
-          format: "keynote",
-        },
-        {
-          time: "10:35–10:45",
-          duration: "10 min",
-          title: "早上場休息時間",
-          format: "break",
-        },
-        {
-          time: "10:45–11:05",
-          duration: "20 min",
-          title: "臺灣IPO新趨勢—創新板助力新創企業成長",
-          speaker: "台灣證交所總經理李愛玲",
-          format: "keynote",
-        },
-        {
-          time: "11:05–11:25",
-          duration: "20 min",
-          title: "Driving Innovation in the AI Era",
-          speaker: "高通業務開發總監暨亞太生態系發展計畫負責人戴郁文",
-          format: "keynote",
-        },
-        {
-          time: "11:25–12:00",
-          duration: "35 min",
-          title: "《新創圈的小欣欣之約》 Panel",
-          speaker: "Panel主持人Addin Venture合夥人蘇祐立 Meet創業小聚執行長AAMA搖籃計劃董事陳素蘭 時代基金會Garage+執行長趙如媛",
-          format: "panel",
-        },
-        {
-          time: "13:00–13:25",
-          duration: "25 min",
-          title: "投資企業與新創的賦能及協同",
-          speaker: "新光三越創投董事長王楠淵William",
-          format: "keynote",
-        },
-        {
-          time: "13:25–13:50",
-          duration: "25 min",
-          title: "Lessons I Learned from Startup Founders",
-          speaker: "基石創投總經理林子樸TP Lin",
-          format: "keynote",
-        },
-        {
-          time: "13:50–14:15",
-          duration: "25 min",
-          title: "台灣創業者的成長挑戰",
-          speaker: "SIC永續影響力投資共同創辦人黃俊傑Amos",
-          format: "keynote",
-        },
-        {
-          time: "14:15–14:40",
-          duration: "25 min",
-          title: "用股權規劃守住創辦人的權力與尊嚴",
-          speaker: "新創律師CIEA跨境創新創業交流協會理事長簡榮宗",
-          format: "keynote",
-        },
-        {
-          time: "14:40–15:05",
-          duration: "25 min",
-          title: "新創出海：不是Plus，是Must",
-          speaker: "LANDED赴美加速器負責人黃聖安Bryan Huang",
-          format: "keynote",
-        },
-        {
-          time: "15:05–15:20",
-          duration: "15 min",
-          title: "下午場休息",
-          format: "break",
-        },
-        {
-          time: "15:20–15:45",
-          duration: "25 min",
-          title: "第三次AI浪潮下，台灣團隊如何勇敢Pivot產品找到PMF？",
-          speaker: "云思維商業模式產品化顧問史耀云",
-          format: "keynote",
-        },
-        {
-          time: "15:45–16:10",
-          duration: "25 min",
-          title: "從硬體思維到智慧零售生態圈",
-          speaker: "CYBERBIZ順立智慧創辦人兼執行長蘇基明",
-          format: "keynote",
-        },
-        {
-          time: "16:10–16:35",
-          duration: "25 min",
-          title: "走向第四次創業：數位健康",
-          speaker: "Flowgreens創辦人海外創業連續成功創業家許晴晏博士",
-          format: "keynote",
-        },
-        {
-          time: "16:35–17:10",
-          duration: "35 min",
-          title: "amazing talker：從0到18億，正往750億邁進",
-          speaker: "Amazing Talker創辦人兼執行長趙捷平Abner",
-          format: "keynote",
-        },
-      ],
+    forums: editionThreeForums,
+    oneLiner: "首度擴大為雙日雙論壇，兩天近 800 人到場。",
+    heroPhoto: "/review/audience-and-stage.jpg",
+    growth: {
+      attendees: 800,
+      speakers: 31, // TODO: 由 35 場議程扣除休息場次推導，需業主確認實際講者人數
+      institutions: 18,
+      days: 2,
     },
-    {
-      day: 2,
-      date: "2025-10-02",
-      name: "投資人論壇",
-      sessions: [
-        {
-          time: "09:00–09:05",
-          duration: "5 min",
-          title: "年會主辦人致歡迎詞",
-          speaker: "台灣新創投資年會主辦人林文欽Vincent",
-          format: "keynote",
-        },
-        {
-          time: "09:05–09:35",
-          duration: "30 min",
-          title: "不是創投，是VC",
-          speaker: "Venture+管理合夥人莊豐賓Roy",
-          format: "keynote",
-        },
-        {
-          time: "09:35–10:05",
-          duration: "30 min",
-          title: "解鎖雙島新動能：台日新創投資報告",
-          speaker: "中華開發資本創新投資事業群主管董事總經理郭大經",
-          format: "keynote",
-        },
-        {
-          time: "10:05–10:35",
-          duration: "30 min",
-          title: "資本的羅盤：引領新創穿越不確定年代",
-          speaker: "H&Q漢鼎創投董事總經理張英信",
-          format: "keynote",
-        },
-        {
-          time: "10:35–10:45",
-          duration: "10 min",
-          title: "上午場休息時間",
-          format: "break",
-        },
-        {
-          time: "10:45–11:15",
-          duration: "30 min",
-          title: "臺灣新創投資洞察：資本熱潮下的反思",
-          speaker: "台灣經濟研究院研究六所副所長范秉航",
-          format: "keynote",
-        },
-        {
-          time: "11:15–11:55",
-          duration: "40 min",
-          title: "GenAI Investment Trends",
-          speaker: "靖亞資本Eminence Capital創始管理合夥人鄭靖偉Peter",
-          format: "keynote",
-        },
-        {
-          time: "13:00–13:30",
-          duration: "30 min",
-          title: "以永續型創投打造連結產業與資本的創投新路徑",
-          speaker: "能率亞洲資本總經理游智元",
-          format: "keynote",
-        },
-        {
-          time: "13:30–14:00",
-          duration: "30 min",
-          title: "新創投資與其他森林裡有數條過於喧囂的孤獨之路",
-          speaker: "和鼎創投副董事長暨總經理劉奕成IC",
-          format: "keynote",
-        },
-        {
-          time: "14:00–14:30",
-          duration: "30 min",
-          title: "全民資本-成就企業新動能",
-          speaker: "資本圈天使會創辦人李豐源Dennis",
-          format: "keynote",
-        },
-        {
-          time: "14:30–14:45",
-          duration: "15 min",
-          title: "下午場休息時間",
-          format: "break",
-        },
-        {
-          time: "14:45–15:10",
-          duration: "25 min",
-          title: "科絡達：SDV與SDX產業視角與機會",
-          speaker: "Carota科絡達創辦人兼執行長 吳柏儀 Paul Wu",
-          format: "keynote",
-        },
-        {
-          time: "15:10–15:35",
-          duration: "25 min",
-          title: "募資四千萬美金創業者的三個真實故事",
-          speaker: "WeMo執行長劉于遜Davidd",
-          format: "keynote",
-        },
-        {
-          time: "15:35–16:00",
-          duration: "25 min",
-          title: "From MAGA to MTGA",
-          speaker: "Taiwan Global Angels 創辦人詹益鑑",
-          format: "keynote",
-        },
-        {
-          time: "16:00–16:25",
-          duration: "25 min",
-          title: "台灣新創軟體投資的百倍奇蹟之旅",
-          speaker: "新經濟創投NEV管理合夥人溫宏駿",
-          format: "keynote",
-        },
-        {
-          time: "16:25–16:50",
-          duration: "25 min",
-          title: "可以被複製的天使投資方法論",
-          speaker: "DNA Fund創始合伙人 / 大數碼集團董事長王俊傑博士",
-          format: "keynote",
-        },
-        {
-          time: "16:50–17:15",
-          duration: "25 min",
-          title: "Fintech x AI：東南亞SaaS的新商業典範",
-          speaker: "Hive Venture 李彥樞Yanlee",
-          format: "keynote",
-        },
-      ],
-    },
-    ],
+    pending: ["講者數量為推導值，待業主確認", "講者欄位為簡報原文整串，需業主校對後拆成單位／姓名", "精選照片建議提供高解析原始檔（現有約 200KB）"],
+    pastSpeakers: thirdEditionSpeakers,
     photos: [
       "/review/stage-keynote-from-physics-to-vc.jpg",
       "/review/stage-speaker-sponsor-wall.jpg",
@@ -976,6 +1078,24 @@ export const editions: Edition[] = [
       "採審核制報名、票價 NT$750，閉門不直播，確保現場交流品質。",
       "出席結構為 80% 專業投資機構與個人投資人、20% 天使輪後至成長期創辦人。",
     ],
+    // ⚠️ 以下為版面設計用的暫時填充料（借 2026 素材），非真實資料，待業主補件後全部替換
+    oneLiner: "（待補）以審核制維持交流品質的單日論壇。",
+    heroPhoto: PLACEHOLDER_PHOTO,
+    growth: {
+      attendees: null, // TODO: 業主補 — 目前僅有 80%/20% 比例數，無絕對人數
+      speakers: null,  // TODO: 業主補
+      institutions: null, // TODO: 業主補
+      days: 1,
+    },
+    pastSpeakers: PLACEHOLDER_SPEAKERS,
+    pending: [
+      "參與人次（目前僅有出席比例，無絕對人數）",
+      "講者數量",
+      "投資機構家數",
+      "主題標語",
+      "現場照片 1 張（橫幅、≥1600px）",
+      "講者名單與講題（單位／姓名／講題）",
+    ],
     dataComplete: true,
   },
   {
@@ -987,6 +1107,26 @@ export const editions: Edition[] = [
     highlights: [
       "首屆台灣新創投資年會於 2023 年舉辦，是台灣新創投資年會系列的起點。",
       "現存公開資料不全，議程、講者、規模與媒體露出待補。",
+    ],
+    // ⚠️ 以下為版面設計用的暫時填充料（借 2026 素材），非真實資料，待業主補件後全部替換
+    oneLiner: "（待補）一切的起點。",
+    heroPhoto: PLACEHOLDER_PHOTO,
+    growth: {
+      attendees: null, // TODO: 業主補
+      speakers: null,  // TODO: 業主補
+      institutions: null, // TODO: 業主補
+      days: null,      // TODO: 業主補
+    },
+    pastSpeakers: PLACEHOLDER_SPEAKERS,
+    pending: [
+      "確切日期",
+      "舉辦地點",
+      "參與人次",
+      "講者數量",
+      "投資機構家數 / 論壇天數",
+      "主題標語（若當年未訂，請告知）",
+      "現場照片 1 張（橫幅、≥1600px）",
+      "講者名單與講題",
     ],
     dataComplete: false,
   },
