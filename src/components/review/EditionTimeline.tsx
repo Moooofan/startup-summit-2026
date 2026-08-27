@@ -12,6 +12,14 @@ import type { Edition } from "@/data/review";
  * - 重點數字主打「參與人次」「講者數量」（業主指定），投資機構／天數為次要。
  *
  * 缺料降級：照片缺 → 品牌色漸層＋年份大字；數字為 null → 顯示「—」。
+ *
+ * 時間軸線（2026/8 加）：最左側一條垂直線串起各屆，節點對齊年份。
+ * - 線畫在「最左緣」而非年份與內容之間 —— 這樣年份與內容維持既有的兩欄關係，
+ *   線是獨立於欄位之外的時間刻度，不會被 sticky 年份帶著跑。
+ * - 線只在 md 以上出現：手機是單欄堆疊，橫向沒有空間放軸線，
+ *   改用年份左側的短色條保留「時間往下走」的暗示。
+ * - 頭尾用 transparent 漸層淡出，避免看起來像被截斷的直線。
+ * - 節點的 top 對齊年份數字的視覺中心（年份是 clamp 字級，故用 em 而非固定 px）。
  */
 
 const CN_NO = ["一", "二", "三", "四"] as const;
@@ -55,9 +63,22 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
       id={`edition-${e.no}`}
       className="relative scroll-mt-28 border-t border-line-soft py-12 first:border-t-0 md:py-16"
     >
+      {/*
+        軸線節點：對齊年份數字的視覺中心。年份是 clamp 字級，
+        所以用 0.5em（半個字高）而非固定 px，字級變動時才不會跑掉。
+      */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute hidden h-[11px] w-[11px] rounded-full bg-orbit ring-4 ring-[rgb(76_104_212/0.14)] md:left-[-48px] md:top-[calc(4rem+0.5em)] md:block lg:left-[-62px]"
+      />
       <div className="md:grid md:grid-cols-[minmax(0,13rem)_minmax(0,1fr)] md:gap-10 lg:gap-16">
         {/* 左欄：年份，桌機 sticky 釘住 */}
         <div className="md:sticky md:top-28 md:self-start">
+          {/* 手機沒有主軸（橫向空間不足），用短色條保留時間往下走的暗示 */}
+          <span
+            aria-hidden
+            className="mb-3 block h-[3px] w-10 rounded-full bg-orbit/45 md:hidden"
+          />
           <p className="font-display text-[clamp(2.6rem,7vw,4.2rem)] font-bold leading-none text-orbit">
             {e.year}
           </p>
@@ -139,7 +160,19 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
 
 export function EditionTimeline({ editions }: { editions: Edition[] }) {
   return (
-    <div className="relative">
+    <div className="relative md:pl-12 lg:pl-16">
+      {/*
+        時間主軸。頭尾淡出，讓線像是從更早／更晚的時間延伸過來，
+        而不是一條被切斷的線段。
+      */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-[5px] hidden w-px md:block lg:left-[7px]"
+        style={{
+          background:
+            "linear-gradient(180deg, transparent 0%, rgb(76 104 212 / 0.42) 10%, rgb(76 104 212 / 0.42) 90%, transparent 100%)",
+        }}
+      />
       {editions.map((e, i) => (
         <EditionRow key={e.no} edition={e} index={i} />
       ))}
