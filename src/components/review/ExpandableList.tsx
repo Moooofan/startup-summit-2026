@@ -26,7 +26,7 @@ export function ExpandableList({
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="glass col-span-full mt-2 inline-flex items-center justify-center gap-2 rounded-pill px-6 py-3 text-sm text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
+        className="glass btn-glass col-span-full mt-2 inline-flex items-center justify-center gap-2 rounded-pill px-6 py-3 text-sm text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
       >
         {open ? labelLess : labelMore}
         <ChevronDown

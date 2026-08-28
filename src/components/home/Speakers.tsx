@@ -50,7 +50,7 @@ function SpeakerCard({
             loading={index < 8 ? "eager" : "lazy"}
           />
           {s.status === "pending" && (
-            <span className="absolute right-3 top-3 rounded-pill bg-bg/80 px-2.5 py-1 text-[10px] text-ink-3 backdrop-blur">
+            <span className="absolute right-3 top-3 rounded-pill bg-bg/80 px-2.5 py-1 text-[16px] text-ink-3 backdrop-blur">
               確認中
             </span>
           )}
@@ -63,7 +63,7 @@ function SpeakerCard({
           />
         </div>
         <div className="mt-3.5">
-          <p className="flex items-center gap-1.5 text-[15px] font-bold text-ink">
+          <p className="flex items-center gap-1.5 text-[18px] font-bold text-ink">
             {s.name}
             <ArrowUpRight
               size={14}
@@ -71,8 +71,8 @@ function SpeakerCard({
               className="shrink-0 text-ink-4 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
             />
           </p>
-          <p className={cn("mt-1 text-[12.5px] font-medium leading-snug", tone.text)}>{s.org}</p>
-          <p className="mt-0.5 text-[12.5px] leading-snug text-ink-3">{s.title}</p>
+          <p className={cn("mt-1 text-[17px] font-medium leading-snug", tone.text)}>{s.org}</p>
+          <p className="mt-0.5 text-[17px] leading-snug text-ink-3">{s.title}</p>
         </div>
       </Link>
     </li>
@@ -97,7 +97,7 @@ function ForumNode({ f, order, count }: { f: Forum; order: number; count: number
           >
             {String(order).padStart(2, "0")}
           </span>
-          <p className={cn("font-display text-[13px] tracking-[0.32em]", a.text)}>
+          <p className={cn("font-display text-[17px] tracking-[0.32em]", a.text)}>
             {f.label} · {f.nameEn}
           </p>
           <h3 className="mt-5 text-[clamp(2.25rem,8vw,5rem)] font-bold leading-[1.05] text-ink">
@@ -106,13 +106,13 @@ function ForumNode({ f, order, count }: { f: Forum; order: number; count: number
           <p className="mt-6 font-display text-lg text-ink-2 md:text-xl">
             {f.dateLabel}（{f.weekday}）· {f.time}
           </p>
-          <p className="mt-2 text-[13px] tracking-wide text-ink-4">對象 · {f.audience}</p>
-          <p className="mx-auto mt-8 max-w-xl text-[15px] leading-[1.9] text-ink-2">
+          <p className="mt-2 text-[17px] tracking-wide text-ink-4">對象 · {f.audience}</p>
+          <p className="mx-auto mt-8 max-w-xl text-[18px] leading-[1.9] text-ink-2">
             {f.description}
           </p>
           <span
             className={cn(
-              "mt-14 inline-flex flex-col items-center gap-2 text-[12px] tracking-[0.24em]",
+              "mt-14 inline-flex flex-col items-center gap-2 text-[17px] tracking-[0.24em]",
               a.text
             )}
           >
@@ -164,7 +164,7 @@ export function Speakers() {
 
         {/* 向下滑提示：頁面中間下方（常駐，不用 whileInView 門檻，否則初次落在視窗邊界不顯示） */}
         <div className="pointer-events-none absolute inset-x-0 bottom-8 hidden justify-center md:flex">
-          <span className="inline-flex flex-col items-center gap-2 text-[12px] tracking-[0.24em] text-orbit-sky">
+          <span className="inline-flex flex-col items-center gap-2 text-[17px] tracking-[0.24em] text-orbit-sky">
             向下滑看兩天陣容
             <ChevronDown size={20} aria-hidden className="animate-bounce motion-reduce:animate-none" />
           </span>
@@ -192,7 +192,7 @@ export function Speakers() {
                     <span className="font-display text-sm text-ink-3">
                       {f.dateLabel}（{f.weekday}）
                     </span>
-                    <span className="ml-auto text-[13px] text-ink-4">{list.length} 位</span>
+                    <span className="ml-auto text-[17px] text-ink-4">{list.length} 位</span>
                   </header>
                 </Reveal>
 
@@ -205,7 +205,7 @@ export function Speakers() {
                 </Reveal>
 
                 {isLast && (
-                  <p className="mt-14 text-[13px] leading-relaxed text-ink-4">
+                  <p className="mt-14 text-[17px] leading-relaxed text-ink-4">
                     ※ 標示「確認中」者為邀請中或行程確認中的講者，最終陣容以官方公告為準。
                   </p>
                 )}

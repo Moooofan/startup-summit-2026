@@ -34,7 +34,7 @@ export function Venue() {
                   <MapPin size={18} />
                   <span className="sr-only">地址</span>
                 </dt>
-                <dd className="text-[15px] leading-relaxed text-ink-2">
+                <dd className="text-[18px] leading-relaxed text-ink-2">
                   {event.venue.address || (
                     <span className="text-ink-3">
                       完整地址與交通指引將於報名開放時公布。
@@ -58,7 +58,7 @@ export function Venue() {
                   <Users size={18} />
                   <span className="sr-only">規模</span>
                 </dt>
-                <dd className="text-[15px] leading-relaxed text-ink-2">
+                <dd className="text-[18px] leading-relaxed text-ink-2">
                   {event.capacity.seats} 席・{event.capacity.attendance}
                 </dd>
               </div>
@@ -87,7 +87,7 @@ export function Venue() {
                         className="mt-0.5 shrink-0 text-orbit-sky"
                       />
                       <div className="min-w-0">
-                        <p className="text-[15px] font-medium text-ink">{z.name}</p>
+                        <p className="text-[18px] font-medium text-ink">{z.name}</p>
                         <p className="mt-1.5 text-sm leading-relaxed text-ink-3">{z.detail}</p>
                       </div>
                     </li>

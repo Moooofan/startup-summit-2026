@@ -78,9 +78,13 @@ export function Nav() {
             className="h-7 w-auto transition-transform duration-300 group-hover:scale-105 md:h-8"
           />
           <span className="leading-tight">
-            <span className="block text-[13px] font-bold tracking-wide text-ink md:text-sm">
+            <span className="block text-[17px] font-bold tracking-wide text-ink md:text-sm">
               台灣新創投資年會
             </span>
+            {/* ⚠️ 這行刻意不吃全站字級級距，維持原始的 10px。
+                它是 logo 的副標，字級一旦追上上方主標（17px）就變成階層倒置 ——
+                全站字級曾整條上調（10→12→14→16），這行被一起帶上去後又調了回來。
+                下次再做全域字級調整時，請把這行排除。 */}
             <span className="font-display block text-[10px] tracking-[0.18em] text-ink-3">
               2026 · 4TH
             </span>
@@ -104,7 +108,7 @@ export function Nav() {
           <NavCountdown />
           <Link
             href="/tickets"
-            className="hidden rounded-pill bg-brand-lift px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-brand-bright hover:shadow-[0_0_28px_rgb(106_134_255/0.45)] md:inline-flex"
+            className="btn-glass btn-glass-on-dark hidden rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:border-white/55 md:inline-flex"
           >
             立即報名
           </Link>
@@ -120,19 +124,23 @@ export function Nav() {
         </div>
       </nav>
 
-      {/* 手機選單 */}
+      {/* 手機選單
+          展開高度用 grid-template-rows 0fr → 1fr，不用 max-h 的魔術數字：
+          ⚠️ 原本寫死 max-h-[420px]，字級一調大（六個連結 + 報名鈕約 467px）就把最後的
+             「立即報名」裁掉。0fr/1fr 由內容自己撐開，往後改字級或加選單項都不會再爆。
+             子層必須有 min-h-0 + overflow-hidden，收合時才塌得回 0。 */}
       <div
         className={cn(
-          "overflow-hidden border-t border-black/8 bg-bg/95 backdrop-blur-md transition-[max-height] duration-500 lg:hidden",
-          open ? "max-h-[420px]" : "max-h-0 border-t-transparent"
+          "grid border-t border-black/8 bg-bg/95 backdrop-blur-md transition-[grid-template-rows] duration-500 lg:hidden",
+          open ? "grid-rows-[1fr]" : "grid-rows-[0fr] border-t-transparent"
         )}
       >
-        <ul className="shell flex flex-col py-4">
+        <ul className="shell flex min-h-0 flex-col overflow-hidden py-4">
           {links.map((l) => (
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="block border-b border-black/5 py-4 text-[15px] text-ink-2 transition-colors hover:text-ink"
+                className="block border-b border-black/5 py-4 text-[18px] text-ink-2 transition-colors hover:text-ink"
               >
                 {l.label}
               </Link>
@@ -141,7 +149,7 @@ export function Nav() {
           <li className="pt-5">
             <Link
               href="/tickets"
-              className="block rounded-pill bg-brand-lift py-3.5 text-center text-[15px] font-medium text-white"
+              className="btn-glass btn-glass-on-dark block rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] py-3.5 text-center text-[18px] font-semibold"
             >
               立即報名
             </Link>

@@ -49,7 +49,7 @@ function Metric({
         {missing ? "—" : value.toLocaleString()}
         {!missing && <span className="ml-1 text-[0.5em] font-medium text-ink-3">{unit}</span>}
       </p>
-      <p className="mt-2 text-[12px] leading-tight text-ink-4">{label}</p>
+      <p className="mt-2 text-[17px] leading-tight text-ink-4">{label}</p>
     </div>
   );
 }
@@ -86,11 +86,11 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
             第{CN_NO[e.no - 1]}屆
           </p>
           {e.theme && (
-            <p className="mt-4 text-[15px] font-semibold leading-relaxed text-ink md:text-base">
+            <p className="mt-4 text-[18px] font-semibold leading-relaxed text-ink md:text-base">
               {e.theme}
             </p>
           )}
-          <p className="mt-4 text-[13px] leading-relaxed text-ink-4">
+          <p className="mt-4 text-[17px] leading-relaxed text-ink-4">
             {e.dateLabel}
             <br />
             {e.venue}
@@ -124,7 +124,7 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
           )}
 
           {e.oneLiner && (
-            <p className="mt-6 text-[15px] leading-[1.9] text-ink-2 md:text-base">{e.oneLiner}</p>
+            <p className="mt-6 text-[18px] leading-[1.9] text-ink-2 md:text-base">{e.oneLiner}</p>
           )}
 
           {g && (
@@ -139,12 +139,12 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
           {/* 待補提示 —— 上線前這些應全部消失 */}
           {isPending && (
             <details className="mt-8 rounded-lg border border-dashed border-black/15 bg-black/[0.02] px-4 py-3">
-              <summary className="cursor-pointer text-[13px] font-medium text-ink-3">
+              <summary className="cursor-pointer text-[17px] font-medium text-ink-3">
                 ⚠️ 此屆有 {e.pending!.length} 項資料待補（僅設計階段顯示）
               </summary>
               <ul className="mt-3 space-y-1.5 pl-1">
                 {e.pending!.map((item) => (
-                  <li key={item} className="flex gap-2 text-[13px] leading-relaxed text-ink-4">
+                  <li key={item} className="flex gap-2 text-[17px] leading-relaxed text-ink-4">
                     <span aria-hidden className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-ink-4" />
                     {item}
                   </li>

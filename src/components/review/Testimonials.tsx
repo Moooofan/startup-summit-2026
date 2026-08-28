@@ -20,7 +20,7 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
       {items.map((t, i) => (
         <li key={i} className="glass flex flex-col rounded-card p-7">
           <blockquote className="flex-1">
-            <p className="text-[15px] leading-[1.95] text-ink-2">
+            <p className="text-[18px] leading-[1.95] text-ink-2">
               <span aria-hidden className="mr-1 text-orbit-sky">
                 「
               </span>
@@ -33,15 +33,15 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
           <footer className="mt-6 border-t border-black/8 pt-5">
             {t.consent ? (
               <>
-                <p className="text-[14px] font-medium text-ink">{t.name}</p>
-                <p className="mt-1 text-[13px] leading-relaxed text-ink-4">
+                <p className="text-[18px] font-medium text-ink">{t.name}</p>
+                <p className="mt-1 text-[17px] leading-relaxed text-ink-4">
                   {t.org}
                   {t.title && `　${t.title}`}
                 </p>
               </>
             ) : (
               /* 未取得具名同意 → 匿名呈現 */
-              <p className="text-[13px] text-ink-4">
+              <p className="text-[17px] text-ink-4">
                 第{CN_NO[t.edition - 1]}屆與會者
               </p>
             )}

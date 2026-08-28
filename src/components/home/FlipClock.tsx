@@ -41,7 +41,7 @@ function Group({ value, label }: { value: number | undefined; label: string }) {
           <FlipCard key={i} digit={d} />
         ))}
       </div>
-      <span className="text-[11px] tracking-[0.24em] text-ink-4">{label}</span>
+      <span className="text-[16px] tracking-[0.24em] text-ink-4">{label}</span>
     </div>
   );
 }

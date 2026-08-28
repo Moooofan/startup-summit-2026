@@ -128,10 +128,10 @@ export default function ReviewPage() {
                       className="glass group flex items-start justify-between gap-4 rounded-card p-5 transition-colors hover:border-black/20"
                     >
                       <span className="min-w-0">
-                        <span className="block text-[14px] leading-relaxed text-ink-2 transition-colors group-hover:text-ink">
+                        <span className="block text-[18px] leading-relaxed text-ink-2 transition-colors group-hover:text-ink">
                           {m.title}
                         </span>
-                        <span className="mt-2 block text-[12px] text-ink-4">
+                        <span className="mt-2 block text-[17px] text-ink-4">
                           {m.outlet}
                           {m.date && `　${m.date}`}
                         </span>
@@ -159,7 +159,7 @@ export default function ReviewPage() {
             <h2 className="mt-5 text-[clamp(1.6rem,4vw,2.4rem)] font-bold text-ink">
               {event.fullName}
             </h2>
-            <p className="mt-4 text-[15px] text-ink-2">
+            <p className="mt-4 text-[18px] text-ink-2">
               {event.dateLabelLong}｜{event.venue.name}
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-4">

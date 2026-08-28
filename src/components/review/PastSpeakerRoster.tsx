@@ -51,10 +51,10 @@ function EditionPanel({ edition: e }: { edition: Edition }) {
               第{CN_NO[e.no - 1]}屆
             </span>
             <span className="font-display text-sm text-ink-4">{e.year}</span>
-            {e.theme && <span className="text-[15px] text-ink-3">{e.theme}</span>}
+            {e.theme && <span className="text-[18px] text-ink-3">{e.theme}</span>}
           </span>
           <span className="flex shrink-0 items-center gap-3">
-            <span className="text-[13px] text-ink-4">
+            <span className="text-[17px] text-ink-4">
               {list.length > 0 ? `${list.length} 場` : "資料整理中"}
             </span>
             <ChevronDown
@@ -69,7 +69,7 @@ function EditionPanel({ edition: e }: { edition: Edition }) {
       {open && (
         <div id={panelId} className="pb-8">
           {list.length === 0 ? (
-            <p className="rounded-lg border border-dashed border-black/15 bg-black/[0.02] px-4 py-4 text-[14px] text-ink-4">
+            <p className="rounded-lg border border-dashed border-black/15 bg-black/[0.02] px-4 py-4 text-[18px] text-ink-4">
               這一屆的議程與講者名單尚未取得，資料整理中。
             </p>
           ) : (
@@ -79,13 +79,13 @@ function EditionPanel({ edition: e }: { edition: Edition }) {
                   <tr className="bg-black/[0.03]">
                     <th
                       scope="col"
-                      className="w-[46%] px-4 py-3 text-[12px] font-medium tracking-wide text-ink-4 md:px-5"
+                      className="w-[46%] px-4 py-3 text-[17px] font-medium tracking-wide text-ink-4 md:px-5"
                     >
                       講題
                     </th>
                     <th
                       scope="col"
-                      className="px-4 py-3 text-[12px] font-medium tracking-wide text-ink-4 md:px-5"
+                      className="px-4 py-3 text-[17px] font-medium tracking-wide text-ink-4 md:px-5"
                     >
                       講者單位與姓名
                     </th>
@@ -97,15 +97,15 @@ function EditionPanel({ edition: e }: { edition: Edition }) {
                       key={`${s.topic}-${i}`}
                       className="border-t border-line-soft align-top transition-colors hover:bg-black/[0.02]"
                     >
-                      <td className="px-4 py-4 text-[14px] leading-relaxed text-ink md:px-5">
+                      <td className="px-4 py-4 text-[18px] leading-relaxed text-ink md:px-5">
                         {s.day && (
-                          <span className="font-display mr-2 text-[11px] text-ink-4">
+                          <span className="font-display mr-2 text-[16px] text-ink-4">
                             D{s.day}
                           </span>
                         )}
                         {s.topic ?? "（講題待補）"}
                       </td>
-                      <td className="px-4 py-4 text-[14px] leading-relaxed md:px-5">
+                      <td className="px-4 py-4 text-[18px] leading-relaxed md:px-5">
                         <SpeakerCell s={s} />
                       </td>
                     </tr>

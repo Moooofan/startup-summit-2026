@@ -146,7 +146,7 @@ export function Hero() {
             initial="hidden"
             animate="show"
             custom={3}
-            className="mt-4 max-w-xl text-[15px] leading-[1.8] text-ink-2 md:text-base"
+            className="mt-4 max-w-xl text-[18px] leading-[1.8] text-ink-2 md:text-base"
           >
             {event.tagline}，{event.taglineSub}。
             <br className="hidden sm:block" />
@@ -192,11 +192,19 @@ export function Hero() {
             custom={5}
             className="mt-5 flex flex-wrap items-center gap-4"
           >
+            {/* 兩顆刻意互為鏡像（藍→紫 / 紫→藍），用色向做出主次差異。
+                alpha 同樣由 0.78 遞減到 0.64，右端最透。
+
+                之所以能安全反轉，是因為兩端都是靖藍 #4c68d4 與紫 #8b6ed8，
+                白字對比 3.4:1 / 2.9:1 都還撐得住。
+                ⚠️ 若日後又在漸層裡加入淺藍／青色，就不能再鏡像 ——
+                高亮度的青色一旦轉到文字底下，白字會掉到約 1.9:1。
+                ⚠️ 這裡若寫回不透明的 hex，會蓋掉半透明底 → 玻璃效果整個失效。 */}
             <Cta
               href="/about"
               variant="gradient"
               size="lg"
-              className="[background-image:linear-gradient(110deg,#4c68d4_0%,#8b6ed8_100%)]"
+              className="[background-image:linear-gradient(110deg,rgb(76_104_212/0.78)_0%,rgb(139_110_216/0.64)_100%)]"
             >
               查看詳情
             </Cta>
@@ -204,7 +212,7 @@ export function Hero() {
               href="/tickets"
               variant="gradient"
               size="lg"
-              className="[background-image:linear-gradient(110deg,#8b6ed8_0%,#4c68d4_100%)]"
+              className="[background-image:linear-gradient(110deg,rgb(139_110_216/0.78)_0%,rgb(76_104_212/0.64)_100%)]"
             >
               立即報名
             </Cta>
@@ -217,7 +225,7 @@ export function Hero() {
             custom={6}
             className="mt-6 border-t border-black/8 pt-4"
           >
-            <p className="mb-3 text-[11px] tracking-[0.24em] text-ink-4">距離開幕</p>
+            <p className="mb-3 text-[16px] tracking-[0.24em] text-ink-4">距離開幕</p>
             <FlipClock target={event.startDate} />
           </motion.div>
         </div>

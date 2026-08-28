@@ -56,8 +56,8 @@ export function Contact() {
                 <span className="text-brand-lift">
                   <Icon size={26} aria-hidden />
                 </span>
-                <p className="mt-5 text-[13px] tracking-[0.14em] text-ink-4">{label}</p>
-                <p className="mt-1.5 flex items-center gap-1.5 text-[15px] font-medium text-ink transition-colors group-hover:text-brand-lift">
+                <p className="mt-5 text-[17px] tracking-[0.14em] text-ink-4">{label}</p>
+                <p className="mt-1.5 flex items-center gap-1.5 text-[18px] font-medium text-ink transition-colors group-hover:text-brand-lift">
                   {value}
                   <ArrowUpRight size={15} className="shrink-0 text-ink-4 transition-colors group-hover:text-brand-lift" />
                 </p>

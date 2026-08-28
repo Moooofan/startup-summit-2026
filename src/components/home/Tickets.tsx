@@ -77,7 +77,7 @@ export function Tickets() {
 
                 <div className="relative">
                   {p.featured && (
-                    <span className="absolute right-0 top-0 rounded-pill bg-brand-lift px-3 py-1 text-[11px] font-medium text-white shadow-[0_0_18px_rgb(106_134_255/0.5)]">
+                    <span className="absolute right-0 top-0 rounded-pill bg-brand-lift px-3 py-1 text-[16px] font-medium text-white shadow-[0_0_18px_rgb(106_134_255/0.5)]">
                       限量
                     </span>
                   )}
@@ -101,7 +101,7 @@ export function Tickets() {
                       </span>
                     </p>
                   )}
-                  <p className="mt-4 text-[13px] leading-relaxed text-ink-3">{p.note}</p>
+                  <p className="mt-4 text-[17px] leading-relaxed text-ink-3">{p.note}</p>
                 </div>
               </div>
             </Reveal>
@@ -131,7 +131,7 @@ export function Tickets() {
               {!REGISTER_READY && (
                 <div className="glass relative mx-auto mt-5 max-w-xl overflow-hidden rounded-card px-5 py-4 text-left">
                   <Reflective mode="fill" radius={0.28} intensity={0.32} />
-                  <p className="relative inline-flex items-start gap-2 text-[13px] leading-relaxed text-ink-3">
+                  <p className="relative inline-flex items-start gap-2 text-[17px] leading-relaxed text-ink-3">
                     <Info size={14} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
                     <span>
                       報名連結尚未開放。開放後將同步公布於本頁與{" "}
@@ -150,7 +150,7 @@ export function Tickets() {
               )}
             </div>
 
-            <p className="mt-6 text-center text-[13px] text-ink-4">
+            <p className="mt-6 text-center text-[17px] text-ink-4">
               {forums.map((f) => `${f.dateLabel.replace(/ /g, "")} ${f.name}`).join("　|　")}
             </p>
           </div>
