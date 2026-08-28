@@ -777,6 +777,12 @@ const editionThreeForums: PastForum[] = [
         format: "panel",
       },
       {
+        time: "12:00–13:00",
+        duration: "60 min",
+        title: "中午場休息時間",
+        format: "break",
+      },
+      {
         time: "13:00–13:25",
         duration: "25 min",
         title: "投資企業與新創的賦能及協同",
@@ -944,14 +950,14 @@ const editionThreeForums: PastForum[] = [
       {
         time: "15:35–16:00",
         duration: "25 min",
-        title: "From MAGA to MTGA",
+        title: "台灣新創軟體投資的百倍奇蹟之旅",
         speaker: "Taiwan Global Angels 創辦人詹益鑑",
         format: "keynote",
       },
       {
         time: "16:00–16:25",
         duration: "25 min",
-        title: "台灣新創軟體投資的百倍奇蹟之旅",
+        title: "From MAGA to MTGA",
         speaker: "新經濟創投NEV管理合夥人溫宏駿",
         format: "keynote",
       },
@@ -977,10 +983,8 @@ const editionThreeForums: PastForum[] = [
    ⚠️ 版面設計用的暫時填充料 —— 全部待業主補件後移除
    業主指示：先借 2026 的素材把三屆版面做出來，缺料處標註待補。
    這些常數只被第一、二屆引用；第三屆用的是真實資料。
+   註：三屆的現場照片已於 2026/8 全部補齊為真實照片，暫用照片常數已移除。
    ========================================================================== */
-
-/** 暫用照片：借第三屆現場照，非該屆真實照片。 */
-const PLACEHOLDER_PHOTO = "/review/group-photo.jpg";
 
 /** 暫用講者名單：借 2026 本屆講者，非該屆真實名單。 */
 const PLACEHOLDER_SPEAKERS: PastSpeaker[] = currentSpeakers.slice(0, 8).map((sp) => ({
@@ -1016,7 +1020,7 @@ export const editions: Edition[] = [
     no: 3,
     year: 2025,
     theme: "贏在不確定的年代",
-    dateLabel: "2025年10月1日（三）－10月2日（四）　09:00－17:00",
+    dateLabel: "2025年10月1日（三）－10月2日（四）　09:00－17:10",
     venue: "政大公企中心 A 棟 2 樓國際會議廳",
     venueAddress: "台北市大安區金華街 187 號",
     stats: [
@@ -1038,16 +1042,17 @@ export const editions: Edition[] = [
     ],
     forums: editionThreeForums,
     oneLiner: "首度擴大為雙日雙論壇，兩天近 800 人到場。",
-    heroPhoto: "/review/audience-and-stage.jpg",
+    heroPhoto: "/review/third-edition-keynote-hofeipeng.jpg",
     growth: {
       attendees: 800,
       speakers: 31, // TODO: 由 35 場議程扣除休息場次推導，需業主確認實際講者人數
       institutions: 18,
       days: 2,
     },
-    pending: ["講者數量為推導值，待業主確認", "講者欄位為簡報原文整串，需業主校對後拆成單位／姓名", "精選照片建議提供高解析原始檔（現有約 200KB）"],
+    pending: ["講者數量為推導值，待業主確認", "講者欄位為簡報原文整串，需業主校對後拆成單位／姓名"],
     pastSpeakers: thirdEditionSpeakers,
     photos: [
+      "/review/third-edition-keynote-hofeipeng.jpg",
       "/review/stage-keynote-from-physics-to-vc.jpg",
       "/review/stage-speaker-sponsor-wall.jpg",
       "/review/group-photo.jpg",
@@ -1078,9 +1083,10 @@ export const editions: Edition[] = [
       "採審核制報名、票價 NT$750，閉門不直播，確保現場交流品質。",
       "出席結構為 80% 專業投資機構與個人投資人、20% 天使輪後至成長期創辦人。",
     ],
-    // ⚠️ 以下為版面設計用的暫時填充料（借 2026 素材），非真實資料，待業主補件後全部替換
+    // ⚠️ 以下多為版面設計用的暫時填充料（借 2026 素材），待業主補件後替換；
+    //    heroPhoto 已是第二屆真實照片（業主 2026/8 提供），不在待替換之列。
     oneLiner: "（待補）以審核制維持交流品質的單日論壇。",
-    heroPhoto: PLACEHOLDER_PHOTO,
+    heroPhoto: "/review/second-edition-audience.jpg",
     growth: {
       attendees: null, // TODO: 業主補 — 目前僅有 80%/20% 比例數，無絕對人數
       speakers: null,  // TODO: 業主補
@@ -1093,7 +1099,6 @@ export const editions: Edition[] = [
       "講者數量",
       "投資機構家數",
       "主題標語",
-      "現場照片 1 張（橫幅、≥1600px）",
       "講者名單與講題（單位／姓名／講題）",
     ],
     dataComplete: true,
@@ -1108,9 +1113,10 @@ export const editions: Edition[] = [
       "首屆台灣新創投資年會於 2023 年舉辦，是台灣新創投資年會系列的起點。",
       "現存公開資料不全，議程、講者、規模與媒體露出待補。",
     ],
-    // ⚠️ 以下為版面設計用的暫時填充料（借 2026 素材），非真實資料，待業主補件後全部替換
+    // ⚠️ 以下多為版面設計用的暫時填充料（借 2026 素材），待業主補件後替換；
+    //    heroPhoto 已是第一屆真實照片（業主 2026/8 提供），不在待替換之列。
     oneLiner: "（待補）一切的起點。",
-    heroPhoto: PLACEHOLDER_PHOTO,
+    heroPhoto: "/review/first-edition-audience.jpg",
     growth: {
       attendees: null, // TODO: 業主補
       speakers: null,  // TODO: 業主補
@@ -1125,7 +1131,6 @@ export const editions: Edition[] = [
       "講者數量",
       "投資機構家數 / 論壇天數",
       "主題標語（若當年未訂，請告知）",
-      "現場照片 1 張（橫幅、≥1600px）",
       "講者名單與講題",
     ],
     dataComplete: false,
