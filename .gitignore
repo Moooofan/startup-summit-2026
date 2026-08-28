@@ -10,6 +10,10 @@
 !.yarn/releases
 !.yarn/versions
 
+# 本專案以 npm 為準（package-lock.json 已進版控）。
+# pnpm-lock.yaml 是誤跑 pnpm install 的殘留，兩個 lockfile 並存會互相打架。
+pnpm-lock.yaml
+
 # testing
 /coverage
 
