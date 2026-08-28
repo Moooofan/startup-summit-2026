@@ -63,14 +63,6 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
       id={`edition-${e.no}`}
       className="relative scroll-mt-28 border-t border-line-soft py-12 first:border-t-0 md:py-16"
     >
-      {/*
-        軸線節點：對齊年份數字的視覺中心。年份是 clamp 字級，
-        所以用 0.5em（半個字高）而非固定 px，字級變動時才不會跑掉。
-      */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute hidden h-[11px] w-[11px] rounded-full bg-orbit ring-4 ring-[rgb(76_104_212/0.14)] md:left-[-48px] md:top-[calc(4rem+0.5em)] md:block lg:left-[-62px]"
-      />
       <div className="md:grid md:grid-cols-[minmax(0,13rem)_minmax(0,1fr)] md:gap-10 lg:gap-16">
         {/* 左欄：年份，桌機 sticky 釘住 */}
         <div className="md:sticky md:top-28 md:self-start">
@@ -79,7 +71,18 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
             aria-hidden
             className="mb-3 block h-[3px] w-10 rounded-full bg-orbit/45 md:hidden"
           />
-          <p className="font-display text-[clamp(2.6rem,7vw,4.2rem)] font-bold leading-none text-orbit">
+          {/*
+            軸線節點直接掛在年份上，用 top-1/2 + -translate-y-1/2 對齊年份自己的垂直中心。
+            早期版本掛在 article 上、用 calc(4rem + 0.5em) 猜偏移 —— 那是錯的：
+            em 繼承的是 article 的 16px，而年份是 clamp() 算出的 67px，實測差了 20px。
+            掛在年份本身就不必猜，字級再怎麼變都會自己置中。
+            left 的負值 = 主軸到左欄的距離（外層 padding md:48 / lg:64 減主軸位置）。
+          */}
+          <p className="font-display relative text-[clamp(2.6rem,7vw,4.2rem)] font-bold leading-none text-orbit">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute top-1/2 hidden h-[11px] w-[11px] -translate-y-1/2 rounded-full bg-orbit ring-4 ring-[rgb(76_104_212/0.14)] md:left-[-48px] md:block lg:left-[-62px]"
+            />
             {e.year}
           </p>
           <p className="mt-3 text-sm font-medium tracking-[0.16em] text-ink-3">
