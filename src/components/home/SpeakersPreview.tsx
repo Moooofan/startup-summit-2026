@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { forums } from "@/data/event";
 import { speakerCount, speakersByDay } from "@/data/speakers";
 import type { Speaker } from "@/data/speakers";
@@ -121,59 +121,77 @@ export function SpeakersPreview() {
   const list2 = speakersByDay(day2.key);
 
   return (
-    <section id="speakers" className="grain relative snap-start scroll-mt-24 bg-bg-soft py-20 md:py-28">
-      <div aria-hidden className="hairline absolute inset-x-0 top-0 z-10 h-px" />
+    <>
+      {/* 節點一：講者大字報，滿版一屏（方案 B：大字報獨立一頁） */}
+      <section
+        id="speakers"
+        className="grain relative flex min-h-[100svh] snap-start items-center overflow-hidden bg-bg-soft py-20 [scroll-margin-top:-88px]"
+      >
+        <div aria-hidden className="hairline absolute inset-x-0 top-0 z-10 h-px" />
 
-      <div className="shell relative">
-        <Reveal>
-          <SectionHead
-            eyebrow="SPEAKERS"
-            ghost="LINE-UP"
-            title={`${speakerCount} 位講者，兩天分場登台`}
-            lead="從剛掛牌的創業家、Edge AI 與半導體團隊，到管理國際基金的機構投資人。點開任何一位，看他們正在解的題目。"
-          />
-        </Reveal>
-      </div>
+        <div className="shell relative w-full">
+          <Reveal>
+            <SectionHead
+              className="md:mt-8"
+              eyebrow="SPEAKERS"
+              ghost="LINE-UP"
+              title={`${speakerCount} 位講者，兩天分場登台`}
+              lead="從剛掛牌的創業家、Edge AI 與半導體團隊，到管理國際基金的機構投資人。點開任何一位，看他們正在解的題目。"
+            />
+          </Reveal>
 
-      {/* 跑馬燈不放進 .shell —— 要滿版跑到螢幕邊緣，羽化才有「持續延伸」的感覺 */}
-      <div className="relative mt-12 space-y-6">
-        <div className="shell">
-          <p className={cn("text-sm font-semibold tracking-[0.2em]", accent[day1.accent].text)}>
-            {day1.label}　{day1.name}
-            <span className="ml-3 font-normal tracking-normal text-ink-4">
-              {day1.dateLabel}・{list1.length} 位
+          {/* 向下滑提示（桌機顯示，與 Agenda 開場一致） */}
+          <div className="pointer-events-none mt-14 hidden justify-center md:flex">
+            <span className="inline-flex flex-col items-center gap-2 text-[17px] tracking-[0.24em] text-orbit-sky">
+              向下看兩天講者陣容
+              <ChevronDown size={20} aria-hidden className="animate-bounce motion-reduce:animate-none" />
             </span>
-          </p>
+          </div>
         </div>
-        <MarqueeRow list={list1} tone={accent[day1.accent]} />
+      </section>
 
-        <div className="shell pt-4">
-          <p className={cn("text-sm font-semibold tracking-[0.2em]", accent[day2.accent].text)}>
-            {day2.label}　{day2.name}
-            <span className="ml-3 font-normal tracking-normal text-ink-4">
-              {day2.dateLabel}・{list2.length} 位
-            </span>
-          </p>
-        </div>
-        <MarqueeRow list={list2} tone={accent[day2.accent]} reverse />
-      </div>
-
-      <div className="shell">
-        <Reveal delay={0.1}>
-          <div className="mt-14 flex flex-wrap items-center gap-x-6 gap-y-3">
-            <Link
-              href="/speakers"
-              className="inline-flex items-center gap-1.5 rounded-pill border border-black/12 bg-white/55 px-6 py-3 text-[17px] font-medium text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
-            >
-              看完整 {speakerCount} 位講者陣容
-              <ArrowUpRight size={16} aria-hidden />
-            </Link>
-            <p className="text-[17px] text-ink-4">
-              ※ 標示「確認中」者為邀請中，最終陣容以官方公告為準。
+      {/* 節點二：兩行反向跑馬燈，滿版一屏、垂直置中（保留同框對比、卡片不放大） */}
+      <section className="relative flex min-h-[100svh] snap-start flex-col justify-center overflow-hidden py-16 [scroll-margin-top:-88px]">
+        {/* 跑馬燈不放進 .shell —— 要滿版跑到螢幕邊緣，羽化才有「持續延伸」的感覺 */}
+        <div className="relative space-y-6">
+          <div className="shell">
+            <p className={cn("text-sm font-semibold tracking-[0.2em]", accent[day1.accent].text)}>
+              {day1.label}　{day1.name}
+              <span className="ml-3 font-normal tracking-normal text-ink-4">
+                {day1.dateLabel}・{list1.length} 位
+              </span>
             </p>
           </div>
-        </Reveal>
-      </div>
-    </section>
+          <MarqueeRow list={list1} tone={accent[day1.accent]} />
+
+          <div className="shell pt-4">
+            <p className={cn("text-sm font-semibold tracking-[0.2em]", accent[day2.accent].text)}>
+              {day2.label}　{day2.name}
+              <span className="ml-3 font-normal tracking-normal text-ink-4">
+                {day2.dateLabel}・{list2.length} 位
+              </span>
+            </p>
+          </div>
+          <MarqueeRow list={list2} tone={accent[day2.accent]} reverse />
+        </div>
+
+        <div className="shell">
+          <Reveal delay={0.1}>
+            <div className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3">
+              <Link
+                href="/speakers"
+                className="inline-flex items-center gap-1.5 rounded-pill border border-black/12 bg-white/55 px-6 py-3 text-[17px] font-medium text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
+              >
+                看完整 {speakerCount} 位講者陣容
+                <ArrowUpRight size={16} aria-hidden />
+              </Link>
+              <p className="text-[17px] text-ink-4">
+                ※ 標示「確認中」者為邀請中，最終陣容以官方公告為準。
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+    </>
   );
 }
