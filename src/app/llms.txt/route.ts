@@ -4,7 +4,7 @@ import { tracks } from "@/data/tracks";
 import { tiers } from "@/data/sponsors";
 import { editions } from "@/data/review";
 import { founderProfile } from "@/data/founder";
-import { site } from "@/lib/config";
+import { site, isPublicRoute } from "@/lib/config";
 
 export const dynamic = "force-static";
 
@@ -59,13 +59,18 @@ ${editions
 詳見 [歷屆回顧](${site.url}/review)。
 
 ## 主要頁面
-- [首頁](${site.url}/)：活動主視覺與入口
-- [關於年會](${site.url}/about)：活動總覽、創辦人的話、會場地點、常見問題
-- [講者陣容](${site.url}/speakers)：${speakers.length} 位講者
-- [論壇主題](${site.url}/agenda)：兩天十二條主題軌
-- [報名資訊](${site.url}/tickets)：票價與權益
-- [贊助方案](${site.url}/sponsor)：五級贊助方案與展位規格
-- [歷屆回顧](${site.url}/review)：第三屆完整議程、媒體報導與合作夥伴
+${[
+  { path: "/", label: "首頁", desc: "活動主視覺與入口" },
+  { path: "/about", label: "關於年會", desc: "活動總覽、創辦人的話、會場地點、常見問題" },
+  { path: "/speakers", label: "講者陣容", desc: `${speakers.length} 位講者` },
+  { path: "/agenda", label: "論壇主題", desc: "兩天十二條主題軌" },
+  { path: "/tickets", label: "報名資訊", desc: "票價與權益" },
+  { path: "/sponsor", label: "贊助方案", desc: "五級贊助方案與展位規格" },
+  { path: "/review", label: "歷屆回顧", desc: "第三屆完整議程、媒體報導與合作夥伴" },
+]
+  .filter((p) => isPublicRoute(p.path))
+  .map((p) => `- [${p.label}](${site.url}${p.path === "/" ? "/" : p.path})：${p.desc}`)
+  .join("\n")}
 
 ## 聯絡
 - ${event.contact.email}

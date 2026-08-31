@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { isPublicRoute } from "@/lib/config";
 import Image from "next/image";
 import { event } from "@/data/event";
 
-const cols = [
+// 隱藏中的分頁保留在清單裡不刪，僅由 isPublicRoute 過濾掉（見 lib/config）
+const allCols = [
   {
     title: "活動",
     links: [
@@ -23,11 +25,26 @@ const cols = [
   },
 ];
 
+// 逐組過濾掉隱藏分頁；整組都被濾光就不渲染該欄
+const cols = allCols
+  .map((c) => ({ ...c, links: c.links.filter((l) => isPublicRoute(l.href)) }))
+  .filter((c) => c.links.length > 0);
+
 export function Footer() {
   return (
     <footer className="relative overflow-hidden border-t border-line-soft bg-bg-soft">
       <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
-      <div className="shell grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr_1.2fr] md:py-20">
+      {/* 欄數跟著實際渲染的連結組數走 —— 隱藏分頁可能整組被濾掉，
+          寫死四欄會在那種情況留下空欄。用 CSS 變數傳值，
+          真正的 grid-template-columns 仍掛在 md: 斷點上，手機維持單欄堆疊。 */}
+      <div
+        className="shell grid gap-12 py-16 md:grid-cols-(--footer-cols) md:py-20"
+        style={
+          {
+            "--footer-cols": `1.4fr ${cols.map(() => "1fr").join(" ")} 1.2fr`,
+          } as React.CSSProperties
+        }
+      >
         <div>
           <div className="flex items-center gap-3">
             <Image src="/logo-mark.png" alt="" width={236} height={224} className="h-7 w-auto" />

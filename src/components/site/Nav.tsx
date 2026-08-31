@@ -8,8 +8,11 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { event } from "@/data/event";
 import { useCountdown } from "@/lib/useCountdown";
+import { isPublicRoute, REGISTER_URL, REGISTER_READY } from "@/lib/config";
 
-const links = [
+/** 全站導覽項目。實際顯示的是下面經 isPublicRoute 過濾後的 links ——
+ *  隱藏中的分頁保留在這裡不刪，恢復時只需改 config 的 PUBLIC_ROUTES。 */
+const allLinks = [
   { href: "/about", label: "關於年會" },
   { href: "/speakers", label: "講者陣容" },
   { href: "/agenda", label: "論壇主題" },
@@ -17,6 +20,12 @@ const links = [
   { href: "/sponsor", label: "贊助方案" },
   { href: "/review", label: "歷屆回顧" },
 ];
+
+const links = allLinks.filter((l) => isPublicRoute(l.href));
+
+/** 報名 CTA 的去向：/tickets 隱藏時就不該再指過去，改用設定的報名連結。 */
+const registerHref = isPublicRoute("/tickets") ? "/tickets" : REGISTER_URL;
+const showRegisterCta = isPublicRoute("/tickets") || REGISTER_READY;
 
 function NavCountdown() {
   const t = useCountdown(event.startDate);
@@ -106,12 +115,14 @@ export function Nav() {
 
         <div className="flex items-center gap-4">
           <NavCountdown />
-          <Link
-            href="/tickets"
-            className="btn-glass btn-glass-on-dark hidden rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:border-white/55 md:inline-flex"
-          >
-            立即報名
-          </Link>
+          {showRegisterCta && (
+            <Link
+              href={registerHref}
+              className="btn-glass btn-glass-on-dark hidden rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:border-white/55 md:inline-flex"
+            >
+              立即報名
+            </Link>
+          )}
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
@@ -146,14 +157,16 @@ export function Nav() {
               </Link>
             </li>
           ))}
-          <li className="pt-5">
-            <Link
-              href="/tickets"
-              className="btn-glass btn-glass-on-dark block rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] py-3.5 text-center text-[18px] font-semibold"
-            >
-              立即報名
-            </Link>
-          </li>
+          {showRegisterCta && (
+            <li className="pt-5">
+              <Link
+                href={registerHref}
+                className="btn-glass btn-glass-on-dark block rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] py-3.5 text-center text-[18px] font-semibold"
+              >
+                立即報名
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
     </header>

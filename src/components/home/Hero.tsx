@@ -9,6 +9,7 @@ import { speakerCount } from "@/data/speakers";
 import { Cta } from "@/components/ui/Cta";
 import { OrbitRing } from "@/components/home/OrbitRing";
 import { FlipClock } from "@/components/home/FlipClock";
+import { isPublicRoute } from "@/lib/config";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -151,15 +152,22 @@ export function Hero() {
             {event.tagline}，{event.taglineSub}。
             <br className="hidden sm:block" />
             兩天雙峰論壇，
+            {/* /agenda 隱藏期間降級為純文字 —— 內容仍要讀得到，只是不再是連結。 */}
             {forums.map((f, i) => (
               <span key={f.key}>
                 {i > 0 && "、"}
-                <Link
-                  href={`/agenda#${f.key}`}
-                  className="font-bold text-ink underline-offset-4 transition-colors hover:text-brand-lift hover:underline"
-                >
-                  {f.dateLabel.replace(/ /g, "")} {f.name}
-                </Link>
+                {isPublicRoute("/agenda") ? (
+                  <Link
+                    href={`/agenda#${f.key}`}
+                    className="font-bold text-ink underline-offset-4 transition-colors hover:text-brand-lift hover:underline"
+                  >
+                    {f.dateLabel.replace(/ /g, "")} {f.name}
+                  </Link>
+                ) : (
+                  <span className="font-bold text-ink">
+                    {f.dateLabel.replace(/ /g, "")} {f.name}
+                  </span>
+                )}
               </span>
             ))}
             ，{speakerCount} 位創業家與機構投資人同場。
@@ -200,8 +208,10 @@ export function Hero() {
                 ⚠️ 若日後又在漸層裡加入淺藍／青色，就不能再鏡像 ——
                 高亮度的青色一旦轉到文字底下，白字會掉到約 1.9:1。
                 ⚠️ 這裡若寫回不透明的 hex，會蓋掉半透明底 → 玻璃效果整個失效。 */}
+            {/* 目的地跟著可見分頁走：/about、/tickets 隱藏期間改導向仍公開的頁面，
+                避免首頁主要 CTA 把人送到看不到的分頁（見 lib/config 的 PUBLIC_ROUTES）。 */}
             <Cta
-              href="/about"
+              href={isPublicRoute("/about") ? "/about" : "/speakers"}
               variant="gradient"
               size="lg"
               className="[background-image:linear-gradient(110deg,rgb(76_104_212/0.78)_0%,rgb(139_110_216/0.64)_100%)]"
@@ -209,12 +219,12 @@ export function Hero() {
               查看詳情
             </Cta>
             <Cta
-              href="/tickets"
+              href={isPublicRoute("/tickets") ? "/tickets" : "/review"}
               variant="gradient"
               size="lg"
               className="[background-image:linear-gradient(110deg,rgb(139_110_216/0.78)_0%,rgb(76_104_212/0.64)_100%)]"
             >
-              立即報名
+              {isPublicRoute("/tickets") ? "立即報名" : "歷屆回顧"}
             </Cta>
           </motion.div>
 
