@@ -6,9 +6,11 @@ import { Reveal } from "@/components/ui/Reveal";
 import { TicketPlans } from "@/components/home/TicketPlans";
 
 /**
- * 首頁報名資訊，拆成兩個滿版節點（與全站一致的一節一螢幕 STICK 版型）：
- *   1. 報名資訊大標＋日期時間小標，獨立一屏置中。
- *   2. 再往下捲一屏 → 藍→紫雙層渲染票卡（早鳥／全天）。
+ * 首頁報名資訊，拆成兩個節點：
+ *   1. 報名資訊大標＋日期時間小標。
+ *   2. 藍→紫雙層渲染票卡（早鳥／全天）。
+ * 桌機（md+）走全站一致的一節一螢幕 STICK 版型（各自滿版、磁吸）；
+ * 手機不觸發 STICK：兩節不強制滿版，大標接著票卡自然流動、只留一點間距。
  * 票卡樣式沿用 /tickets 的相框設計；票卡的桌機並排／手機滑動牌堆都在 TicketPlans。
  */
 export function Tickets() {
@@ -17,7 +19,7 @@ export function Tickets() {
       {/* 節點一：報名資訊大標，滿版置中 */}
       <section
         id="tickets"
-        className="grain relative flex min-h-[100svh] snap-start items-center justify-center overflow-hidden bg-bg-soft pb-16 pt-24 [scroll-margin-top:-88px]"
+        className="grain relative flex snap-start items-center justify-center overflow-hidden bg-bg-soft pb-6 pt-20 md:min-h-[100svh] md:pb-16 md:pt-24 [scroll-margin-top:-88px]"
       >
         <div
           aria-hidden
@@ -48,7 +50,7 @@ export function Tickets() {
       {/* 節點二：藍→紫雙層渲染票卡 */}
       <section
         id="tickets-plans"
-        className="relative flex min-h-[100svh] snap-start items-center overflow-hidden pb-16 pt-24 [scroll-margin-top:-88px]"
+        className="relative flex snap-start items-center overflow-hidden pb-16 pt-6 md:min-h-[100svh] md:pt-24 [scroll-margin-top:-88px]"
       >
         <div
           aria-hidden
