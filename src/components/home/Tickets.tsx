@@ -133,7 +133,9 @@ function TicketCard({ plan }: { plan: (typeof plans)[number] }) {
     >
       <div
         className={cn(
-          "relative h-full overflow-hidden rounded-[13px] border bg-gradient-to-br from-orbit-sky/18 via-white/45 to-[#6d47c4]/18 p-5 sm:p-7",
+          // flex-col + 下方 CTA 區 mt-auto：兩張卡在 grid 已被撐成等高，
+          // 把 CTA 推到底端 → 左右卡的「報名」鈕水平對齊（不必手動補右卡間距）。
+          "relative flex h-full flex-col overflow-hidden rounded-[13px] border bg-gradient-to-br from-orbit-sky/18 via-white/45 to-[#6d47c4]/18 p-5 sm:p-7",
           plan.featured ? "border-brand-lift/30" : "border-line-soft"
         )}
       >
@@ -173,7 +175,7 @@ function TicketCard({ plan }: { plan: (typeof plans)[number] }) {
           ))}
         </ul>
 
-        <div className="mt-4 sm:mt-5">
+        <div className="mt-auto pt-4 sm:pt-5">
           <Cta href={REGISTER_URL} size="md" variant="outline">
             {REGISTER_READY ? "前往報名" : "報名即將開放"}
           </Cta>
