@@ -346,8 +346,9 @@
   }
 
   /* 暫停必須作用在「整條軌道」——只停可見的那半，複製的那半會繼續跑然後突然冒出來。
-     除了 hover 也要 focus-within：鍵盤使用者 Tab 進卡片時軌道若繼續跑，焦點會被帶走。 */
-  .marquee-viewport:hover .marquee-track,
+     刻意不掛 :hover 暫停 —— 磁吸落到這屏時滑鼠常剛好停在第一行上，:hover 會讓整條
+     瞬間凍住、看起來像壞掉。改為只在 :focus-within 暫停：鍵盤使用者 Tab 進卡片時，
+     軌道若繼續跑焦點會被帶走，這個必須擋；滑鼠要點講者卡照樣可點（軌道低速前進不影響點擊）。 */
   .marquee-viewport:focus-within .marquee-track {
     animation-play-state: paused;
   }

@@ -150,8 +150,12 @@ export function SpeakersPreview() {
         </div>
       </section>
 
-      {/* 節點二：兩行反向跑馬燈，滿版一屏、垂直置中（保留同框對比、卡片不放大） */}
-      <section className="relative flex min-h-[100svh] snap-start flex-col justify-center overflow-hidden py-16 [scroll-margin-top:-88px]">
+      {/* 節點二：兩行反向跑馬燈，滿版一屏、垂直置中（保留同框對比、卡片不放大）。
+          pt-[104px]（≥ nav 88px + 呼吸）是「地板」：justify-center 再怎麼置中，內容頂端
+          都壓不到固定導覽列下面 → 不同縮放/字級都不會把 Day1 標籤切掉。
+          overflow-x-hidden（非 overflow-hidden）：只擋跑馬燈左右溢出，垂直永不裁切；
+          內容真的比一屏高時（極端縮放/矮螢幕）就長出來，交給原生捲動＋控制器捲到底再吸。 */}
+      <section className="relative flex min-h-[100svh] snap-start flex-col justify-center overflow-x-hidden pb-16 pt-[104px] [scroll-margin-top:-88px]">
         {/* 跑馬燈不放進 .shell —— 要滿版跑到螢幕邊緣，羽化才有「持續延伸」的感覺 */}
         <div className="relative space-y-6">
           <div className="shell">
