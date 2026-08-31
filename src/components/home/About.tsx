@@ -6,6 +6,9 @@ import { SectionHead } from "@/components/ui/SectionHead";
 import { Reveal } from "@/components/ui/Reveal";
 import { isPublicRoute } from "@/lib/config";
 
+// 首頁論壇卡的主題軌 chips 上限（避免創辦人日 9 條全塞爆版面）。
+const MAX_CHIPS = 4;
+
 export function About() {
   return (
     <section
@@ -38,7 +41,11 @@ export function About() {
         {/* 兩天論壇 */}
         <div className="mt-14 grid gap-6 md:mt-16 lg:grid-cols-2">
           {forums.map((f, i) => {
+            // 創辦人日有 9 條主題軌，全列出來 chips 太滿 —— 首頁只留前幾條當預覽，
+            // 其餘用「＋N 條」帶過（完整清單在 /agenda 或講者頁）。
             const dayTracks = tracksByDay(f.key);
+            const shownTracks = dayTracks.slice(0, MAX_CHIPS);
+            const moreCount = dayTracks.length - shownTracks.length;
             return (
               <Reveal key={f.key} delay={0.12 + i * 0.08}>
                 <article className="glass group relative h-full overflow-hidden rounded-card p-8 transition-colors duration-500 hover:border-black/20 md:p-10">
@@ -74,7 +81,7 @@ export function About() {
                     </p>
 
                     <ul className="mt-7 flex flex-wrap gap-2">
-                      {dayTracks.map((t) => (
+                      {shownTracks.map((t) => (
                         <li
                           key={t.key}
                           className="rounded-pill border border-black/10 bg-black/[0.04] px-3 py-1.5 text-xs text-ink-2"
@@ -82,6 +89,11 @@ export function About() {
                           {t.title}
                         </li>
                       ))}
+                      {moreCount > 0 && (
+                        <li className="rounded-pill border border-black/8 px-3 py-1.5 text-xs text-ink-4">
+                          ＋{moreCount} 條主題
+                        </li>
+                      )}
                     </ul>
 
                     {/* /agenda 隱藏期間不顯示這顆連結（見 lib/config 的 PUBLIC_ROUTES）；

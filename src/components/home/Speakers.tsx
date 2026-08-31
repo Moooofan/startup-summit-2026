@@ -83,7 +83,10 @@ function SpeakerCard({
 function ForumNode({ f, order, count }: { f: Forum; order: number; count: number }) {
   const a = accent[f.accent];
   return (
-    <div className="snap-panel relative flex items-center justify-center overflow-hidden md:min-h-[100svh]">
+    <div
+      id={f.key}
+      className="snap-panel relative flex items-center justify-center overflow-hidden md:min-h-[100svh]"
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-1/2 h-[70vw] max-h-[720px] w-[70vw] max-w-[720px] -translate-x-1/2 -translate-y-1/2 rounded-full"

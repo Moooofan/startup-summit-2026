@@ -115,6 +115,36 @@ function MarqueeRow({
   );
 }
 
+/** 日別標題（可點）：整行連到 /speakers 的該日錨點，取代原本的「看完整陣容」按鈕。 */
+function DayHeading({ forum, count }: { forum: (typeof forums)[number]; count: number }) {
+  return (
+    <div className="shell">
+      <Link
+        href={`/speakers#${forum.key}`}
+        aria-label={`看 ${forum.name}完整講者陣容`}
+        className="group inline-flex flex-wrap items-center gap-x-3 gap-y-1"
+      >
+        <span
+          className={cn(
+            "text-sm font-semibold tracking-[0.2em] underline-offset-4 transition-colors group-hover:underline",
+            accent[forum.accent].text
+          )}
+        >
+          {forum.label}　{forum.name}
+        </span>
+        <span className="text-sm font-normal tracking-normal text-ink-4">
+          {forum.dateLabel}・{count} 位
+        </span>
+        <ArrowUpRight
+          size={15}
+          aria-hidden
+          className="shrink-0 text-ink-4 transition-transform group-hover:translate-x-0.5 group-hover:text-ink-2"
+        />
+      </Link>
+    </div>
+  );
+}
+
 export function SpeakersPreview() {
   const [day1, day2] = forums;
   const list1 = speakersByDay(day1.key);
@@ -158,41 +188,20 @@ export function SpeakersPreview() {
       <section className="relative flex min-h-[100svh] snap-start flex-col justify-center overflow-x-hidden pb-16 pt-[104px] [scroll-margin-top:-88px]">
         {/* 跑馬燈不放進 .shell —— 要滿版跑到螢幕邊緣，羽化才有「持續延伸」的感覺 */}
         <div className="relative space-y-6">
-          <div className="shell">
-            <p className={cn("text-sm font-semibold tracking-[0.2em]", accent[day1.accent].text)}>
-              {day1.label}　{day1.name}
-              <span className="ml-3 font-normal tracking-normal text-ink-4">
-                {day1.dateLabel}・{list1.length} 位
-              </span>
-            </p>
-          </div>
+          <DayHeading forum={day1} count={list1.length} />
           <MarqueeRow list={list1} tone={accent[day1.accent]} />
 
-          <div className="shell pt-4">
-            <p className={cn("text-sm font-semibold tracking-[0.2em]", accent[day2.accent].text)}>
-              {day2.label}　{day2.name}
-              <span className="ml-3 font-normal tracking-normal text-ink-4">
-                {day2.dateLabel}・{list2.length} 位
-              </span>
-            </p>
+          <div className="pt-4">
+            <DayHeading forum={day2} count={list2.length} />
           </div>
           <MarqueeRow list={list2} tone={accent[day2.accent]} reverse />
         </div>
 
         <div className="shell">
           <Reveal delay={0.1}>
-            <div className="mt-12 flex flex-wrap items-center gap-x-6 gap-y-3">
-              <Link
-                href="/speakers"
-                className="inline-flex items-center gap-1.5 rounded-pill border border-black/12 bg-white/55 px-6 py-3 text-[17px] font-medium text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
-              >
-                看完整 {speakerCount} 位講者陣容
-                <ArrowUpRight size={16} aria-hidden />
-              </Link>
-              <p className="text-[17px] text-ink-4">
-                ※ 標示「確認中」者為邀請中，最終陣容以官方公告為準。
-              </p>
-            </div>
+            <p className="mt-10 text-[17px] text-ink-4">
+              ※ 標示「確認中」者為邀請中，最終陣容以官方公告為準。點日別標題可看該日完整講者。
+            </p>
           </Reveal>
         </div>
       </section>
