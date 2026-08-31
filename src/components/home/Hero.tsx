@@ -96,12 +96,12 @@ export function Hero() {
             custom={1}
             className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2"
           >
-            {/* 年份與日期改為單一淺色（brand-glow 淺靛藍）—— 把搶眼的漸層讓給下方主標語，
-                這行保持安靜、淺調。 */}
+            {/* 2026 用淺色（brand-glow 淺靛藍）把搶眼的漸層讓給下方主標語；
+                日期則加深（ink-2）保住可讀性 —— 淺色在淺底上對比不足。 */}
             <span className="font-display text-[clamp(2.2rem,6vw,3.5rem)] font-semibold tracking-[0.22em] text-brand-glow">
               2026
             </span>
-            <span className="font-display text-[clamp(1.1rem,3.4vw,1.6rem)] font-medium tracking-wide text-brand-glow">
+            <span className="font-display text-[clamp(1.1rem,3.4vw,1.6rem)] font-medium tracking-wide text-ink-2">
               {event.dateLabel}
             </span>
           </motion.div>
