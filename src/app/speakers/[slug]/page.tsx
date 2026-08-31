@@ -11,6 +11,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { Cta } from "@/components/ui/Cta";
 import { BackLink } from "@/components/site/BackLink";
 import { PersonJsonLd } from "@/components/site/JsonLd";
+import { isPublicRoute } from "@/lib/config";
 
 export function generateStaticParams() {
   return speakers.map((s) => ({ slug: s.slug }));
@@ -134,7 +135,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
               <Reveal delay={0.06}>
                 {track && (
                   <Link
-                    href="/agenda"
+                    href={isPublicRoute("/agenda") ? "/agenda" : "/speakers"}
                     className="inline-flex items-center gap-2 rounded-pill border border-black/10 bg-black/[0.04] px-4 py-1.5 text-[17px] text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
                   >
                     {track.title}
@@ -190,7 +191,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
 
               <Reveal delay={0.18}>
                 <div className="mt-12 border-t border-black/8 pt-10">
-                  <Cta href="/tickets">報名參加{forum?.name}</Cta>
+                  {isPublicRoute("/tickets") && <Cta href="/tickets">報名參加{forum?.name}</Cta>}
                 </div>
               </Reveal>
             </div>

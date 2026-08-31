@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { event } from "@/data/event";
+import { isPublicRoute } from "@/lib/config";
 
 /** 手機版底部固定報名列 —— 滑過 Hero 後才出現。 */
 export function MobileCta() {
@@ -15,6 +16,10 @@ export function MobileCta() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // 這條浮動列整條都是報名用的 —— /tickets 隱藏期間直接不渲染。
+  // 提前 return 必須放在所有 hook 之後，否則違反 Rules of Hooks。
+  if (!isPublicRoute("/tickets")) return null;
 
   return (
     <div

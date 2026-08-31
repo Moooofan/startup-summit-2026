@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { editions, testimonials } from "@/data/review";
 import { event } from "@/data/event";
+import { isPublicRoute } from "@/lib/config";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Reveal } from "@/components/ui/Reveal";
 import { EditionTimeline } from "@/components/review/EditionTimeline";
@@ -163,9 +164,11 @@ export default function ReviewPage() {
               {event.dateLabelLong}｜{event.venue.name}
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-4">
-              <Cta href="/tickets" size="lg">
-                查看本屆資訊
-              </Cta>
+              {isPublicRoute("/tickets") && (
+                <Cta href="/tickets" size="lg">
+                  查看本屆資訊
+                </Cta>
+              )}
               <Link
                 href="/speakers"
                 className="inline-flex items-center gap-1.5 px-2 py-4 text-sm text-ink-2 transition-colors hover:text-ink"

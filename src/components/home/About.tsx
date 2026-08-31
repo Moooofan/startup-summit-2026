@@ -4,6 +4,7 @@ import { event, forums } from "@/data/event";
 import { tracksByDay } from "@/data/tracks";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Reveal } from "@/components/ui/Reveal";
+import { isPublicRoute } from "@/lib/config";
 
 export function About() {
   return (
@@ -83,13 +84,17 @@ export function About() {
                       ))}
                     </ul>
 
-                    <Link
-                      href="/agenda"
-                      className="mt-8 inline-flex items-center gap-1.5 text-sm text-orbit-sky transition-colors hover:text-ink"
-                    >
-                      查看 {f.name}主題
-                      <ArrowUpRight size={15} />
-                    </Link>
+                    {/* /agenda 隱藏期間不顯示這顆連結（見 lib/config 的 PUBLIC_ROUTES）；
+                        上方的主題軌 chips 已把該日主題列出來，拿掉不影響資訊完整度。 */}
+                    {isPublicRoute("/agenda") && (
+                      <Link
+                        href="/agenda"
+                        className="mt-8 inline-flex items-center gap-1.5 text-sm text-orbit-sky transition-colors hover:text-ink"
+                      >
+                        查看 {f.name}主題
+                        <ArrowUpRight size={15} />
+                      </Link>
+                    )}
                   </div>
                 </article>
               </Reveal>
