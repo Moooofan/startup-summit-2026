@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { MapPin } from "lucide-react";
 import { event, forums } from "@/data/event";
-import { speakerCount } from "@/data/speakers";
 import { Cta } from "@/components/ui/Cta";
 import { OrbitRing } from "@/components/home/OrbitRing";
 import { FlipClock } from "@/components/home/FlipClock";
@@ -142,15 +141,26 @@ export function Hero() {
             </h1>
           </motion.div>
 
+          {/* 主標語（取代原本的 tagline 句）：點出「社群出身、年度最大規模」的定位。
+              custom 用 2.6（非整數）刻意夾在標題 2 與下段 3 之間，讓進場多這一段仍不會把
+              最後一個元素推過 OrbitRing 的掛載閘門（~1150ms，見上方 rise 註解）。 */}
+          <motion.p
+            variants={rise}
+            initial="hidden"
+            animate="show"
+            custom={2.6}
+            className="mt-4 text-[clamp(1.05rem,3.4vw,1.55rem)] font-semibold leading-snug tracking-[0.04em] text-ink"
+          >
+            <span className="text-gold">社群原生</span>，年度最盛大的新創投資年會
+          </motion.p>
+
           <motion.p
             variants={rise}
             initial="hidden"
             animate="show"
             custom={3}
-            className="mt-4 max-w-xl text-[18px] leading-[1.8] text-ink-2 md:text-base"
+            className="mt-3 max-w-xl text-[18px] leading-[1.8] text-ink-2 md:text-base"
           >
-            {event.tagline}，{event.taglineSub}。
-            <br className="hidden sm:block" />
             兩天雙峰論壇，
             {/* /agenda 隱藏期間降級為純文字 —— 內容仍要讀得到，只是不再是連結。 */}
             {forums.map((f, i) => (
@@ -170,7 +180,7 @@ export function Hero() {
                 )}
               </span>
             ))}
-            ，{speakerCount} 位創業家與機構投資人同場。
+            。
           </motion.p>
 
           <motion.div
