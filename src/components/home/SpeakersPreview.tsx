@@ -121,7 +121,7 @@ export function SpeakersPreview() {
   const list2 = speakersByDay(day2.key);
 
   return (
-    <section id="speakers" className="grain relative scroll-mt-24 bg-bg-soft py-20 md:py-28">
+    <section id="speakers" className="grain relative snap-start scroll-mt-24 bg-bg-soft py-20 md:py-28">
       <div aria-hidden className="hairline absolute inset-x-0 top-0 z-10 h-px" />
 
       <div className="shell relative">
