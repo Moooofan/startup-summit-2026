@@ -5,6 +5,7 @@ import { SpeakersPreview } from "@/components/home/SpeakersPreview";
 import { Tickets } from "@/components/home/Tickets";
 import { Faq } from "@/components/home/Faq";
 import { ScrollSnapController } from "@/components/home/ScrollSnapController";
+import { HomeBackdrop } from "@/components/home/HomeBackdrop";
 import { SiteJsonLd, EventJsonLd, FaqJsonLd } from "@/components/site/JsonLd";
 import { speakers } from "@/data/speakers";
 
@@ -30,6 +31,8 @@ export default function HomePage() {
   return (
     <>
       <ScrollSnapController />
+      {/* 首頁專屬：歷屆活動照的梯形撕紙背景（固定、在文字之下） */}
+      <HomeBackdrop />
       <SiteJsonLd />
       <EventJsonLd
         performers={speakers.map((s) => ({
