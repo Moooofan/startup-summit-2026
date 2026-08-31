@@ -285,6 +285,16 @@
 @keyframes marquee-left  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
 @keyframes marquee-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 
+/* 首頁 Hero 背景的歷屆活動照輪播：多張同位置疊放，靠 opacity 交叉淡入淡出。
+   五張各佔 20% 週期，這裡讓每張亮到 22% 才收 → 與下一張重疊 2%，交接時不會出現空檔。 */
+@keyframes bd-slide {
+  0%   { opacity: 0; }
+  3%   { opacity: 1; }
+  18%  { opacity: 1; }
+  22%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+
 @keyframes orbit-spin { to { transform: rotate(360deg); } }
 @keyframes float-y {
   0%, 100% { transform: translateY(0); }
@@ -346,10 +356,18 @@
   }
 
   /* 暫停必須作用在「整條軌道」——只停可見的那半，複製的那半會繼續跑然後突然冒出來。
-     除了 hover 也要 focus-within：鍵盤使用者 Tab 進卡片時軌道若繼續跑，焦點會被帶走。 */
-  .marquee-viewport:hover .marquee-track,
+     刻意不掛 :hover 暫停 —— 磁吸落到這屏時滑鼠常剛好停在第一行上，:hover 會讓整條
+     瞬間凍住、看起來像壞掉。改為只在 :focus-within 暫停：鍵盤使用者 Tab 進卡片時，
+     軌道若繼續跑焦點會被帶走，這個必須擋；滑鼠要點講者卡照樣可點（軌道低速前進不影響點擊）。 */
   .marquee-viewport:focus-within .marquee-track {
     animation-play-state: paused;
+  }
+
+  /* 背景輪播單張：週期共用 --bd-cycle，各張的錯開時間由行內 --bd-delay 指定。 */
+  .bd-slide {
+    opacity: 0;
+    animation: bd-slide var(--bd-cycle, 30s) linear infinite;
+    animation-delay: var(--bd-delay, 0s);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -360,6 +378,11 @@
       transform: none !important;
     }
     .marquee-viewport { overflow-x: auto; }
+
+    /* 同樣的坑：0.01ms 會讓輪播瞬間停在 100%（opacity: 0）＝ 整片背景照片消失。
+       必須明確關掉動畫，並只留第一張當靜態背景。 */
+    .bd-slide { animation: none !important; opacity: 0; }
+    .bd-slide:first-of-type { opacity: 1; }
   }
 
   .animate-nudge-r { animation: nudge-r 1.8s var(--ease-out-soft) infinite; }

@@ -5,10 +5,10 @@ import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { MapPin } from "lucide-react";
 import { event, forums } from "@/data/event";
-import { speakerCount } from "@/data/speakers";
 import { Cta } from "@/components/ui/Cta";
 import { OrbitRing } from "@/components/home/OrbitRing";
 import { FlipClock } from "@/components/home/FlipClock";
+import { HomeBackdrop } from "@/components/home/HomeBackdrop";
 import { isPublicRoute } from "@/lib/config";
 
 export function Hero() {
@@ -36,6 +36,9 @@ export function Hero() {
         ref={ref}
         className="grain relative flex min-h-[100svh] snap-start items-center overflow-hidden pt-[72px] md:pt-[88px] [scroll-margin-top:-88px]"
       >
+        {/* 首頁第一屏專屬：左半滿版歷屆活動照 + 右緣撕紙斜線（只在 Hero，捲走即回歸原背景） */}
+        <HomeBackdrop />
+
         {/* 底層光暈 */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -right-[10%] top-[-14%] h-[70vw] max-h-[900px] w-[70vw] max-w-[900px] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.12)_0%,transparent_62%)]" />
@@ -97,17 +100,9 @@ export function Hero() {
             custom={1}
             className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2"
           >
-            <span
-              className="font-display text-[clamp(2.2rem,6vw,3.5rem)] font-semibold tracking-[0.22em]"
-              style={{
-                // 斜向、偏淡的光軌漸層（獨立於全站 .text-orbit）
-                backgroundImage:
-                  "linear-gradient(118deg,#6d8bd6 0%,#8f7fd0 55%,#c58bb0 100%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
-              }}
-            >
+            {/* 2026 用淺色（brand-glow 淺靛藍）把搶眼的漸層讓給下方主標語；
+                日期則加深（ink-2）保住可讀性 —— 淺色在淺底上對比不足。 */}
+            <span className="font-display text-[clamp(2.2rem,6vw,3.5rem)] font-semibold tracking-[0.22em] text-brand-glow">
               2026
             </span>
             <span className="font-display text-[clamp(1.1rem,3.4vw,1.6rem)] font-medium tracking-wide text-ink-2">
@@ -142,15 +137,34 @@ export function Hero() {
             </h1>
           </motion.div>
 
+          {/* 主標語（取代原本的 tagline 句）：點出「社群出身、年度最大規模」的定位。
+              custom 用 2.6（非整數）刻意夾在標題 2 與下段 3 之間，讓進場多這一段仍不會把
+              最後一個元素推過 OrbitRing 的掛載閘門（~1150ms，見上方 rise 註解）。 */}
+          <motion.p
+            variants={rise}
+            initial="hidden"
+            animate="show"
+            custom={2.6}
+            className="mt-4 w-fit text-[clamp(1.05rem,3.4vw,1.55rem)] font-semibold leading-snug tracking-[0.04em]"
+            style={{
+              // 沿用原本 2026 的斜向光軌漸層（藍→紫→粉）；w-fit 讓漸層貼齊文字寬度、
+              // 色階分佈與 2026 一致，而非攤在整行。
+              backgroundImage: "linear-gradient(118deg,#6d8bd6 0%,#8f7fd0 55%,#c58bb0 100%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+            }}
+          >
+            社群原生，年度最盛大的新創投資年會
+          </motion.p>
+
           <motion.p
             variants={rise}
             initial="hidden"
             animate="show"
             custom={3}
-            className="mt-4 max-w-xl text-[18px] leading-[1.8] text-ink-2 md:text-base"
+            className="mt-3 max-w-xl text-[18px] leading-[1.8] text-ink-2 md:text-base"
           >
-            {event.tagline}，{event.taglineSub}。
-            <br className="hidden sm:block" />
             兩天雙峰論壇，
             {/* /agenda 隱藏期間降級為純文字 —— 內容仍要讀得到，只是不再是連結。 */}
             {forums.map((f, i) => (
@@ -170,7 +184,7 @@ export function Hero() {
                 )}
               </span>
             ))}
-            ，{speakerCount} 位創業家與機構投資人同場。
+            。
           </motion.p>
 
           <motion.div

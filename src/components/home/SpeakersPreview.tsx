@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronDown } from "lucide-react";
 import { forums } from "@/data/event";
 import { speakerCount, speakersByDay } from "@/data/speakers";
 import type { Speaker } from "@/data/speakers";
@@ -115,65 +115,96 @@ function MarqueeRow({
   );
 }
 
+/** 日別標題（可點）：整行連到 /speakers 的該日錨點，取代原本的「看完整陣容」按鈕。 */
+function DayHeading({ forum, count }: { forum: (typeof forums)[number]; count: number }) {
+  return (
+    <div className="shell">
+      <Link
+        href={`/speakers#${forum.key}`}
+        aria-label={`看 ${forum.name}完整講者陣容`}
+        className="group inline-flex flex-wrap items-center gap-x-3 gap-y-1"
+      >
+        <span
+          className={cn(
+            "text-sm font-semibold tracking-[0.2em] underline-offset-4 transition-colors group-hover:underline",
+            accent[forum.accent].text
+          )}
+        >
+          {forum.label}　{forum.name}
+        </span>
+        <span className="text-sm font-normal tracking-normal text-ink-4">
+          {forum.dateLabel}・{count} 位
+        </span>
+        <ArrowUpRight
+          size={15}
+          aria-hidden
+          className="shrink-0 text-ink-4 transition-transform group-hover:translate-x-0.5 group-hover:text-ink-2"
+        />
+      </Link>
+    </div>
+  );
+}
+
 export function SpeakersPreview() {
   const [day1, day2] = forums;
   const list1 = speakersByDay(day1.key);
   const list2 = speakersByDay(day2.key);
 
   return (
-    <section id="speakers" className="grain relative scroll-mt-24 bg-bg-soft py-20 md:py-28">
-      <div aria-hidden className="hairline absolute inset-x-0 top-0 z-10 h-px" />
+    <>
+      {/* 節點一：講者大字報，滿版一屏（方案 B：大字報獨立一頁） */}
+      <section
+        id="speakers"
+        className="grain relative flex snap-start items-center overflow-hidden bg-bg-soft pb-6 pt-20 md:min-h-[100svh] md:py-20 [scroll-margin-top:-88px]"
+      >
+        <div aria-hidden className="hairline absolute inset-x-0 top-0 z-10 h-px" />
 
-      <div className="shell relative">
-        <Reveal>
-          <SectionHead
-            eyebrow="SPEAKERS"
-            ghost="LINE-UP"
-            title={`${speakerCount} 位講者，兩天分場登台`}
-            lead="從剛掛牌的創業家、Edge AI 與半導體團隊，到管理國際基金的機構投資人。點開任何一位，看他們正在解的題目。"
-          />
-        </Reveal>
-      </div>
+        <div className="shell relative w-full">
+          <Reveal>
+            <SectionHead
+              className="md:mt-8"
+              eyebrow="SPEAKERS"
+              ghost="LINE-UP"
+              title={`${speakerCount} 位講者，兩天分場登台`}
+              lead="從剛掛牌的創業家、Edge AI 與半導體團隊，到管理國際基金的機構投資人。點開任何一位，看他們正在解的題目。"
+            />
+          </Reveal>
 
-      {/* 跑馬燈不放進 .shell —— 要滿版跑到螢幕邊緣，羽化才有「持續延伸」的感覺 */}
-      <div className="relative mt-12 space-y-6">
-        <div className="shell">
-          <p className={cn("text-sm font-semibold tracking-[0.2em]", accent[day1.accent].text)}>
-            {day1.label}　{day1.name}
-            <span className="ml-3 font-normal tracking-normal text-ink-4">
-              {day1.dateLabel}・{list1.length} 位
+          {/* 向下滑提示（桌機顯示，與 Agenda 開場一致） */}
+          <div className="pointer-events-none mt-14 hidden justify-center md:flex">
+            <span className="inline-flex flex-col items-center gap-2 text-[17px] tracking-[0.24em] text-orbit-sky">
+              向下看兩天講者陣容
+              <ChevronDown size={20} aria-hidden className="animate-bounce motion-reduce:animate-none" />
             </span>
-          </p>
-        </div>
-        <MarqueeRow list={list1} tone={accent[day1.accent]} />
-
-        <div className="shell pt-4">
-          <p className={cn("text-sm font-semibold tracking-[0.2em]", accent[day2.accent].text)}>
-            {day2.label}　{day2.name}
-            <span className="ml-3 font-normal tracking-normal text-ink-4">
-              {day2.dateLabel}・{list2.length} 位
-            </span>
-          </p>
-        </div>
-        <MarqueeRow list={list2} tone={accent[day2.accent]} reverse />
-      </div>
-
-      <div className="shell">
-        <Reveal delay={0.1}>
-          <div className="mt-14 flex flex-wrap items-center gap-x-6 gap-y-3">
-            <Link
-              href="/speakers"
-              className="inline-flex items-center gap-1.5 rounded-pill border border-black/12 bg-white/55 px-6 py-3 text-[17px] font-medium text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
-            >
-              看完整 {speakerCount} 位講者陣容
-              <ArrowUpRight size={16} aria-hidden />
-            </Link>
-            <p className="text-[17px] text-ink-4">
-              ※ 標示「確認中」者為邀請中，最終陣容以官方公告為準。
-            </p>
           </div>
-        </Reveal>
-      </div>
-    </section>
+        </div>
+      </section>
+
+      {/* 節點二：兩行反向跑馬燈。桌機（md+）才滿版一屏、垂直置中：
+          pt-[104px]（≥ nav 88px + 呼吸）是「地板」，justify-center 再怎麼置中，內容頂端
+          都壓不到固定導覽列下面 → 不同縮放/字級都不會把 Day1 標籤切掉。
+          手機不觸發 STICK：不強制滿版，接在大字報下方自然流動、只留一點上緣間距。
+          overflow-x-hidden（非 overflow-hidden）：只擋跑馬燈左右溢出，垂直永不裁切。 */}
+      <section className="relative flex snap-start flex-col justify-center overflow-x-hidden pb-16 pt-4 md:min-h-[100svh] md:pt-[104px] [scroll-margin-top:-88px]">
+        {/* 跑馬燈不放進 .shell —— 要滿版跑到螢幕邊緣，羽化才有「持續延伸」的感覺 */}
+        <div className="relative space-y-6">
+          <DayHeading forum={day1} count={list1.length} />
+          <MarqueeRow list={list1} tone={accent[day1.accent]} />
+
+          <div className="pt-4">
+            <DayHeading forum={day2} count={list2.length} />
+          </div>
+          <MarqueeRow list={list2} tone={accent[day2.accent]} reverse />
+        </div>
+
+        <div className="shell">
+          <Reveal delay={0.1}>
+            <p className="mt-10 text-[17px] text-ink-4">
+              ※ 標示「確認中」者為邀請中，最終陣容以官方公告為準。點日別標題可看該日完整講者。
+            </p>
+          </Reveal>
+        </div>
+      </section>
+    </>
   );
 }
