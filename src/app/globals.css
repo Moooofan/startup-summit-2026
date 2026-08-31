@@ -279,6 +279,12 @@
   @media (min-width: 768px) { .shell { padding-inline: 40px; } }
 }
 
+/* 講者跑馬燈：軌道複製一份接在後面，跑到 -50% 時畫面與起點完全相同 → 無縫循環。
+   用 transform 而非 left/margin：走 GPU 合成層，不觸發重排重繪，
+   也不會再吃掉 .glass 那層 blur 已經很吃緊的捲動效能。 */
+@keyframes marquee-left  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+@keyframes marquee-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
 @keyframes orbit-spin { to { transform: rotate(360deg); } }
 @keyframes float-y {
   0%, 100% { transform: translateY(0); }
@@ -307,6 +313,55 @@
   100% { transform: translateX(230%); opacity: 0; }
 }
 @layer utilities {
+  /* 跑馬燈軌道。速度用 --marquee-duration 由行內指定（兩排長度不同，各自配速）。 */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-left var(--marquee-duration, 60s) linear infinite;
+    will-change: transform;
+  }
+  .marquee-track-reverse { animation-name: marquee-right; }
+
+  /* 兩側羽化。用 mask 而非疊漸層色塊：本區塊底下是 layout 那張水墨背景圖，
+     不是純色，疊 from-bg-soft 的漸層蓋不住，卡片會被邊緣硬切一刀。
+     mask 直接讓像素本身透明，底下是什麼都無所謂。 */
+  .marquee-viewport {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 var(--marquee-fade, 4rem),
+      #000 calc(100% - var(--marquee-fade, 4rem)),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 var(--marquee-fade, 4rem),
+      #000 calc(100% - var(--marquee-fade, 4rem)),
+      transparent 100%
+    );
+  }
+  @media (min-width: 768px) {
+    .marquee-viewport { --marquee-fade: 7rem; }
+  }
+
+  /* 暫停必須作用在「整條軌道」——只停可見的那半，複製的那半會繼續跑然後突然冒出來。
+     除了 hover 也要 focus-within：鍵盤使用者 Tab 進卡片時軌道若繼續跑，焦點會被帶走。 */
+  .marquee-viewport:hover .marquee-track,
+  .marquee-viewport:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* base 層的全域規則會把 duration 壓成 0.01ms —— 對位移動畫而言那不是「停止」，
+       而是瞬間跳到終點 (-50%)。這裡必須明確關掉動畫並歸零，改由使用者自己橫向捲動。 */
+    .marquee-track {
+      animation: none !important;
+      transform: none !important;
+    }
+    .marquee-viewport { overflow-x: auto; }
+  }
+
   .animate-nudge-r { animation: nudge-r 1.8s var(--ease-out-soft) infinite; }
   .animate-nudge-l { animation: nudge-l 1.8s var(--ease-out-soft) infinite; }
   .animate-track-right { animation: track-right 5s var(--ease-out-soft) infinite; }

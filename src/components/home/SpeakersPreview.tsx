@@ -2,157 +2,170 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { forums } from "@/data/event";
-import { speakers, speakerCount, speakersByDay } from "@/data/speakers";
+import { speakerCount, speakersByDay } from "@/data/speakers";
+import type { Speaker } from "@/data/speakers";
 import { photoFocus } from "@/data/speakerPhotoFocus";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/utils";
 
 /**
- * 首頁用的講者陣容「預覽」 —— 刻意不是 /speakers 那一套。
+ * 首頁講者陣容 —— 兩排反向跑馬燈（上排往左、下排往右）。
  *
- * /speakers 的 <Speakers /> 是五個滿版 snap-panel（開場 + 兩個日別節點 + 兩頁網格），
- * 整段搬進首頁會吃掉五個螢幕高度，把後面的售票與 FAQ 推到很下面 ——
- * 首頁要的是「看得到陣容 + 想看更多就點進去」，不是把整個講者頁重播一次。
+ * 為什麼是純 CSS、而且是 Server Component：
+ * 效果只需要「等速位移 + hover 暫停」，這用 CSS animation 就做得完，
+ * 不需要 Swiper／Embla 那類套件（多背 20–40KB，還會讓整段變成 client component）。
+ * 位移用 transform → GPU 合成層，不觸發重排重繪 ——
+ * 這一點在本專案特別要緊：.glass 的 blur 已經是捲動效能的主因。
  *
- * 因此這裡壓成一段：每個論壇各取前 N 位，其餘導去 /speakers。
+ * 無縫循環的原理：軌道把清單「複製一份」接在後面，跑到 -50% 時
+ * 畫面上的內容與起點完全相同，接回 0 看不出接縫。
+ *
+ * 無障礙（見 globals.css 的 .marquee-* ）：
+ * - 複製的那一份掛 aria-hidden，否則螢幕閱讀器會把每位講者念兩遍
+ * - hover 與 focus-within 都要暫停；只做 hover 的話鍵盤使用者 Tab 進去焦點會被帶著跑
+ * - prefers-reduced-motion 直接關掉動畫，改成可手動橫向捲動
  */
 
-const PER_FORUM = 5;
+/** 兩排各自配速：卡片多的那排跑久一點，讓兩排的視覺速度接近。 */
+const SECONDS_PER_CARD = 4.5;
 
 const accent = {
   sky: { text: "text-orbit-sky", line: "via-orbit-sky/70" },
   violet: { text: "text-[#6d47c4]", line: "via-[#6d47c4]/60" },
 } as const;
 
-function MiniCard({
-  slug,
-  photo,
-  name,
-  org,
-  title,
-  status,
+type Tone = (typeof accent)[keyof typeof accent];
+
+function SpeakerCard({ s, tone }: { s: Speaker; tone: Tone }) {
+  return (
+    <Link
+      href={`/speakers/${s.slug}`}
+      className="group block w-[172px] shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-glow sm:w-[196px]"
+    >
+      <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-black/8 bg-surface">
+        <Image
+          src={s.photo}
+          alt={`${s.name}｜${s.org} ${s.title}`}
+          fill
+          sizes="196px"
+          style={{ objectPosition: photoFocus(s.slug) }}
+          className="object-cover transition-transform duration-500 group-hover:scale-[1.07]"
+        />
+        {s.status === "pending" && (
+          <span className="absolute right-2.5 top-2.5 rounded-pill bg-bg/80 px-2.5 py-1 text-[15px] text-ink-3 backdrop-blur">
+            確認中
+          </span>
+        )}
+        <span
+          aria-hidden
+          className={cn(
+            "absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100",
+            tone.line
+          )}
+        />
+      </div>
+      <div className="mt-3">
+        <p className="flex items-center gap-1.5 text-[17px] font-bold text-ink">
+          {s.name}
+          <ArrowUpRight
+            size={13}
+            aria-hidden
+            className="shrink-0 text-ink-4 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
+          />
+        </p>
+        <p className={cn("mt-0.5 line-clamp-1 text-[16px] font-medium", tone.text)}>{s.org}</p>
+        <p className="mt-0.5 line-clamp-1 text-[16px] text-ink-3">{s.title}</p>
+      </div>
+    </Link>
+  );
+}
+
+function MarqueeRow({
+  list,
   tone,
-  eager,
+  reverse,
 }: {
-  slug: string;
-  photo: string;
-  name: string;
-  org: string;
-  title: string;
-  status?: string;
-  tone: (typeof accent)[keyof typeof accent];
-  eager: boolean;
+  list: Speaker[];
+  tone: Tone;
+  reverse?: boolean;
 }) {
   return (
-    <li>
-      <Link
-        href={`/speakers/${slug}`}
-        className="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-glow"
+    /* 兩側羽化由 .marquee-viewport 的 mask 處理（見 globals.css）——
+       疊漸層色塊在這裡行不通，底下是水墨背景圖而非純色。 */
+    <div className="marquee-viewport relative overflow-hidden">
+      <div
+        className={cn("marquee-track gap-5", reverse && "marquee-track-reverse")}
+        style={{ ["--marquee-duration" as string]: `${list.length * SECONDS_PER_CARD}s` }}
       >
-        <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-black/8 bg-surface">
-          <Image
-            src={photo}
-            alt={`${name}｜${org} ${title}`}
-            fill
-            sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 200px"
-            style={{ objectPosition: photoFocus(slug) }}
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.07]"
-            loading={eager ? "eager" : "lazy"}
-          />
-          {status === "pending" && (
-            <span className="absolute right-3 top-3 rounded-pill bg-bg/80 px-2.5 py-1 text-[16px] text-ink-3 backdrop-blur">
-              確認中
-            </span>
-          )}
-          <span
-            aria-hidden
-            className={cn(
-              "absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100",
-              tone.line
-            )}
-          />
+        {list.map((s) => (
+          <SpeakerCard key={s.slug} s={s} tone={tone} />
+        ))}
+        {/* 複製一份湊成無縫循環。aria-hidden + tabIndex -1：
+            不重複念給螢幕閱讀器，也不讓鍵盤 Tab 進到看不出差別的第二份。 */}
+        <div aria-hidden className="contents">
+          {list.map((s) => (
+            <div key={`dup-${s.slug}`} className="contents [&_a]:pointer-events-none">
+              <SpeakerCard s={s} tone={tone} />
+            </div>
+          ))}
         </div>
-        <div className="mt-3.5">
-          <p className="flex items-center gap-1.5 text-[18px] font-bold text-ink">
-            {name}
-            <ArrowUpRight
-              size={14}
-              aria-hidden
-              className="shrink-0 text-ink-4 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:opacity-100"
-            />
-          </p>
-          <p className={cn("mt-1 text-[17px] font-medium leading-snug", tone.text)}>{org}</p>
-          <p className="mt-0.5 text-[17px] leading-snug text-ink-3">{title}</p>
-        </div>
-      </Link>
-    </li>
+      </div>
+    </div>
   );
 }
 
 export function SpeakersPreview() {
+  const [day1, day2] = forums;
+  const list1 = speakersByDay(day1.key);
+  const list2 = speakersByDay(day2.key);
+
   return (
     <section id="speakers" className="grain relative scroll-mt-24 bg-bg-soft py-20 md:py-28">
       <div aria-hidden className="hairline absolute inset-x-0 top-0 z-10 h-px" />
+
       <div className="shell relative">
         <Reveal>
           <SectionHead
             eyebrow="SPEAKERS"
             ghost="LINE-UP"
             title={`${speakerCount} 位講者，兩天分場登台`}
-            lead="從剛掛牌的創業家、Edge AI 與半導體團隊，到管理國際基金的機構投資人。"
+            lead="從剛掛牌的創業家、Edge AI 與半導體團隊，到管理國際基金的機構投資人。點開任何一位，看他們正在解的題目。"
           />
         </Reveal>
+      </div>
 
-        {forums.map((f, fi) => {
-          const list = speakersByDay(f.key);
-          const shown = list.slice(0, PER_FORUM);
-          const tone = accent[f.accent];
-          return (
-            <div key={f.key} className={fi === 0 ? "mt-12" : "mt-16"}>
-              <Reveal>
-                <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-black/8 pb-5">
-                  <span
-                    className={cn("font-display text-sm font-semibold tracking-[0.2em]", tone.text)}
-                  >
-                    {f.label}
-                  </span>
-                  <h3 className="text-xl font-bold text-ink md:text-2xl">{f.name}</h3>
-                  <span className="font-display text-[17px] text-ink-3">
-                    {f.dateLabel}（{f.weekday}）
-                  </span>
-                  <span className="ml-auto text-[17px] text-ink-4">{list.length} 位</span>
-                </header>
-              </Reveal>
+      {/* 跑馬燈不放進 .shell —— 要滿版跑到螢幕邊緣，羽化才有「持續延伸」的感覺 */}
+      <div className="relative mt-12 space-y-6">
+        <div className="shell">
+          <p className={cn("text-sm font-semibold tracking-[0.2em]", accent[day1.accent].text)}>
+            {day1.label}　{day1.name}
+            <span className="ml-3 font-normal tracking-normal text-ink-4">
+              {day1.dateLabel}・{list1.length} 位
+            </span>
+          </p>
+        </div>
+        <MarqueeRow list={list1} tone={accent[day1.accent]} />
 
-              <Reveal delay={0.08}>
-                <ul className="mt-8 grid grid-cols-2 gap-x-5 gap-y-9 sm:grid-cols-3 lg:grid-cols-5">
-                  {shown.map((s, i) => (
-                    <MiniCard
-                      key={s.slug}
-                      slug={s.slug}
-                      photo={s.photo}
-                      name={s.name}
-                      org={s.org}
-                      title={s.title}
-                      status={s.status}
-                      tone={tone}
-                      eager={fi === 0 && i < 5}
-                    />
-                  ))}
-                </ul>
-              </Reveal>
-            </div>
-          );
-        })}
+        <div className="shell pt-4">
+          <p className={cn("text-sm font-semibold tracking-[0.2em]", accent[day2.accent].text)}>
+            {day2.label}　{day2.name}
+            <span className="ml-3 font-normal tracking-normal text-ink-4">
+              {day2.dateLabel}・{list2.length} 位
+            </span>
+          </p>
+        </div>
+        <MarqueeRow list={list2} tone={accent[day2.accent]} reverse />
+      </div>
 
+      <div className="shell">
         <Reveal delay={0.1}>
           <div className="mt-14 flex flex-wrap items-center gap-x-6 gap-y-3">
             <Link
               href="/speakers"
               className="inline-flex items-center gap-1.5 rounded-pill border border-black/12 bg-white/55 px-6 py-3 text-[17px] font-medium text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
             >
-              看完整 {speakers.length} 位講者陣容
+              看完整 {speakerCount} 位講者陣容
               <ArrowUpRight size={16} aria-hidden />
             </Link>
             <p className="text-[17px] text-ink-4">
