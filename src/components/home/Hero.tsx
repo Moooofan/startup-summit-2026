@@ -96,20 +96,12 @@ export function Hero() {
             custom={1}
             className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2"
           >
-            <span
-              className="font-display text-[clamp(2.2rem,6vw,3.5rem)] font-semibold tracking-[0.22em]"
-              style={{
-                // 斜向、偏淡的光軌漸層（獨立於全站 .text-orbit）
-                backgroundImage:
-                  "linear-gradient(118deg,#6d8bd6 0%,#8f7fd0 55%,#c58bb0 100%)",
-                WebkitBackgroundClip: "text",
-                backgroundClip: "text",
-                color: "transparent",
-              }}
-            >
+            {/* 年份與日期改為單一淺色（brand-glow 淺靛藍）—— 把搶眼的漸層讓給下方主標語，
+                這行保持安靜、淺調。 */}
+            <span className="font-display text-[clamp(2.2rem,6vw,3.5rem)] font-semibold tracking-[0.22em] text-brand-glow">
               2026
             </span>
-            <span className="font-display text-[clamp(1.1rem,3.4vw,1.6rem)] font-medium tracking-wide text-ink-2">
+            <span className="font-display text-[clamp(1.1rem,3.4vw,1.6rem)] font-medium tracking-wide text-brand-glow">
               {event.dateLabel}
             </span>
           </motion.div>
@@ -149,9 +141,17 @@ export function Hero() {
             initial="hidden"
             animate="show"
             custom={2.6}
-            className="mt-4 text-[clamp(1.05rem,3.4vw,1.55rem)] font-semibold leading-snug tracking-[0.04em] text-ink"
+            className="mt-4 w-fit text-[clamp(1.05rem,3.4vw,1.55rem)] font-semibold leading-snug tracking-[0.04em]"
+            style={{
+              // 沿用原本 2026 的斜向光軌漸層（藍→紫→粉）；w-fit 讓漸層貼齊文字寬度、
+              // 色階分佈與 2026 一致，而非攤在整行。
+              backgroundImage: "linear-gradient(118deg,#6d8bd6 0%,#8f7fd0 55%,#c58bb0 100%)",
+              WebkitBackgroundClip: "text",
+              backgroundClip: "text",
+              color: "transparent",
+            }}
           >
-            <span className="text-gold">社群原生</span>，年度最盛大的新創投資年會
+            社群原生，年度最盛大的新創投資年會
           </motion.p>
 
           <motion.p
