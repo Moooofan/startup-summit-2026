@@ -8,6 +8,7 @@ import { event, forums } from "@/data/event";
 import { Cta } from "@/components/ui/Cta";
 import { OrbitRing } from "@/components/home/OrbitRing";
 import { FlipClock } from "@/components/home/FlipClock";
+import { HomeBackdrop } from "@/components/home/HomeBackdrop";
 import { isPublicRoute } from "@/lib/config";
 
 export function Hero() {
@@ -35,6 +36,9 @@ export function Hero() {
         ref={ref}
         className="grain relative flex min-h-[100svh] snap-start items-center overflow-hidden pt-[72px] md:pt-[88px] [scroll-margin-top:-88px]"
       >
+        {/* 首頁第一屏專屬：左半滿版歷屆活動照 + 右緣撕紙斜線（只在 Hero，捲走即回歸原背景） */}
+        <HomeBackdrop />
+
         {/* 底層光暈 */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute -right-[10%] top-[-14%] h-[70vw] max-h-[900px] w-[70vw] max-w-[900px] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.12)_0%,transparent_62%)]" />
