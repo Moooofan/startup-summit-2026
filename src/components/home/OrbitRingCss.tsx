@@ -46,7 +46,7 @@ export function OrbitRingCss({ className = "" }: { className?: string }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
-  /* ⚠️ 必須是 useLayoutEffect，而且要在 observe 之前先同步量一次：
+  /* 必須是 useLayoutEffect，而且要在 observe 之前先同步量一次：
      scale 初始值是 1，等於「用 DESIGN=560 的原尺寸畫」。手機上容器只有約 370px，
      ResizeObserver 回呼是下一幀才到 → 中間那一幀整個環超出容器，被 Hero 的
      overflow-hidden 裁掉，表現為進場閃一下。改成 layout effect 就在瀏覽器繪製前完成縮放。

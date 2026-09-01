@@ -30,7 +30,7 @@ export function HomeAgenda() {
                   {f.label}
                 </span>
                 <h3 className="text-2xl font-bold text-ink md:text-3xl">{f.name}</h3>
-                {/* ⚠️ 手機強制折行：basis-full 讓這個 0 高度的元素獨佔一行，後面的項目一定落到第二行。
+                {/* 手機強制折行：basis-full 讓這個 0 高度的元素獨佔一行，後面的項目一定落到第二行。
                     這一列固有寬約 584px，手機可用寬最多 350px —— 放著自己 wrap 折點會隨文案飄，
                     ml-auto 想把場次數推到右端的意圖也會散掉。完整說明見 Speakers.tsx 的同一列。 */}
                 <span aria-hidden className="basis-full sm:hidden" />

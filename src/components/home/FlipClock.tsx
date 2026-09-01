@@ -54,7 +54,7 @@ export function FlipClock({ target }: { target: string }) {
     </span>
   );
   return (
-    /* ⚠️ max-[359px]:gap-1 是 320px 級距的救命索：
+    /* max-[359px]:gap-1 是 320px 級距的救命索：
        clamp 的 3.6vw 在 755px 以下都低於 1.7rem 下限 → 這一列在所有手機上都是固定寬度、
        且沒有換行（8 張牌 200px + 牌內 gap 16px + 三個冒號 ≈ 18px + 外層 gap-2 48px ≈ 282px），
        但 320px 螢幕扣掉 .shell 左右各 20px 只剩 280px → 溢出。

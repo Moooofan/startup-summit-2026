@@ -46,9 +46,9 @@ type Plan = (typeof plans)[number];
  * 兩種版型共用同一個 TicketCard，用 sm 斷點各自顯示其一。
  *
  * 票卡只顯示 1 人價，四段團報級距交給下方的 TicketGroupTable（業主 2026/9 定案）。
- * ⚠️ 加了對照表之後，外層 #tickets-plans 的高度會超過一屏 —— 這會讓
- *    ScrollSnapController 把它判為「長內容區塊」（isShort 為 false）而交還原生捲動，
- *    要捲到底才跳下一節。這是控制器的既定行為、不是壞掉，別為此把表格搬走。
+ * 加了對照表之後，外層 #tickets-plans 的高度會超過一屏 —— 這會讓
+ * ScrollSnapController 把它判為「長內容區塊」（isShort 為 false）而交還原生捲動，
+ * 要捲到底才跳下一節。這是控制器的既定行為、不是壞掉，別為此把表格搬走。
  */
 export function TicketPlans() {
   return (
@@ -104,7 +104,7 @@ function TicketCard({ plan }: { plan: Plan }) {
         </p>
 
         {/* 主價一律是「1 人價」；團報級距在下方對照表，這裡只帶一句最低價當鉤子 */}
-        {/* ⚠️ max-[359px] 是 320px 級距的救命索，且這裡的破法是「直接被切掉」而非換行：
+        {/* max-[359px] 是 320px 級距的救命索，且這裡的破法是「直接被切掉」而非換行：
             這一列沒有 flex-wrap，而 NT$2,500 是 Montserrat 的一串拉丁字元（無斷行點）——
             33.6px 下約 161px，加 gap-2(8) 與「／人」(34) 共 203px，
             但 320px 螢幕的卡片內容區只有 76vw(243) − p-2.5(20) − p-5(40) ＝ 183px，

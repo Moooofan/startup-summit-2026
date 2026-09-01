@@ -112,7 +112,7 @@ export function Agenda() {
                       {f.label}
                     </span>
                     <h3 className="text-2xl font-bold text-ink md:text-3xl">{f.name}</h3>
-                    {/* ⚠️ 手機強制折行，同 Speakers.tsx 的標題列（那邊有完整說明）。
+                    {/* 手機強制折行，同 Speakers.tsx 的標題列（那邊有完整說明）。
                         這一列更長：Day 1(60) + 論壇名(130) + 日期時間(252) + 條數(82) + gap ＝ 584px，
                         手機可用寬最多 350px → 放著自己 wrap 會斷成三四行且折點不固定。
                         指定折點後：第一行 Day 1＋論壇名(190px)、第二行 日期＋時間(252px)，

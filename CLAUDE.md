@@ -6,13 +6,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Next.js 15 App Router + React 19 + TypeScript + Tailwind v4 + motion + three。純繁體中文，無 i18n、無測試、無 CMS。
 
-## ⚠️ 鐵則（使用者定案，勿違反）
+## 鐵則（使用者定案，勿違反）
 
 - **部署一律由使用者本人執行**。Claude **不得自行部署**（不觸發 Vercel、不 push 上線）。
 - **Claude 不要自己跑 `npm run dev`、`npm run build` 或 `next start`／起任何 server**。build／執行／部署都由使用者做。
 - Claude 只做：改程式 + 靜態檢查 `npx tsc --noEmit`、`npm run lint`。
 - **需要看畫面（截圖驗證）時，開口請使用者截圖給你**，不要自己 build＋起 server 截圖。
 - 若不慎跑了 build／server，**用完立刻清乾淨**：停 server → `rm -rf .next`。
+- **全站禁用 emoji**：程式碼、註解、畫面文字、資料檔、commit 訊息一律不出現圖形化符號
+  （警告三角、打勾、火焰、表情臉那類）。要強調就用文字或 `**粗體**`，不要用符號。
+  排版標點不在此限，可以繼續用：`—` `·` `・` `｜` `※` `→` `⟶` `©` `®`。
+  自我檢查（應無輸出）：
+  `rg --pcre2 '[\x{1F000}-\x{1FAFF}\x{2600}-\x{27BF}\x{2B00}-\x{2BFF}\x{FE0F}]' src CLAUDE.md TODO.md`
 
 ## 指令
 
@@ -106,7 +111,7 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
 發光體（白底乘積反解）。原稿是點陣圖、文字燒在圖上；網站標題全部是真實 HTML 文字。
 `public/logo-mark.png` 同樣從 KV 去背，解析度有限 —— **應向 VM 索取 SVG**。
 
-⚠️ **`scratchpad/`（`gen_speakers.py`、`unmultiply.py`）從未進版控，目前不存在**。
+**`scratchpad/`（`gen_speakers.py`、`unmultiply.py`）從未進版控，目前不存在**。
 `speakers.ts` 檔頭仍寫「由 gen_speakers.py 產生」，但那個腳本已無法取得 ——
 **現在改講者就是直接改 `speakers.ts`**。若日後重建產生器，記得它不做圖片壓縮：
 簡報原圖有幾張是 2MB 以上 PNG，已手動轉 JPEG 並更新引用，重跑會把原始 PNG 蓋回來。

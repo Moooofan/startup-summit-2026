@@ -118,7 +118,7 @@ function MarqueeRow({
 function DayHeading({ forum, count }: { forum: (typeof forums)[number]; count: number }) {
   return (
     <div className="shell">
-      {/* ⚠️ 手機是「確定的兩行」，不是碰運氣換行：
+      {/* 手機是「確定的兩行」，不是碰運氣換行：
           這一列固有寬 ＝ Day 1　創辦人論壇(182) + 日期・人數(149) + 箭頭(15) + gap ＝ 370px，
           但手機可用寬只有 280–350px（375px 剛好卡在 335px 的刀鋒上）。
           DOM 順序刻意排成「標題 → 箭頭 → 折行 → 日期」，箭頭再用 sm:order-last 推到最後 ——
@@ -166,10 +166,10 @@ export function SpeakersPreview() {
        手機不觸發 STICK：不強制滿版，自然流動即可。
        overflow-x-hidden（非 overflow-hidden）：只擋跑馬燈左右溢出，垂直永不裁切。
 
-       ⚠️ 這一段之前還有一屏「LINE-UP」大字報（SectionHead + 向下滑提示），
-          2026/9 依業主指示拿掉——「直接顯示兩排移動式講者」。
-          id="speakers" 與頂部分隔線因此搬到這裡，pt 也從 pt-4（原本接在大字報下方）
-          改成 pt-20，手機才有自己的上緣留白。 */
+       這一段之前還有一屏「LINE-UP」大字報（SectionHead + 向下滑提示），
+       2026/9 依業主指示拿掉——「直接顯示兩排移動式講者」。
+       id="speakers" 與頂部分隔線因此搬到這裡，pt 也從 pt-4（原本接在大字報下方）
+       改成 pt-20，手機才有自己的上緣留白。 */
     <section
       id="speakers"
       className="relative flex snap-start flex-col justify-center overflow-x-hidden pb-16 pt-20 md:min-h-[100svh] md:pt-[104px] [scroll-margin-top:-88px]"

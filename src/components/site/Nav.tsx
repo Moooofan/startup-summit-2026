@@ -90,7 +90,7 @@ export function Nav() {
             <span className="block text-[17px] font-bold tracking-wide text-ink md:text-sm">
               台灣新創投資年會
             </span>
-            {/* ⚠️ 這行刻意不吃全站字級級距，維持原始的 10px。
+            {/* 這行刻意不吃全站字級級距，維持原始的 10px。
                 它是 logo 的副標，字級一旦追上上方主標（17px）就變成階層倒置 ——
                 全站字級曾整條上調（10→12→14→16），這行被一起帶上去後又調了回來。
                 下次再做全域字級調整時，請把這行排除。 */}
@@ -137,13 +137,13 @@ export function Nav() {
 
       {/* 手機選單
           展開高度用 grid-template-rows 0fr → 1fr，不用 max-h 的魔術數字：
-          ⚠️ 原本寫死 max-h-[420px]，字級一調大（六個連結 + 報名鈕約 467px）就把最後的
-             「立即報名」裁掉。0fr/1fr 由內容自己撐開，往後改字級或加選單項都不會再爆。
-             子層必須有 min-h-0 + overflow-hidden，收合時才塌得回 0。
-          ⚠️ padding 一定要放在 overflow-hidden 那層的「內側」：overflow-hidden + min-h-0 只壓得掉
-             內容，壓不掉元素自己的 padding（border-box 高度不會低於 padding-top + padding-bottom）。
-             先前 py-4 與 overflow-hidden 同掛在 <ul> 上，收合時軌道仍被撐出 32px，父層的
-             bg-bg/95 就在導覽列正下方畫出一條白霧橫條 —— 因為容器是 lg:hidden，只有手機／平板看得到。 */}
+          原本寫死 max-h-[420px]，字級一調大（六個連結 + 報名鈕約 467px）就把最後的
+          「立即報名」裁掉。0fr/1fr 由內容自己撐開，往後改字級或加選單項都不會再爆。
+          子層必須有 min-h-0 + overflow-hidden，收合時才塌得回 0。
+          padding 一定要放在 overflow-hidden 那層的「內側」：overflow-hidden + min-h-0 只壓得掉
+          內容，壓不掉元素自己的 padding（border-box 高度不會低於 padding-top + padding-bottom）。
+          先前 py-4 與 overflow-hidden 同掛在 <ul> 上，收合時軌道仍被撐出 32px，父層的
+          bg-bg/95 就在導覽列正下方畫出一條白霧橫條 —— 因為容器是 lg:hidden，只有手機／平板看得到。 */}
       <div
         className={cn(
           "grid border-t border-black/8 bg-bg/95 backdrop-blur-md transition-[grid-template-rows] duration-500 lg:hidden",
@@ -152,7 +152,7 @@ export function Nav() {
       >
         {/* 這層只負責被 grid 軌道壓扁：不帶 padding／border，自動最小尺寸才真的是 0 */}
         <div className="min-h-0 overflow-hidden">
-          {/* ⚠️ 捲動要開在 <ul> 上，不能開在上面那層：那層的 overflow-hidden + min-h-0 是收合
+          {/* 捲動要開在 <ul> 上，不能開在上面那層：那層的 overflow-hidden + min-h-0 是收合
               能塌回 0 的關鍵，換成 overflow-y-auto 會在收合時留下一條捲軸殘影。
               為什麼需要捲動：展開時 body 被鎖 overflow-hidden，選單本身又是 overflow-hidden，
               六個連結加報名鈕約 467px —— 在橫向手機（視窗高 360–400px）會有項目既點不到也捲不到。
