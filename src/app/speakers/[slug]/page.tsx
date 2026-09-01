@@ -89,7 +89,9 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
             {/* 人像 */}
             <Reveal>
               <div className="lg:sticky lg:top-32">
-                <div className="relative mx-auto max-w-[280px] lg:mx-0 lg:max-w-none">
+                {/* 280px 剛好等於 320px 螢幕的可用寬（扣掉 .shell 左右各 20px），
+                    外圈那層 -inset-2.5 的光暈會貼死兩側邊緣 → 收到 260px 留一點呼吸。 */}
+                <div className="relative mx-auto max-w-[260px] lg:mx-0 lg:max-w-none">
                   <div
                     aria-hidden
                     className="absolute -inset-2.5 rounded-[20px] bg-gradient-to-br from-orbit-sky/25 via-transparent to-orbit-rose/25 blur-lg"

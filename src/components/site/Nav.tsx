@@ -139,35 +139,47 @@ export function Nav() {
           展開高度用 grid-template-rows 0fr → 1fr，不用 max-h 的魔術數字：
           ⚠️ 原本寫死 max-h-[420px]，字級一調大（六個連結 + 報名鈕約 467px）就把最後的
              「立即報名」裁掉。0fr/1fr 由內容自己撐開，往後改字級或加選單項都不會再爆。
-             子層必須有 min-h-0 + overflow-hidden，收合時才塌得回 0。 */}
+             子層必須有 min-h-0 + overflow-hidden，收合時才塌得回 0。
+          ⚠️ padding 一定要放在 overflow-hidden 那層的「內側」：overflow-hidden + min-h-0 只壓得掉
+             內容，壓不掉元素自己的 padding（border-box 高度不會低於 padding-top + padding-bottom）。
+             先前 py-4 與 overflow-hidden 同掛在 <ul> 上，收合時軌道仍被撐出 32px，父層的
+             bg-bg/95 就在導覽列正下方畫出一條白霧橫條 —— 因為容器是 lg:hidden，只有手機／平板看得到。 */}
       <div
         className={cn(
           "grid border-t border-black/8 bg-bg/95 backdrop-blur-md transition-[grid-template-rows] duration-500 lg:hidden",
           open ? "grid-rows-[1fr]" : "grid-rows-[0fr] border-t-transparent"
         )}
       >
-        <ul className="shell flex min-h-0 flex-col overflow-hidden py-4">
-          {links.map((l) => (
-            <li key={l.href}>
-              <Link
-                href={l.href}
-                className="block border-b border-black/5 py-4 text-[18px] text-ink-2 transition-colors hover:text-ink"
-              >
-                {l.label}
-              </Link>
-            </li>
-          ))}
-          {showRegisterCta && (
-            <li className="pt-5">
-              <Link
-                href={registerHref}
-                className="btn-glass btn-glass-on-dark block rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] py-3.5 text-center text-[18px] font-semibold"
-              >
-                立即報名
-              </Link>
-            </li>
-          )}
-        </ul>
+        {/* 這層只負責被 grid 軌道壓扁：不帶 padding／border，自動最小尺寸才真的是 0 */}
+        <div className="min-h-0 overflow-hidden">
+          {/* ⚠️ 捲動要開在 <ul> 上，不能開在上面那層：那層的 overflow-hidden + min-h-0 是收合
+              能塌回 0 的關鍵，換成 overflow-y-auto 會在收合時留下一條捲軸殘影。
+              為什麼需要捲動：展開時 body 被鎖 overflow-hidden，選單本身又是 overflow-hidden，
+              六個連結加報名鈕約 467px —— 在橫向手機（視窗高 360–400px）會有項目既點不到也捲不到。
+              72px = 手機版導覽列高度（md 以上是 88px，但這塊本來就只在 lg 以下出現）。 */}
+          <ul className="shell flex max-h-[calc(100svh-72px)] flex-col overflow-y-auto overscroll-contain py-4">
+            {links.map((l) => (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  className="block border-b border-black/5 py-4 text-[18px] text-ink-2 transition-colors hover:text-ink"
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+            {showRegisterCta && (
+              <li className="pt-5">
+                <Link
+                  href={registerHref}
+                  className="btn-glass btn-glass-on-dark block rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] py-3.5 text-center text-[18px] font-semibold"
+                >
+                  立即報名
+                </Link>
+              </li>
+            )}
+          </ul>
+        </div>
       </div>
     </header>
   );
