@@ -38,13 +38,30 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
   // gradient 變體 ＝ 參考 button2.png：左紫 → 右藍的膠囊 + 右端「圓框箭頭」徽章。
   // 文字靠左、箭頭圓貼右緣（pr 很小），圓框近乎撐滿按鈕高度。
   if (variant === "gradient") {
+    /* ⚠️ lg 在 sm 斷點以下整組收窄，否則首頁那兩顆 CTA 幾乎在所有手機上都會換行成上下排：
+       一顆 = pl-8(32) + 四個中文字 ×18px(72) + gap-4(16) + 圓框 h-11(44) + pr-1.5(6) + 邊框(2)
+            = 172px
+       兩顆 + Hero 容器的 gap-4(16) = 360px
+       但 .shell 左右各 20px → 320/360/375/390px 的螢幕分別只剩 280/320/335/350px，
+       全數不足；要到 430px（Pro Max 級）才排得下。這不是邊緣case，是多數手機的常態。
+
+       收窄後一顆 = pl-4(16) + 16px 字 ×4(64) + gap-2(8) + 圓框 h-8(32) + pr-1(4) + 邊框(2)
+                  = 126px → 兩顆 + gap-4 = 268px，320px 螢幕都放得下（留 12px 餘裕）。
+       高度仍是 py-1.5×2 + 32 = 44px，觸控目標沒有變小。
+       sm 以上完全維持原尺寸 —— 桌機不受影響。 */
     const pad = {
       sm: "gap-2.5 py-1 pl-5 pr-1 text-sm",
       md: "gap-3 py-1.5 pl-6 pr-1.5 text-[18px]",
-      lg: "gap-4 py-1.5 pl-8 pr-1.5 text-base",
+      lg: "gap-2 py-1.5 pl-4 pr-1 text-[16px] sm:gap-4 sm:pl-8 sm:pr-1.5 sm:text-base",
     };
-    const circle = { sm: "h-7 w-7", md: "h-9 w-9", lg: "h-11 w-11" };
-    const chev = { sm: 15, md: 17, lg: 20 };
+    const circle = { sm: "h-7 w-7", md: "h-9 w-9", lg: "h-8 w-8 sm:h-11 sm:w-11" };
+    /* 箭頭尺寸走 class 而非 lucide 的 size prop —— size 是 svg 的呈現屬性，給不了斷點。
+       CSS 的 width/height 會蓋過呈現屬性，所以 sm/md 換成等值的任意值後輸出不變。 */
+    const chev = {
+      sm: "h-[15px] w-[15px]",
+      md: "h-[17px] w-[17px]",
+      lg: "h-4 w-4 sm:h-5 sm:w-5",
+    };
     return (
       <Link
         href={href}
@@ -74,7 +91,7 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
             circle[size]
           )}
         >
-          <ChevronRight size={chev[size]} strokeWidth={2.4} />
+          <ChevronRight className={chev[size]} strokeWidth={2.4} />
         </span>
       </Link>
     );
