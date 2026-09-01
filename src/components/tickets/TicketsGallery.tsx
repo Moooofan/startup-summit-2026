@@ -180,9 +180,9 @@ export function TicketsGallery() {
               className={cn(
                 "h-2 rounded-full transition-all duration-300",
                 // 頁碼點只有 2px 高，掛 .btn-glass 沒有意義（微光會被 overflow 裁掉）→ 只降不透明度
-                // ⚠️ 可點區用 ::after 往上下各撐 16px（8 + 32 = 40px）：這是每個斷點都看得到的
-                //    主要換頁控制，8px 高的觸控目標在手機上按不到。用偽元素而非加 padding／改高度，
-                //    是為了不動視覺位置（這一列是 absolute bottom-6，改高度會把點往上推）。
+                // 可點區用 ::after 往上下各撐 16px（8 + 32 = 40px）：這是每個斷點都看得到的
+                // 主要換頁控制，8px 高的觸控目標在手機上按不到。用偽元素而非加 padding／改高度，
+                // 是為了不動視覺位置（這一列是 absolute bottom-6，改高度會把點往上推）。
                 "relative after:absolute after:-inset-x-0.5 after:-inset-y-4 after:content-['']",
                 i === page ? "w-7 bg-[rgb(76_104_212/0.76)]" : "w-2 bg-ink/20 hover:bg-ink/40"
               )}
@@ -256,9 +256,9 @@ function NavArrow({
 
 /**
  * 單頁外殼。外層負責捲動、內層負責置中 —— 兩層不能合併：
- * ⚠️ 直接在同一層寫 flex + items-center + overflow-y-auto，內容比容器高時
- *    上緣會被切掉且捲不回去（flex 置中的老問題）。拆成「外層捲動 + 內層 min-h-full 置中」
- *    才能做到「放得下就置中、放不下就往下捲」。
+ * 直接在同一層寫 flex + items-center + overflow-y-auto，內容比容器高時
+ * 上緣會被切掉且捲不回去（flex 置中的老問題）。拆成「外層捲動 + 內層 min-h-full 置中」
+ * 才能做到「放得下就置中、放不下就往下捲」。
  * 這頁是 h-[100svh] 的固定高橫向畫廊，字級一調大票卡就撐破一頁 —— 原本是 overflow-hidden
  * 直接裁掉，改成可捲動後矮螢幕也看得完整張卡。
  * 垂直捲動不會被外層 section 攔走：那邊的 onWheel 只吃 deltaX，touchAction 也留了 pan-y。
@@ -354,10 +354,10 @@ function TicketsPanel({
     <PanelShell>
       <div className="w-full max-w-4xl">
         {/* 相框切換舞台（橫向滑動切票種）
-            ⚠️ 高度不再寫死。原本是 h-[58vh] max-h-[560px] min-h-[420px]，而所有票卡都是
-               absolute（不撐高度）—— 字級一調大，卡片（約 520px）就撐破舞台被裁掉。
-               改用下面那張隱形卡當「高度撐架」：舞台永遠等於最高那張卡的高度，
-               切換票種時也不會跳動（兩張卡差一列「原價」）。 */}
+            高度不再寫死。原本是 h-[58vh] max-h-[560px] min-h-[420px]，而所有票卡都是
+            absolute（不撐高度）—— 字級一調大，卡片（約 520px）就撐破舞台被裁掉。
+            改用下面那張隱形卡當「高度撐架」：舞台永遠等於最高那張卡的高度，
+            切換票種時也不會跳動（兩張卡差一列「原價」）。 */}
         <div
           className="relative mx-auto flex items-center justify-center"
           onPointerDown={onStageDown}
@@ -458,7 +458,7 @@ function TicketCard({
         </p>
 
         {/* 主價一律是「1 人價」；團報級距在票種頁下方的對照表，這裡只帶一句最低價當鉤子 */}
-        {/* ⚠️ max-[359px] 是 320px 級距的救命索，且這裡的破法是「直接被切掉」而非換行：
+        {/* max-[359px] 是 320px 級距的救命索，且這裡的破法是「直接被切掉」而非換行：
             這一列沒有 flex-wrap，而 NT$2,500 是 Montserrat 的一串拉丁字元（無斷行點）——
             33.6px 下約 161px，加 gap-2(8) 與「／人」(34) 共 203px，
             但 320px 螢幕的卡片內容區只有 76vw(243) − p-2.5(20) − p-5(40) ＝ 183px，

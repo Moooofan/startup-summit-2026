@@ -212,7 +212,7 @@ export function Speakers() {
                       {f.label}
                     </span>
                     <h3 className="text-xl font-bold text-ink md:text-2xl">{f.name}</h3>
-                    {/* ⚠️ 手機強制折行：basis-full 讓這個 0 高度的元素獨佔一行，後面的項目一定落到第二行。
+                    {/* 手機強制折行：basis-full 讓這個 0 高度的元素獨佔一行，後面的項目一定落到第二行。
                         這一列固有寬 ＝ Day 1(56) + 論壇名(110) + 日期(108) + 計數(41) + gap ＝ 375px，
                         比 390px 手機的可用寬（350px）還寬 —— 也就是任何手機都排不下、必定換行。
                         放著讓它自己 wrap 的話折點會隨字串長度飄；明確指定折點後：

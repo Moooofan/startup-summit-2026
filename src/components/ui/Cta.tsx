@@ -17,7 +17,7 @@ type Props = {
  * 這是預設值：實際唯一的使用者是 Hero 的兩顆 CTA，且它們各自用 className 覆寫成
  * 互為鏡像的正／反向斜坡。改這裡時記得 Hero 那兩行不會跟著變。
  *
- * ⚠️ 兩條路已經走過、別再走：
+ * 兩條路已經走過、別再走：
  *
  * 1) 「把底色調深、再降 alpha」以保住白字對比 —— 合成後會變回實心按鈕的樣子，
  *    等於自己把透明感抵銷掉。要看起來變淺，合成後的亮度就得真的上升。
@@ -38,7 +38,7 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
   // gradient 變體 ＝ 參考 button2.png：左紫 → 右藍的膠囊 + 右端「圓框箭頭」徽章。
   // 文字靠左、箭頭圓貼右緣（pr 很小），圓框近乎撐滿按鈕高度。
   if (variant === "gradient") {
-    /* ⚠️ lg 在 sm 斷點以下整組收窄，否則首頁那兩顆 CTA 幾乎在所有手機上都會換行成上下排：
+    /* lg 在 sm 斷點以下整組收窄，否則首頁那兩顆 CTA 幾乎在所有手機上都會換行成上下排：
        一顆 = pl-8(32) + 四個中文字 ×18px(72) + gap-4(16) + 圓框 h-11(44) + pr-1.5(6) + 邊框(2)
             = 172px
        兩顆 + Hero 容器的 gap-4(16) = 360px
@@ -99,7 +99,7 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
 
   const base =
     "btn-glass group inline-flex items-center justify-center gap-2 rounded-pill font-medium transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-glow";
-  /* ⚠️ lg 同樣要在 sm 以下收窄，理由與上面 gradient 那組一模一樣 ——
+  /* lg 同樣要在 sm 以下收窄，理由與上面 gradient 那組一模一樣 ——
      站內兩處把兩顆 lg 並排：/sponsor 的「來信洽談贊助(192px) + 了解年會(136px)」＝ 344px、
      /review 的「查看本屆資訊(172px) + 講者陣容連結(139px)」＝ 327px，
      但手機可用寬只有 280–350px（.shell 左右各 20px）→ 兩顆都會被擠成上下排。

@@ -1,7 +1,7 @@
 /**
  * 贊助方案。來源：《第四屆新創投資年會企劃 新增贊助方案.pptx》
- * ⚠️ 已知矛盾：總覽頁的「攤位贊助 NT$18,000」與攤位細項頁的「小型展位 NT$50,000」
- *    數字不一致，已於 boothPricingConflict 標記，上線前需主辦方確認。
+ * 已知矛盾：總覽頁的「攤位贊助 NT$18,000」與攤位細項頁的「小型展位 NT$50,000」
+ * 數字不一致，已於 boothPricingConflict 標記，上線前需主辦方確認。
  */
 
 export interface Tier {
@@ -134,7 +134,7 @@ export const tiers: Tier[] = [
   },
 ];
 
-/** ⚠️ 上線前需主辦方確認的價格衝突 */
+/** 上線前需主辦方確認的價格衝突 */
 export const boothPricingConflict = {
   overviewPrice: "NT$18,000",
   detailPrice: "NT$50,000",

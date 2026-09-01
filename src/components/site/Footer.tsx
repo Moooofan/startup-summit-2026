@@ -30,16 +30,21 @@ const cols = allCols
   .map((c) => ({ ...c, links: c.links.filter((l) => isPublicRoute(l.href)) }))
   .filter((c) => c.links.length > 0);
 
+// event.dateLabelLong 是「起 — 迄」的長日期，字串裡的半形空格讓瀏覽器可以斷在
+// 「10 月 15」和「日（四）」中間 —— 日期被腰斬。拆成破折號前後兩半、各自鎖成不可斷的整體，
+// 要斷就只能斷在破折號後面。相依於 dateLabelLong 內含「—」；event.ts 改格式時這裡要跟著改。
+const [dateFrom, dateTo] = event.dateLabelLong.split("—");
+
 export function Footer() {
   return (
     <footer className="relative overflow-hidden border-t border-line-soft bg-bg-soft">
       <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
       {/* 欄數跟著實際渲染的連結組數走 —— 隱藏分頁可能整組被濾掉，
           寫死四欄會在那種情況留下空欄。用 CSS 變數傳值，手機維持單欄堆疊。
-          ⚠️ 變數版型改掛在 lg: 而非 md:：768px 時四欄各只有約 118–142px，
-             但聯絡欄的信箱是不可斷的長字串（≈145px），grid item 預設 min-width:auto
-             → 欄位被撐開、整頁多出水平捲軸。平板先走兩欄，桌機才展開成完整欄數。
-             同理下面每個 grid 子項都要 min-w-0，否則長字串照樣能撐破欄寬。 */}
+          變數版型改掛在 lg: 而非 md:：768px 時四欄各只有約 118–142px，
+          但聯絡欄的信箱是不可斷的長字串（≈145px），grid item 預設 min-width:auto
+          → 欄位被撐開、整頁多出水平捲軸。平板先走兩欄，桌機才展開成完整欄數。
+          同理下面每個 grid 子項都要 min-w-0，否則長字串照樣能撐破欄寬。 */}
       <div
         className="shell grid gap-12 py-16 md:grid-cols-2 md:py-20 lg:grid-cols-(--footer-cols)"
         style={
@@ -53,12 +58,21 @@ export function Footer() {
             <Image src="/logo-mark.png" alt="" width={236} height={224} className="h-7 w-auto" />
             <span className="text-sm font-bold text-ink">{event.organizer.name}</span>
           </div>
-          <p className="mt-5 max-w-xs text-sm leading-relaxed text-ink-3">
-            {event.fullName}・{event.subtitle}
+          {/* max-w-xs 只留給 md 以上：手機是單欄堆疊，.shell 給的內容寬是 350px，
+              320px 的上限等於自己少用 30px；md（兩欄各 320px）與 lg（1.4fr 約 309px）
+              欄寬本來就 ≤320px，那兩檔的上限是 no-op，視覺不受影響。 */}
+          <p className="mt-5 text-sm leading-relaxed text-ink-3 md:max-w-xs">
+            {/* 中文沒有詞界，預設任何字元邊界都能斷 ——「雙峰論壇」會被拆成「雙峰 ／ 論壇」。
+                活動全名與副標各自鎖成整體後，放不下時只會斷在中間的「・」之後。
+                只鎖這四段、不整段 nowrap：nowrap 撐不下時會溢出而非斷行，footer 的
+                overflow-hidden 會把字裁掉。這四段在 320px（內容寬 280px）都放得下。 */}
+            <span className="whitespace-nowrap">{event.fullName}</span>・
+            <span className="whitespace-nowrap">{event.subtitle}</span>
             <br />
-            {event.dateLabelLong}
+            <span className="whitespace-nowrap">{dateFrom.trimEnd()}—</span>{" "}
+            <span className="whitespace-nowrap">{dateTo.trim()}</span>
           </p>
-          <p className="font-display mt-4 text-xs tracking-[0.16em] text-ink-4">
+          <p className="font-display mt-4 text-balance text-xs tracking-[0.16em] text-ink-4">
             {event.nameEn.toUpperCase()}
           </p>
         </div>

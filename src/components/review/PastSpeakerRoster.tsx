@@ -70,7 +70,7 @@ function SpeakerCell({ s }: { s: PastSpeaker }) {
 }
 
 /** 手機版（< md）：表格降級成逐場卡片。
- *  ⚠️ 不是「加個 overflow-x-auto 讓它橫捲」就好：兩欄 46%／54% 加上儲存格 px-4，
+ *  不是「加個 overflow-x-auto 讓它橫捲」就好：兩欄 46%／54% 加上儲存格 px-4，
  *  在 320px 螢幕（.shell 內只剩 280px）講題欄的實際文字寬只有約 97px —— 一行五個字，
  *  「心元資本：從天使到機構基金…」這種長講題會拉成十幾行，整張表讀不下去。
  *  版型沿用 /sponsor 的「桌機表格 + 手機卡片」同一套做法（見 app/sponsor/page.tsx）。 */

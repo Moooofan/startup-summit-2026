@@ -72,7 +72,7 @@ export function SwipeDeck<T>({
               )}
               style={{ transform: `translateX(${side * 58}%) scale(${isActive ? 1 : 0.82})` }}
             >
-              {/* ⚠️ 側卡整段 inert，不是只掛 aria-hidden：卡片內的連結（票卡的報名鈕）
+              {/* 側卡整段 inert，不是只掛 aria-hidden：卡片內的連結（票卡的報名鈕）
                   原本照樣進得了 Tab 順序 —— 鍵盤使用者會聚焦到一顆看不見、只露一角的按鈕。
                   inert 同時移除焦點與無障礙樹曝光；再加 pointer-events-none，讓點擊確實落到
                   下面那顆覆蓋鈕上（inert 子樹本身的指標事件行為各家瀏覽器不一致，不要依賴）。 */}

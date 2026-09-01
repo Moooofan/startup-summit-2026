@@ -143,7 +143,7 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
           {isPending && (
             <details className="mt-8 rounded-lg border border-dashed border-black/15 bg-black/[0.02] px-4 py-3">
               <summary className="cursor-pointer text-[17px] font-medium text-ink-3">
-                ⚠️ 此屆有 {e.pending!.length} 項資料待補（僅設計階段顯示）
+                此屆有 {e.pending!.length} 項資料待補（僅設計階段顯示）
               </summary>
               <ul className="mt-3 space-y-1.5 pl-1">
                 {e.pending!.map((item) => (

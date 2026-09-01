@@ -70,11 +70,23 @@ export function FounderNote() {
             </Reveal>
 
             <Reveal delay={0.14}>
-              <blockquote className="relative mt-10 border-l-2 border-brand-lift/60 pl-6 md:pl-8">
+              <blockquote className="relative mt-10 pl-6 md:pl-8">
                 <Quote
                   aria-hidden
                   size={26}
-                  className="absolute -left-[14px] -top-3 fill-bg-soft text-brand-lift"
+                  className="absolute -left-[14px] -top-3 text-brand-lift"
+                />
+                {/* 左線刻意不用 border-l：引號原本壓在線的起點，靠 fill-bg-soft 用區塊底色
+                    把線挖掉，做出「線被引號打斷」的效果。但 --color-bg-soft 在全站改成單一
+                    白霧底時已設為 transparent，遮罩失效、線就直接穿過引號了。
+                    別再試「補一塊實色把線蓋掉」那條路：底下是 layout 那張水墨背景圖、不是純色，
+                    色塊會露出補丁（同 globals.css 的 .marquee-viewport 為何改用 mask）。
+                    改讓線本身從引號下方才開始。top-[18px] 是算出來的：
+                    引號 -top-3（-12px）+ size 26 = 底部落在 14px，再留 4px 呼吸。
+                    動 Quote 的 size 或 -top-3 時這個值要跟著重算，否則線會再咬回引號。 */}
+                <span
+                  aria-hidden
+                  className="absolute bottom-0 left-0 top-[18px] w-0.5 bg-brand-lift/60"
                 />
                 <p className="text-[clamp(1.15rem,2.6vw,1.5rem)] font-medium leading-[1.75] text-ink">
                   「{founderQuote.text}」

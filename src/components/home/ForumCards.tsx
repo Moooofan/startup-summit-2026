@@ -14,10 +14,10 @@ type Forum = (typeof forums)[number];
  * 「重疊卡片＋滑動切換」牌堆（原本是上下堆疊，業主要求比照 /tickets）。
  * 兩種版型共用同一個 ForumCard。
  *
- * ⚠️ 牌堆邊界原本是 lg，等於 768–1023px 的平板也吃手機版 —— SwipeDeck 的卡片寬是
- *    w-[76vw] max-w-[360px]，在 900px 寬的平板上會變成一張 360px 的卡置中、兩側大片空白。
- *    改成 md 之後 768px 時每張卡約 332px，扣掉 md:p-10 還有 252px，日期列（223px）放得下。
- *    票卡（TicketPlans）的邊界是 sm 而非 md，因為票卡內容量少得多、更早就排得下兩張。
+ * 牌堆邊界原本是 lg，等於 768–1023px 的平板也吃手機版 —— SwipeDeck 的卡片寬是
+ * w-[76vw] max-w-[360px]，在 900px 寬的平板上會變成一張 360px 的卡置中、兩側大片空白。
+ * 改成 md 之後 768px 時每張卡約 332px，扣掉 md:p-10 還有 252px，日期列（223px）放得下。
+ * 票卡（TicketPlans）的邊界是 sm 而非 md，因為票卡內容量少得多、更早就排得下兩張。
  */
 export function ForumCards() {
   return (
@@ -47,10 +47,10 @@ function ForumCard({ f }: { f: Forum }) {
   return (
     /* 內距在牌堆版降到 p-6：卡片寬是 76vw，320px 螢幕只有 243px，p-8 之後內容區只剩 179px，
        對內文太窄。p-6 之後是 195px。
-       ⚠️ 但**光靠 p-6 救不了下面那條日期列** —— 舊註解寫「日期列要 181px」是錯的：
-          那是把「Day 1」當中文字用 17px 估出來的。它其實是 Montserrat 拉丁字（16px）加
-          tracking-[0.22em] ＝ 59.7px，右側 10 / 14 是 font-display 26px ＝ 88.4px，
-          再加（三）59px 與 gap-4，實際要 223px > 195px。正解見日期列自己的註解。 */
+       但**光靠 p-6 救不了下面那條日期列** —— 舊註解寫「日期列要 181px」是錯的：
+       那是把「Day 1」當中文字用 17px 估出來的。它其實是 Montserrat 拉丁字（16px）加
+       tracking-[0.22em] ＝ 59.7px，右側 10 / 14 是 font-display 26px ＝ 88.4px，
+       再加（三）59px 與 gap-4，實際要 223px > 195px。正解見日期列自己的註解。 */
     <article className="glass group relative h-full overflow-hidden rounded-card p-6 transition-colors duration-500 hover:border-black/20 sm:p-8 md:p-10">
       <div
         aria-hidden
@@ -61,7 +61,7 @@ function ForumCard({ f }: { f: Forum }) {
         }`}
       />
       <div className="relative">
-        {/* ⚠️ sm 以下改上下堆疊，不要再追那幾個像素：
+        {/* sm 以下改上下堆疊，不要再追那幾個像素：
             這一列固有寬 ＝ Day 1(59.7) + 10 / 14(88.4) + （三）+ml-2(59) + gap-4(16) ＝ 223px，
             但 320px 螢幕的卡片內容區只有 76vw(243) − p-6(48) ＝ 195px，360px 也只多 2.6px ——
             靠縮字級／縮間距去湊，餘裕會落在測量誤差內，換個字型或改文案就再爆一次。

@@ -4,7 +4,7 @@
 //           + 《第二屆新創投資年會講者名單與主題.pptx》（業主 2026/9 提供，兩天議程各一張投影片）
 //           + 第一屆當年議程表圖片（業主 2026/9 提供）
 // 由 gen_review.py 自簡報 XML 產生，議程與媒體連結逐字保留。
-// ⚠️ 第一、二屆的講者名單是手動輸入，不在 gen_review.py 的輸出範圍內（見各自的常數註解）。
+// 第一、二屆的講者名單是手動輸入，不在 gen_review.py 的輸出範圍內（見各自的常數註解）。
 
 export interface PastSession {
   time: string;        // "09:30–10:00"
@@ -498,7 +498,9 @@ export const mediaCoverage: MediaItem[] = [
   },
 ];
 
-/** 第三屆（2025）社群露出，共 26 則（僅列公開帳號）。 */
+/** 第三屆（2025）社群露出，共 26 則（僅列公開帳號）。
+ *  title 為貼文原標題，其中的表情符號已依鐵則（全站禁用 emoji）移除，其餘逐字保留 ——
+ *  看起來像漏字的地方是原文就有符號，不要「訂正」回去。 */
 export const socialCoverage: SocialItem[] = [
   {
     platform: "Threads",
@@ -535,7 +537,7 @@ export const socialCoverage: SocialItem[] = [
     url: "https://www.threads.com/@startup.venture.outsider/post/DPbrV8ziTbq",
     views: "478",
     shares: "2",
-    title: "【台灣新創投資年會小小心得💼投資人篇】身為長期在創投與新創之間飄移的局...",
+    title: "【台灣新創投資年會小小心得投資人篇】身為長期在創投與新創之間飄移的局...",
     author: "startup.venture.outsider",
   },
   {
@@ -551,7 +553,7 @@ export const socialCoverage: SocialItem[] = [
     url: "https://www.threads.com/@startup.venture.outsider/post/DPZJX4pki-a",
     views: "527",
     shares: "1",
-    title: "【台灣新創投資年會小小心得💡創業家篇】這兩天的年會，資訊量大到我週末還在...",
+    title: "【台灣新創投資年會小小心得創業家篇】這兩天的年會，資訊量大到我週末還在...",
     author: "startup.venture.outsider",
   },
   {
@@ -624,13 +626,13 @@ export const socialCoverage: SocialItem[] = [
     url: "https://www.threads.com/@startup.venture.outsider/post/DPTpiKTErjl",
     views: "1,946",
     shares: "2",
-    title: "📊【台灣新創投資年會Day 2：臺灣的TechCrunch Disrupt?...",
+    title: "【台灣新創投資年會Day 2：臺灣的TechCrunch Disrupt?...",
     author: "startup.venture.outsider",
   },
   {
     platform: "Facebook關鍵意見領袖",
     url: "https://www.facebook.com/1788235857/posts/10224581482283027",
-    title: "一早就來學習前輩們的經驗與無私分享😌 Venture + Roy：VC=...",
+    title: "一早就來學習前輩們的經驗與無私分享 Venture + Roy：VC=...",
     author: "温宏駿",
   },
   {
@@ -643,7 +645,7 @@ export const socialCoverage: SocialItem[] = [
   {
     platform: "Facebook關鍵意見領袖",
     url: "https://www.facebook.com/1788235857/posts/10224576177990423",
-    title: "班哥我還是趕到了😌 AAMA10期一條心🔥(Abner就是帥）第三屆台灣新創...",
+    title: "班哥我還是趕到了 AAMA10期一條心(Abner就是帥）第三屆台灣新創...",
     author: "温宏駿",
   },
   {
@@ -657,7 +659,7 @@ export const socialCoverage: SocialItem[] = [
     platform: "Facebook粉絲團",
     url: "https://www.facebook.com/234748703319896/posts/1299635408842882",
     shares: "1",
-    title: "#布爾喬亞在工作🔥恭喜台灣新創投資社團與創辦人林文欽，2025 #第三屆台...",
+    title: "#布爾喬亞在工作恭喜台灣新創投資社團與創辦人林文欽，2025 #第三屆台...",
     author: "布爾喬亞公關顧問",
   },
   {
@@ -665,7 +667,7 @@ export const socialCoverage: SocialItem[] = [
     url: "https://www.threads.com/@startup.venture.outsider/post/DPQegj8jY0d",
     views: "1,115",
     shares: "2",
-    title: "📣【今日最夯打卡地點：台灣新創投資年會Day1】 「台灣新創投資年會」登場...",
+    title: "【今日最夯打卡地點：台灣新創投資年會Day1】 「台灣新創投資年會」登場...",
     author: "startup.venture.outsider",
   },
   {
@@ -981,7 +983,7 @@ const editionThreeForums: PastForum[] = [
 ];
 
 /** 第一屆（2023）講者名單 —— 業主提供的當年議程表圖片，2026/9 手動輸入。
- *  ⚠️ 不在 gen_review.py 的輸出範圍內（那支只讀簡報 XML），重跑產生器不會覆寫這裡。
+ *  不在 gen_review.py 的輸出範圍內（那支只讀簡報 XML），重跑產生器不會覆寫這裡。
  *
  *  只存講者與講題，不存時間表：業主指示不需要時間欄，且 Edition.forums 目前
  *  沒有任何頁面在讀（components/review/Timeline.tsx 未被掛上），存了也不會顯示。
@@ -1027,7 +1029,7 @@ const firstEditionSpeakers: PastSpeaker[] = [
 ];
 
 /** 第二屆（2024）講者名單 —— 業主提供的《第二屆新創投資年會講者名單與主題.pptx》，2026/9 手動輸入。
- *  ⚠️ 同 firstEditionSpeakers，不在 gen_review.py 的輸出範圍內。
+ *  同 firstEditionSpeakers，不在 gen_review.py 的輸出範圍內。
  *
  *  day 1 ＝ 10/16（三）投資人專場、day 2 ＝ 10/18（五）主會場 —— 這一屆是兩天，
  *  與《第四屆企劃 pptx》記載的「單日」不符，已依本檔一併修正該屆的日期／天數欄位。
@@ -1230,8 +1232,8 @@ const secondEditionSpeakers: PastSpeaker[] = [
  *
  *  原本是用 flatMap 從議程推導：org 塞整串簡報原文（「Kdan凱鈿創辦人兼執行長蘇柏州」）、
  *  name 留空字串。那樣三屆的名單長得不一樣，故改為與第一、二屆同一形狀的手寫陣列。
- *  ⚠️ 拆解無法自動化（原文沒有分隔符），所以這份不再由 editionThreeForums 推導 ——
- *     日後改議程要記得兩邊都改。editionThreeForums 保留為逐字的原始議程紀錄。
+ *  拆解無法自動化（原文沒有分隔符），所以這份不再由 editionThreeForums 推導 ——
+ *  日後改議程要記得兩邊都改。editionThreeForums 保留為逐字的原始議程紀錄。
  *
  *  收錄規則同第一、二屆：排除 5 場休息、排除兩場主辦人致歡迎辭／詞，
  *  去掉「開幕演講：」「特約演講嘉賓：」與 Panel 那列尾端的「 Panel」等場次標籤；
@@ -1521,9 +1523,9 @@ export const editions: Edition[] = [
   {
     no: 2,
     year: 2024,
-    // ⚠️ 這一屆是「非連續的兩天」，故用「、」而非「－」。時間為兩天的涵蓋區間
-    //    （10/16 場 08:30－17:30、10/18 場 08:30－17:20，見第二屆議程 pptx）。
-    //    先前依《第四屆企劃 pptx》寫成「單日 10/16 09:00－17:00」，2026/9 依當屆議程更正。
+    // 這一屆是「非連續的兩天」，故用「、」而非「－」。時間為兩天的涵蓋區間
+    // （10/16 場 08:30－17:30、10/18 場 08:30－17:20，見第二屆議程 pptx）。
+    // 先前依《第四屆企劃 pptx》寫成「單日 10/16 09:00－17:00」，2026/9 依當屆議程更正。
     dateLabel: "2024年10月16日（三）、10月18日（五）　08:30－17:30",
     venue: "台大集思會議中心 蘇格拉底廳",
     venueAddress: "台北市羅斯福路四段 85 號 B1",
@@ -1544,8 +1546,8 @@ export const editions: Edition[] = [
     heroPhoto: "/review/second-edition-audience.jpg",
     growth: {
       attendees: 120,
-      // ⚠️ 業主提供的官方數字，刻意與下方 pastSpeakers 的列數不同（名單 26 場、25 位）——
-      //    名單只收「有講題的場次」，官方數字算的是另一套口徑。別為了對齊而改任一邊。
+      // 業主提供的官方數字，刻意與下方 pastSpeakers 的列數不同（名單 26 場、25 位）——
+      // 名單只收「有講題的場次」，官方數字算的是另一套口徑。別為了對齊而改任一邊。
       speakers: 10,
       institutions: 20,
       days: 2,
@@ -1574,8 +1576,8 @@ export const editions: Edition[] = [
     heroPhoto: "/review/first-edition-audience.jpg",
     growth: {
       attendees: 100,
-      // ⚠️ 同第二屆：業主官方數字，與 firstEditionSpeakers 的 5 列不同（名單不收報到、
-      //    中場休息與兩場開場致詞）。兩個數字口徑不同，不要互相對齊。
+      // 同第二屆：業主官方數字，與 firstEditionSpeakers 的 5 列不同（名單不收報到、
+      // 中場休息與兩場開場致詞）。兩個數字口徑不同，不要互相對齊。
       speakers: 10,
       institutions: 8,
       days: 1,

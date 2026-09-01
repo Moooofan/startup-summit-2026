@@ -4,7 +4,7 @@ import { forums, type ForumKey } from "./event";
  * 2026 第四屆年會的逐時段議程表。
  *
  * 事實來源：《第四屆新創投資年會講者名單與議程0817.pptx》（業主 2026/9 提供）投影片 15–18。
- * ⚠️ 那四張議程表在簡報裡是**圖片**不是表格，內容由人工逐格轉錄，改資料前請對照原圖。
+ * 那四張議程表在簡報裡是**圖片**不是表格，內容由人工逐格轉錄，改資料前請對照原圖。
  *
  * 轉錄原則（同 data/review.ts）：
  * - 講題、單位、職稱一律逐字保留簡報原文，不潤飾、不補字。
@@ -374,9 +374,9 @@ export interface SpeakerSlot {
 /**
  * 依 slug 找出該講者的場次。找不到 = 還沒排進議程（speakers.ts 有幾位是這種情況）。
  *
- * ⚠️ 同一人可能在議程裡出現兩次 —— 楊本豫既是 Edge AI 那段的 keynote 講者，
- *    也是同一段 Panel 的 Moderator。這裡只回傳**第一筆**：講者內頁那顆膠囊只放得下一個場次，
- *    而第一筆就是他最早登台的那場，資訊上不會誤導。要列全部場次得改成回傳陣列。
+ * 同一人可能在議程裡出現兩次 —— 楊本豫既是 Edge AI 那段的 keynote 講者，
+ * 也是同一段 Panel 的 Moderator。這裡只回傳**第一筆**：講者內頁那顆膠囊只放得下一個場次，
+ * 而第一筆就是他最早登台的那場，資訊上不會誤導。要列全部場次得改成回傳陣列。
  */
 export function findSpeakerSlot(slug: string): SpeakerSlot | undefined {
   for (const d of agenda) {
