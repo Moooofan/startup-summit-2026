@@ -37,9 +37,22 @@ export const event = {
   },
 
   tickets: {
-    full: 3300,
-    earlyBird: 2200,
+    /** 1 人單價（＝團報級距第一段）。JSON-LD 與各處摘要都取這兩個數字。 */
+    full: 3000,
+    earlyBird: 2500,
     currency: "NT$",
+    /**
+     * 團報級距：人數越多每人單價越低。（業主 2026/9 提供的票價表）
+     * ⚠️ 這是「單日票」的價目 —— 10/14 與 10/15 各自售票，兩天都要參加要買兩張。
+     *    業主給的兩張表（創辦人論壇／投資人論壇）數字完全相同，故只列一份，
+     *    不依 ForumKey 拆開；日後若兩天價格分歧，才需要改成 Record<ForumKey, …>。
+     */
+    groupTiers: [
+      { people: 1, label: "1 人", earlyBird: 2500, full: 3000 },
+      { people: 2, label: "2 人", earlyBird: 2200, full: 2700 },
+      { people: 5, label: "5 人", earlyBird: 2000, full: 2500 },
+      { people: 10, label: "10 人", earlyBird: 1500, full: 2000 },
+    ],
     // TODO: Accupass 連結未定，先以 # 佔位（見 lib/config.ts）
     note: "早鳥票數量有限，售完為止",
   },
@@ -63,6 +76,10 @@ export const event = {
     note: "年會落幕後舉行，席次隨贊助方案配置",
   },
 } as const;
+
+/** 團報最低單價（級距最末段）。票卡摘要指向這裡，改級距時不必兩邊對數字。 */
+export const lowestGroupPrice =
+  event.tickets.groupTiers[event.tickets.groupTiers.length - 1];
 
 export const forums = [
   {

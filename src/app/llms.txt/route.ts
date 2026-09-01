@@ -21,7 +21,10 @@ export function GET() {
 - 日期：${event.dateLabelLong}，每日 ${event.timeLabel}
 - 地點：${event.venue.name} ${event.venue.detail}（臺北市）
 - 規模：${event.capacity.seats} 席，${event.capacity.attendance}
-- 票價：全天票 ${event.tickets.currency}${event.tickets.full.toLocaleString()}，早鳥票 ${event.tickets.currency}${event.tickets.earlyBird.toLocaleString()}
+- 票價：單日票（10/14 與 10/15 分開售票、價格相同）。早鳥票 ${event.tickets.currency}${event.tickets.earlyBird.toLocaleString()}／人、一般票 ${event.tickets.currency}${event.tickets.full.toLocaleString()}／人（皆為 1 人價）
+- 團報單價（${event.tickets.currency}／人）：${event.tickets.groupTiers
+    .map((t) => `${t.label} 早鳥 ${t.earlyBird.toLocaleString()}／正常 ${t.full.toLocaleString()}`)
+    .join("；")}
 - 主辦：${event.organizer.name}｜主辦人 ${founderProfile.name}（${founderProfile.title}）
 - 會後另有 ${event.dinner.name}
 

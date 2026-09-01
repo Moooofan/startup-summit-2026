@@ -87,10 +87,13 @@ export function EventJsonLd({
         },
         organizer: { "@id": `${site.url}/#organization` },
         maximumAttendeeCapacity: 700,
+        /* 只掛兩筆「1 人價」的 Offer，刻意不把四段團報級距展開成八筆：
+           團報是同一張票的數量折扣，逐段展開會被 Google 讀成八種不同票種、
+           且 rich result 只會挑最低價顯示（NT$1,500）造成誤導。以 1 人價當代表價最貼近檢索意圖。 */
         offers: [
           {
             "@type": "Offer",
-            name: "早鳥票",
+            name: "早鳥票（單日・1 人）",
             price: event.tickets.earlyBird,
             priceCurrency: "TWD",
             availability: REGISTER_READY
@@ -101,7 +104,7 @@ export function EventJsonLd({
           },
           {
             "@type": "Offer",
-            name: "全天票",
+            name: "一般票（單日・1 人）",
             price: event.tickets.full,
             priceCurrency: "TWD",
             availability: REGISTER_READY
