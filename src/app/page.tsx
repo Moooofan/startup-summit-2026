@@ -9,13 +9,16 @@ import { SiteJsonLd, EventJsonLd, FaqJsonLd } from "@/components/site/JsonLd";
 import { speakers } from "@/data/speakers";
 
 /**
- * 首頁（2026/8 業主定案的單頁結構）：
- *   1. Hero            —— 主視覺（維持現狀，未在本次調整範圍）
+ * 首頁（2026/9 業主重新定序的單頁結構）：
+ *   1. Hero            —— 主視覺
  *   2. 創辦人的話        —— FounderNote
- *      兩場年會核心議程    —— About（兩張論壇卡 + 各日主題軌）
- *      講者名單          —— SpeakersPreview（首頁精簡版，非 /speakers 的五頁滿版）
- *   3. 售票連結         —— Tickets
- *   4. 常見問題         —— Faq
+ *   3. 年會概覽＋今年議程  —— About（兩張論壇卡，卡片下方接 HomeAgenda 的主題軌與講者）
+ *   4. 報名資訊         —— Tickets（票價、團報級距、報名連結）
+ *   5. 講者陣容         —— SpeakersPreview（兩排移動式講者卡，已拿掉 LINE-UP 大字報）
+ *   6. 常見問題         —— Faq
+ *
+ * ⚠️ 順序是業主定的：議程看完馬上接報名（轉換點），講者陣容往後放。
+ *    要換順序只改這裡的 JSX 即可，各區塊不互相依賴。
  *
  * 這些區塊原本散在 /about、/speakers、/tickets；那些分頁的程式碼與路由都還在，
  * 只是目前從導覽列隱藏（見 lib/config 的 PUBLIC_ROUTES），所以這裡是「共用」而非「搬走」。
@@ -45,8 +48,8 @@ export default function HomePage() {
       <Hero />
       <FounderNote />
       <About />
-      <SpeakersPreview />
       <Tickets />
+      <SpeakersPreview />
       <Faq />
     </>
   );

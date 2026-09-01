@@ -1473,7 +1473,6 @@ export const editions: Edition[] = [
   {
     no: 3,
     year: 2025,
-    theme: "贏在不確定的年代",
     dateLabel: "2025年10月1日（三）－10月2日（四）　09:00－17:10",
     venue: "政大公企中心 A 棟 2 樓國際會議廳",
     venueAddress: "台北市大安區金華街 187 號",
@@ -1488,7 +1487,7 @@ export const editions: Edition[] = [
       { label: "社群露出", value: "26 則" },
     ],
     highlights: [
-      "以「贏在不確定的年代」為題，分創辦人論壇與投資人論壇兩日舉行，兩天合計 35 場演講與對談。",
+      "分創辦人論壇與投資人論壇兩日舉行，兩天合計 35 場演講與對談。",
       "匯聚 18 家投資機構、8 位跨世代創業家、7 位生態系組織領袖與 3 位專業顧問同台。",
       "兩天 1,000 人報名參與，維持台灣新創投資圈唯一售票大型論壇的滿座紀錄。",
       "會後累積 64 則媒體露出，涵蓋中央社、經濟日報、工商時報、中時新聞網等主流財經媒體。",
@@ -1568,9 +1567,10 @@ export const editions: Edition[] = [
       "首屆台灣新創投資年會於 2023 年舉辦，是台灣新創投資年會系列的起點。",
       "2023 年 11 月 11 日下午於南山 Plaza AWS 會議廳舉行的半日場，5 場演講、8 家投資機構參與。",
     ],
-    // ⚠️ 只剩 oneLiner 還是暫用文案，待業主給正式的一句話定調後替換。
-    //    日期地點、講者名單、heroPhoto 都已是業主提供的真實資料。
-    oneLiner: "（待補）一切的起點。",
+    // oneLiner 的每個元素都能從本檔既有欄位驗證：半日場（dateLabel 13:00－17:30、
+    // growth.days）、8 家（stats／growth.institutions）、100 人（growth.attendees）。
+    // 業主 2026/9 定案，取代原本「（待補）一切的起點。」的暫用文案。
+    oneLiner: "南山 Plaza 的半日場，8 家投資機構、100 人到場。",
     heroPhoto: "/review/first-edition-audience.jpg",
     growth: {
       attendees: 100,

@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, Calendar, MapPin } from "lucide-react";
 import { speakers, getSpeaker } from "@/data/speakers";
 import { photoFocus } from "@/data/speakerPhotoFocus";
-import { trackMap } from "@/data/tracks";
+import { findSpeakerSlot } from "@/data/agenda";
 import { event, forums } from "@/data/event";
 import { Reveal } from "@/components/ui/Reveal";
 import { Cta } from "@/components/ui/Cta";
@@ -52,7 +52,10 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
   const idx = speakers.findIndex((x) => x.slug === slug);
   const prev = idx > 0 ? speakers[idx - 1] : null;
   const next = idx < speakers.length - 1 ? speakers[idx + 1] : null;
-  const track = trackMap[s.track];
+  // 場次改讀逐時段議程（data/agenda.ts）。原本這裡讀 tracks.ts 的主題軌，
+  // 主題軌於 2026/9 連同資料檔一起移除（業主指示議程一律用表格）。
+  // 還沒排進議程的講者會拿到 undefined → 膠囊整顆不渲染。
+  const slot = findSpeakerSlot(s.slug);
   const forum = forums.find((f) => f.key === s.day);
   const paragraphs = s.bio ? s.bio.split("\n\n").filter(Boolean) : [];
 
@@ -135,13 +138,16 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
             {/* 內容 */}
             <div>
               <Reveal delay={0.06}>
-                {track && (
+                {slot && (
+                  /* /agenda 隱藏期間指回首頁的議程錨點（HomeAgenda 掛了 id="agenda"） */
                   <Link
-                    href={isPublicRoute("/agenda") ? "/agenda" : "/speakers"}
+                    href={isPublicRoute("/agenda") ? "/agenda" : "/#agenda"}
                     className="inline-flex items-center gap-2 rounded-pill border border-black/10 bg-black/[0.04] px-4 py-1.5 text-[17px] text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
                   >
-                    {track.title}
-                    {s.role === "moderator" && <span className="text-ink-4">・主持人</span>}
+                    {slot.group ?? slot.topic ?? forum?.name}
+                    {slot.time && <span className="text-ink-4">・{slot.time}</span>}
+                    {/* 主持人以議程表為準：speakers.ts 的 role 是舊資料 */}
+                    {slot.moderator && <span className="text-ink-4">・主持人</span>}
                   </Link>
                 )}
 

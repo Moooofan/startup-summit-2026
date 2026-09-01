@@ -110,10 +110,6 @@ export function TicketGroupTable() {
           </tbody>
         </table>
       </div>
-
-      <p className="mt-3 text-[17px] leading-relaxed text-ink-4">
-        單日票，10/14 與 10/15 分開售票、票價相同；同一場次同時報名達級距人數即適用該價。
-      </p>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { event, forums } from "@/data/event";
 import { speakers } from "@/data/speakers";
-import { tracks } from "@/data/tracks";
+import { agendaMarkdown } from "@/data/agenda";
 import { tiers } from "@/data/sponsors";
 import { editions } from "@/data/review";
 import { founderProfile } from "@/data/founder";
@@ -36,8 +36,8 @@ ${forums
   )
   .join("\n")}
 
-## 主題軌
-${tracks.map((t) => `- ${t.title}（${t.titleEn}）：${t.summary}`).join("\n")}
+## 議程
+${agendaMarkdown()}
 
 ## 講者（${speakers.length} 位已公布，國際開幕講者確認中）
 ### 創辦人論壇 10/14

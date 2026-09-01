@@ -2,6 +2,7 @@ import { event } from "@/data/event";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Reveal } from "@/components/ui/Reveal";
 import { ForumCards } from "@/components/home/ForumCards";
+import { HomeAgenda } from "@/components/home/HomeAgenda";
 
 export function About() {
   return (
@@ -34,6 +35,12 @@ export function About() {
 
         {/* 兩天論壇（桌機並排 / 手機滑動牌堆，見 ForumCards） */}
         <ForumCards />
+
+        {/* 今年議程（業主 2026/9：兩張論壇卡下面要放主題與講者名單）。
+            ⚠️ About 同時被首頁與 /about 使用 → /about 也會出現這段議程。兩頁目前都不是
+               導覽列上的入口（/about 隱藏中，見 lib/config 的 PUBLIC_ROUTES），影響有限；
+               日後若 /about 重新開放、又不想與 /agenda 重複，把這行移到 app/page.tsx 即可。 */}
+        <HomeAgenda />
       </div>
     </section>
   );
