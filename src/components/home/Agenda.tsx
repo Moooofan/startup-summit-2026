@@ -1,56 +1,20 @@
 import { Fragment } from "react";
-import Link from "next/link";
-import { Info, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { forums } from "@/data/event";
-import { tracksByDay } from "@/data/tracks";
-import { speakersByTrack } from "@/data/speakers";
+import { agendaByDay, talkCount } from "@/data/agenda";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Reveal } from "@/components/ui/Reveal";
+import { AgendaTable, dayTone } from "@/components/home/AgendaTable";
 import { cn } from "@/lib/utils";
-
-const slotLabel: Record<string, string> = {
-  morning: "上午",
-  afternoon: "下午",
-  evening: "會後",
-};
-
-const formatLabel: Record<string, string> = {
-  keynote: "Keynote",
-  panel: "Panel",
-  session: "Session",
-  social: "Networking",
-};
-
-// 日別色調：Day 1 藍 / Day 2 紫
-const dayTone = {
-  sky: {
-    text: "text-orbit-sky",
-    badge: "bg-orbit-sky/15 text-orbit-sky",
-    glow: "rgb(47 127 176 / 0.12)",
-    line: "via-orbit-sky/60",
-    corner:
-      "radial-gradient(circle, rgb(47 127 176 / 0.4) 0%, rgb(47 127 176 / 0.1) 45%, transparent 70%)",
-  },
-  violet: {
-    text: "text-[#6d47c4]",
-    badge: "bg-[#6d47c4]/15 text-[#6d47c4]",
-    glow: "rgb(109 71 196 / 0.12)",
-    line: "via-[#6d47c4]/60",
-    corner:
-      "radial-gradient(circle, rgb(109 71 196 / 0.42) 0%, rgb(109 71 196 / 0.12) 45%, transparent 70%)",
-  },
-} as const;
 
 /** 日別文字節點（同講者陣容 ForumNode 的設計） */
 function DayNode({
   f,
   order,
-  tracks,
   id,
 }: {
   f: (typeof forums)[number];
   order: number;
-  tracks: ReturnType<typeof tracksByDay>;
   id?: string;
 }) {
   const t = dayTone[f.accent];
@@ -81,17 +45,6 @@ function DayNode({
           <p className="mt-6 font-display text-xl text-ink-2 md:text-2xl">
             {f.dateLabel}（{f.weekday}）· {f.time}
           </p>
-          {/* 議程專屬：主題軌預覽 chips（和講者陣容節點做出區隔） */}
-          <ul className="mx-auto mt-8 flex max-w-2xl flex-wrap justify-center gap-2.5">
-            {tracks.map((tk) => (
-              <li
-                key={tk.key}
-                className="rounded-pill border border-black/10 bg-white/50 px-3.5 py-1.5 text-[17px] text-ink-2"
-              >
-                {tk.title}
-              </li>
-            ))}
-          </ul>
           <span
             className={cn(
               "mt-12 inline-flex flex-col items-center gap-2 text-[17px] tracking-[0.24em]",
@@ -115,6 +68,8 @@ function DayNode({
 }
 
 export function Agenda() {
+  const totalTalks = forums.reduce((n, f) => n + talkCount(agendaByDay(f.key)), 0);
+
   return (
     <section id="agenda" className="relative">
       {/* 開場大字報頁（同講者陣容） */}
@@ -125,16 +80,9 @@ export function Agenda() {
               className="md:mt-14"
               eyebrow="PROGRAM"
               ghost="AGENDA"
-              title="兩天，十二條主題軌"
-              lead="10/14 從創業實戰走到技術分軌，10/15 從機構投資人的資本配置談到 AI 與生醫的投資判準。"
+              title={`兩天，${totalTalks} 場議程`}
+              lead="10/14 從創業實戰、新 IPO 對談走到 Edge AI 與 AI 軟體，10/15 從焦點創投與 CVC 談到生醫與半導體的投資判準。"
             />
-          </Reveal>
-
-          <Reveal delay={0.08}>
-            <p className="mt-8 inline-flex max-w-2xl items-start gap-2.5 rounded-card border border-black/8 bg-black/[0.03] px-5 py-4 text-sm leading-relaxed text-ink-3">
-              <Info size={16} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
-              目前公布的是主題軌與講者歸屬，逐時段完整議程表將於活動前公布。議程時間將依現場流程與講者安排保留調整彈性。
-            </p>
           </Reveal>
         </div>
 
@@ -148,12 +96,12 @@ export function Agenda() {
       </div>
 
       {forums.map((f, fi) => {
-        const dayTracks = tracksByDay(f.key);
+        const items = agendaByDay(f.key);
         const tone = dayTone[f.accent];
         return (
           <Fragment key={f.key}>
             {/* 日別節點 */}
-            <DayNode f={f} order={fi + 1} tracks={dayTracks} id={f.key} />
+            <DayNode f={f} order={fi + 1} id={f.key} />
 
             {/* 課程格 */}
             <div className="snap-panel pb-16 pt-6 md:min-h-[100svh]">
@@ -164,72 +112,20 @@ export function Agenda() {
                       {f.label}
                     </span>
                     <h3 className="text-2xl font-bold text-ink md:text-3xl">{f.name}</h3>
+                    {/* ⚠️ 手機強制折行，同 Speakers.tsx 的標題列（那邊有完整說明）。
+                        這一列更長：Day 1(60) + 論壇名(130) + 日期時間(252) + 條數(82) + gap ＝ 584px，
+                        手機可用寬最多 350px → 放著自己 wrap 會斷成三四行且折點不固定。
+                        指定折點後：第一行 Day 1＋論壇名(190px)、第二行 日期＋時間(252px)，
+                        條數再落第三行靠右 —— 行數沒少，但每次都一樣，不會隨文案跳動。 */}
+                    <span aria-hidden className="basis-full sm:hidden" />
                     <span className="font-display text-base text-ink-3">
                       {f.dateLabel}（{f.weekday}）　{f.time}
                     </span>
-                    <span className="ml-auto text-sm text-ink-4">{dayTracks.length} 條主題軌</span>
+                    <span className="ml-auto text-sm text-ink-4">{talkCount(items)} 場</span>
                   </header>
                 </Reveal>
 
-                <ul className="mt-10 grid gap-6 lg:grid-cols-2">
-                  {dayTracks.map((t, i) => {
-                    const list = speakersByTrack(t.key);
-                    return (
-                      <Reveal key={t.key} delay={0.04 * i}>
-                        {/* 雙層白框 + 角落漸層（同聯絡資訊卡） */}
-                        <li className="group relative h-full overflow-hidden rounded-[18px] border border-line bg-white/50 p-2.5 shadow-[0_18px_50px_-24px_rgba(24,34,66,0.35)] transition-colors duration-300 hover:border-brand-lift/40">
-                          <span
-                            aria-hidden
-                            className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full blur-xl"
-                            style={{ background: tone.corner }}
-                          />
-                          <div className="relative h-full rounded-[13px] border border-line-soft bg-white/35 p-6 sm:p-8">
-                            <div className="flex items-center gap-3">
-                              <span
-                                className={cn(
-                                  "font-display grid h-9 w-9 shrink-0 place-items-center rounded-lg text-sm font-semibold",
-                                  tone.badge
-                                )}
-                              >
-                                {t.no}
-                              </span>
-                              <span className="text-xs tracking-[0.14em] text-ink-4">
-                                {slotLabel[t.slot]}・{formatLabel[t.format]}
-                              </span>
-                            </div>
-
-                            <h4 className="mt-5 text-xl font-bold text-ink">{t.title}</h4>
-                            <p className="font-display mt-1.5 text-xs font-semibold tracking-[0.12em] text-gold">
-                              {t.titleEn.toUpperCase()}
-                            </p>
-
-                            <p className="mt-4 text-[18px] leading-[1.9] text-ink-2">{t.summary}</p>
-
-                            {list.length > 0 ? (
-                              <ul className="mt-6 flex flex-wrap gap-2">
-                                {list.map((s) => (
-                                  <li key={s.slug}>
-                                    <Link
-                                      href={`/speakers/${s.slug}`}
-                                      className="inline-flex items-center gap-1.5 rounded-pill border border-black/10 bg-white/60 px-3.5 py-2 text-[17px] text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
-                                    >
-                                      {s.name}
-                                      {s.role === "moderator" && (
-                                        <span className="text-[16px] text-ink-4">主持</span>
-                                      )}
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <p className="mt-6 text-sm text-ink-4">講者陣容確認中</p>
-                            )}
-                          </div>
-                        </li>
-                      </Reveal>
-                    );
-                  })}
-                </ul>
+                <AgendaTable items={items} />
               </div>
             </div>
           </Fragment>

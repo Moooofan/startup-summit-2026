@@ -1,7 +1,15 @@
 /**
- * 講者資料。由 scratchpad/gen_speakers.py 自簡報 pptx 抽出後產生。
- * bio 逐字取自《第四屆新創投資年會企劃 新增贊助方案.pptx》，未經改寫。
- * 照片為簡報內嵌原圖（解析度偏低，建議向主辦方索取高解析檔）。
+ * 講者資料。
+ *
+ * 事實來源：《第四屆新創投資年會講者名單與議程0817.pptx》（業主 2026/9 提供）投影片 2–14，
+ * 更早的版本來自《第四屆新創投資年會企劃 新增贊助方案.pptx》。
+ * bio 逐字取自簡報，未經改寫；照片為簡報內嵌原圖（解析度偏低，建議向主辦方索取高解析檔）。
+ *
+ * ⚠️ 陣列順序刻意對齊 data/agenda.ts 的議程順序（同一場次的講者相鄰）——
+ *    /speakers 的網格是按陣列順序鋪的，順序打亂同場次的人就會被拆散。
+ *
+ * ⚠️ 議程表上還有三位不在這裡：田建中（證交所）與兩位分段主持人劉宥彤、張提提 ——
+ *    他們只出現在議程圖裡，0817 簡報沒有介紹與照片，補到才上站（見 TODO.md）。
  */
 import type { ForumKey } from "./event";
 
@@ -14,6 +22,9 @@ export interface Speaker {
   title: string;
   org: string;
   day: ForumKey;
+  /** ⚠️ 原本指向 data/tracks.ts 的主題軌 key。主題軌已於 2026/9 全站移除
+   *  （業主指示議程一律用表格，見 data/agenda.ts），這欄現在是沒有對應資料的歷史字串，
+   *  畫面不讀它。值沿用 agenda.ts 的場次分組，只當分類備註用。 */
   track: string;
   role?: string;
   status: SpeakerStatus;
@@ -23,6 +34,21 @@ export interface Speaker {
 }
 
 export const speakers: Speaker[] = [
+  // ───────── 10/14 創辦人論壇 ─────────
+  // 《焦點創業家分享》
+  {
+    slug: "ryan-lee",
+    name: "李昇圭",
+    nameEn: "Ryan Seungkyu Lee",
+    title: "聯合創辦人暨執行副總裁（EVP）",
+    org: "Pinkfong",
+    day: "founder",
+    track: "founder-keynote",
+    status: "confirmed",
+    photo: "/speakers/ryan-lee.png",
+    bio: "Pinkfong Company 於 2010 年 6 月創立（當時名為 SmartStudy），由 3 位擁有線上遊戲產業背景的夥伴共同創立。李昇圭（Ryan Seungkyu Lee）為聯合創辦人暨執行副總裁（EVP），從創立初期便負責全球業務拓展（BD）、海外授權與國際戰略。李昇圭是 2010 年公司成立時就參與奠基的關鍵合夥人，並且是全球化拓展的推手：由於他具備流利的英語能力與國際商務拓展經驗，在《Baby Shark》走紅全球的過程中，他是代表 Pinkfong 走向歐美與東南亞市場、洽談 Netflix/Nickelodeon 等跨國授權與合作的第一線掌舵者。",
+    tags: ["韓國獨角獸", "IP 授權", "全球業務拓展", "Baby Shark"],
+  },
   {
     slug: "shen-shu-wei",
     name: "沈書緯",
@@ -35,18 +61,20 @@ export const speakers: Speaker[] = [
     bio: "他曾任職於高通，並在 Google 領導 Google Assistant 台北團隊達 6 年，負責智慧音箱等多項專案。2019 年他放棄千萬年薪創業，鎖定勞力密集的旅宿業，開發專利自然語言理解 (NLU) 技術，打造全台市占第一的客房 AI 語音管家「小美犀」。他成功將非結構性的對話轉為飯店後台管理數據，解決缺工痛點。在基石創投、緯創等支持下，產品已攻入全球逾兩萬間客房。",
     tags: ["對話式 AI", "飯店科技", "自然語言理解", "Google Assistant"],
   },
+
+  // 《焦點創業生態機構分享》
   {
-    slug: "adams-chung",
-    name: "鍾哲民",
-    nameEn: "Adams Chung",
-    title: "創辦人兼執行長",
-    org: "MoBagel 行動貝果",
+    slug: "kj-wu",
+    name: "吳貴融",
+    nameEn: "KJ Wu",
+    title: "大中華區新創技術副總",
+    org: "Google Cloud",
     day: "founder",
-    track: "founder-keynote",
+    track: "ecosystem",
     status: "confirmed",
-    photo: "/speakers/adams-chung.jpg",
-    bio: "Mobagel（美商行動貝果）是一家專精於 AI 數據分析的軟體公司，提供企業級 AI 代理與邊緣運算方案。創辦人兼執行長鍾哲民具備 MIT 統計背景，他帶領團隊從 SaaS 轉型軟硬整合，致力幫助全球企業將 AI 實際落地以創造商業成效。",
-    tags: ["AI 數據分析", "企業級 AI 代理", "邊緣運算", "軟硬整合"],
+    photo: "/speakers/kj-wu.png",
+    bio: "KJ 是負責 Google Cloud 團隊的技術解決方案主管，所帶領的 Google Cloud 技術團隊主要協助不同規模的企業擬定雲端策略與採行雲端解決方案。加入 Google 以前，KJ 帶領新創團隊開發 FinTech 產品，並歷任大型顧問與雲端跨國企業，擔任各種技術與管理職位，包括安全性研發、軟體工程、雲端架構、企業策略規劃等管理職務。",
+    tags: ["雲端策略", "新創技術", "FinTech", "企業架構"],
   },
   {
     slug: "lin-zhi-yao",
@@ -72,42 +100,8 @@ export const speakers: Speaker[] = [
     bio: "他曾是台灣網際網路創業的先驅者與資深導師。於 1999 年創辦 Webs-TV.com，在當年網路泡沫化浪潮中成為少數成功獲利的新創，隨後曾出任天空傳媒 (yam) 策略長暨營運長、TiEA 台灣網路暨電子商務發展協會秘書長等要職。加入 AppWorks 後，他憑藉逾二十年的創業與實戰經驗，專注於挖掘具備長遠「網路思維」的潛力人才。他長期陪伴並輔導新創團隊從零到一突破瓶頸，在推動台灣產業數位轉型與新創生態圈鏈結上，扮演著關鍵的推手角色。",
     tags: ["網路創業", "加速器", "數位轉型", "新創輔導"],
   },
-  {
-    slug: "li-ai-ling",
-    name: "李愛玲",
-    title: "總經理",
-    org: "臺灣證券交易所",
-    day: "founder",
-    track: "ecosystem",
-    status: "pending",
-    photo: "/speakers/li-ai-ling.jpg",
-    bio: "現任臺灣證券交易所股份有限公司總經理,曾任證券櫃檯買賣中心總經理及臺灣集中保管結算所副總經理,於證券周邊單位服務逾30年,⻑期帶領團隊強化臺灣資本市場資訊透明度、交易安全性、金融商品多元化及普惠金融發展,並致力擴大市場規模與提升資本市場營運韌性;同時積極推動永續金融發展,持續健全臺灣資本市場生態系。",
-    tags: ["資本市場", "證券交易所", "永續金融", "普惠金融"],
-  },
-  {
-    slug: "chen-jun-jia",
-    name: "陳俊嘉",
-    title: "共同創辦人暨執行長",
-    org: "永悅健康（H2U）",
-    day: "founder",
-    track: "new-ipo",
-    status: "confirmed",
-    photo: "/speakers/chen-jun-jia.png",
-    bio: "畢業於台灣大學生化科技與經濟雙學位、台大 EMBA。他曾任職於鴻海科技集團健康事業群，擁有深厚的生醫與科技跨界背景。2013年內部創業成立 H2U，引進 AI 與數據技術，建構台灣規模領先的「全場景健康數據生態系」。今年（2026年）7月他成功帶領永悅健康正式於台灣證券交易所創新板掛牌上市，為台灣數位健康與預防醫學產業寫下指標性的新創里程碑。",
-    tags: ["數位健康", "預防醫學", "健康數據生態系", "創新板上市"],
-  },
-  {
-    slug: "li-lun-jia",
-    name: "李倫家",
-    title: "創辦人兼董事長",
-    org: "PRO360 達人網",
-    day: "founder",
-    track: "new-ipo",
-    status: "confirmed",
-    photo: "/speakers/li-lun-jia.jpg",
-    bio: "畢業於美國西點軍校經濟系與系統工程系。他是一位擁有8次創業經驗的連續創業家，早期在美國創辦的多家晶片與硬體公司皆成功出售給NASDAQ上市公司及Motorola等國際大廠。回台後，他敏銳捕捉到生活服務數位化的龐大商機，打造出全台最大的專業服務媒合平台。憑藉高度的軍事紀律與創新AI數據媒合模式，他成功帶領公司維持高達9成的驚人毛利率，並於2026年6月15日正式掛牌上櫃（股票代號：7839），成功將平台推向台灣資本市場並加速拓展東南亞版圖。",
-    tags: ["服務媒合平台", "連續創業家", "AI 數據媒合", "上櫃"],
-  },
+
+  // 《新IPO創業家Panel對談》
   {
     slug: "shen-li-ping",
     name: "沈立平",
@@ -122,22 +116,48 @@ export const speakers: Speaker[] = [
     tags: ["創投", "大健康", "智慧製造", "資本市場對接"],
   },
   {
+    slug: "wu-you-xun",
+    name: "吳侑勳",
+    title: "創辦人兼董事長",
+    org: "東聯互動（7738）",
+    day: "founder",
+    track: "new-ipo",
+    status: "confirmed",
+    photo: "/speakers/wu-you-xun.jpg",
+    bio: "東聯互動（7738）創辦人兼董事長吳侑勳深耕電信與軟體數據服務逾20年。他曾任電信產業主管，因長期觀察到移工跨國小額匯兌的痛點，於2016年捨棄高薪創業。他帶領團隊突破嚴格金融監理，打造合法便利的跨境金融平台，並兼任一卡通公司董事，成功帶領公司成為台灣跨境金融與移工匯兌領頭羊。",
+    tags: ["跨境金融", "移工匯兌", "電信數據", "上櫃"],
+  },
+  {
     slug: "wu-ming-wei",
     name: "吳明蔚",
     title: "創辦人暨執行長",
     org: "奧義智慧（7823）",
     day: "founder",
     track: "new-ipo",
-    status: "pending",
+    status: "confirmed",
     photo: "/speakers/wu-ming-wei.png",
     bio: "台灣大學電機博士畢業。他是台灣資安與 AI 領域的傳奇連續創業家，曾與團隊兩度成功創業並獲跨國大廠併購。\n\n他具備深厚的 AI 演算法與大型資安架構專長，致力於將防禦技術全面自動化。他帶領奧義智慧研發主權 AI 技術、跨足國防韧性與無人機反制，客戶涵蓋八成台灣本國銀行及台積電等科技巨頭，並於 2026 年推動公司成功掛牌上市。",
     tags: ["資安", "主權 AI", "連續創業家", "國防韌性"],
   },
   {
+    slug: "li-lun-jia",
+    name: "李倫家",
+    title: "創辦人兼董事長",
+    org: "PRO360 達人網（7839）",
+    day: "founder",
+    track: "new-ipo",
+    status: "confirmed",
+    photo: "/speakers/li-lun-jia.jpg",
+    bio: "畢業於美國西點軍校經濟系與系統工程系。他是一位擁有8次創業經驗的連續創業家，早期在美國創辦的多家晶片與硬體公司皆成功出售給NASDAQ上市公司及Motorola等國際大廠。回台後，他敏銳捕捉到生活服務數位化的龐大商機，打造出全台最大的專業服務媒合平台。憑藉高度的軍事紀律與創新AI數據媒合模式，他成功帶領公司維持高達9成的驚人毛利率，並於2026年6月15日正式掛牌上櫃（股票代號：7839），成功將平台推向台灣資本市場並加速拓展東南亞版圖。",
+    tags: ["服務媒合平台", "連續創業家", "AI 數據媒合", "上櫃"],
+  },
+
+  // 《併購與擴張》
+  {
     slug: "huang-huai-en",
     name: "黃懷恩",
     title: "執行長兼總經理",
-    org: "欣新網",
+    org: "欣新網（2949）",
     day: "founder",
     track: "ma-global",
     status: "confirmed",
@@ -146,16 +166,57 @@ export const speakers: Speaker[] = [
     tags: ["電商代營運", "企業轉型", "大數據與 AI", "品牌一條龍服務"],
   },
   {
+    slug: "xu-yu-ting",
+    name: "許郁婷",
+    title: "共同創辦人暨執行長",
+    org: "股感媒體集團",
+    day: "founder",
+    track: "ma-global",
+    status: "confirmed",
+    photo: "/speakers/xu-yu-ting.jpg",
+    bio: "帶領股感從股票知識平台出發，拓展出房感、安錢感等多元品牌，並服務全台逾七成金融機構。深耕 FinTech 與數據策略，秉持「場景驅動、數據落地」理念，進而打造生態商務賦能平台；透過第一方數據與跨場景連結，精準串接多元產業，促成品牌間商業資源的高效流動，建構永續發展的新經濟生態系。",
+    tags: ["FinTech", "第一方數據", "生態商務", "金融內容"],
+  },
+  {
+    slug: "song-jie-ren",
+    name: "宋捷仁",
+    title: "創辦人兼執行長",
+    org: "USPACE 悠勢科技",
+    day: "founder",
+    track: "ma-global",
+    status: "confirmed",
+    photo: "/speakers/song-jie-ren.png",
+    bio: "宋捷仁是跨國共享車位平台USPACE執行長。2016 年因車輛遭拖吊創立悠勢科技，透過 IoT 地鎖活化閒置車位。他近年推動國際化，2024 年全資併購日本共享停車新創「軒先」，成功輸出 AI 車牌辨識並帶領營收翻倍，將公司打造為涵蓋台、日、東南亞的跨國出行生態圈。",
+    tags: ["共享停車", "IoT 地鎖", "跨國併購", "出行生態圈"],
+  },
+  {
+    slug: "adams-chung",
+    name: "鍾哲民",
+    nameEn: "Adams Chung",
+    title: "創辦人兼執行長",
+    org: "MoBagel 行動貝果",
+    day: "founder",
+    track: "ma-global",
+    status: "confirmed",
+    photo: "/speakers/adams-chung.jpg",
+    bio: "Mobagel（美商行動貝果）是一家專精於 AI 數據分析的軟體公司，提供企業級 AI 代理與邊緣運算方案。創辦人兼執行長鍾哲民具備 MIT 統計背景，他帶領團隊從 SaaS 轉型軟硬整合，致力幫助全球企業將 AI 實際落地以創造商業成效。",
+    tags: ["AI 數據分析", "企業級 AI 代理", "邊緣運算", "軟硬整合"],
+  },
+
+  // 《Edge AI 趨勢對談》
+  {
     slug: "yang-ben-yu",
     name: "楊本豫",
-    title: "策略長室顧問",
+    // 0817 簡報自己不一致：講者介紹頁寫「策略長室顧問」、議程表寫「董事長室顧問」，
+    // 依業主指示以議程表為準。
+    title: "董事長室顧問",
     org: "友達光電集團",
     day: "founder",
     track: "edge-ai",
     role: "moderator",
     status: "confirmed",
     photo: "/speakers/yang-ben-yu.png",
-    bio: "過去曾擔任友達光電投資管理總部副總經理、友達集團智慧零售事業群總經理，負責公司之價值轉型策略投資佈局，其兼任友達集團智慧零售事業群總經理，綜理智慧零售事業單位之營運，帶領團隊開發解決方案與推展場域商機。2002 年加入友達光電，曾先後擔任友達大陸廠區財務長、友達光電財務總處協理等要職。2009 年接任友達光電財務長，2015 年轉任策略長。楊本豫擁有國立台灣大學財務金融系學士學位及美國喬治華盛頓大學企管碩士學位。",
+    bio: "曾任友達光電策略長，負責公司之價值轉型、策略投資與跨國併購佈局，並兼任友達集團智慧零售事業群總經理與友達數位科技董事長，綜理智慧零售與智慧製造服務事業之內部新創營運，帶領團隊從0到1開發解決方案與推展場域商機。2002 年加入友達光電，曾先後擔任友達大陸廠區財務長、友達光電財務總處協理等要職。2009 年接任友達光電財務長，2015 年轉任策略長。楊本豫擁有國立台灣大學財務金融系學士學位及美國喬治華盛頓大學企管碩士學位。",
     tags: ["Edge AI", "智慧零售", "策略投資", "垂直場域應用"],
   },
   {
@@ -167,20 +228,8 @@ export const speakers: Speaker[] = [
     track: "edge-ai",
     status: "confirmed",
     photo: "/speakers/qiu-li-quan.jpg",
-    bio: "啟雲科技董事長丘立全，畢業於臺大國企所。曾任趨勢科技台灣總經理與訊連科技副總經理，在軟體科技界擁有深厚資歷。他於2014年創辦啟雲科技，帶領公司成為Meta官方認證的AR技術合作夥伴。啟雲專精於AI影像辨識與程式化3D內容技術，不僅開發出AR智慧拍照機器人（PICBOT），更將AIoT與社群行銷結合，致力將台灣的AI創新科技推向全球市場。",
+    bio: "啟雲科技執行長丘立全，畢業於臺大國企所。曾任趨勢科技台灣區及亞太區總經理、訊連科技副總經理，在軟體科技界擁有深厚資歷。他於2014年創辦啟雲科技，帶領公司成為Facebook平台上全球頂尖的技術提供者，並且是第一個在Facebook全球年會上台分享的台灣人。啟雲專精於AI影像辨識與程式化3D內容技術，不僅開發出AR智慧拍照機器人（PICBOT），更將AIoT與社群行銷結合，致力將台灣的AI創新科技推向全球市場。",
     tags: ["AR 技術", "AI 影像辨識", "3D 內容", "AIoT"],
-  },
-  {
-    slug: "zhao-xin-min",
-    name: "趙新民",
-    title: "智慧製造部資深總監",
-    org: "宇沛永續",
-    day: "founder",
-    track: "edge-ai",
-    status: "confirmed",
-    photo: "/speakers/zhao-xin-min.png",
-    bio: "趙新民畢業於元智大學。他專精於結合綠色技術與數位科技，致力於推動企業雙軸轉型。身為友達光電旗下子公司，宇沛專注於碳管理、水處理與智能化控制。趙新民帶領團隊將 AI 技術導入工業應用，推出 AI 瑕疵分類、PHM 預測性維護及生成式 AI 服務，為製造業打造兼顧效能與永續的智慧工廠解決方案。",
-    tags: ["雙軸轉型", "碳管理", "智慧工廠", "預測性維護"],
   },
   {
     slug: "zou-da-zhi",
@@ -191,8 +240,34 @@ export const speakers: Speaker[] = [
     track: "edge-ai",
     status: "confirmed",
     photo: "/speakers/zou-da-zhi.jpg",
-    bio: "凌華科技全球財務長鄒大智，擁有國立臺灣大學國際企業學研究所碩士學位。他歷任凌華科技財務協理，憑藉深厚的財務規劃與策略分析專業，晉升為全球財務長。在AI領域，身為邊緣運算領導者的凌華科技，專注於發展實體AI（Physical AI）與邊緣AI技術。鄒大智指出，凌華近期的專案接單動能中，有高達四成與邊緣AI應用密切相關。公司正致力於將AI技術落地，廣泛應用於智慧工控、醫療影像、自主移動機器人等領域，協助全球客戶提升運算效能與自動化能力。",
-    tags: ["邊緣運算", "實體 AI", "工業電腦", "智慧工控"],
+    bio: "現任凌華科技全球財務長暨凌華智能(中國)投資長，完成四家歐美公司100%股權併購，引進策略投資人Keysight及友達光電推動策略轉型，並與頂尖企業及國際投資機構於台灣，英國、大陸完成三項股權JV。憑藉策略分析與營運經驗，對投後管理具獨到洞見。凌華科技身為AI邊緣運算領導者，以軟硬整合系統，為智慧工控、醫療、機器人等領域提供技術方案，並與產業生態系合作，共同建立競爭優勢。鄒大智畢業於國立台灣大學理學院，並取得商學院EMBA及紐約州立大學碩士學位。",
+    tags: ["邊緣運算", "跨國併購", "工業電腦", "智慧工控"],
+  },
+  {
+    slug: "zhao-xin-min",
+    name: "趙新民",
+    title: "智慧製造服務處資深總監",
+    org: "宇沛永續",
+    day: "founder",
+    track: "edge-ai",
+    status: "confirmed",
+    photo: "/speakers/zhao-xin-min.png",
+    bio: "元智大學工業工程與管理博士，專精於綠色技術與數位科技整合，致力推動企業永續與數位雙軸轉型。宇沛永續為友達集團旗下子公司，專注於碳管理、水資源循環及智慧製造服務。趙新民帶領團隊將AI導入製造場域，發展AI瑕疵分類、PHM預測性維護及生成式AI應用等解決方案，協助企業提升品質、效率與設備可靠度，打造兼具營運效益與永續價值的智慧工廠",
+    tags: ["雙軸轉型", "碳管理", "智慧工廠", "預測性維護"],
+  },
+
+  // 《AI 軟體創業家分享》
+  {
+    slug: "xue-jin",
+    name: "薛覲",
+    title: "共同創辦人暨執行長",
+    org: "漸強實驗室",
+    day: "founder",
+    track: "ai-software",
+    status: "confirmed",
+    photo: "/speakers/xue-jin.png",
+    bio: "薛覲畢業於清華大學，曾於紐約與上海工作。2017年創立漸強實驗室並任執行長，帶領團隊從LINE生態切入，打造MAAC一站式AI自動化行銷平台，成為金級技術夥伴。近年他主導海外擴張，成功將SaaS服務打入日本、泰國與新加坡市場，致力用AI重塑亞洲企業的商業溝通。",
+    tags: ["行銷自動化", "LINE 生態", "SaaS 出海", "對話式商務"],
   },
   {
     slug: "zhu-yi-zhen",
@@ -207,78 +282,47 @@ export const speakers: Speaker[] = [
     tags: ["AI PC", "本地端 AI", "連續創業家", "軟硬整合"],
   },
   {
-    slug: "xue-jin",
-    name: "薛覲",
-    title: "共同創辦人暨執行長",
-    org: "漸強實驗室",
-    day: "founder",
-    track: "ai-software",
-    status: "confirmed",
-    photo: "/speakers/xue-jin.png",
-    bio: "薛覲畢業於清華大學，曾於紐約與上海工作。2017年創立漸強實驗室並任執行長，帶領團隊從LINE生態切入，打造MAAC一站式AI自動化行銷平台，成為金級技術夥伴。近年他主導海外擴張，成功將SaaS服務打入日本、泰國與新加坡市場，致力用AI重塑亞洲企業的商業溝通。",
-    tags: ["行銷自動化", "LINE 生態", "SaaS 出海", "對話式商務"],
-  },
-  {
     slug: "li-xin-yi",
     name: "李信宜",
-    title: "總經理",
-    org: "愛比科技",
+    title: "總經理兼 Vurbo.ai 共同創辦人",
+    org: "愛比科技（6858）",
     day: "founder",
     track: "ai-software",
     status: "confirmed",
     photo: "/speakers/li-xin-yi.jpg",
-    bio: "愛比科技總經理李信宜畢業於台大機械系與台大商學研究所碩士。他曾任職華碩產品協理與威聯通副總，具備深厚的科技硬體與高階經理人背景。近年他帶領愛比科技推動轉型，推出自主研發的Vurbo.AI語意 AI 翻譯平台，支援百種語言即時語意翻譯、回溯語境與會議摘要，成功攻入金融、醫療及跨國大型展會市場。",
+    bio: "畢業於台大機械系與台大商學研究所碩士(就讀台大EMBA)。他曾任職技嘉亞洲業務主管、華碩AICS協理與威聯通AIoT 副總，另有三家創辦(或共同創辦)新創經驗，具備深厚的科技硬體與軟體(雲端及SaaS) 及高階經理人背景。近年他帶領愛比科技推動轉型，推出自主研發的Vurbo.ai語意 AI 翻譯平台，支援百種語言即時語意即時翻譯及口譯、回溯語境與會議摘要，成功攻入半導體、金融、醫療、大學龍頭企業及跨國大型展會市場。因客製專屬特殊語音模型，獲台積電、玉山、佛光山等代表企業採用，目前已超過230+家企業訂閱。",
     tags: ["語意 AI 翻譯", "會議摘要", "硬體轉型", "跨國會展"],
   },
+
+  // 《年度新基金》
   {
-    slug: "qu-zhi-hao",
-    name: "瞿志豪",
-    title: "台灣區合夥人（前 ITIC 創新工業技術移轉總經理）",
-    org: "橡子園創投（Acorn Campus）",
+    slug: "sophia-cheng",
+    name: "程淑芬",
+    nameEn: "Sophia Cheng",
+    title: "合夥人（前國泰金控投資長）",
+    org: "宏齊永續與氣候基金",
     day: "founder",
-    track: "deep-tech",
+    track: "new-fund",
     status: "confirmed",
-    photo: "/speakers/qu-zhi-hao.png",
-    bio: "瞿志豪現任 ITIC 創新工業技術移轉總經理、TBMC 臺灣生物醫藥製造董事兼財務長，以及 Reizawa Capital 合夥人。他畢業於台大電機系與研究所，並擁有台大 EMBA 碩士學位。\n\n他是台灣著名的連續創業家與資深創投，1997 年共同創辦和信超媒體GigaMedia並出任執行副總兼技術長，成功帶領公司於美國 NASDAQ 上市。隨後他轉任創投，曾任橡子園創投Acorn Campus合夥人與生醫產業創新推動方案執行中心創新長。現亦於台大兼任教授，憑藉跨越科技、網路與生醫領域的深厚資歷，積極培育新創人才。",
-    tags: ["連續創業家", "創投", "技術移轉", "生醫產業"],
+    photo: "/speakers/sophia-cheng.png",
+    bio: "Sophia畢業於臺灣大學，取得美國金門大學財務銀行碩士。曾任美林環球投顧董事長、日盛金控高階主管，2012年出任國泰金控投資長，掌理集團投資策略並推動ESG責任投資。現任國泰金控資深顧問、宏齊顧問資深合夥人，參與「宏齊永續與氣候基金」，聚焦AI、綠能、循環經濟及氣候解決方案投資。",
+    tags: ["ESG 責任投資", "氣候基金", "綠能", "循環經濟"],
   },
   {
-    slug: "ju-zhi-yuan",
-    name: "鞠志遠",
-    title: "創辦人兼CEO",
-    org: "歐姆佳科技",
+    slug: "jiang-minjun",
+    name: "江旻峻",
+    title: "總經理",
+    org: "台大校友創投 NTU.VC",
     day: "founder",
-    track: "deep-tech",
+    track: "new-fund",
     status: "confirmed",
-    photo: "/speakers/ju-zhi-yuan.jpg",
-    bio: "為台灣大學電信所太空科學博士，深耕太空與通訊領域長達20年。他創辦的歐姆佳科技，核心產品為射頻半導體自動測試設備（ATE），主要應用於半導體測試供應鏈中的高速射頻晶片量測與多站點並行測試，能大幅降低40%的測試成本。在國發會主辦的「創業綻放計畫」中，歐姆佳從數千組隊伍中脫穎而出，成功挺進全國前30強決賽，展現出卓越的高科技產業實力與市場競爭力。",
-    tags: ["射頻半導體", "自動測試設備", "太空與通訊", "半導體測試"],
+    photo: "/speakers/jiang-minjun.jpg",
+    bio: "現任台大校友創投（NTU.VC）總經理、富旌創投（Addin Ventures）創始合夥人及飛拓投創執行合夥人。他畢業於台大商學研究所，擁有近十年豐富的風險投資與新創輔導經驗，曾任基石創投投資副總，並長期撰寫「布蘭登觀點」分享創投洞見。他專注於 AI、SaaS、垂直領域軟體及數據驅動的早期新創，擅長為團隊拆解商業模式與架構台美跨境的募資策略。身為台大校友創投總經理，他以社群為核心，積極推動「在地化」投資與校友資源鏈結，協助台灣新創打入國際市場。",
+    tags: ["AI / SaaS", "校友基金"],
   },
-  {
-    slug: "jian-dan",
-    name: "簡丹",
-    title: "董事長暨合夥人",
-    org: "台安傑天使俱樂部（Taipei Angels）",
-    day: "founder",
-    track: "early-fund",
-    status: "confirmed",
-    photo: "/speakers/jian-dan.jpg",
-    bio: "她擁有深厚的科技產業背景，在國際級 IT 企業累積逾二十年的高階管理與銷售實戰歷練。過去曾歷任 Check Point 台灣區總經理、Autodesk 台灣區總經理，以及台灣微軟 (Microsoft) 業務經理等要職。加入台安傑後，她憑藉敏銳的市场洞察與跨國企業治理經驗，積極協助具潛力的早期新創團隊健全商務模式、媒合關鍵資源，是推動台灣早期天使投資與新創生態圈國際化發展的重要女性領導者。",
-    tags: ["天使投資", "早期新創", "跨國企業治理", "女性領導者"],
-  },
-  {
-    slug: "lin-bo-han",
-    name: "林伯翰",
-    nameEn: "Boice Lin",
-    title: "創辦人",
-    org: "一春資本",
-    day: "founder",
-    track: "early-fund",
-    status: "confirmed",
-    photo: "/speakers/lin-bo-han.jpg",
-    bio: "林伯翰（Boice Lin）為台灣少數兼具「跨國外商高管」與「三家知名新創出場/上市」實戰經驗的指標性操盤手。職涯由 IBM 起步，曾任電通 Merkle 台灣總經理，並先後擔任 TutorABC 營銷副總、Appier 全球資深副總及 Gogolook 商務長，具備極深厚的 B2B 與 B2C 跨界實績。憑藉清大天使會前會長的早期生態號召力，以及透過《商業周刊》專欄與「商業操盤學院」社群持續輸出的系統化戰略方法論，他發起成立台灣首支 Operator-Led（操盤手型）創投基金，並建立Revenue Intelligence Architecture 增長架構。相較於傳統財務型創投，他聚焦早期增長與數位轉型，以「親身戰略賦能 + 資金挹注」雙輪驅動，協助新創團隊突破商業瓶頸、實現規模化出海。",
-    tags: ["操盤手型創投", "早期增長", "數位轉型", "規模化出海"],
-  },
+
+  // ───────── 10/15 投資人論壇 ─────────
+  // 《焦點創投 / CVC 分享》
   {
     slug: "eric-wu",
     name: "吳思本",
@@ -317,18 +361,6 @@ export const speakers: Speaker[] = [
     tags: ["Deep Tech", "國際鏈結"],
   },
   {
-    slug: "huang-junliang",
-    name: "黃峻樑",
-    title: "創辦人暨管理合夥人",
-    org: "峻盛資本",
-    day: "investor",
-    track: "institutional",
-    status: "confirmed",
-    photo: "/speakers/huang-junliang.jpg",
-    bio: "曾先後擔任美商惠普科技(Hewlett Packard)電子儀器事業群總經理、美商安捷倫科技(Agilent)全球半導體顧客業務及服務事業群副總裁、國巨股份有限公司執行長、蔚華科技董事長兼執行長，以及Cooler Master 訊凱國際副董事長兼執行長、卓毅資本執行長及合夥人等重要職務。曾為全球第一大量測儀器安捷倫科技最年輕的全球副總裁，負責全球半導體代工生產測試業務，並榮獲「惠普科技全球總裁品質獎」的肯定，更領導國巨股份有限公司轉虧為盈，成為台灣獲利最佳的上市公司及全球主要被動元件供應商，為一位精實管理專家。",
-    tags: ["硬科技", "精實管理"],
-  },
-  {
     slug: "sean-peng",
     name: "彭適辰",
     nameEn: "Sean Peng",
@@ -340,6 +372,18 @@ export const speakers: Speaker[] = [
     photo: "/speakers/sean-peng.jpg",
     bio: "美商中經合集團於1993年由劉宇環先生創立，是全球知名的跨境早期風險投資公司，專注於挖掘高科技與醫療健康領域的明星新創。其資深合夥人彭適辰先生（Sean Peng）在半導體與高科技創投領域深耕超過30年，憑藉深厚的產業洞察力，成功協助無數美國、中國大陸及台灣的早期企業規模化成長，在亞太創投圈享有盛譽。",
     tags: ["跨境創投", "半導體"],
+  },
+  {
+    slug: "huang-junliang",
+    name: "黃峻樑",
+    title: "創辦人暨管理合夥人",
+    org: "峻盛資本",
+    day: "investor",
+    track: "institutional",
+    status: "confirmed",
+    photo: "/speakers/huang-junliang.jpg",
+    bio: "曾先後擔任美商惠普科技(Hewlett Packard)電子儀器事業群總經理、美商安捷倫科技(Agilent)全球半導體顧客業務及服務事業群副總裁、國巨股份有限公司執行長、蔚華科技董事長兼執行長，以及Cooler Master 訊凱國際副董事長兼執行長、卓毅資本執行長及合夥人等重要職務。曾為全球第一大量測儀器安捷倫科技最年輕的全球副總裁，負責全球半導體代工生產測試業務，並榮獲「惠普科技全球總裁品質獎」的肯定，更領導國巨股份有限公司轉虧為盈，成為台灣獲利最佳的上市公司及全球主要被動元件供應商，為一位精實管理專家。",
+    tags: ["硬科技", "精實管理"],
   },
   {
     slug: "allen-kao",
@@ -367,48 +411,13 @@ export const speakers: Speaker[] = [
     bio: "Poseidon 畢業於台大資管系，曾於 MIT 媒體實驗室、微軟研究院等學術機構從事集體智慧與實境運算等研究，擁有 15 項國際設計及編程競賽獎項，也是全世界最高級別的德州撲克錦標賽選手。 2016 年他創辦 Outliers Fund，第一二期基金皆創下超過十倍 DPI 的驚人回報，過去兩年他以青年創投家身份受邀至海湖莊園、美國總統就職典禮演講，並參與籌備川普任內有關 AI、Crypto、Space 等行政命令。 今年他啟動兩支全新的創投基金：「Outliers太空基金」專注於投資美國的太空與國防軍事科技；「Outliers智能基金」專注於拓展人類智能的 AI、機器人、腦機接口、量子計算等等。Poseidon 是在美國硬科技投資方面具指標性的新生代創投家。",
     tags: ["太空與國防", "美國硬科技"],
   },
-  {
-    slug: "timothy-chen",
-    name: "陳恩平",
-    nameEn: "Timothy Chen",
-    title: "創辦人",
-    org: "Essence VC",
-    day: "investor",
-    track: "ai-investment",
-    status: "pending",
-    photo: "/speakers/timothy-chen.jpg",
-    bio: "陳恩平（Timothy Chen）是近年在美國矽谷極受矚目的台灣籍創投家，他是技術創業者出身，目前擔任Essence VC的創始合夥人暨管理合夥人。 陳恩平以 「個人創投」（Solo GP / Solo VC） 的模式獨立掌舵此基金，因精準投資多家 AI 與開源基礎設施的明星新創，在矽谷技術投資圈聲名大噪。",
-    tags: ["Solo GP", "AI 基礎設施"],
-  },
-  {
-    slug: "fang-junjie",
-    name: "方俊傑",
-    title: "創辦人暨執行長",
-    org: "AVA Angels",
-    day: "investor",
-    track: "ai-investment",
-    status: "confirmed",
-    photo: "/speakers/fang-junjie.png",
-    bio: "畢業於台大化工系及應力所。他曾任職於益鼎創投，累積逾 2,000 萬美元投資經驗，並曾赴矽谷 Venture University 取經。早年歷練於廣達電腦及醫材新創，具備豐富產業背景。2020 年創立 AVA，引進天使俱樂部模式，專注扶植台灣早期新創。",
-    tags: ["天使投資", "早期新創"],
-  },
-  {
-    slug: "jiang-minjun",
-    name: "江旻峻",
-    title: "總經理",
-    org: "台大校友創投 NTU.VC",
-    day: "investor",
-    track: "ai-investment",
-    status: "confirmed",
-    photo: "/speakers/jiang-minjun.jpg",
-    bio: "現任台大校友創投（NTU.VC）總經理、富旌創投（Addin Ventures）創始合夥人及飛拓投創執行合夥人。他畢業於台大商學研究所，擁有近十年豐富的風險投資與新創輔導經驗，曾任基石創投投資副總，並長期撰寫「布蘭登觀點」分享創投洞見。他專注於 AI、SaaS、垂直領域軟體及數據驅動的早期新創，擅長為團隊拆解商業模式與架構台美跨境的募資策略。身為台大校友創投總經理，他以社群為核心，積極推動「在地化」投資與校友資源鏈結，協助台灣新創打入國際市場。",
-    tags: ["AI / SaaS", "校友基金"],
-  },
+
+  // 《生醫投資趨勢》
   {
     slug: "minami-maeda",
     name: "前田南",
     nameEn: "Minami Maeda",
-    title: "創辦人、總裁暨副會長／台灣樂天醫藥股份有限公司 (Rakuten Medical Taiwan, Inc.) 董事長",
+    title: "總裁暨副會長／台灣樂天醫藥股份有限公司 (Rakuten Medical Taiwan, Inc.) 董事長",
     org: "樂天醫藥 Rakuten Medical",
     day: "investor",
     track: "biotech-investment",
@@ -430,6 +439,7 @@ export const speakers: Speaker[] = [
     tags: ["醫材", "盡職調查"],
   },
   {
+    // 0817 講者介紹頁標「已確認」，但四張議程表沒有排到他的時段 —— 落差待業主確認（見 TODO.md）
     slug: "lin-chuanen",
     name: "林傳恩",
     title: "總經理暨共同創辦人",
@@ -440,6 +450,83 @@ export const speakers: Speaker[] = [
     photo: "/speakers/lin-chuanen.jpg",
     bio: "林傳恩專注於醫療科技新創投資評估與投後管理。他同時擔任恩益資產管理董事長，負責家族辦公室全球多元資產配置，並兼任台灣大學SPARK新藥審查委員。他畢業於台灣大學生命科學系學士和碩士，並取得美國加州柏克萊大學Haas商學院創投高階經理人認證，同時具備CFP國際認證高級理財規劃顧問證照。曾任德商台灣百多力（BIOTRONIK）心臟節律管理事業群副總監，擁有逾10年醫材經驗及全球IBHRE心律不整治療醫材認證，深具生醫與金融跨域之專業背景。",
     tags: ["醫療科技", "家族辦公室"],
+  },
+
+  // 《變革中的早期投資機構》
+  {
+    slug: "fang-junjie",
+    name: "方俊傑",
+    title: "創辦人暨執行長",
+    org: "AVA Angels",
+    day: "investor",
+    track: "early-stage",
+    status: "confirmed",
+    photo: "/speakers/fang-junjie.png",
+    bio: "畢業於台大化工系及應力所。他曾任職於益鼎創投，累積逾 2,000 萬美元投資經驗，並曾赴矽谷 Venture University 取經。早年歷練於廣達電腦及醫材新創，具備豐富產業背景。2020 年創立 AVA，引進天使俱樂部模式，專注扶植台灣早期新創。",
+    tags: ["天使投資", "早期新創"],
+  },
+  {
+    slug: "jian-dan",
+    name: "簡丹",
+    title: "董事長暨合夥人",
+    org: "台安傑天使俱樂部（Taipei Angels）",
+    day: "investor",
+    track: "early-stage",
+    status: "confirmed",
+    photo: "/speakers/jian-dan.jpg",
+    bio: "她擁有深厚的科技產業背景，在國際級 IT 企業累積逾二十年的高階管理與銷售實戰歷練。過去曾歷任 Check Point 台灣區總經理、Autodesk 台灣區總經理，以及台灣微軟 (Microsoft) 業務經理等要職。加入台安傑後，她憑藉敏銳的市场洞察與跨國企業治理經驗，積極協助具潛力的早期新創團隊健全商務模式、媒合關鍵資源，是推動台灣早期天使投資與新創生態圈國際化發展的重要女性領導者。",
+    tags: ["天使投資", "早期新創", "跨國企業治理", "女性領導者"],
+  },
+  {
+    slug: "lin-bo-han",
+    name: "林伯翰",
+    nameEn: "Boice Lin",
+    title: "創辦人",
+    org: "一春資本",
+    day: "investor",
+    track: "early-stage",
+    status: "confirmed",
+    photo: "/speakers/lin-bo-han.jpg",
+    bio: "林伯翰（Boice Lin）為台灣少數兼具「跨國外商高管」與「三家知名新創出場/上市」實戰經驗的指標性操盤手。職涯由 IBM 起步，曾任電通 Merkle 台灣總經理，並先後擔任 TutorABC 營銷副總、Appier 全球資深副總及 Gogolook 商務長，具備極深厚的 B2B 與 B2C 跨界實績。憑藉清大天使會前會長的早期生態號召力，以及透過《商業周刊》專欄與「商業操盤學院」社群持續輸出的系統化戰略方法論，他發起成立台灣首支 Operator-Led（操盤手型）創投基金，並建立Revenue Intelligence Architecture 增長架構。相較於傳統財務型創投，他聚焦早期增長與數位轉型，以「親身戰略賦能 + 資金挹注」雙輪驅動，協助新創團隊突破商業瓶頸、實現規模化出海。",
+    tags: ["操盤手型創投", "早期增長", "數位轉型", "規模化出海"],
+  },
+
+  // 《半導體硬科技投資趨勢 Panel》
+  {
+    slug: "qu-zhi-hao",
+    name: "瞿志豪",
+    title: "台灣區合夥人（前 ITIC 創新工業技術移轉總經理）",
+    org: "橡子園創投（Acorn Campus）",
+    day: "investor",
+    track: "deep-tech",
+    status: "confirmed",
+    photo: "/speakers/qu-zhi-hao.png",
+    bio: "瞿志豪現任 ITIC 創新工業技術移轉總經理、TBMC 臺灣生物醫藥製造董事兼財務長，以及 Reizawa Capital 合夥人。他畢業於台大電機系與研究所，並擁有台大 EMBA 碩士學位。\n\n他是台灣著名的連續創業家與資深創投，1997 年共同創辦和信超媒體GigaMedia並出任執行副總兼技術長，成功帶領公司於美國 NASDAQ 上市。隨後他轉任創投，曾任橡子園創投Acorn Campus合夥人與生醫產業創新推動方案執行中心創新長。現亦於台大兼任教授，憑藉跨越科技、網路與生醫領域的深厚資歷，積極培育新創人才。",
+    tags: ["連續創業家", "創投", "技術移轉", "生醫產業"],
+  },
+  {
+    slug: "pan-yi-fan",
+    name: "潘逸凡",
+    title: "合夥人暨投資審議委員",
+    org: "豐新資本",
+    day: "investor",
+    track: "deep-tech",
+    status: "confirmed",
+    photo: "/speakers/pan-yi-fan.png",
+    bio: "潘逸凡現任豐新資本合夥人暨投資審議委員，具25年策略顧問、投資銀行與私募股權經驗。畢業於臺灣大學工商管理系，並取得美國密西根大學MBA。曾任麥肯錫專案經理、德意志銀行研究部董事及東森集團策略長，主導跨境併購與投後整合；目前聚焦半導體、人工智慧、智慧移動、電動車、機器人、軟體、資安與消費科技等成長型投資賽道。",
+    tags: ["私募股權", "跨境併購", "半導體", "成長型投資"],
+  },
+  {
+    slug: "ju-zhi-yuan",
+    name: "鞠志遠",
+    title: "創辦人兼CEO",
+    org: "歐姆佳科技",
+    day: "investor",
+    track: "deep-tech",
+    status: "confirmed",
+    photo: "/speakers/ju-zhi-yuan.jpg",
+    bio: "為台灣大學電信所太空科學博士，深耕太空與通訊領域長達20年。他創辦的歐姆佳科技，核心產品為射頻半導體自動測試設備（ATE），主要應用於半導體測試供應鏈中的高速射頻晶片量測與多站點並行測試，能大幅降低40%的測試成本。在國發會主辦的「創業綻放計畫」中，歐姆佳從數千組隊伍中脫穎而出，成功挺進全國前30強決賽，展現出卓越的高科技產業實力與市場競爭力。",
+    tags: ["射頻半導體", "自動測試設備", "太空與通訊", "半導體測試"],
   },
 ];
 
@@ -464,10 +551,6 @@ export function getSpeaker(slug: string): Speaker | undefined {
 
 export function speakersByDay(day: ForumKey): Speaker[] {
   return speakers.filter((s) => s.day === day);
-}
-
-export function speakersByTrack(track: string): Speaker[] {
-  return speakers.filter((s) => s.track === track);
 }
 
 export const speakerCount = speakers.length;

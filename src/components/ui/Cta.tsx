@@ -99,10 +99,16 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
 
   const base =
     "btn-glass group inline-flex items-center justify-center gap-2 rounded-pill font-medium transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-glow";
+  /* ⚠️ lg 同樣要在 sm 以下收窄，理由與上面 gradient 那組一模一樣 ——
+     站內兩處把兩顆 lg 並排：/sponsor 的「來信洽談贊助(192px) + 了解年會(136px)」＝ 344px、
+     /review 的「查看本屆資訊(172px) + 講者陣容連結(139px)」＝ 327px，
+     但手機可用寬只有 280–350px（.shell 左右各 20px）→ 兩顆都會被擠成上下排。
+     收窄後 /sponsor ＝ 150+98+16 ＝ 264px、/review ＝ 130+133+16 ＝ 279px，320px 都放得下。
+     lg 的非 gradient 使用者全站只有那三顆，改這裡不會波及別處。 */
   const sizes = {
     sm: "px-4 py-2 text-sm",
     md: "px-6 py-3 text-[18px]",
-    lg: "px-8 py-4 text-base",
+    lg: "px-4 py-3 text-[16px] sm:px-8 sm:py-4 sm:text-base",
   };
   // hover 一律不改底色（使用者指定）—— 回饋交給掃光、邊框提亮與 .btn-glass:hover 的陰影抬升。
   const variants = {

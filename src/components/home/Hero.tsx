@@ -9,7 +9,7 @@ import { Cta } from "@/components/ui/Cta";
 import { OrbitRing } from "@/components/home/OrbitRing";
 import { FlipClock } from "@/components/home/FlipClock";
 import { HomeBackdrop } from "@/components/home/HomeBackdrop";
-import { isPublicRoute } from "@/lib/config";
+import { isPublicRoute, REGISTER_URL } from "@/lib/config";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -228,23 +228,31 @@ export function Hero() {
                 ⚠️ 若日後又在漸層裡加入淺藍／青色，就不能再鏡像 ——
                 高亮度的青色一旦轉到文字底下，白字會掉到約 1.9:1。
                 ⚠️ 這裡若寫回不透明的 hex，會蓋掉半透明底 → 玻璃效果整個失效。 */}
-            {/* 目的地跟著可見分頁走：/about、/tickets 隱藏期間改導向仍公開的頁面，
-                避免首頁主要 CTA 把人送到看不到的分頁（見 lib/config 的 PUBLIC_ROUTES）。 */}
+            {/* 主 CTA 用 REGISTER_URL 而非寫死 "#tickets"：那個常數的角色就是「報名去向」
+                （見 lib/config 的註解），目前值是首頁報名資訊那一節的錨點，Accupass 連結一填
+                就會自動改指過去，不必再回來改 Hero。Nav 與 TicketPlans 也都吃同一個常數。
+
+                ⚠️ 刻意用原生錨點跳轉，不做 JS 平滑捲動，兩個理由：
+                1. globals.css 已載明全站不開 scroll-behavior: smooth（會害「回上一頁」的
+                   位置還原先跳到最上方再滑下來）。
+                2. 首頁加了完整議程表之後，Hero 到報名資訊之間隔了創辦人的話 + 兩天 35 列議程，
+                   距離接近十個螢幕高 —— 平滑捲動要滑一兩秒、中間畫面糊成一片，比直接跳更差。
+                導覽列的偏移由 globals.css 的 scroll-padding-top: 88px 處理。 */}
             <Cta
-              href={isPublicRoute("/about") ? "/about" : "/speakers"}
+              href={REGISTER_URL}
               variant="gradient"
               size="lg"
               className="[background-image:linear-gradient(110deg,rgb(76_104_212/0.78)_0%,rgb(139_110_216/0.64)_100%)]"
             >
-              查看詳情
+              立即報名
             </Cta>
             <Cta
-              href={isPublicRoute("/tickets") ? "/tickets" : "/review"}
+              href="/review"
               variant="gradient"
               size="lg"
               className="[background-image:linear-gradient(110deg,rgb(139_110_216/0.78)_0%,rgb(76_104_212/0.64)_100%)]"
             >
-              {isPublicRoute("/tickets") ? "立即報名" : "歷屆回顧"}
+              歷屆回顧
             </Cta>
           </motion.div>
 

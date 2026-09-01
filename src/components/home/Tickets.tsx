@@ -1,6 +1,5 @@
-import { Info, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { event } from "@/data/event";
-import { REGISTER_READY } from "@/lib/config";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Reveal } from "@/components/ui/Reveal";
 import { TicketPlans } from "@/components/home/TicketPlans";
@@ -30,7 +29,6 @@ export function Tickets() {
             <SectionHead
               eyebrow="REGISTRATION"
               ghost="TICKETS"
-              ghostClassName="top-0"
               align="center"
               title="報名資訊"
               lead={`${event.dateLabelLong}，${event.timeLabel}。兩日論壇於同一場地舉行。`}
@@ -60,28 +58,6 @@ export function Tickets() {
           <Reveal>
             <TicketPlans />
           </Reveal>
-
-          {!REGISTER_READY && (
-            <Reveal delay={0.24}>
-              <div className="glass relative mx-auto mt-8 max-w-xl overflow-hidden rounded-card px-5 py-4">
-                <p className="relative inline-flex items-start gap-2 text-[17px] leading-relaxed text-ink-3">
-                  <Info size={14} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
-                  <span>
-                    報名連結尚未開放。開放後將同步公布於本頁與{" "}
-                    <a
-                      href="https://www.facebook.com/groups/1169347120648777/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-orbit-sky underline-offset-4 hover:underline"
-                    >
-                      台灣新創投資社團
-                    </a>
-                    。
-                  </span>
-                </p>
-              </div>
-            </Reveal>
-          )}
         </div>
       </section>
     </>

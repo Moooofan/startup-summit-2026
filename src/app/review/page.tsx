@@ -169,9 +169,11 @@ export default function ReviewPage() {
                   查看本屆資訊
                 </Cta>
               )}
+              {/* 手機縮一級：這顆與左邊的 lg 按鈕要並排在同一列，
+                  兩者相加必須壓在 280px（320px 螢幕的可用寬）以內，見 ui/Cta.tsx 的算式 */}
               <Link
                 href="/speakers"
-                className="inline-flex items-center gap-1.5 px-2 py-4 text-sm text-ink-2 transition-colors hover:text-ink"
+                className="inline-flex items-center gap-1.5 px-2 py-4 text-[16px] text-ink-2 transition-colors hover:text-ink sm:text-sm"
               >
                 本屆講者陣容
                 <ArrowUpRight size={15} />
