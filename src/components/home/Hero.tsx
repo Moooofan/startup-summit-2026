@@ -132,7 +132,13 @@ export function Hero() {
                 boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
               }}
             />
-            <h1 className="relative whitespace-nowrap text-[clamp(2.1rem,7vw,4.9rem)] font-black leading-[1.02] tracking-[0.18em] text-ink">
+            {/* ⚠️ max-[359px] 這段是給 320px 級距（iPhone SE 1 代）的救命索，不是設計調整：
+                clamp 的下限 2.1rem（33.6px）搭配 whitespace-nowrap 與 tracking-[0.18em]，
+                八個字實際要 8 × 1.18em ≈ 317px，但 320px 螢幕扣掉 .shell 左右各 20px 只剩 280px
+                → 標題右緣被本 section 的 overflow-hidden 裁掉（不會有捲軸，所以很容易漏看）。
+                降到 1.7rem 後約 257px，留 23px 餘裕。360px 以上不觸發，視覺完全不變 ——
+                刻意不改 clamp 下限，因為那會連帶把 360–393px 的常見手機一起縮小。 */}
+            <h1 className="relative whitespace-nowrap text-[clamp(2.1rem,7vw,4.9rem)] font-black leading-[1.02] tracking-[0.18em] text-ink max-[359px]:text-[1.7rem]">
               <span>台灣新創投資年會</span>
             </h1>
           </motion.div>

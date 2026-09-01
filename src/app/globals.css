@@ -351,6 +351,11 @@
       transparent 100%
     );
   }
+  /* 羽化寬度是固定 rem，螢幕越窄佔比越高：4rem × 2 = 128px，在 320px 螢幕吃掉四成畫面，
+     兩側各只剩一張半可讀的卡。小螢幕收到 2.25rem（72px，約 22%）。 */
+  @media (max-width: 480px) {
+    .marquee-viewport { --marquee-fade: 2.25rem; }
+  }
   @media (min-width: 768px) {
     .marquee-viewport { --marquee-fade: 7rem; }
   }

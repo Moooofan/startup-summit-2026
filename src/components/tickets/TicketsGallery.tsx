@@ -164,7 +164,7 @@ export function TicketsGallery() {
           onClick={() => go(page - 1)}
           disabled={page === 0}
           aria-label={page > 0 ? `上一頁：${PAGE_NAMES[page - 1]}` : "上一頁"}
-          className="btn-glass grid h-9 w-9 place-items-center rounded-full border border-line bg-white/55 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
+          className="btn-glass grid h-10 w-10 place-items-center rounded-full border border-line bg-white/55 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
         >
           <ChevronLeft size={18} aria-hidden />
         </button>
@@ -177,6 +177,10 @@ export function TicketsGallery() {
               className={cn(
                 "h-2 rounded-full transition-all duration-300",
                 // 頁碼點只有 2px 高，掛 .btn-glass 沒有意義（微光會被 overflow 裁掉）→ 只降不透明度
+                // ⚠️ 可點區用 ::after 往上下各撐 16px（8 + 32 = 40px）：這是每個斷點都看得到的
+                //    主要換頁控制，8px 高的觸控目標在手機上按不到。用偽元素而非加 padding／改高度，
+                //    是為了不動視覺位置（這一列是 absolute bottom-6，改高度會把點往上推）。
+                "relative after:absolute after:-inset-x-0.5 after:-inset-y-4 after:content-['']",
                 i === page ? "w-7 bg-[rgb(76_104_212/0.76)]" : "w-2 bg-ink/20 hover:bg-ink/40"
               )}
             />
@@ -186,7 +190,7 @@ export function TicketsGallery() {
           onClick={() => go(page + 1)}
           disabled={page === 2}
           aria-label={page < 2 ? `下一頁：${PAGE_NAMES[page + 1]}` : "下一頁"}
-          className="btn-glass grid h-9 w-9 place-items-center rounded-full border border-line bg-white/55 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
+          className="btn-glass grid h-10 w-10 place-items-center rounded-full border border-line bg-white/55 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
         >
           <ChevronRight size={18} aria-hidden />
         </button>

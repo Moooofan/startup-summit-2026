@@ -14,15 +14,20 @@ type Forum = (typeof forums)[number];
 const MAX_CHIPS = 4;
 
 /**
- * 首頁兩天論壇卡。桌機維持 lg 兩張並排 grid；手機（< lg）改成 /tickets 式
+ * 首頁兩天論壇卡。md 以上兩張並排 grid；md 以下改成 /tickets 式
  * 「重疊卡片＋滑動切換」牌堆（原本是上下堆疊，業主要求比照 /tickets）。
  * 兩種版型共用同一個 ForumCard。
+ *
+ * ⚠️ 牌堆邊界原本是 lg，等於 768–1023px 的平板也吃手機版 —— SwipeDeck 的卡片寬是
+ *    w-[76vw] max-w-[360px]，在 900px 寬的平板上會變成一張 360px 的卡置中、兩側大片空白。
+ *    改成 md 之後 768px 時每張卡約 332px，扣掉 md:p-10 還有 252px，日期列（約 181px）放得下。
+ *    票卡（TicketPlans）的邊界是 sm 而非 md，因為票卡內容量少得多、更早就排得下兩張。
  */
 export function ForumCards() {
   return (
     <div className="mt-14 md:mt-16">
-      {/* 桌機：兩張並排 */}
-      <div className="hidden gap-6 lg:grid lg:grid-cols-2">
+      {/* 平板與桌機：兩張並排 */}
+      <div className="hidden gap-6 md:grid md:grid-cols-2">
         {forums.map((f, i) => (
           <Reveal key={f.key} delay={0.12 + i * 0.08}>
             <ForumCard f={f} />
@@ -32,7 +37,7 @@ export function ForumCards() {
 
       {/* 手機：重疊牌堆，滑動或點側卡、或點下方頁籤切換 */}
       <SwipeDeck
-        className="lg:hidden"
+        className="md:hidden"
         items={forums}
         getKey={(f) => f.key}
         labels={forums.map((f) => f.name)}
@@ -47,7 +52,10 @@ function ForumCard({ f }: { f: Forum }) {
   const shownTracks = dayTracks.slice(0, MAX_CHIPS);
   const moreCount = dayTracks.length - shownTracks.length;
   return (
-    <article className="glass group relative h-full overflow-hidden rounded-card p-8 transition-colors duration-500 hover:border-black/20 md:p-10">
+    /* ⚠️ 內距在牌堆版必須降到 p-6：卡片寬是 76vw，320px 螢幕只有 243px，
+       p-8（左右各 32px）之後內容區剩 179px，但下方日期列（Day 1 + 10 / 14（三））要 181px
+       → 「Day 1」會被擠成兩行（rwd-320-forumcard.png 拍到過）。p-6 之後內容區 195px。 */
+    <article className="glass group relative h-full overflow-hidden rounded-card p-6 transition-colors duration-500 hover:border-black/20 sm:p-8 md:p-10">
       <div
         aria-hidden
         className={`pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full blur-3xl transition-opacity duration-500 group-hover:opacity-80 ${
@@ -58,7 +66,10 @@ function ForumCard({ f }: { f: Forum }) {
       />
       <div className="relative">
         <div className="flex items-baseline justify-between gap-4">
-          <span className="font-display text-xs tracking-[0.22em] text-ink-4">{f.label}</span>
+          {/* whitespace-nowrap 是保險：這行是「Day 1」這種短標，一旦被擠到換行會變成兩層樓 */}
+          <span className="font-display whitespace-nowrap text-xs tracking-[0.22em] text-ink-4">
+            {f.label}
+          </span>
           <span className="font-display text-2xl font-semibold text-ink-2">
             {f.dateLabel}
             <span className="ml-2 text-sm text-ink-4">（{f.weekday}）</span>

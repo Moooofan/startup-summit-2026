@@ -31,8 +31,12 @@ export function SwipeDeck<T>({
 
   // 橫向滑動切卡；位移太小視為點擊。垂直捲動留給頁面（touchAction: pan-y）。
   const swipeX = useRef<number | null>(null);
+  // 這一次手勢有沒有構成「滑動」。滑動結束後瀏覽器仍會補一個 click，
+  // 若不擋掉，側卡上的切換鈕會再切一次 → 一個手勢跳兩張。每次 pointerdown 歸零。
+  const swiped = useRef(false);
   const onDown = (e: React.PointerEvent) => {
     swipeX.current = e.clientX;
+    swiped.current = false;
   };
   const onUp = (e: React.PointerEvent) => {
     const s = swipeX.current;
@@ -40,6 +44,7 @@ export function SwipeDeck<T>({
     if (s == null) return;
     const dx = e.clientX - s;
     if (Math.abs(dx) < 40) return;
+    swiped.current = true;
     setActive((a) => clamp(a + (dx < 0 ? 1 : -1)));
   };
 
@@ -60,16 +65,34 @@ export function SwipeDeck<T>({
           return (
             <div
               key={getKey(item, i)}
-              onClick={() => !isActive && setActive(i)}
-              aria-hidden={!isActive}
               className={cn(
                 // 同格重疊 → 容器高＝最高卡；卡片本身窄於容器並置中，側卡才有空間 peek
-                "col-start-1 row-start-1 mx-auto w-[76vw] max-w-[360px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-                isActive ? "z-20 opacity-100" : "z-10 cursor-pointer opacity-40"
+                "relative col-start-1 row-start-1 mx-auto w-[76vw] max-w-[360px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+                isActive ? "z-20 opacity-100" : "z-10 opacity-40"
               )}
               style={{ transform: `translateX(${side * 58}%) scale(${isActive ? 1 : 0.82})` }}
             >
-              {renderItem(item, isActive)}
+              {/* ⚠️ 側卡整段 inert，不是只掛 aria-hidden：卡片內的連結（票卡的報名鈕）
+                  原本照樣進得了 Tab 順序 —— 鍵盤使用者會聚焦到一顆看不見、只露一角的按鈕。
+                  inert 同時移除焦點與無障礙樹曝光；再加 pointer-events-none，讓點擊確實落到
+                  下面那顆覆蓋鈕上（inert 子樹本身的指標事件行為各家瀏覽器不一致，不要依賴）。 */}
+              <div inert={!isActive} className={cn(!isActive && "pointer-events-none")}>
+                {renderItem(item, isActive)}
+              </div>
+
+              {/* 切換入口：原本只有 <div> 上的 onClick，鍵盤完全沒有路徑。
+                  改成覆蓋在側卡上的真按鈕 → 滑鼠點側卡、鍵盤 Tab 到它按 Enter 都能切換。 */}
+              {!isActive && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (swiped.current) return; // 滑動後補發的 click，不重複切換
+                    setActive(i);
+                  }}
+                  aria-label={labels?.[i] ? `切換到${labels[i]}` : `切換到第 ${i + 1} 張`}
+                  className="absolute inset-0 z-10 cursor-pointer rounded-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-glow"
+                />
+              )}
             </div>
           );
         })}

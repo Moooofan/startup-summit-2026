@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
 
 /* ==========================================================================
@@ -46,9 +46,16 @@ export function OrbitRingCss({ className = "" }: { className?: string }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
-  useEffect(() => {
+  /* ⚠️ 必須是 useLayoutEffect，而且要在 observe 之前先同步量一次：
+     scale 初始值是 1，等於「用 DESIGN=560 的原尺寸畫」。手機上容器只有約 370px，
+     ResizeObserver 回呼是下一幀才到 → 中間那一幀整個環超出容器，被 Hero 的
+     overflow-hidden 裁掉，表現為進場閃一下。改成 layout effect 就在瀏覽器繪製前完成縮放。
+     本元件只在 OrbitRing 決策為 "css" 後才掛載（決策在 useEffect 裡），不參與 SSR，
+     所以用 useLayoutEffect 不會有 server 端警告。 */
+  useLayoutEffect(() => {
     const el = wrapRef.current;
     if (!el || typeof ResizeObserver === "undefined") return;
+    setScale(el.clientWidth / DESIGN);
     const ro = new ResizeObserver(([e]) => setScale(e.contentRect.width / DESIGN));
     ro.observe(el);
     return () => ro.disconnect();

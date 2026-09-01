@@ -54,7 +54,12 @@ export function FlipClock({ target }: { target: string }) {
     </span>
   );
   return (
-    <div className="font-display flex items-start gap-2 text-[clamp(1.7rem,3.6vw,2.4rem)] font-bold tabular-nums sm:gap-3">
+    /* ⚠️ max-[359px]:gap-1 是 320px 級距的救命索：
+       clamp 的 3.6vw 在 755px 以下都低於 1.7rem 下限 → 這一列在所有手機上都是固定寬度、
+       且沒有換行（8 張牌 200px + 牌內 gap 16px + 三個冒號 ≈ 18px + 外層 gap-2 48px ≈ 282px），
+       但 320px 螢幕扣掉 .shell 左右各 20px 只剩 280px → 溢出。
+       只縮外層間距（48px → 24px）就能塞下，不動字級，360px 以上維持原樣。 */
+    <div className="font-display flex items-start gap-2 text-[clamp(1.7rem,3.6vw,2.4rem)] font-bold tabular-nums max-[359px]:gap-1 sm:gap-3">
       <Group value={t?.days} label="天" />
       {colon}
       <Group value={t?.hours} label="時" />
