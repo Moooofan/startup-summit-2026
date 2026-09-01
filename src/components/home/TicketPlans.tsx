@@ -1,14 +1,16 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { event, forums } from "@/data/event";
+import { event, forums, lowestGroupPrice } from "@/data/event";
 import { REGISTER_URL, REGISTER_READY } from "@/lib/config";
 import { Cta } from "@/components/ui/Cta";
 import { SwipeDeck } from "@/components/ui/SwipeDeck";
+import { TicketGroupTable } from "@/components/tickets/TicketGroupTable";
 import { cn } from "@/lib/utils";
 
 const included = [
-  "兩日論壇全場次入場",
+  // 單日票：一張票只進一天的場（業主 2026/9 定案），文案不可再寫「兩日」
+  "單日論壇全場次入場",
   "現場茶敘與交流時段",
   "品牌攤位區自由參觀",
   "活動紀念手冊",
@@ -26,8 +28,9 @@ const plans = [
   },
   {
     key: "full",
-    name: "全天票",
-    nameEn: "Full Pass",
+    // 單日票制下不再有「全天票」。簡報價目表寫「正常票」，業主 2026/9 指定站上用「一般票」
+    name: "一般票",
+    nameEn: "Regular",
     price: event.tickets.full,
     original: null as number | null,
     note: "報名開放期間皆可購買",
@@ -41,6 +44,11 @@ type Plan = (typeof plans)[number];
  * 首頁票種。桌機維持兩張並排 grid；手機改成 /tickets 式「重疊卡片＋滑動切換」牌堆
  * （原本手機是上下堆疊，業主要求比照 /tickets 左右重疊、可滑動）。
  * 兩種版型共用同一個 TicketCard，用 sm 斷點各自顯示其一。
+ *
+ * 票卡只顯示 1 人價，四段團報級距交給下方的 TicketGroupTable（業主 2026/9 定案）。
+ * ⚠️ 加了對照表之後，外層 #tickets-plans 的高度會超過一屏 —— 這會讓
+ *    ScrollSnapController 把它判為「長內容區塊」（isShort 為 false）而交還原生捲動，
+ *    要捲到底才跳下一節。這是控制器的既定行為、不是壞掉，別為此把表格搬走。
  */
 export function TicketPlans() {
   return (
@@ -60,6 +68,8 @@ export function TicketPlans() {
         labels={plans.map((p) => p.name)}
         renderItem={(p) => <TicketCard plan={p} />}
       />
+
+      <TicketGroupTable />
     </div>
   );
 }
@@ -93,11 +103,13 @@ function TicketCard({ plan }: { plan: Plan }) {
           {plan.nameEn.toUpperCase()}
         </p>
 
+        {/* 主價一律是「1 人價」；團報級距在下方對照表，這裡只帶一句最低價當鉤子 */}
         <p className="mt-5 flex items-baseline gap-2 sm:mt-6">
           <span className="font-display text-[2.1rem] font-semibold leading-none text-ink sm:text-[2.6rem]">
             {event.tickets.currency}
             {plan.price.toLocaleString()}
           </span>
+          <span className="text-[17px] text-ink-4">／人</span>
         </p>
         {plan.original && (
           <p className="mt-2 text-sm text-ink-4">
@@ -108,6 +120,17 @@ function TicketCard({ plan }: { plan: Plan }) {
             </span>
           </p>
         )}
+        <p className="mt-2 text-[17px] text-ink-3">
+          團報最低{" "}
+          <span className="font-medium text-ink-2">
+            {event.tickets.currency}
+            {(plan.key === "early"
+              ? lowestGroupPrice.earlyBird
+              : lowestGroupPrice.full
+            ).toLocaleString()}
+            ／人
+          </span>
+        </p>
         <p className="mt-3 text-[17px] leading-relaxed text-ink-3">{plan.note}</p>
 
         <ul className="mt-3.5 grid gap-1.5 border-t border-line-soft pt-3.5 sm:mt-4 sm:pt-4">
@@ -125,8 +148,11 @@ function TicketCard({ plan }: { plan: Plan }) {
           </Cta>
         </div>
 
+        {/* 兩行都必要：上行說明有哪兩場，下行說明它們是分開賣的 ——
+            只留上行的話，這張卡在單日票語意下會被讀成「一張票通兩天」。 */}
         <p className="mt-3 text-[17px] text-ink-4">
           {forums.map((f) => `${f.dateLabel.replace(/ /g, "")} ${f.name}`).join("　|　")}
+          <span className="mt-1 block">兩天分開售票、票價相同</span>
         </p>
       </div>
     </div>

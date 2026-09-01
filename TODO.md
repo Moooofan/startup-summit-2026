@@ -7,7 +7,8 @@
 - [ ] **Accupass 報名連結** — `lib/config.ts` 的 `REGISTER_URL`，並把 `REGISTER_READY` 改 `true`
 - [ ] **正式網域** — `lib/config.ts` 的 `site.url`（目前是佔位的 startup-summit.tw）
 - [ ] **官方聯絡信箱** — 目前用主辦人個人 Gmail `hm8827@gmail.com`
-- [ ] **票種細節** — 是否有單日票／VIP 票／團體票；早鳥截止日
+- [ ] **票種細節** — 單日票與四段團報級距已於 2026/9 由業主提供價目表（見 `data/event.ts`
+      的 `tickets.groupTiers`）。仍待確認：早鳥截止日、兩天合購是否另有優惠、是否有 VIP 票
 - [ ] **退票與轉讓規定** — `data/faq.ts` 最後一題目前寫「將隨報名開放公布」
 - [ ] **是否直播／錄影** — `data/faq.ts` 同上
 - [ ] **小型展位價格** — 簡報總覽頁寫 NT$18,000、細項頁寫 NT$50,000，**互相矛盾**。
