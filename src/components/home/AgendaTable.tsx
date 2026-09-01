@@ -169,8 +169,36 @@ function AgendaCards({ items }: { items: AgendaItem[] }) {
   );
 }
 
+/** 連續多列都沒有講題時，把佔位字併成一格，別讓同一句話在同一欄裡重複印。
+ *  回傳與 items 等長的陣列：大於 0 = 由這一列輸出 <td rowSpan>，0 = 這一列不輸出主題欄。
+ *
+ *  分段標題列與休息列會中斷連續段 —— 它們用 colSpan 佔掉了主題欄，rowSpan 跨不過去。
+ *  做法與 review/PastSpeakerRoster 的 groupByTopic() 同一套。 */
+function tbaRowSpans(items: AgendaItem[]): number[] {
+  const spans = new Array<number>(items.length).fill(0);
+  let i = 0;
+  while (i < items.length) {
+    const it = items[i];
+    if (it.type !== "talk" || it.topic) {
+      i += 1;
+      continue;
+    }
+    let j = i + 1;
+    while (j < items.length) {
+      const next = items[j];
+      if (next.type !== "talk" || next.topic) break;
+      j += 1;
+    }
+    spans[i] = j - i;
+    i = j;
+  }
+  return spans;
+}
+
 /** md 以上：三欄表格 */
 function AgendaGrid({ items }: { items: AgendaItem[] }) {
+  const tbaSpans = tbaRowSpans(items);
+
   return (
     <div className="mt-8 hidden overflow-hidden rounded-card border border-line-soft md:block">
       <table className="w-full border-collapse text-left">
@@ -227,14 +255,18 @@ function AgendaGrid({ items }: { items: AgendaItem[] }) {
                 <td className="px-5 py-4">
                   <Time time={item.time} duration={item.duration} />
                 </td>
-                <td
-                  className={cn(
-                    "px-5 py-4 text-[18px] leading-relaxed",
-                    item.topic ? "text-ink" : "text-ink-4"
-                  )}
-                >
-                  {item.topic ?? TBA}
-                </td>
+                {/* 沒講題時只由連續段的第一列輸出一個跨列的格，其餘各列不輸出本欄。
+                    align-middle 是拿來蓋掉 <tr> 的 align-top，讓佔位字垂直置中在整段上。 */}
+                {item.topic ? (
+                  <td className="px-5 py-4 text-[18px] leading-relaxed text-ink">{item.topic}</td>
+                ) : tbaSpans[i] > 0 ? (
+                  <td
+                    rowSpan={tbaSpans[i]}
+                    className="px-5 py-4 align-middle text-[18px] leading-relaxed text-ink-4"
+                  >
+                    {TBA}
+                  </td>
+                ) : null}
                 <td className="px-5 py-4">
                   <Speakers list={item.speakers} />
                 </td>
