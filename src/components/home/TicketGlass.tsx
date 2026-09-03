@@ -17,7 +17,8 @@ import type { Mesh } from "three";
    由自帶的 <Lightformer> 現場打光（完全離線，不拉外部 HDRI）。
    材質對齊首頁玻璃圓環（OrbitGlass）：亮面 resin（低 roughness、ior 1.5、色散）
    + 藍色折射底 background → 通透玻璃感（非霧面奶白）。WebGL 透射看不到 DOM，
-   故用淺藍 background 當折射底（別移除，否則變黑）。玻璃板隨時間緩慢擺動 → 反光低頻掃過。
+   故用 background 當折射底（別移除，否則變黑）；深色版該值已改成深藍量體，
+   理由見 Slab 內的註解。玻璃板隨時間緩慢擺動 → 反光低頻掃過。
    ========================================================================== */
 
 // 亮面藍調樹脂（比霧面版更清透，貼近圓環質感）
@@ -50,10 +51,13 @@ function Slab({
   const { viewport } = useThree();
   const frames = useRef(0);
 
-  // 折射底色（淺藍，貼近圓環藍調但淺一點 → 玻璃感 + 疊字可讀）
-  const bg = useMemo(() => new THREE.Color(featured ? "#ccd8f2" : "#d6e0f6"), [featured]);
-  const bodyColor = featured ? "#eef2ff" : "#f3f6ff";
-  const attColor = featured ? "#9aa9e6" : "#b3c0ee";
+  // 折射底色 —— 這是「透過玻璃看到的世界」，不是卡片底色。
+  // 淺色版用淺藍（#ccd8f2）配白霧底；深色版照抄的話票卡會變成兩塊發亮的白板，
+  // 而卡片上的文字現在是白的 → 直接讀不到。改成主視覺的深藍量體，
+  // 玻璃仍有折射與色散，但整體壓在背景之下、讓白字浮上來。
+  const bg = useMemo(() => new THREE.Color(featured ? "#152a6e" : "#101f52"), [featured]);
+  const bodyColor = featured ? "#dcefff" : "#e6efff";
+  const attColor = featured ? "#2b5cff" : "#3b62d8";
 
   const w = viewport.width;
   const h = viewport.height;
@@ -95,12 +99,13 @@ function Slab({
 function Lights() {
   return (
     <Environment resolution={64} frames={1}>
-      {/* 藍色調、對比較強的光片 → 玻璃面上有清楚的高光帶（掃過即成低頻反光） */}
-      <Lightformer form="rect" intensity={5} color="#ffffff" position={[0, 2.5, 3]} scale={[5, 1.6, 1]} />
-      <Lightformer form="rect" intensity={3} color="#9cc6ff" position={[-3.5, 1, 2]} scale={[2, 5, 1]} />
-      <Lightformer form="rect" intensity={3} color="#b4adff" position={[3.5, -1, 2]} scale={[2, 5, 1]} />
-      <Lightformer form="ring" intensity={2.6} color="#d6f4ff" position={[0, 0, -5]} scale={6} />
-      <Lightformer form="circle" intensity={2} color="#e7ecff" position={[-2, -2.5, 3]} scale={3} />
+      {/* 光片改吃主視覺的青與電光藍。深色版把主光拉強（5 → 5.6）：
+          底色壓深之後，玻璃面全靠這幾道高光帶顯形，光一弱票卡就變成一塊死板。 */}
+      <Lightformer form="rect" intensity={5.6} color="#ffffff" position={[0, 2.5, 3]} scale={[5, 1.6, 1]} />
+      <Lightformer form="rect" intensity={3.2} color="#8cf5ff" position={[-3.5, 1, 2]} scale={[2, 5, 1]} />
+      <Lightformer form="rect" intensity={3.2} color="#a58cf5" position={[3.5, -1, 2]} scale={[2, 5, 1]} />
+      <Lightformer form="ring" intensity={2.8} color="#5f8cff" position={[0, 0, -5]} scale={6} />
+      <Lightformer form="circle" intensity={2} color="#d6f7ff" position={[-2, -2.5, 3]} scale={3} />
     </Environment>
   );
 }
@@ -125,7 +130,7 @@ export default function TicketGlass({
       style={{ background: "transparent" }}
       onCreated={({ gl }) => {
         gl.setClearColor(0x000000, 0);
-        gl.toneMappingExposure = 1.25;
+        gl.toneMappingExposure = 1.15; // 深底上曝光過高會讓票卡泛白、吃掉白字
       }}
     >
       <ambientLight intensity={0.6} />

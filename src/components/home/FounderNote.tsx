@@ -33,7 +33,7 @@ export function FounderNote() {
                   aria-hidden
                   className="absolute -inset-3 rounded-[22px] bg-gradient-to-br from-orbit-sky/25 via-transparent to-orbit-rose/25 blur-xl"
                 />
-                <div className="relative overflow-hidden rounded-[18px] border border-black/10">
+                <div className="relative overflow-hidden rounded-[18px] border border-white/14">
                   <Image
                     src={founderProfile.photo}
                     alt={`${founderProfile.name}｜${founderProfile.title}`}
@@ -60,8 +60,8 @@ export function FounderNote() {
           {/* 右：正常流動的內文 —— 平順上下捲動，不吸附。到底再滾一下就吸去講者頁。 */}
           <div className="pb-[16vh] pt-12 lg:pb-[18vh] lg:pt-[calc(88px+7vh)]">
             <Reveal delay={0.08}>
-              <p className="mb-4 flex items-center gap-3 text-[16px] font-medium tracking-[0.24em] text-gold">
-                <span aria-hidden className="h-px w-8 bg-gold/60" />
+              <p className="mb-4 flex items-center gap-3 text-[16px] font-medium tracking-[0.24em] text-aqua">
+                <span aria-hidden className="h-px w-8 bg-aqua/60" />
                 FOUNDER&apos;S NOTE
               </p>
               <h2 className="text-[clamp(1.75rem,4.2vw,2.5rem)] font-bold leading-tight text-ink">
@@ -117,7 +117,7 @@ export function FounderNote() {
             </Reveal>
 
             <Reveal delay={0.32}>
-              <div className="mt-12 border-t border-black/8 pt-8">
+              <div className="mt-12 border-t border-white/10 pt-8">
                 <h3 className="text-xs tracking-[0.2em] text-ink-4">經歷</h3>
                 <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
                   {founderProfile.career.map((c) => (

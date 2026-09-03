@@ -74,7 +74,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
       <article className="grain relative overflow-hidden pb-24 pt-[112px] md:pt-[148px]">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-[16%] -top-[14%] h-[46vw] max-h-[620px] w-[46vw] max-w-[620px] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.2)_0%,transparent_66%)]"
+          className="pointer-events-none absolute -right-[16%] -top-[14%] h-[46vw] max-h-[620px] w-[46vw] max-w-[620px] rounded-full bg-[radial-gradient(circle,rgb(43_92_255/0.30)_0%,transparent_66%)]"
         />
 
         <div className="shell relative">
@@ -99,7 +99,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                     aria-hidden
                     className="absolute -inset-2.5 rounded-[20px] bg-gradient-to-br from-orbit-sky/25 via-transparent to-orbit-rose/25 blur-lg"
                   />
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-[16px] border border-black/10 bg-surface">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-[16px] border border-white/14 bg-surface">
                     <Image
                       src={s.photo}
                       alt={`${s.name}｜${s.org} ${s.title}`}
@@ -142,7 +142,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                   /* /agenda 隱藏期間指回首頁的議程錨點（HomeAgenda 掛了 id="agenda"） */
                   <Link
                     href={isPublicRoute("/agenda") ? "/agenda" : "/#agenda"}
-                    className="inline-flex items-center gap-2 rounded-pill border border-black/10 bg-black/[0.04] px-4 py-1.5 text-[17px] text-ink-2 transition-colors hover:border-black/25 hover:text-ink"
+                    className="inline-flex items-center gap-2 rounded-pill border border-white/14 bg-white/[0.07] px-4 py-1.5 text-[17px] text-ink-2 transition-colors hover:border-white/30 hover:text-ink"
                   >
                     {slot.group ?? slot.topic ?? forum?.name}
                     {slot.time && <span className="text-ink-4">・{slot.time}</span>}
@@ -151,7 +151,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                   </Link>
                 )}
 
-                <h1 className="mt-6 text-[clamp(2rem,5vw,3rem)] font-black leading-tight text-ink">
+                <h1 className="text-kv mt-6 text-[clamp(2rem,5vw,3rem)] font-semibold leading-tight">
                   {s.name}
                   {s.nameEn && (
                     <span className="font-display ml-3 text-[0.45em] font-medium tracking-wide text-ink-3">
@@ -164,7 +164,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                 <p className="mt-1 text-[18px] text-ink-2">{s.title}</p>
 
                 {s.status === "pending" && (
-                  <p className="mt-5 inline-block rounded-lg border border-black/8 bg-black/[0.03] px-4 py-2 text-[17px] text-ink-3">
+                  <p className="mt-5 inline-block rounded-lg border border-white/10 bg-white/[0.05] px-4 py-2 text-[17px] text-ink-3">
                     出席確認中，最終陣容以官方公告為準
                   </p>
                 )}
@@ -174,7 +174,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                     {s.tags.map((t) => (
                       <li
                         key={t}
-                        className="rounded-pill border border-black/8 px-3 py-1 text-[17px] text-ink-3"
+                        className="rounded-pill border border-white/10 px-3 py-1 text-[17px] text-ink-3"
                       >
                         {t}
                       </li>
@@ -184,7 +184,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
               </Reveal>
 
               <Reveal delay={0.12}>
-                <div className="mt-10 space-y-5 border-t border-black/8 pt-10">
+                <div className="mt-10 space-y-5 border-t border-white/10 pt-10">
                   {paragraphs.length > 0 ? (
                     paragraphs.map((p, i) => (
                       <p key={i} className="text-[18px] leading-[2] text-ink-2 md:text-base">
@@ -198,7 +198,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
               </Reveal>
 
               <Reveal delay={0.18}>
-                <div className="mt-12 border-t border-black/8 pt-10">
+                <div className="mt-12 border-t border-white/10 pt-10">
                   {isPublicRoute("/tickets") && <Cta href="/tickets">報名參加{forum?.name}</Cta>}
                 </div>
               </Reveal>
@@ -209,13 +209,13 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
           <Reveal delay={0.1}>
             <nav
               aria-label="其他講者"
-              className="mt-20 grid gap-4 border-t border-black/8 pt-10 sm:grid-cols-2"
+              className="mt-20 grid gap-4 border-t border-white/10 pt-10 sm:grid-cols-2"
             >
               {prev ? (
                 <Link
                   href={`/speakers/${prev.slug}`}
                   replace
-                  className="glass group flex items-center gap-4 rounded-card p-5 transition-colors hover:border-black/20"
+                  className="glass group flex items-center gap-4 rounded-card p-5 transition-colors hover:border-white/25"
                 >
                   <ArrowLeft size={16} className="shrink-0 text-ink-4" />
                   <span className="min-w-0">
@@ -233,7 +233,7 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                 <Link
                   href={`/speakers/${next.slug}`}
                   replace
-                  className="glass group flex items-center justify-end gap-4 rounded-card p-5 text-right transition-colors hover:border-black/20 sm:col-start-2"
+                  className="glass group flex items-center justify-end gap-4 rounded-card p-5 text-right transition-colors hover:border-white/25 sm:col-start-2"
                 >
                   <span className="min-w-0">
                     <span className="block text-[16px] text-ink-4">下一位</span>

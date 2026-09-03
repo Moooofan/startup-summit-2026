@@ -69,7 +69,9 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
           {/* 手機沒有主軸（橫向空間不足），用短色條保留時間往下走的暗示 */}
           <span
             aria-hidden
-            className="mb-3 block h-[3px] w-10 rounded-full bg-orbit/45 md:hidden"
+            /* 原本寫 bg-orbit/45 —— @theme 裡沒有裸的 --color-orbit（只有 orbit-blue / orbit-sky …），
+               Tailwind 會靜默丟掉這個類別，這條色條長期是隱形的。改吃主視覺的青。 */
+            className="mb-3 block h-[3px] w-10 rounded-full bg-orbit-sky/60 md:hidden"
           />
           {/*
             軸線節點直接掛在年份上，用 top-1/2 + -translate-y-1/2 對齊年份自己的垂直中心。
@@ -81,7 +83,9 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
           <p className="font-display relative text-[clamp(2.6rem,7vw,4.2rem)] font-bold leading-none text-orbit">
             <span
               aria-hidden
-              className="pointer-events-none absolute top-1/2 hidden h-[11px] w-[11px] -translate-y-1/2 rounded-full bg-orbit ring-4 ring-[rgb(76_104_212/0.14)] md:left-[-48px] md:block lg:left-[-62px]"
+              /* 同上：bg-orbit 對不到 token → 節點一直沒有顏色。改吃主視覺的青，
+                 與外圈 ring 的藍霧一起，才看得出是「軸線上的一個點」。 */
+              className="pointer-events-none absolute top-1/2 hidden h-[11px] w-[11px] -translate-y-1/2 rounded-full bg-orbit-sky ring-4 ring-[rgb(96_140_255/0.22)] md:left-[-48px] md:block lg:left-[-62px]"
             />
             {e.year}
           </p>
@@ -103,7 +107,7 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
         {/* 右欄：精選照片 ＋ 重點數字 */}
         <div className="mt-8 md:mt-0">
           {e.heroPhoto ? (
-            <figure className="group relative overflow-hidden rounded-card border border-black/8">
+            <figure className="group relative overflow-hidden rounded-card border border-white/10">
               <Image
                 src={e.heroPhoto}
                 alt={`${e.year} 年第${CN_NO[e.no - 1]}屆台灣新創投資年會現場`}
@@ -118,7 +122,7 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
             /* 缺照片 → 品牌色漸層＋年份大字，不開天窗 */
             <div
               aria-hidden
-              className="grid aspect-[16/9] w-full place-items-center rounded-card border border-black/8 bg-[linear-gradient(135deg,rgb(76_104_212/0.18),rgb(176_68_122/0.14))]"
+              className="grid aspect-[16/9] w-full place-items-center rounded-card border border-white/10 bg-[linear-gradient(135deg,rgb(43_92_255/0.30),rgb(140_110_255/0.22))]"
             >
               <span className="font-display text-[clamp(2.4rem,8vw,4rem)] font-bold text-white/70">
                 {e.year}
@@ -141,7 +145,7 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
 
           {/* 待補提示 —— 上線前這些應全部消失 */}
           {isPending && (
-            <details className="mt-8 rounded-lg border border-dashed border-black/15 bg-black/[0.02] px-4 py-3">
+            <details className="mt-8 rounded-lg border border-dashed border-white/18 bg-white/[0.035] px-4 py-3">
               <summary className="cursor-pointer text-[17px] font-medium text-ink-3">
                 此屆有 {e.pending!.length} 項資料待補（僅設計階段顯示）
               </summary>
@@ -173,7 +177,7 @@ export function EditionTimeline({ editions }: { editions: Edition[] }) {
         className="pointer-events-none absolute inset-y-0 left-[5px] hidden w-px md:block lg:left-[7px]"
         style={{
           background:
-            "linear-gradient(180deg, transparent 0%, rgb(76 104 212 / 0.42) 10%, rgb(76 104 212 / 0.42) 90%, transparent 100%)",
+            "linear-gradient(180deg, transparent 0%, rgb(110 150 255 / 0.5) 10%, rgb(110 150 255 / 0.5) 90%, transparent 100%)",
         }}
       />
       {editions.map((e, i) => (

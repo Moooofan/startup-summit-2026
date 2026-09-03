@@ -49,15 +49,18 @@ export function SectionHead({
               Montserrat 的字身在行框內約落在 0.06em–0.76em，視覺中心約在 51%，
               所以 top-1/2 + -translate-y-1/2 就能跟左對齊版對齊，且字級隨視窗縮放時不會再跑掉。 */}
           {eyebrow && (
-            <p className="mb-3 flex items-center justify-center gap-3 text-[16px] font-medium tracking-[0.24em] text-gold md:absolute md:left-1 md:top-1/2 md:mb-0 md:-translate-y-1/2 md:justify-start">
-              <span aria-hidden className="h-px w-8 bg-gold/60" />
+            <p className="mb-3 flex items-center justify-center gap-3 text-[16px] font-medium tracking-[0.24em] text-aqua md:absolute md:left-1 md:top-1/2 md:mb-0 md:-translate-y-1/2 md:justify-start">
+              <span aria-hidden className="h-px w-8 bg-aqua/60" />
               {eyebrow}
             </p>
           )}
         </div>
         <Heading
           className={cn(
-            "relative z-10 text-[clamp(1.75rem,4.2vw,2.75rem)] font-bold leading-tight text-ink",
+            // text-kv：與 Hero 主標同一套的近白→淡藍漸層（見 globals.css）。
+            // 字重 semibold 而非 bold —— 主視覺的標題是細筆畫，全站大標一起減一級；
+            // 但不跟 Hero 主標一樣降到 light，區塊標題只有 28–44px，light 在深底上會虛掉。
+            "text-kv relative z-10 text-[clamp(1.75rem,4.2vw,2.75rem)] font-semibold leading-tight",
             ghost && "md:-mt-8 lg:-mt-10"
           )}
         >
@@ -86,12 +89,12 @@ export function SectionHead({
       )}
       <div className="relative">
         {eyebrow && (
-          <p className="relative -left-1 -top-3 mb-3 flex items-center gap-3 text-[16px] font-medium tracking-[0.24em] text-gold">
-            <span aria-hidden className="h-px w-8 bg-gold/60" />
+          <p className="relative -left-1 -top-3 mb-3 flex items-center gap-3 text-[16px] font-medium tracking-[0.24em] text-aqua">
+            <span aria-hidden className="h-px w-8 bg-aqua/60" />
             {eyebrow}
           </p>
         )}
-        <Heading className="text-[clamp(1.75rem,4.2vw,2.75rem)] font-bold leading-tight text-ink">
+        <Heading className="text-kv text-[clamp(1.75rem,4.2vw,2.75rem)] font-semibold leading-tight">
           {title}
         </Heading>
         {lead && (

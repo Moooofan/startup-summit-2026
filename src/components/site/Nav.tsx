@@ -72,17 +72,17 @@ export function Nav() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         scrolled
-          ? "border-b border-black/8 bg-bg/90 backdrop-blur-md"
+          ? "border-b border-white/10 bg-bg/90 backdrop-blur-md"
           : "border-b border-transparent bg-gradient-to-b from-bg/90 to-transparent"
       )}
     >
       <nav className="shell flex h-[72px] items-center justify-between gap-6 md:h-[88px]">
         <Link href="/" className="group flex items-center gap-3" aria-label={event.fullName}>
           <Image
-            src="/logo-mark.png"
+            src="/logo-mark-v2.png"
             alt=""
-            width={236}
-            height={224}
+            width={472}
+            height={448}
             priority
             className="h-7 w-auto transition-transform duration-300 group-hover:scale-105 md:h-8"
           />
@@ -118,7 +118,7 @@ export function Nav() {
           {showRegisterCta && (
             <Link
               href={registerHref}
-              className="btn-glass btn-glass-on-dark hidden rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:border-white/55 md:inline-flex"
+              className="btn-glass btn-glass-on-dark hidden rounded-pill border border-white/35 bg-[rgb(60_110_255/0.85)] px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:border-white/55 md:inline-flex"
             >
               立即報名
             </Link>
@@ -146,7 +146,7 @@ export function Nav() {
           bg-bg/95 就在導覽列正下方畫出一條白霧橫條 —— 因為容器是 lg:hidden，只有手機／平板看得到。 */}
       <div
         className={cn(
-          "grid border-t border-black/8 bg-bg/95 backdrop-blur-md transition-[grid-template-rows] duration-500 lg:hidden",
+          "grid border-t border-white/10 bg-bg/95 backdrop-blur-md transition-[grid-template-rows] duration-500 lg:hidden",
           open ? "grid-rows-[1fr]" : "grid-rows-[0fr] border-t-transparent"
         )}
       >
@@ -162,7 +162,7 @@ export function Nav() {
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="block border-b border-black/5 py-4 text-[18px] text-ink-2 transition-colors hover:text-ink"
+                  className="block border-b border-white/8 py-4 text-[18px] text-ink-2 transition-colors hover:text-ink"
                 >
                   {l.label}
                 </Link>
@@ -172,7 +172,7 @@ export function Nav() {
               <li className="pt-5">
                 <Link
                   href={registerHref}
-                  className="btn-glass btn-glass-on-dark block rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] py-3.5 text-center text-[18px] font-semibold"
+                  className="btn-glass btn-glass-on-dark block rounded-pill border border-white/35 bg-[rgb(60_110_255/0.85)] py-3.5 text-center text-[18px] font-semibold"
                 >
                   立即報名
                 </Link>

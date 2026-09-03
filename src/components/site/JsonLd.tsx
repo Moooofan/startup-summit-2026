@@ -74,7 +74,10 @@ export function EventJsonLd({
         eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
         inLanguage: "zh-Hant-TW",
         url: site.url,
-        image: [`${site.url}/kv/kv-full.png`],
+        /* 2026/9 換主視覺：原本指向 /kv/kv-full.png，那是舊的淺色 KV（方案 C 的玻璃光環），
+           站上已經不長那樣了。改指新主視覺裁出的 /og-2026.jpg，
+           搜尋結果的縮圖才會和實際站台一致。 */
+        image: [`${site.url}/og-2026.jpg`],
         location: {
           "@type": "Place",
           name: `${event.venue.name} ${event.venue.detail}`,

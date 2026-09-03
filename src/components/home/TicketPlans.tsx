@@ -76,25 +76,25 @@ export function TicketPlans() {
 
 /**
  * 票卡：平面雙層相框（沿用 /tickets）——
- * 外白框 + 內襯漸層（左上藍 orbit-sky → 右下紫 #6d47c4），內含票價、含括權益與報名鈕。
+ * 外白框 + 內襯漸層（左上藍 orbit-sky → 右下紫 #a98bff），內含票價、含括權益與報名鈕。
  */
 function TicketCard({ plan }: { plan: Plan }) {
   return (
     <div
       className={cn(
-        "h-full rounded-[20px] border bg-white/85 p-2.5 shadow-[0_28px_70px_-28px_rgba(24,34,66,0.4)] sm:p-3",
+        "h-full rounded-[20px] border bg-[rgb(9_16_54/0.72)] p-2.5 shadow-[0_28px_70px_-28px_rgba(1,4,24,0.78)] sm:p-3",
         plan.featured ? "border-brand-lift/45" : "border-line"
       )}
     >
       <div
         className={cn(
           // flex-col + 下方 CTA 區 mt-auto：兩張卡等高時把「報名」鈕推到底端 → 左右卡水平對齊。
-          "relative flex h-full flex-col overflow-hidden rounded-[13px] border bg-gradient-to-br from-orbit-sky/18 via-white/45 to-[#6d47c4]/18 p-5 sm:p-7",
+          "relative flex h-full flex-col overflow-hidden rounded-[13px] border bg-gradient-to-br from-orbit-sky/16 via-[rgb(12_22_70/0.5)] to-[#a98bff]/16 p-5 sm:p-7",
           plan.featured ? "border-brand-lift/30" : "border-line-soft"
         )}
       >
         {plan.featured && (
-          <span className="absolute right-4 top-4 inline-flex items-center rounded-pill border-2 border-gold/60 bg-gold/15 px-3 py-1 text-[16px] font-bold text-gold sm:right-5 sm:top-5">
+          <span className="absolute right-4 top-4 inline-flex items-center rounded-pill border-2 border-aqua/60 bg-aqua/18 px-3 py-1 text-[16px] font-bold text-aqua sm:right-5 sm:top-5">
             限量
           </span>
         )}

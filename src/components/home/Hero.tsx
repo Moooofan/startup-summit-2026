@@ -41,8 +41,11 @@ export function Hero() {
 
         {/* 底層光暈 */}
         <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute -right-[10%] top-[-14%] h-[70vw] max-h-[900px] w-[70vw] max-w-[900px] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.12)_0%,transparent_62%)]" />
-          <div className="absolute -left-[18%] bottom-[-22%] h-[60vw] max-h-[760px] w-[60vw] max-w-[760px] rounded-full bg-[radial-gradient(circle,rgb(176_68_122/0.20)_0%,transparent_65%)]" />
+          {/* 兩團光的位置沿用原構圖，色相改吃主視覺：右上是中藍量體、左下是深靛的餘光。
+              左下那團原本是洋紅 —— 新主視覺整張圖沒有暖色，改成低彩度的藍紫，
+              才不會在深靛底上冒出一塊突兀的粉。 */}
+          <div className="absolute -right-[10%] top-[-14%] h-[70vw] max-h-[900px] w-[70vw] max-w-[900px] rounded-full bg-[radial-gradient(circle,rgb(43_92_255/0.22)_0%,transparent_62%)]" />
+          <div className="absolute -left-[18%] bottom-[-22%] h-[60vw] max-h-[760px] w-[60vw] max-w-[760px] rounded-full bg-[radial-gradient(circle,rgb(96_78_210/0.18)_0%,transparent_65%)]" />
           <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-bg to-transparent" />
         </div>
 
@@ -81,14 +84,19 @@ export function Hero() {
             initial="hidden"
             animate="show"
             custom={0}
-            className="flex items-center gap-3"
+            className="flex"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-gold" />
-            </span>
-            <span className="font-display text-[clamp(0.95rem,2.3vw,1.45rem)] font-medium tracking-[0.3em] text-gold">
-              {event.editionLabel}・{event.subtitle}
+            {/* 主視覺左上角那顆「第四屆」徽章：圓角膠囊、銀紫漸層底、細亮框。
+                原本是「金色小圓點 + 純文字」，改成徽章是為了對上 KV 的第一個視覺物件。
+                w-fit + inline-flex：膠囊要貼齊文字寬度，不能撐滿整列。 */}
+            <span className="inline-flex w-fit items-center gap-2.5 rounded-pill border border-white/25 px-4 py-1.5 backdrop-blur-sm [background-image:linear-gradient(120deg,rgb(143_142_173/0.34)_0%,rgb(253_254_249/0.16)_48%,rgb(108_113_171/0.28)_100%)]">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-aqua opacity-60" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-aqua" />
+              </span>
+              <span className="font-display text-[clamp(0.85rem,2vw,1.15rem)] font-medium tracking-[0.28em] text-ink">
+                {event.editionLabel}・{event.subtitle}
+              </span>
             </span>
           </motion.div>
 
@@ -100,12 +108,13 @@ export function Hero() {
             custom={1}
             className="mt-4 flex flex-wrap items-baseline gap-x-6 gap-y-2"
           >
-            {/* 2026 用淺色（brand-glow 淺靛藍）把搶眼的漸層讓給下方主標語；
-                日期則加深（ink-2）保住可讀性 —— 淺色在淺底上對比不足。 */}
-            <span className="font-display text-[clamp(2.2rem,6vw,3.5rem)] font-semibold tracking-[0.22em] text-brand-glow">
+            {/* 深色版：2026 改吃主視覺的青色高光（#8cf5ff，全圖最亮的那一點），
+                日期退到 ink-2 —— 兩者的亮度差本身就是階層，不必再靠字重拉開。
+                字重一併降到 light，對齊 KV 的細筆畫拉丁字。 */}
+            <span className="font-display text-[clamp(2.2rem,6vw,3.5rem)] font-light tracking-[0.24em] text-aqua">
               2026
             </span>
-            <span className="font-display text-[clamp(1.1rem,3.4vw,1.6rem)] font-medium tracking-wide text-ink-2">
+            <span className="font-display text-[clamp(1.1rem,3.4vw,1.6rem)] font-light tracking-[0.14em] text-ink-2">
               {event.dateLabel}
             </span>
           </motion.div>
@@ -125,11 +134,13 @@ export function Hero() {
               style={{
                 // 半透明霧面片：在文字之下、玻璃環之上 → 遮住後方的環，
                 // 環的邊緣轉到標題後方時被擋住、轉出去再顯現。backdrop-blur 為加成（部分情境有效）。
+                // 深色版必須改成「壓暗」而非淺色版的「提亮」：在深靛底上疊一片淺霧
+                // 會變成一塊發亮的橢圓，比它要遮的玻璃環還搶眼。
                 background:
-                  "radial-gradient(72% 62% at 50% 50%, rgba(214,226,255,0.20) 0%, rgba(214,226,255,0.11) 46%, rgba(214,226,255,0.03) 74%, transparent 100%)",
+                  "radial-gradient(72% 62% at 50% 50%, rgba(4,9,42,0.62) 0%, rgba(4,9,42,0.42) 46%, rgba(4,9,42,0.14) 74%, transparent 100%)",
                 backdropFilter: "blur(9px)",
                 WebkitBackdropFilter: "blur(9px)",
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.10)",
+                boxShadow: "inset 0 1px 0 rgba(160,190,255,0.12)",
               }}
             />
             {/* max-[359px] 這段是給 320px 級距（iPhone SE 1 代）的救命索，不是設計調整：
@@ -138,10 +149,30 @@ export function Hero() {
                 → 標題右緣被本 section 的 overflow-hidden 裁掉（不會有捲軸，所以很容易漏看）。
                 降到 1.7rem 後約 257px，留 23px 餘裕。360px 以上不觸發，視覺完全不變 ——
                 刻意不改 clamp 下限，因為那會連帶把 360–393px 的常見手機一起縮小。 */}
-            <h1 className="relative whitespace-nowrap text-[clamp(2.1rem,7vw,4.9rem)] font-black leading-[1.02] tracking-[0.18em] text-ink max-[359px]:text-[1.7rem]">
+            {/* 字重 font-light（300）而非原本的 font-black：主視覺的中文標題是細筆畫、
+                大字距的處理，粗黑體會把 KV 的空氣感整個吃掉。
+                中文是等寬字（全形 1em advance），改字重不影響行寬 ——
+                上面那條 320px 的救命索算式因此完全不受影響，仍然成立。
+                tracking 維持 0.18em，不要調大：0.22em 會讓 360px 螢幕溢出約 8px。 */}
+            <h1 className="text-kv relative whitespace-nowrap text-[clamp(2.1rem,7vw,4.9rem)] font-light leading-[1.02] tracking-[0.18em] max-[359px]:text-[1.7rem]">
               <span>台灣新創投資年會</span>
             </h1>
           </motion.div>
+
+          {/* 主視覺中文標題正下方那行拉丁字。KV 有這一行，站上原本沒有 ——
+              它是把 KV 的「中文主標 + 英文副標」雙層鎖定搬過來，不是新增文案：
+              字串直接取自 event.nameEn，沒有另外編。
+              手機容不容得下交給 wrap（tracking 也跟著收）：43 個字元在 320px 螢幕
+              放不下一行，硬用 nowrap 會被 section 的 overflow-hidden 裁掉右緣。 */}
+          <motion.p
+            variants={rise}
+            initial="hidden"
+            animate="show"
+            custom={2.3}
+            className="font-display mt-3 max-w-xl text-[clamp(0.66rem,1.7vw,0.86rem)] font-light leading-[2] tracking-[0.18em] text-ink-3 sm:tracking-[0.26em]"
+          >
+            {event.nameEn.toUpperCase()}
+          </motion.p>
 
           {/* 主標語（取代原本的 tagline 句）：點出「社群出身、年度最大規模」的定位。
               custom 用 2.6（非整數）刻意夾在標題 2 與下段 3 之間，讓進場多這一段仍不會把
@@ -153,9 +184,9 @@ export function Hero() {
             custom={2.6}
             className="mt-4 w-fit text-[clamp(1.05rem,3.4vw,1.55rem)] font-semibold leading-snug tracking-[0.04em]"
             style={{
-              // 沿用原本 2026 的斜向光軌漸層（藍→紫→粉）；w-fit 讓漸層貼齊文字寬度、
-              // 色階分佈與 2026 一致，而非攤在整行。
-              backgroundImage: "linear-gradient(118deg,#6d8bd6 0%,#8f7fd0 55%,#c58bb0 100%)",
+              // 主視覺色帶：青 #8cf5ff → 電光藍 → logo 紫。
+              // w-fit 讓漸層貼齊文字寬度，色階分佈才不會攤在整行變成一片單色。
+              backgroundImage: "linear-gradient(118deg,#8cf5ff 0%,#6f9bff 52%,#b48cf5 100%)",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",
@@ -206,7 +237,7 @@ export function Hero() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 underline-offset-4 transition-colors hover:text-ink-2 hover:underline"
             >
-              <MapPin size={15} className="shrink-0 text-gold" />
+              <MapPin size={15} className="shrink-0 text-aqua" />
               <span>
                 {event.venue.name}　{event.venue.detail}
               </span>
@@ -221,12 +252,12 @@ export function Hero() {
             className="mt-5 flex flex-wrap items-center gap-4"
           >
             {/* 兩顆刻意互為鏡像（藍→紫 / 紫→藍），用色向做出主次差異。
-                alpha 同樣由 0.78 遞減到 0.64，右端最透。
+                alpha 同樣由 0.88 遞減到 0.72，右端最透。
 
-                之所以能安全反轉，是因為兩端都是靖藍 #4c68d4 與紫 #8b6ed8，
-                白字對比 3.4:1 / 2.9:1 都還撐得住。
-                若日後又在漸層裡加入淺藍／青色，就不能再鏡像 ——
-                高亮度的青色一旦轉到文字底下，白字會掉到約 1.9:1。
+                之所以能安全反轉，是因為兩端都是電光藍 #2b5cff 與 logo 紫 #7e5cf0，
+                在深靛底上合成後白字對比 6.1:1 / 7.0:1，兩個方向都過 AA。
+                若日後在漸層裡加入主視覺那支青色 #8cf5ff 就不能再鏡像 ——
+                高亮度的青色一旦轉到文字底下，白字會掉到 2:1 上下。
                 這裡若寫回不透明的 hex，會蓋掉半透明底 → 玻璃效果整個失效。 */}
             {/* 主 CTA 用 REGISTER_URL 而非寫死 "#tickets"：那個常數的角色就是「報名去向」
                 （見 lib/config 的註解），目前值是首頁報名資訊那一節的錨點，Accupass 連結一填
@@ -242,7 +273,7 @@ export function Hero() {
               href={REGISTER_URL}
               variant="gradient"
               size="lg"
-              className="[background-image:linear-gradient(110deg,rgb(76_104_212/0.78)_0%,rgb(139_110_216/0.64)_100%)]"
+              className="[background-image:linear-gradient(110deg,rgb(43_92_255/0.88)_0%,rgb(126_92_240/0.72)_100%)]"
             >
               立即報名
             </Cta>
@@ -250,7 +281,7 @@ export function Hero() {
               href="/review"
               variant="gradient"
               size="lg"
-              className="[background-image:linear-gradient(110deg,rgb(139_110_216/0.78)_0%,rgb(76_104_212/0.64)_100%)]"
+              className="[background-image:linear-gradient(110deg,rgb(126_92_240/0.88)_0%,rgb(43_92_255/0.72)_100%)]"
             >
               歷屆回顧
             </Cta>
@@ -261,7 +292,7 @@ export function Hero() {
             initial="hidden"
             animate="show"
             custom={6}
-            className="mt-6 border-t border-black/8 pt-4"
+            className="mt-6 border-t border-white/10 pt-4"
           >
             <p className="mb-3 text-[16px] tracking-[0.24em] text-ink-4">距離開幕</p>
             <FlipClock target={event.startDate} />

@@ -22,14 +22,17 @@ const R_JITTER = [0, 10, -8, 6, -12, 8, -4, 12, -6, 4, -10];
 const LEN_JITTER = [0, -8, 6, -10, 4, -6, 10, -4, 8, -12, 6];
 const SKIP = new Set([7]);
 
+/* 每片碎塊的亮／暗色對。2026/9 換主視覺：原本第 5–7 組是粉、蜜桃、橘（#FFD0E7 /
+   #F0A891 / #FFC27A），在深靛底上會變成三塊突兀的暖光。全部換成 KV 取樣的
+   青 → 電光藍 → logo 紫，暗端也一併加深，讓碎塊在深底上仍分得出正反面。 */
 const GRADS: [string, string][] = [
-  ["#D6F4FF", "#16233f"],
+  ["#D6F7FF", "#0a1740"],
   ["#7FB2FF", "#001a5e"],
   ["#B4ADFF", "#123a9e"],
-  ["#D7BFFF", "#4a2b8e"],
-  ["#FFD0E7", "#7a2e6b"],
-  ["#F0A891", "#7a2a20"],
-  ["#FFC27A", "#a13f6e"],
+  ["#C8B6FF", "#3a2b8e"],
+  ["#8CF5FF", "#0b3a63"],
+  ["#9FD8FF", "#10245e"],
+  ["#A58CF5", "#2b1c72"],
   ["#B6C1FF", "#0b4d63"],
   ["#8FB0E0", "#0c1730"],
   ["#A7C4FF", "#12224a"],
@@ -160,8 +163,8 @@ export function OrbitRingCss({ className = "" }: { className?: string }) {
       aria-hidden
       className={`pointer-events-none relative aspect-square w-full ${className}`}
     >
-      <div className="absolute inset-[10%] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.28)_0%,transparent_62%)] blur-2xl" />
-      <div className="absolute inset-[26%] rounded-full bg-[radial-gradient(circle,rgb(176_68_122/0.16)_0%,transparent_66%)] blur-2xl" />
+      <div className="absolute inset-[10%] rounded-full bg-[radial-gradient(circle,rgb(43_92_255/0.40)_0%,transparent_62%)] blur-2xl" />
+      <div className="absolute inset-[26%] rounded-full bg-[radial-gradient(circle,rgb(140_110_255/0.24)_0%,transparent_66%)] blur-2xl" />
 
       <div className="absolute inset-0 grid place-items-center">
         <div

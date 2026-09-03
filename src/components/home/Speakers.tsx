@@ -14,13 +14,13 @@ type Forum = (typeof forums)[number];
 const accent: Record<Forum["accent"], { text: string; glow: string; line: string }> = {
   sky: {
     text: "text-orbit-sky",
-    glow: "rgb(94 174 220 / 0.10)",
+    glow: "rgb(70 190 245 / 0.14)",
     line: "via-orbit-sky/70",
   },
   violet: {
-    text: "text-[#6d47c4]",
-    glow: "rgb(182 185 220 / 0.10)",
-    line: "via-[#6d47c4]/60",
+    text: "text-[#a98bff]",
+    glow: "rgb(150 130 255 / 0.14)",
+    line: "via-[#a98bff]/60",
   },
 };
 
@@ -39,7 +39,7 @@ function SpeakerCard({
         href={`/speakers/${s.slug}`}
         className="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-glow"
       >
-        <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-black/8 bg-surface">
+        <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-white/10 bg-surface">
           <Image
             src={s.photo}
             alt={`${s.name}｜${s.org} ${s.title}`}
@@ -119,7 +119,7 @@ function ForumNode({ f, order, count }: { f: Forum; order: number; count: number
             <span aria-hidden className="h-px w-8 bg-current/50 md:hidden" />
             {f.label} · {f.nameEn}
           </p>
-          <h3 className="mt-5 text-[clamp(2.25rem,8vw,5rem)] font-bold leading-[1.05] text-ink">
+          <h3 className="text-kv mt-5 text-[clamp(2.25rem,8vw,5rem)] font-light leading-[1.05]">
             {f.name}
           </h3>
           <p className="mt-6 font-display text-lg text-ink-2 md:text-xl">
@@ -171,7 +171,7 @@ export function Speakers() {
       <div className="snap-panel relative flex items-center overflow-hidden pb-4 pt-24 md:min-h-[100svh] md:pb-0 md:pt-0">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-[10%] top-[12%] h-[34vw] max-h-[440px] w-[34vw] max-w-[440px] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.08)_0%,transparent_66%)]"
+          className="pointer-events-none absolute -right-[10%] top-[12%] h-[34vw] max-h-[440px] w-[34vw] max-w-[440px] rounded-full bg-[radial-gradient(circle,rgb(43_92_255/0.16)_0%,transparent_66%)]"
         />
         <div className="shell relative w-full">
           <Reveal>
@@ -207,7 +207,7 @@ export function Speakers() {
             <div className="snap-panel pb-16 pt-6 md:min-h-[100svh]">
               <div className="shell">
                 <Reveal>
-                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-black/8 pb-5">
+                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-white/10 pb-5">
                     <span className={cn("font-display text-xs font-semibold tracking-[0.2em]", a.text)}>
                       {f.label}
                     </span>

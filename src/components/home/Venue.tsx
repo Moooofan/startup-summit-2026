@@ -72,10 +72,10 @@ export function Venue() {
                 className="pointer-events-none absolute -right-14 -top-14 h-44 w-44 rounded-full bg-orbit-violet/35 blur-3xl"
               />
               <div className="relative">
-              <div className="border-b border-black/8 px-7 py-5">
+              <div className="border-b border-white/10 px-7 py-5">
                 <h3 className="text-sm font-medium text-ink">會場分區</h3>
               </div>
-              <ul className="divide-y divide-black/5">
+              <ul className="divide-y divide-white/8">
                 {venueZones.map((z, i) => {
                   const Icon = zoneIcons[i] ?? LayoutGrid;
                   return (

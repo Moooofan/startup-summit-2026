@@ -51,14 +51,25 @@ function ForumCard({ f }: { f: Forum }) {
        那是把「Day 1」當中文字用 17px 估出來的。它其實是 Montserrat 拉丁字（16px）加
        tracking-[0.22em] ＝ 59.7px，右側 10 / 14 是 font-display 26px ＝ 88.4px，
        再加（三）59px 與 gap-4，實際要 223px > 195px。正解見日期列自己的註解。 */
-    <article className="glass group relative h-full overflow-hidden rounded-card p-6 transition-colors duration-500 hover:border-black/20 sm:p-8 md:p-10">
+    <article className="glass group relative h-full overflow-hidden rounded-card p-6 transition-colors duration-500 hover:border-white/25 sm:p-8 md:p-10">
       <div
         aria-hidden
         className={`pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full blur-3xl transition-opacity duration-500 group-hover:opacity-80 ${
           f.accent === "sky"
             ? "bg-orbit-sky/20 opacity-50"
-            : "bg-[rgb(150_115_225)]/40 opacity-90"
+            : "bg-[rgb(150_120_255)]/40 opacity-90"
         }`}
+      />
+      {/* 主視覺的線填充色帶：等距水平細線鋪成的一條窄帶，貼在卡片右上、被 blur 光暈壓在下面。
+          .kv-hatch 的線距與 SiteBackdrop 的 SVG pattern 同為 9px，兩處看起來才是同一種材質
+          （見 globals.css）。mask 讓色帶往左淡出，不會在卡片中央硬切一刀。 */}
+      <div
+        aria-hidden
+        className="kv-hatch pointer-events-none absolute right-0 top-0 h-24 w-1/2 opacity-70"
+        style={{
+          maskImage: "linear-gradient(255deg, #000 8%, transparent 78%)",
+          WebkitMaskImage: "linear-gradient(255deg, #000 8%, transparent 78%)",
+        }}
       />
       <div className="relative">
         {/* sm 以下改上下堆疊，不要再追那幾個像素：
@@ -78,7 +89,7 @@ function ForumCard({ f }: { f: Forum }) {
         </div>
 
         <h3 className="mt-6 text-2xl font-bold text-ink md:text-[1.75rem]">{f.name}</h3>
-        <p className="font-display mt-1.5 text-xs font-semibold tracking-[0.14em] text-gold">
+        <p className="font-display mt-1.5 text-xs font-semibold tracking-[0.14em] text-aqua">
           {f.nameEn.toUpperCase()}
         </p>
 

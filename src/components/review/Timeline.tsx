@@ -44,7 +44,7 @@ export function Timeline({ forum }: { forum: PastForum }) {
                   <p className="mt-1.5 text-[17px] leading-relaxed text-ink-3">{s.speaker}</p>
                 )}
                 {s.format && !isBreak && s.format !== "keynote" && (
-                  <span className="mt-2.5 inline-block rounded-pill border border-black/10 px-2.5 py-0.5 text-[16px] text-ink-4">
+                  <span className="mt-2.5 inline-block rounded-pill border border-white/14 px-2.5 py-0.5 text-[16px] text-ink-4">
                     {formatLabel[s.format] ?? s.format}
                   </span>
                 )}

@@ -62,7 +62,7 @@ export default function SponsorPage() {
       <section className="grain relative overflow-hidden pb-16 pt-[132px] md:pb-24 md:pt-[176px]">
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-[10%] -top-[16%] h-[50vw] max-h-[640px] w-[50vw] max-w-[640px] rounded-full bg-[radial-gradient(circle,rgb(106_134_255/0.22)_0%,transparent_64%)]"
+          className="pointer-events-none absolute -left-[10%] -top-[16%] h-[50vw] max-h-[640px] w-[50vw] max-w-[640px] rounded-full bg-[radial-gradient(circle,rgb(90_170_255/0.30)_0%,transparent_64%)]"
         />
         <div className="shell relative">
           <Reveal>
@@ -210,7 +210,7 @@ export default function SponsorPage() {
                   </header>
                   <p className="mt-4 text-[18px] leading-relaxed text-ink-2">{t.tagline}</p>
                   {t.limited && <p className="mt-2 text-[17px] text-ink-4">{t.limited}</p>}
-                  <dl className="mt-5 divide-y divide-black/6 border-t border-black/6">
+                  <dl className="mt-5 divide-y divide-white/10 border-t border-white/10">
                     {benefitRows.map((row) => {
                       const v = t.benefits[row.key];
                       if (v === false) return null;

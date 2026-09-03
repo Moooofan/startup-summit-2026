@@ -31,7 +31,7 @@ const SECONDS_PER_CARD = 4.5;
 
 const accent = {
   sky: { text: "text-orbit-sky", line: "via-orbit-sky/70" },
-  violet: { text: "text-[#6d47c4]", line: "via-[#6d47c4]/60" },
+  violet: { text: "text-[#a98bff]", line: "via-[#a98bff]/60" },
 } as const;
 
 type Tone = (typeof accent)[keyof typeof accent];
@@ -42,7 +42,7 @@ function SpeakerCard({ s, tone }: { s: Speaker; tone: Tone }) {
       href={`/speakers/${s.slug}`}
       className="group block w-[172px] shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-glow sm:w-[196px]"
     >
-      <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-black/8 bg-surface">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-white/10 bg-surface">
         <Image
           src={s.photo}
           alt={`${s.name}｜${s.org} ${s.title}`}

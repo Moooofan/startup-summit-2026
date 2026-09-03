@@ -120,7 +120,7 @@ function Plane({
 
 export default function TicketSheen({
   mode = "frame",
-  color = "#6a86ff",
+  color = "#7cc9ff", // 主視覺青（深底上反光要帶青才像玻璃邊緣，藍色會糊進背景）
   intensity = 1,
   radius = 0.2,
   animate = true,

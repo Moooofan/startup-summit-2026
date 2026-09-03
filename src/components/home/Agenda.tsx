@@ -39,7 +39,7 @@ function DayNode({
           <p className={cn("font-display text-sm font-semibold tracking-[0.32em]", t.text)}>
             {f.label} · {f.nameEn}
           </p>
-          <h3 className="mt-5 text-[clamp(2.5rem,8vw,5rem)] font-bold leading-[1.05] text-ink">
+          <h3 className="text-kv mt-5 text-[clamp(2.5rem,8vw,5rem)] font-light leading-[1.05]">
             {f.name}
           </h3>
           <p className="mt-6 font-display text-xl text-ink-2 md:text-2xl">
@@ -107,7 +107,7 @@ export function Agenda() {
             <div className="snap-panel pb-16 pt-6 md:min-h-[100svh]">
               <div className="shell">
                 <Reveal>
-                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-black/8 pb-5">
+                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-white/10 pb-5">
                     <span className={cn("font-display text-sm font-semibold tracking-[0.2em]", tone.text)}>
                       {f.label}
                     </span>

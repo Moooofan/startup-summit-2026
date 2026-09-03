@@ -32,15 +32,18 @@ const BANDS: { r: number; count: number; z: number }[] = [
   { r: 0.18, count: 3, z: 0.68 },
 ];
 
-// 每條的漸層色停（淺色 KV 光軌調）；不同條配不同色對 → 每塊顏色不一
+// 每條的漸層色停；不同條配不同色對 → 每塊顏色不一。
+// 2026/9 換主視覺：原本七組裡有兩組是暖色（#ffe6cd 蜜桃 / #ffdcf1 粉），
+// 新 KV 整張圖沒有任何暖色 —— 玻璃是折射體，任何暖色停都會在深靛底上被放大成一塊橘光。
+// 全數換成 KV 取樣的青（#8cf5ff）／電光藍（#2b5cff）／logo 紫（#9072b2 提亮）三族。
 const CPAIRS: [string, string][] = [
-  ["#dcf4ff", "#a9c0ff"],
-  ["#b3d3ff", "#d3ccff"],
-  ["#e4dbff", "#ffcbe6"],
-  ["#ffe6cd", "#ffcbdd"],
-  ["#cef2ff", "#c2c8ff"],
-  ["#e8e1ff", "#c7dcff"],
-  ["#ffdcf1", "#cde0ff"],
+  ["#d6f7ff", "#7fb0ff"],
+  ["#9fd8ff", "#b8c6ff"],
+  ["#dcd6ff", "#8cf5ff"],
+  ["#c3e9ff", "#7a5cf0"],
+  ["#8cf5ff", "#5f8cff"],
+  ["#e6ecff", "#6fa8ff"],
+  ["#c8b6ff", "#9fd0ff"],
 ];
 
 // 傾斜（上下鏡射）
@@ -67,8 +70,8 @@ const MATERIAL_PROPS = {
   samples: 3, // 保持效能預算（先前使用者抱怨捲動卡 → 別調高）
   resolution: 144, // 同上，維持 144
   backsideThickness: 0.3,
-  color: "#e3e9ff", // 微冷白 body tint
-  attenuationColor: "#4c68d4", // brand-lift 藍 → 厚處淡淡染藍
+  color: "#dcefff", // 微青白 body tint（對齊 KV 標題字的 #ddeff9）
+  attenuationColor: "#1c3bd0", // 主視覺中景藍 → 厚處染成 KV 的藍
   attenuationDistance: 8, // 拉長 → 吸收變弱 → 更通透（僅厚處帶一點藍）
 };
 
@@ -243,8 +246,11 @@ type Groups = { outer: BufferGeometry; mid: BufferGeometry; dome: BufferGeometry
 
 function Ring({ onReady }: { onReady?: () => void }) {
   const [groups, setGroups] = useState<Groups | null>(null);
-  // 玻璃折射看到的底色：拉亮成藍調 → 玻璃本體更淺、更通透
-  const bg = useMemo(() => new THREE.Color("#a9c1ea"), []);
+  // 玻璃折射看到的底色。WebGL 的透射看不到 DOM，這個值就是「透過玻璃看見的世界」——
+  // 淺色版是淡藍灰 #a9c1ea（配白霧底）；深色版若照抄，環會變成一圈死白的塑膠環，
+  // 和背後的深靛底完全脫節。改成主視覺的電光藍：玻璃本體發藍光、邊緣由 Lightformer
+  // 打出青白高光，讀起來就是 KV 那種「藍色發光體」。別再往淺色調回去。
+  const bg = useMemo(() => new THREE.Color("#1e4fd8"), []);
 
   // 分幀建構：把 ~44 塊玻璃拆成每幀幾塊，之間讓出主執行緒 → 進場不再一次性凍格。
   // computeSpecs 保留原亂數順序 → 幾何與同步版完全一致（純效能重構，外觀不變）。
@@ -302,13 +308,15 @@ function Ring({ onReady }: { onReady?: () => void }) {
 function Lights() {
   return (
     <Environment resolution={128} frames={1}>
-      {/* 淺色、airy 的環境光：亮白主光 + 淡藍/青/紫虹彩，取自 KV 光軌色 */}
-      <Lightformer form="ring" intensity={3.4} color="#d6f4ff" position={[0, 3.5, -4]} scale={7} />
-      <Lightformer form="rect" intensity={4.2} color="#9cc6ff" position={[-5, 1, -2]} scale={[3, 7, 1]} />
-      <Lightformer form="rect" intensity={3.6} color="#b4adff" position={[5, -1.5, -2]} scale={[3, 7, 1]} />
-      <Lightformer form="rect" intensity={2.6} color="#ffd3a8" position={[0, -4, -3]} scale={6} />
+      {/* 環境光取自主視覺：青白主光 + 電光藍 + logo 紫。
+          底下那盞原本是暖橘（#ffd3a8）—— 新 KV 沒有暖色，換成中景藍，
+          否則環的下緣會出現一圈與整站無關的橘邊。 */}
+      <Lightformer form="ring" intensity={3.6} color="#8cf5ff" position={[0, 3.5, -4]} scale={7} />
+      <Lightformer form="rect" intensity={4.4} color="#5f8cff" position={[-5, 1, -2]} scale={[3, 7, 1]} />
+      <Lightformer form="rect" intensity={3.6} color="#a58cf5" position={[5, -1.5, -2]} scale={[3, 7, 1]} />
+      <Lightformer form="rect" intensity={2.8} color="#1e4fd8" position={[0, -4, -3]} scale={6} />
       <Lightformer form="rect" intensity={6} color="#ffffff" position={[1, 4, 4]} scale={5} />
-      <Lightformer form="circle" intensity={3} color="#e7ecff" position={[-3, -3, 3]} scale={3.5} />
+      <Lightformer form="circle" intensity={3} color="#d6f7ff" position={[-3, -3, 3]} scale={3.5} />
     </Environment>
   );
 }
@@ -331,7 +339,9 @@ export default function OrbitGlass({
       style={{ background: "transparent" }}
       onCreated={({ gl }) => {
         gl.setClearColor(0x000000, 0);
-        gl.toneMappingExposure = 1.35; // 提亮，整體更淺
+        // 淺色版靠 1.35 把環拉淺以融進白霧底；深色版底是深靛，曝光過高會讓環整個泛白、
+        // 失去藍色玻璃感。收到 1.2 —— 亮度改由 Lightformer 的高光提供。
+        gl.toneMappingExposure = 1.2;
       }}
     >
       <ambientLight intensity={0.5} />

@@ -41,10 +41,16 @@ const TOP_RIGHT_X = 1260;
 const BOT_RIGHT_X = 650;
 const GRAY_GAP = 26; // 灰色底襯比照片右緣多外擴多少 → 露出的鑲邊寬度
 const TEAR_SCALE = 24; // 撕裂強度：位移越大鋸齒越明顯
-const GRAY = "#9aa3b2"; // 鑲邊灰（冷調）
-const TINT = "#28324e"; // 照片統一色（靛藍）
-const TINT_OPACITY = 0.3;
-const LAYER_OPACITY = 0.22; // 整層透明度：越低越不搶文字
+/* 深色版（2026/9）：這四個常數全部翻面。
+   淺色底時的做法是「灰色鑲邊 + 淡靛調色 + 照片略提亮」；深靛底上照抄會出事 ——
+   照片本身比背景亮得多，會變成 Hero 左半浮著一塊發光的方形，把主標壓下去。
+   所以：鑲邊改成藍紫（在深底上才看得出是一條邊而不是一道白光）、
+   調色改成主視覺的深藍且加重、照片本身壓暗，整層透明度反而可以提高
+   —— 照片變成「底紋」而非「圖片」。 */
+const GRAY = "#6f8ad6"; // 鑲邊：藍紫，對應主視覺的細線色 #b1bee8 降階
+const TINT = "#0b1c66"; // 照片統一色（主視覺中景藍）
+const TINT_OPACITY = 0.46;
+const LAYER_OPACITY = 0.3; // 整層透明度：照片已壓暗，可比淺色版高一點
 
 // 左／上／下外擴到畫面外，確保滿版且撕裂位移不會在邊緣露出破口
 const PHOTO_SHAPE = `-80,-60 ${TOP_RIGHT_X},-60 ${BOT_RIGHT_X},${VB_H + 60} -80,${VB_H + 60}`;
@@ -61,8 +67,8 @@ export function HomeBackdrop() {
         className="h-full w-full"
         viewBox={`0 0 ${VB_W} ${VB_H}`}
         preserveAspectRatio="xMidYMid slice"
-        // 照片降飽和、微提亮 → 融進冷色調、不喧賓奪主
-        style={{ filter: "saturate(0.7) brightness(1.03)" }}
+        // 照片降飽和 + 壓暗 → 融進深靛底，不喧賓奪主（淺色版是微提亮，深色版必須反過來）
+        style={{ filter: "saturate(0.55) brightness(0.7) contrast(1.06)" }}
       >
         <defs>
           {/* 撕紙邊緣濾鏡：亂數雜訊 → 位移貼在遮罩形狀上。filter 區域放大避免鋸齒被裁掉 */}

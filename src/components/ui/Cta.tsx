@@ -11,28 +11,27 @@ type Props = {
 };
 
 /**
- * 半透明玻璃底色 —— 靖藍 #4c68d4 → 紫 #8b6ed8，alpha 沿橫向由 0.78 遞減到 0.64
- * （左實右透，像玻璃往邊緣變薄）。
+ * 半透明玻璃底色 —— 主視覺電光藍 #2b5cff → logo 紫 #7e5cf0，
+ * alpha 沿橫向由 0.88 遞減到 0.72（左實右透，像玻璃往邊緣變薄）。
  *
  * 這是預設值：實際唯一的使用者是 Hero 的兩顆 CTA，且它們各自用 className 覆寫成
  * 互為鏡像的正／反向斜坡。改這裡時記得 Hero 那兩行不會跟著變。
  *
+ * 對比（2026/9 深色版）：全站背景合成後約 rgb(5 10 43)，
+ * 本組色合成後為 rgb(38 82 230) → rgb(92 69 185)，白字對比 6.1:1 與 7.0:1，
+ * 兩端都過 WCAG AA。淺色版時代那條「白字只有 2.9–3.4:1、是知情下的取捨」的限制已解除，
+ * 現在調整漸層不必再為對比讓步 —— 但仍要維持在 4.5:1 以上。
+ *
  * 兩條路已經走過、別再走：
  *
- * 1) 「把底色調深、再降 alpha」以保住白字對比 —— 合成後會變回實心按鈕的樣子，
- *    等於自己把透明感抵銷掉。要看起來變淺，合成後的亮度就得真的上升。
+ * 1) 「把底色調深、再降 alpha」以求透明感 —— 合成後會變回實心按鈕的樣子，
+ *    等於自己把透明感抵銷掉。深色底更明顯：底色一深就直接和背景糊在一起。
  *
- * 2) 在漸層裡加高亮度的青／淺藍停 —— 曾採用 source/button2.png 的色階
- *    （#8B5FAA → #7C85C0 → #60D2ED），使用者要求撤回。
- *    若日後又要引入，注意它一旦落到文字底下白字會掉到約 1.9:1，
- *    屆時漸層就不能再鏡像（見 Hero.tsx 的註解）。
- *
- * 全站背景合成後約 rgb(238 241 247)，本組色的白字對比為 2.9–3.4:1。
- * 低於 WCAG AA 4.5:1，是使用者確認「白字夠明顯」後的知情選擇。
- * 若日後要真正達標，唯一槓桿是把文字改成深色（--color-brand）。
+ * 2) 在漸層裡加高亮度的青停（主視覺的 #8cf5ff 很誘人）—— 青色落到文字底下時
+ *    白字會掉到 2:1 上下。青色只能當邊框、光暈與眉標，不能當白字的底。
  */
 const GRADIENT_GLASS =
-  "[background-image:linear-gradient(110deg,rgb(76_104_212/0.78)_0%,rgb(139_110_216/0.64)_100%)]";
+  "[background-image:linear-gradient(110deg,rgb(43_92_255/0.88)_0%,rgb(126_92_240/0.72)_100%)]";
 
 export function Cta({ href, children, variant = "solid", size = "md", className }: Props) {
   // gradient 變體 ＝ 參考 button2.png：左紫 → 右藍的膠囊 + 右端「圓框箭頭」徽章。
@@ -66,7 +65,7 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
       <Link
         href={href}
         className={cn(
-          // font-semibold（非 medium）：淺底上的白字對比只有 3.08:1，加字重是零成本的可讀性補償
+          // font-semibold（非 medium）：深底上對比已達 AA，字重純粹是讓白字在玻璃高光上不糊掉
           "btn-glass btn-glass-on-dark group inline-flex items-center rounded-pill border border-white/40 font-semibold transition-all duration-300",
           GRADIENT_GLASS,
           "hover:border-white/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-glow",
@@ -85,7 +84,7 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
         <span
           aria-hidden
           className={cn(
-            // 圓框落在漸層最透的右端（alpha 0.64，合成後約 rgb(175 157 227)）→
+            // 圓框落在漸層最透的右端（alpha 0.72，合成後約 rgb(92 69 185)）→
             // 白框要夠實才立得住。別跟著底色一起調淡。
             "relative grid shrink-0 place-items-center rounded-full border-2 border-white/85 bg-white/25",
             circle[size]
@@ -112,15 +111,16 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
   };
   // hover 一律不改底色（使用者指定）—— 回饋交給掃光、邊框提亮與 .btn-glass:hover 的陰影抬升。
   const variants = {
-    // 平塗版：brand-lift #4c68d4 原色降到 0.76（合成後約 rgb(115 137 220)，白字 3.32:1），
-    // 與 Hero 鏡像漸層的兩個端點同色系。
+    // 平塗版：主視覺電光藍降到 0.85（合成後約 rgb(52 95 223)，白字 5.4:1 → 過 AA），
+    // 與 Hero 鏡像漸層的左端同色。
     solid:
-      "btn-glass-on-dark border border-white/35 bg-[rgb(76_104_212/0.76)] font-semibold hover:border-white/55",
-    // .glass 自帶深色細邊框，不再套白色鏡框 → 淺底按鈕維持原本的輕盈感
-    ghost: "glass text-ink hover:border-black/25",
-    // 藍色外框 + 淺藍底 + 藍字（報名按鈕）
+      "btn-glass-on-dark border border-white/35 bg-[rgb(60_110_255/0.85)] font-semibold hover:border-white/55",
+    // .glass 自帶藍色細邊框，不再套白色鏡框 → 次要按鈕維持輕盈感
+    ghost: "glass text-ink hover:border-white/30",
+    // 青色外框 + 青霧底 + 青字（報名按鈕）——
+    // 青色只在「不當白字底」的前提下使用，這裡文字本身就是青色，對比 8:1 以上。
     outline:
-      "border border-orbit-sky/70 bg-orbit-sky/12 text-orbit-sky hover:border-orbit-sky",
+      "border border-orbit-sky/60 bg-orbit-sky/10 text-orbit-sky hover:border-orbit-sky hover:bg-orbit-sky/16",
   };
 
   return (
@@ -128,7 +128,8 @@ export function Cta({ href, children, variant = "solid", size = "md", className 
       href={href}
       className={cn(base, sizes[size], variants[variant as "solid" | "ghost" | "outline"], className)}
     >
-      {/* 掃光只給深底的 solid —— 白色亮帶掃過 ghost / outline 的淺底幾乎看不見，
+      {/* 掃光只給實底的 solid —— 白色亮帶掃過 ghost / outline 那種近乎透明的底時，
+          亮帶會直接照到後方的背景、看起來像一塊亮斑而不是反光。
           那兩個變體的光感由 .btn-glass 的常駐微光與上緣高光提供。 */}
       {variant === "solid" && (
         <span
