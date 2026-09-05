@@ -173,9 +173,10 @@ export function Hero() {
             custom={2.6}
             className="mt-4 w-fit text-[clamp(1.05rem,3.4vw,1.55rem)] font-semibold leading-snug tracking-[0.04em]"
             style={{
-              // 沿用原本 2026 的斜向光軌漸層（藍→紫→粉）；w-fit 讓漸層貼齊文字寬度、
-              // 色階分佈與 2026 一致，而非攤在整行。
-              backgroundImage: "linear-gradient(118deg,#85f6fa 0%,#a58ff2 52%,#cf87c1 100%)",
+              // 青→白（業主 2026/9）。原本的藍→紫→粉是舊主視覺遺留，新 KV 沒有紫與粉。
+              // 中停刻意比線性內插更偏青，不然句子中段就洗白、尾巴整段沒有顏色。
+              // w-fit 讓漸層貼齊文字寬度，色階不會攤在整行。
+              backgroundImage: "linear-gradient(118deg,#68d1ee 0%,#9adef4 52%,#f2f6ff 100%)",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               color: "transparent",

@@ -24,7 +24,7 @@ Next.js 15 App Router + React 19 + TypeScript + Tailwind v4 + motion + three。�
 ```bash
 npx tsc --noEmit  # Claude 可用（型別檢查）
 npm run lint      # Claude 可用（eslint，flat config + next/core-web-vitals）
-npm run build     # 由「使用者」執行；會預先渲染 35 個講者頁
+npm run build     # 由「使用者」執行；會預先渲染 38 個講者頁
 npm run dev       # 由「使用者」執行（--turbopack）
 ```
 
@@ -40,8 +40,8 @@ npm run dev       # 由「使用者」執行（--turbopack）
 | 檔案 | 內容 | 來源 |
 |---|---|---|
 | `data/event.ts` | 日期／地點／票價／主辦單位／`forums`／`stats` | 企劃 pptx |
-| `data/speakers.ts` | 35 位講者 + `hostSpeaker` | **自簡報產生，見下方警告** |
-| `data/tracks.ts` | 12 條主題軌 + `trackMap` | 企劃 pptx（人工整理） |
+| `data/speakers.ts` | 38 位講者 + `hostSpeaker` | **自簡報產生，見下方警告** |
+| `data/agenda.ts` | 兩天逐時段議程 + `findSpeakerSlot`／`talkCount`／`agendaMarkdown` | 議程總表 0902 xlsx |
 | `data/sponsors.ts` | 五級贊助方案、展位、`benefitRows` | 企劃 pptx |
 | `data/review.ts` | 歷屆回顧（第三屆 35 場議程／64 則媒體／贊助 logo） | 企劃 pptx + 網路查證 |
 | `data/founder.ts` | 林文欽介紹與引言 | 企劃 pptx + 公開發言 |
@@ -50,7 +50,9 @@ npm run dev       # 由「使用者」執行（--turbopack）
 | `lib/config.ts` | 網域、Accupass 連結、贊助信箱 | **上線前必改** |
 
 `event.ts` 的 `forums` 陣列導出 `ForumKey` 型別（`founder` / `investor`），
-講者、主題軌都用它綁定日別 —— 改 forums 的 key 會連鎖影響整個型別系統。
+講者、議程都用它綁定日別 —— 改 forums 的 key 會連鎖影響整個型別系統。
+
+`speakers.ts` 的 `track` 欄是主題軌（舊 `data/tracks.ts`）移除後留下的歷史字串，畫面不讀它。
 
 「簡報沒寫、需向主辦方索取」的缺口記在各資料檔自己的 `// TODO` 註解裡，改資料前先掃過。
 
@@ -66,10 +68,10 @@ npm run dev       # 由「使用者」執行（--turbopack）
 全站 **Server Component 為預設**，`"use client"` 只出現在需要瀏覽器 API 的葉節點
 （Nav、Reveal、FlipClock、三個 three.js 元件、ScrollSnapController…）。
 
-- `/`（`app/page.tsx`）**只有 JsonLd + `<Hero />`** —— 首頁其餘內容住在 `components/home/`，
-  是歷史分頁改版留下的；找首頁區塊請看 `components/home/`，別在 `app/page.tsx` 找。
+- `/`（`app/page.tsx`）是六段單頁：Hero → FounderNote → About（內含 HomeAgenda）→ Tickets
+  → SpeakersPreview → Faq。`app/page.tsx` 只排順序，區塊實作全在 `components/home/`。
 - `/about` `/speakers` `/agenda` `/tickets` `/sponsor` `/review`：各自獨立頁
-- `/speakers/[slug]`：`generateStaticParams()` 從 `speakers` 產生 35 頁靜態頁，
+- `/speakers/[slug]`：`generateStaticParams()` 從 `speakers` 產生 38 頁靜態頁，
   各自有 `generateMetadata` 與 PersonJsonLd，含上下位講者導覽
 
 ### 中文字型走 CDN，不是 next/font（重要）
@@ -100,6 +102,15 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
 深靛漸層 + SVG 線構圖 + 青色高光 + 顆粒，固定不隨捲動；區塊本身不自帶底色
 （`--color-bg-soft: transparent`），所以整站色調統一。
 原本的「`/bg.jpg` 水墨圖 + `blur(26px)` + 深藍霧」已停用 —— 水墨與新 KV 的幾何線條語彙無關。
+
+`SiteBackdrop` 裡是**兩套構圖，不是一套的 RWD 裁切**：桌機 16:9（`xMaxYMid slice`）、
+手機直式 440x950。原因是 16:9 用 `slice` 撐滿直式螢幕時只剩約四分之一寬度可見，
+主視覺的「4」會整個掉到畫面外（實測入鏡率 iPhone 14 只有 4%）。
+兩顆 svg 的 `<defs>` 因為都用 `gradientUnits="userSpaceOnUse"`、座標綁死各自的 viewBox，
+**不能共用**，手機那組 id 一律加 `-m` 後綴（兩顆都在 DOM 裡，撞 id 會靜默取到前一個）。
+手機版各圖層的 alpha 刻意比桌機高：那一區同時壓著 scrim 與 screen 疊加的青色光暈。
+另外**首頁第一屏另有一層 `Hero.tsx` 的手機遮罩**（`from-bg via-bg/75 to-bg/20`，`md:hidden`），
+會把 KV 再遮掉約 68% —— 在首頁調背景強度前先確認你看的是不是那層。
 
 色票**逐點取樣自 `source/背景.jpg`**（2026 主視覺原稿，深藍夜空 + 電光藍 + 青色高光）。
 所有 token 定義在 `src/app/globals.css` 的 `@theme` 區塊 —— **改色只改那裡**。

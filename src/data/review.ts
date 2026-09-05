@@ -498,6 +498,20 @@ export const mediaCoverage: MediaItem[] = [
   },
 ];
 
+/** /review 露出的四則（業主 2026/9：媒體報導不用全放）。
+ *  64 則多為同一篇稿的轉載，故挑四家財經主媒、各自標題不同的版本。 */
+const FEATURED_MEDIA_URLS = [
+  "https://money.udn.com/money/story/11799/9044855", // 經濟日報 10/02
+  "https://www.ctee.com.tw/news/20251002700554-430201", // 工商時報 10/02
+  "https://www.chinatimes.com/newspapers/20251002000343-260206", // 中時新聞網 10/02
+  "https://udn.com/news/story/7251/9044028", // 聯合新聞網 10/01
+];
+
+/** 用 filter 而非 find + non-null assertion：url 日後失準只會少一張卡，不會整頁爆掉。 */
+export const featuredMedia: MediaItem[] = FEATURED_MEDIA_URLS.flatMap((u) =>
+  mediaCoverage.filter((m) => m.url === u)
+);
+
 /** 第三屆（2025）社群露出，共 26 則（僅列公開帳號）。
  *  title 為貼文原標題，其中的表情符號已依鐵則（全站禁用 emoji）移除，其餘逐字保留 ——
  *  看起來像漏字的地方是原文就有符號，不要「訂正」回去。 */
