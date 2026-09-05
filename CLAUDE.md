@@ -24,7 +24,7 @@ Next.js 15 App Router + React 19 + TypeScript + Tailwind v4 + motion + three。�
 ```bash
 npx tsc --noEmit  # Claude 可用（型別檢查）
 npm run lint      # Claude 可用（eslint，flat config + next/core-web-vitals）
-npm run build     # 由「使用者」執行；會預先渲染 35 個講者頁
+npm run build     # 由「使用者」執行；會預先渲染 38 個講者頁
 npm run dev       # 由「使用者」執行（--turbopack）
 ```
 
@@ -40,8 +40,8 @@ npm run dev       # 由「使用者」執行（--turbopack）
 | 檔案 | 內容 | 來源 |
 |---|---|---|
 | `data/event.ts` | 日期／地點／票價／主辦單位／`forums`／`stats` | 企劃 pptx |
-| `data/speakers.ts` | 35 位講者 + `hostSpeaker` | **自簡報產生，見下方警告** |
-| `data/tracks.ts` | 12 條主題軌 + `trackMap` | 企劃 pptx（人工整理） |
+| `data/speakers.ts` | 38 位講者 + `hostSpeaker` | **自簡報產生，見下方警告** |
+| `data/agenda.ts` | 兩天逐時段議程 + `findSpeakerSlot`／`talkCount`／`agendaMarkdown` | 議程總表 0902 xlsx |
 | `data/sponsors.ts` | 五級贊助方案、展位、`benefitRows` | 企劃 pptx |
 | `data/review.ts` | 歷屆回顧（第三屆 35 場議程／64 則媒體／贊助 logo） | 企劃 pptx + 網路查證 |
 | `data/founder.ts` | 林文欽介紹與引言 | 企劃 pptx + 公開發言 |
@@ -50,7 +50,9 @@ npm run dev       # 由「使用者」執行（--turbopack）
 | `lib/config.ts` | 網域、Accupass 連結、贊助信箱 | **上線前必改** |
 
 `event.ts` 的 `forums` 陣列導出 `ForumKey` 型別（`founder` / `investor`），
-講者、主題軌都用它綁定日別 —— 改 forums 的 key 會連鎖影響整個型別系統。
+講者、議程都用它綁定日別 —— 改 forums 的 key 會連鎖影響整個型別系統。
+
+`speakers.ts` 的 `track` 欄是主題軌（舊 `data/tracks.ts`）移除後留下的歷史字串，畫面不讀它。
 
 「簡報沒寫、需向主辦方索取」的缺口記在各資料檔自己的 `// TODO` 註解裡，改資料前先掃過。
 
@@ -66,10 +68,10 @@ npm run dev       # 由「使用者」執行（--turbopack）
 全站 **Server Component 為預設**，`"use client"` 只出現在需要瀏覽器 API 的葉節點
 （Nav、Reveal、FlipClock、三個 three.js 元件、ScrollSnapController…）。
 
-- `/`（`app/page.tsx`）**只有 JsonLd + `<Hero />`** —— 首頁其餘內容住在 `components/home/`，
-  是歷史分頁改版留下的；找首頁區塊請看 `components/home/`，別在 `app/page.tsx` 找。
+- `/`（`app/page.tsx`）是六段單頁：Hero → FounderNote → About（內含 HomeAgenda）→ Tickets
+  → SpeakersPreview → Faq。`app/page.tsx` 只排順序，區塊實作全在 `components/home/`。
 - `/about` `/speakers` `/agenda` `/tickets` `/sponsor` `/review`：各自獨立頁
-- `/speakers/[slug]`：`generateStaticParams()` 從 `speakers` 產生 35 頁靜態頁，
+- `/speakers/[slug]`：`generateStaticParams()` 從 `speakers` 產生 38 頁靜態頁，
   各自有 `generateMetadata` 與 PersonJsonLd，含上下位講者導覽
 
 ### 中文字型走 CDN，不是 next/font（重要）
