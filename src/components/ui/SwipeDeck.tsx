@@ -68,7 +68,7 @@ export function SwipeDeck<T>({
               className={cn(
                 // 同格重疊 → 容器高＝最高卡；卡片本身窄於容器並置中，側卡才有空間 peek
                 "relative col-start-1 row-start-1 mx-auto w-[76vw] max-w-[360px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-                isActive ? "z-20 opacity-100" : "z-10 opacity-40"
+                isActive ? "z-20 opacity-100" : "z-10 opacity-[0.32]"
               )}
               style={{ transform: `translateX(${side * 58}%) scale(${isActive ? 1 : 0.82})` }}
             >
@@ -76,7 +76,13 @@ export function SwipeDeck<T>({
                   原本照樣進得了 Tab 順序 —— 鍵盤使用者會聚焦到一顆看不見、只露一角的按鈕。
                   inert 同時移除焦點與無障礙樹曝光；再加 pointer-events-none，讓點擊確實落到
                   下面那顆覆蓋鈕上（inert 子樹本身的指標事件行為各家瀏覽器不一致，不要依賴）。 */}
-              <div inert={!isActive} className={cn(!isActive && "pointer-events-none")}>
+              {/* 側卡加景深：卡面幾乎透明（票卡只擋得住約四分之一），不糊掉的話後卡的字
+                  會穿過前卡跟前卡的字疊在一起。blur 下在內容這層、不下在外層 ——
+                  外層還包著切換鈕，一起糊掉會看不見鍵盤焦點框。 */}
+              <div
+                inert={!isActive}
+                className={cn(!isActive && "pointer-events-none blur-[5px]")}
+              >
                 {renderItem(item, isActive)}
               </div>
 

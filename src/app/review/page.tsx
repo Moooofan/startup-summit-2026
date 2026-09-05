@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
-import { editions, testimonials } from "@/data/review";
+import { editions, testimonials, featuredMedia } from "@/data/review";
 import { event } from "@/data/event";
 import { isPublicRoute } from "@/lib/config";
 import { SectionHead } from "@/components/ui/SectionHead";
@@ -9,7 +9,6 @@ import { Reveal } from "@/components/ui/Reveal";
 import { EditionTimeline } from "@/components/review/EditionTimeline";
 import { PastSpeakerRoster } from "@/components/review/PastSpeakerRoster";
 import { Testimonials } from "@/components/review/Testimonials";
-import { ExpandableList } from "@/components/review/ExpandableList";
 import { Cta } from "@/components/ui/Cta";
 
 export const metadata: Metadata = {
@@ -118,41 +117,36 @@ export default function ReviewPage() {
               <SectionHead
                 eyebrow="PRESS"
                 title="媒體報導"
-                lead={`第${["一", "二", "三", "四"][latest.no - 1]}屆會後累積 ${latest.media.length} 則媒體露出。`}
+                lead={`第${["一", "二", "三", "四"][latest.no - 1]}屆會後獲主流財經媒體 ${latest.media.length} 則報導。`}
               />
             </Reveal>
             <Reveal delay={0.08}>
+              {/* 只露出 featuredMedia 那四則（業主 2026/9），不再提供展開全部 */}
               <div className="mt-10 grid gap-3 sm:grid-cols-2">
-                <ExpandableList
-                  total={latest.media.length}
-                  initial={10}
-                  labelMore={`展開全部 ${latest.media.length} 則報導`}
-                >
-                  {latest.media.map((m) => (
-                    <a
-                      key={m.url}
-                      href={m.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="glass group flex items-start justify-between gap-4 rounded-card p-5 transition-colors hover:border-white/22"
-                    >
-                      <span className="min-w-0">
-                        <span className="block text-[18px] leading-relaxed text-ink-2 transition-colors group-hover:text-ink">
-                          {m.title}
-                        </span>
-                        <span className="mt-2 block text-[17px] text-ink-4">
-                          {m.outlet}
-                          {m.date && `　${m.date}`}
-                        </span>
+                {featuredMedia.map((m) => (
+                  <a
+                    key={m.url}
+                    href={m.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="glass group flex items-start justify-between gap-4 rounded-card p-5 transition-colors hover:border-white/22"
+                  >
+                    <span className="min-w-0">
+                      <span className="block text-[18px] leading-relaxed text-ink-2 transition-colors group-hover:text-ink">
+                        {m.title}
                       </span>
-                      <ExternalLink
-                        size={14}
-                        aria-hidden
-                        className="mt-1 shrink-0 text-ink-4 transition-colors group-hover:text-orbit-sky"
-                      />
-                    </a>
-                  ))}
-                </ExpandableList>
+                      <span className="mt-2 block text-[17px] text-ink-4">
+                        {m.outlet}
+                        {m.date && `　${m.date}`}
+                      </span>
+                    </span>
+                    <ExternalLink
+                      size={14}
+                      aria-hidden
+                      className="mt-1 shrink-0 text-ink-4 transition-colors group-hover:text-orbit-sky"
+                    />
+                  </a>
+                ))}
               </div>
             </Reveal>
           </div>

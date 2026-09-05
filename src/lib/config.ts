@@ -51,4 +51,4 @@ export function isExternalHref(href: string): boolean {
   return /^https?:\/\//.test(href);
 }
 
-export const SPONSOR_CONTACT = "mailto:hm8827@gmail.com?subject=2026%20台灣新創投資年會%20贊助洽談";
+export const SPONSOR_CONTACT = "mailto:2026tsic@gmail.com?subject=2026%20台灣新創投資年會%20贊助洽談";

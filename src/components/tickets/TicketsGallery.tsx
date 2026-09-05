@@ -387,7 +387,9 @@ function TicketsPanel({
                   "absolute w-[76vw] max-w-[360px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] sm:w-[360px]",
                   isActive
                     ? "z-20 scale-100 opacity-100"
-                    : "z-10 scale-[0.82] cursor-pointer opacity-40 hover:opacity-60"
+                    : // 側卡加景深：相框幾乎透明（只擋得住約四分之一），不糊掉的話
+                      // 側卡的字會穿過前卡跟前卡的字疊在一起。值與 ui/SwipeDeck 同步。
+                      "z-10 scale-[0.82] cursor-pointer opacity-[0.32] blur-[5px] hover:opacity-60"
                 )}
                 style={{
                   transform: `translateX(${side * 58}%) scale(${isActive ? 1 : 0.82})`,

@@ -177,7 +177,7 @@ export const friendModes = [
 
 /** 展場規劃 */
 export const venueZones = [
-  { zone: "A / B / C", name: "演講廳", detail: "三廳打通，600–700 席" },
+  { zone: "A / B / C", name: "演講廳", detail: "600–700 席" },
   { zone: "D", name: "交誼與餐飲區", detail: "茶敘、午餐與自由交流" },
   { zone: "E", name: "品牌攤位區", detail: "8–10 個贊助商展位" },
 ];
