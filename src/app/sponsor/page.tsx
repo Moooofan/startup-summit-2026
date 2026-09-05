@@ -148,7 +148,7 @@ export default function SponsorPage() {
                         className={`rounded-t-card border-x border-t p-6 align-top ${
                           t.featured
                             ? "border-brand-lift/40 bg-brand/15"
-                            : "border-line-soft bg-surface/60"
+                            : "border-line-soft bg-surface-2"
                         }`}
                       >
                         <span className="block text-[18px] font-bold text-ink">{t.name}</span>
@@ -183,7 +183,7 @@ export default function SponsorPage() {
                           className={`border-x p-4 text-center align-middle ${
                             t.featured
                               ? "border-brand-lift/40 bg-brand/8"
-                              : "border-line-soft bg-surface/30"
+                              : "border-line-soft bg-surface"
                           }`}
                         >
                           <Cell value={t.benefits[row.key]} />

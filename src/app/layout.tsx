@@ -5,15 +5,22 @@ import { site } from "@/lib/config";
 import { event } from "@/data/event";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
+import { SiteBackdrop } from "@/components/site/SiteBackdrop";
 
 /**
  * 中文字型走 CDN <link> 而非 next/font：
  * Noto Sans TC 的 CSS 含上百段 unicode-range，next/font 會在建置期把每個字重的
  * 所有分片全部下載，導致 build 卡死。改由瀏覽器按需取用需要的字元範圍。
+ *
+ * 字重清單多了 300（2026/9）：主視覺的「台灣新創投資年會」是細筆畫 + 大字距，
+ * Hero 主標與各處大標都吃 font-light。這是 CDN <link>、不走 next/font，
+ * 多一個字重只是多一行 @font-face 宣告，不會重演 build 卡死那件事。
  */
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  // 300/400 是 2026 主視覺的拉丁字重（細體 + 大字距的英文全名鎖定）；
+  // 少了它們只能用 500 頂替，字面會比 KV 粗一級、與中文標題的細筆畫對不起來。
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-montserrat",
   display: "swap",
 });
@@ -63,21 +70,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* eslint-disable-next-line @next/next/no-page-custom-font -- App Router：此規則針對 pages router，不適用 */}
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap"
         />
       </head>
       <body className="text-ink antialiased">
-        {/* 全站背景：水墨圖模糊霧化 + 一層深藍霧（固定不隨捲動）。
-            深色版只把白霧換成深藍霧，架構不動 —— 區塊仍不自帶底色，全站只吃這一層 = 色調統一。
-            0.96 這個 alpha 是算出來的、不是調出來的：bg.jpg 模糊後平均約 rgb(187 190 191)，
-            0.96 × (3,9,41) + 0.04 × (187,190,191) ≈ rgb(10 16 47) = #0a1030，
-            正好落在 --color-bg 上 —— 全站所有對比數字都以這個合成結果為基準，改這裡要重算。
-            水墨的明暗起伏在這個 alpha 下只剩 #080d2d–#0c1231 的範圍，是紋理不是圖案。
-            這正是要的：新 KV 是幾何線條風格，底圖只該留一點呼吸感，不該還認得出是水墨。 */}
-        <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-          <div className="absolute inset-0 scale-110 bg-[url('/bg.jpg')] bg-cover bg-center blur-[26px]" />
-          <div className="absolute inset-0 bg-[#030929]/96" />
-        </div>
+        {/* 全站背景：2026 主視覺的深靛底 + 線構圖（固定不隨捲動）。
+            原本是「/bg.jpg 水墨圖模糊 + 一層深藍霧」，2026/9 換成 SiteBackdrop ——
+            水墨底圖與新 KV 的幾何線條語彙無關，霧化到看不出是水墨之後也只剩一點雜訊，
+            不如直接畫出 KV 自己的構圖。區塊仍不自帶底色，全站只吃這一層 = 色調統一。
+            構圖與可讀性的分工說明見 SiteBackdrop 檔頭。 */}
+        <SiteBackdrop />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-brand-fill focus:px-4 focus:py-2 focus:text-white"

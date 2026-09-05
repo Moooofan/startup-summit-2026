@@ -86,10 +86,10 @@ export function Nav() {
       <nav className="shell flex h-[72px] items-center justify-between gap-6 md:h-[88px]">
         <Link href="/" className="group flex items-center gap-3" aria-label={event.fullName}>
           <Image
-            src="/logo-mark.png"
+            src="/logo-mark-v2.png"
             alt=""
-            width={236}
-            height={224}
+            width={472}
+            height={448}
             priority
             className="h-7 w-auto transition-transform duration-300 group-hover:scale-105 md:h-8"
           />

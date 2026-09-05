@@ -55,7 +55,7 @@ export function Footer() {
       >
         <div className="min-w-0">
           <div className="flex items-center gap-3">
-            <Image src="/logo-mark.png" alt="" width={236} height={224} className="h-7 w-auto" />
+            <Image src="/logo-mark-v2.png" alt="" width={472} height={448} className="h-7 w-auto" />
             <span className="text-sm font-bold text-ink">{event.organizer.name}</span>
           </div>
           {/* max-w-xs 只留給 md 以上：手機是單欄堆疊，.shell 給的內容寬是 350px，

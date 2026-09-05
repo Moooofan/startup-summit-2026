@@ -74,9 +74,12 @@ npm run dev       # 由「使用者」執行（--turbopack）
 
 ### 中文字型走 CDN，不是 next/font（重要）
 
-`layout.tsx` 用 `next/font` 載 Montserrat（拉丁），但 **Noto Sans TC 是 `<link>` 到 Google Fonts**。
+`layout.tsx` 用 `next/font` 載 Montserrat（拉丁 300–700），但 **Noto Sans TC 是 `<link>` 到 Google Fonts**。
 理由寫在檔案註解：Noto Sans TC 的 CSS 含上百段 unicode-range，next/font 會在建置期把所有
 字重的所有分片全部下載 → **build 卡死**。不要「順手優化」把它改回 next/font。
+
+字重清單是 `300;400;500;700;900`。**300 不能拿掉** —— 主視覺的中文標題是細筆畫、大字距，
+Hero 主標與日別大標都吃 `font-light`；少了 300 瀏覽器會用 400 硬頂，字面立刻粗一級。
 
 ### three.js 是漸進增強，且刻意延後掛載
 
@@ -93,22 +96,33 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
 
 ## 設計系統
 
-**深色主題**（2026/9 改版，原為淺色）：全站底層是 `layout.tsx` 固定的 `/bg.jpg` 水墨圖 +
-`blur(26px)` + 一層 `bg-[#030929]/96` 深藍霧；區塊本身不自帶底色（`--color-bg-soft: transparent`），
-所以整站色調統一。合成後的頁面底色 ≈ **`#0a1030`** —— 全站對比數字都以它為基準，改霧的 alpha 要重算。
+**深色主題**（2026/9 換版，原為淺色）：全站底層是 `layout.tsx` 掛的 `<SiteBackdrop />` ——
+深靛漸層 + SVG 線構圖 + 青色高光 + 顆粒，固定不隨捲動；區塊本身不自帶底色
+（`--color-bg-soft: transparent`），所以整站色調統一。
+原本的「`/bg.jpg` 水墨圖 + `blur(26px)` + 深藍霧」已停用 —— 水墨與新 KV 的幾何線條語彙無關。
 
-色票取自 2026 新主視覺，色值由 KV 原圖逐點取樣（深場 `#010139` / 電光藍 `#0326c4` / 青 `#68d1ee`）。
+色票**逐點取樣自 `source/背景.jpg`**（2026 主視覺原稿，深藍夜空 + 電光藍 + 青色高光）。
 所有 token 定義在 `src/app/globals.css` 的 `@theme` 區塊 —— **改色只改那裡**。
+取樣值也寫在該檔檔頭，要調色**先看那組數字，不要憑印象**。
 
-- 底色階 `bg / surface / surface-2 / surface-3`：深色版改用**不透明**色階，
-  因為半透明白再吃 `/60` 這類修飾詞會複合到幾乎看不見
-- 主色 `--color-brand: #0d2a9e`（**只能當大面積色塊底，對頁底只有 1.63:1，不可用於文字**），
-  另有 `brand-fill`（按鈕實底，白字 9.65:1）/ `brand-lift`（連結）/ `brand-bright` / `brand-glow`
-- 強調色 `--color-accent: #68d1ee`（KV 青）—— 取代舊的 `--color-gold`，新 KV 沒有任何金色
-- 日別 `orbit-sky`（Day 1，同時是全站泛用次要藍）/ `day2`（Day 2 紫）/ `magenta`（KV logo 粉）。
-  舊的 `orbit-blue / orbit-lilac / orbit-violet / orbit-rose / coral` 已移除
-- 文字階 `ink / ink-2 / ink-3 / ink-4`（冷白 → 淺藍灰），對頁底 17.2 / 12.0 / 7.5 / 5.8，**四階全過 AA**
-- 工具類：`.glass`、`.glass-strong`、`.text-orbit`、`.text-fade`、`.ghost-head`、`.grain`、`.photo-sink`、`.shell`
+- 底色 `--color-bg: #050a2b`（只給導覽列／遮罩用的實色；區塊一律透明）
+- 主色 `--color-brand: #2b56f0`（KV 電光藍）。另有 `brand-fill`（`#1e40cc`，按鈕實底，
+  白字 7.4:1）/ `brand-lift`（連結）/ `brand-bright` / `brand-glow`。
+  **brand 本身只當大面積色塊底，不要拿來寫字**
+- 強調色 `--color-aqua: #6fe3ff`（KV 的青色高光）—— **取代舊版的 `--color-gold`**，
+  新主視覺整張圖沒有任何暖色。`--color-accent` 是它的別名，兩支值必須永遠相同：
+  站上 36 處眉標／強調點沿用 `accent`（語意上的「本站強調色」），
+  `aqua` 留給明確要「KV 那支青」的地方。要換強調色**兩支一起換**
+- 光構圖色系 `orbit-blue / orbit-sky / orbit-violet / orbit-lilac / orbit-rose` + `coral` / `magenta`
+- 日別（業主定案兩色制）：Day 1 走 `orbit-sky`（同時是全站泛用次要藍，刻意不另開 `day1` token），
+  Day 2 走 `--color-day2: #a98bff`
+- 文字階 `ink / ink-2 / ink-3 / ink-4`（近白 → 藍灰）。對 `--color-bg` 的對比：
+  17:1 / 11:1 / 7.2:1 / 4.8:1 —— **`ink-4` 已經貼著 AA 的線，別再往暗調**
+- 工具類：`.glass`、`.glass-strong`、`.text-orbit`、`.ghost-head`、`.grain`、`.hairline`、
+  `.photo-sink`、`.btn-gradient-primary`、`.kv-hatch`、`.shell`
+- `.kv-hatch` 是 KV 的等距水平細線填充，線距 9px，與 `SiteBackdrop` 裡的 SVG `<pattern>`
+  同值 —— **兩邊要一起改**，否則同一種材質會出現兩種線距
+- `.text-kv`（近白→淡藍漸層 + 藍光暈）與 `.text-fade` 目前**全站沒有呼叫點**，備而未用
 - `.glass` 的 blur 半徑是**捲動效能主因**，已從 14 調到 8，不要調回去
 - **玻璃卡的「玻璃感」不要靠邊框或亮帶去做**（試過漸層邊框＋鏡面稜線＋斜向亮帶，業主評為「生硬」）。
   站上認可的做法是論壇卡那套：`.glass` + `overflow-hidden` + 卡外角落一顆
@@ -132,11 +146,31 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
 - `OrbitGlass` 的折射底色（`new THREE.Color("#071a72")`）是「玻璃眼中的背景」，
   WebGL 取樣不到 DOM —— 動到 layout 的霧色時必須連它一起改，否則玻璃環會變成不透明色盤
 
+### 深色版特有的坑（換版時逐一踩過）
+
+- **不能把淺色值直接反相**。`bg-black/8` 這種「白底上壓暗線」翻成深色版時，亮度階要略微
+  提高（→ `border-white/10`）：人眼在暗底上對低對比亮線比在亮底上對低對比暗線更不敏感。
+- **WebGL 的 `background` 是「透過玻璃看到的世界」，不是卡片底色**。`OrbitGlass` 與
+  `TicketGlass` 若沿用淺色版的淡藍折射底，會變成深底上兩塊死白的板，且蓋掉上層白字。
+  現在都改成深藍量體，亮度改由 `Lightformer` 的高光提供。
+- **暖色一律撤掉**。舊版的洋紅光暈、蜜桃／橘色玻璃碎塊、金色眉標在深靛底上都會變成
+  一團與主視覺無關的暖光。改色時若看到 `#ff…` 開頭的暖色停，那是漏改的。
+- **遮罩要壓暗而非提亮**。Hero 標題後方那片擋住玻璃環的霧面片，淺色版是提亮，
+  深色版照抄會變成一塊發光橢圓，比它要遮的東西還搶眼。
+
 ### 素材是加工過的，且產生器不在 repo 裡
 
-`public/kv/orbit-glow-v2.png`、`orbit-bloom-v2.png` 是把方案 C 的光軌從淺色底去背並轉成
-發光體（白底乘積反解）。原稿是點陣圖、文字燒在圖上；網站標題全部是真實 HTML 文字。
-`public/logo-mark.png` 同樣從 KV 去背，解析度有限 —— **應向 VM 索取 SVG**。
+`public/og-v2.png`（1200×630）與 `public/logo-mark-v2.png` 都是從主視覺原稿加工而來，
+加工腳本沒有進版控（一次性、用 Pillow 做的）：
+- `og-v2.png` = `source/背景.jpg` 置中裁切成 1.905:1 再縮到 1200×630。標題、日期、logo 都在裁切範圍內。
+  （合併兩條分支時另一版 `og-2026.jpg` 是同一張圖的 JPEG 輸出，已刪，別再各存一份）
+- `logo-mark-v2.png` = `logo-mark.png` 2 倍放大 + 彩度 ×1.42 + 亮度 ×1.20。Nav 與 Footer 共用。
+  原檔偏灰（#905090／#8060a0／#60a0d0），深底上會混濁；加亮後貼近 KV 取樣值。
+  解析度仍有限 —— **應向 VM 索取 SVG**。
+
+**已停用但保留在 repo 的舊素材**：`public/bg.jpg`（淺色水墨底，SiteBackdrop 上線後不再引用）、`public/og.png`、`public/logo-mark.png`、
+`public/kv/*`（方案 C 的淺色 KV 與光軌去背圖）。全部已無程式引用，
+留著是為了萬一要回頭比對；要清就整批清，別只刪一半。
 
 **`scratchpad/`（`gen_speakers.py`、`unmultiply.py`）從未進版控，目前不存在**。
 `speakers.ts` 檔頭仍寫「由 gen_speakers.py 產生」，但那個腳本已無法取得 ——

@@ -1,71 +1,86 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   Design tokens — 2026 新主視覺（深藍場域 + 電光藍 + 青）
-   色值全部取自 KV 影像實際取樣，不是目測。
-   深色版與淺色版的關係**不是反相**，是重新取樣：淺色版把光軌壓深以求在白霧上可讀，
-   深色版把同一批色相提亮。照著反相做會得到一堆濁掉的藍。
-   全站對比基準底色 = #0a1030（見 layout.tsx 遮罩層的算式註解）。
+   Design tokens — 全部取樣自 2026 主視覺原稿 `source/背景.jpg`（深藍夜空 + 電光藍 + 青色高光）
+
+   取樣值（PIL 逐點取樣，勿憑印象改）：
+     底色     #000025 / #01003d / #01004e   —— 幾乎純藍的深靛，R/G 接近 0
+     中景藍   #0120b6 / #001db9
+     電光藍   #0106dc / #0d27fa / #0015ff
+     青色高光 #8cf5ff（最亮處 #8fffff）
+     細線條   #b1bee8（淡藍灰，永遠低透明度）
+     Logo 三色 #bc609f 洋紅 / #9072b2 紫 / #2dbbed 青
+     標題字   #ddeff9（帶藍的近白）
+
+   2026/9 由淺色水墨版整站翻成深色版：文字階全部反轉、玻璃由白霧改為藍霧、
+   全域底圖由 /bg.jpg 換成 SiteBackdrop 的漸層＋線構圖。
    ========================================================================== */
 @theme {
-  /* --- surface ladder ---
-     深色版改用**不透明**色階，與淺色版的半透明白層相反。理由：底層已經是不透明深藍，
-     半透明白再吃 /60 /30 這類修飾詞會複合成幾乎看不見（淺色版的 bg-surface/60
-     實際只有 33% 白，已經是這個坑）。不透明色階讓 opacity 修飾詞的行為可預測。 */
-  --color-bg: #0a1030; /* KV 深場 #010128↔#010139 之間，R/G 微抬避免大面積純藍在螢幕上發散 */
-  --color-bg-soft: transparent; /* 不變：區塊仍不自帶底色 → 全站只吃 layout 那一層 = 色調統一 */
-  --color-surface: #101a40; /* KV #010148 提亮一階 */
-  --color-surface-2: #16224e; /* KV #020455；翻牌鐘的牌身 */
-  --color-surface-3: #1c2b60; /* KV #02085e；翻牌鐘的牌面（比牌身再亮一階才有立體） */
-  --color-line: rgb(255 255 255 / 0.14); /* 淺色版 rgb(24 34 66 / 0.14) 的等值翻面 */
-  /* 0.08 微調到 0.09：1px 亮線在深底上會被次像素抗鋸齒吃掉，比暗線更容易消失 */
-  --color-line-soft: rgb(255 255 255 / 0.09);
+  /* --- surface ladder（深色版：藍霧玻璃，覆在 SiteBackdrop 上）---
+     --color-bg 是唯一的「實色底」，給導覽列、手機選單與 Hero 的漸層遮罩用；
+     取主視覺左半的底色 #01003d 再往中性拉一點（純 0,0,x 在螢幕上會偏紫）。 */
+  --color-bg: #050a2b;
+  --color-bg-soft: transparent; /* 區塊不自帶底 → 全站只吃同一層 SiteBackdrop = 色調統一 */
+  --color-surface: rgb(146 174 255 / 0.07);
+  --color-surface-2: rgb(146 174 255 / 0.11);
+  --color-surface-3: rgb(146 174 255 / 0.16);
+  /* 這三階**本身就是半透明**，所以不要再套 Tailwind 的 /60 /30 修飾詞 ——
+     bg-surface/60 合成後只剩 4.2% 藍白，在深底上等於什麼都沒畫。
+     要兩級深淺就直接換階（surface → surface-2 → surface-3），別去乘 alpha。 */
+  --color-line: rgb(150 178 255 / 0.22);
+  --color-line-soft: rgb(150 178 255 / 0.12);
 
-  /* --- brand ---
-     淺色版四階是「由深到淺」，深底上不能照抄：同一個 token 不可能既當白字按鈕底
-     （要暗）又當連結文字色（要亮）。因此把「按鈕實底」拆成獨立的 brand-fill，
-     brand-lift 以上整組往亮的方向重新定位 —— 所有 text-brand-lift / border-brand-lift
-     的呼叫點因此一行都不用改。
-     警告：--color-brand 對頁底只有 1.63:1，**只能當大面積色塊底，絕不可用於文字**。 */
-  --color-brand: #0d2a9e; /* KV 電光藍 #0319a7 */
-  --color-brand-fill: #1b45cf; /* KV #0220b7↔#0326c4；按鈕實底，白字 7.50:1 */
-  --color-brand-lift: #5f89ff; /* 連結／圖示／小標，5.76:1 */
-  --color-brand-bright: #8fb3ff; /* 大字與結構性藍，8.91:1 */
-  --color-brand-glow: #b9cdff; /* 焦點框、光暈最亮端，11.72:1 */
-  /* Hero 兩顆鏡像 CTA 的紫端；白字 10.31:1。與 day2 是不同 token：day2 是文字色，這支是底色 */
-  --color-violet-fill: #5b3fd0;
+  /* --- brand（主視覺電光藍，在深底上依序提亮）--- */
+  --color-brand: #2b56f0;
+  /* 按鈕實底。brand 本身偏亮、當大面積填色會過曝，往深藍側收一階後白字 7.4:1。
+     呼叫端是 Cta 的 solid 變體與導覽列報名鈕 —— 它們要「一塊實心藍」，
+     不是 brand 那種用來當光構圖的亮藍。 */
+  --color-brand-fill: #1e40cc;
+  --color-brand-lift: #4b7bff;
+  --color-brand-bright: #7aa2ff;
+  --color-brand-glow: #a9c4ff;
 
-  /* --- accent（原 --color-gold）---
-     業主定案：金色點綴改為 KV 青。取 KV 亮青區塊的**中段** #68d1ee，
-     刻意不取更亮的 #7aeaf5／#85f6fa —— 眉標在淺色版是「安靜的點綴」，
-     13:1 的亮青會搶過標題。
-     token 一併改名是刻意的：叫 gold 卻畫青色，下一個維護的人一定會踩到。 */
-  --color-accent: #68d1ee;
+  /* --- aqua：主視覺的青色高光（#8cf5ff）。
+     取代淺色版的 --color-gold —— 新主視覺整張圖沒有任何暖色/金色，
+     眉標與強調點一律改用這支青色。改名不是重構潔癖：留著叫 gold 卻渲染青色，
+     下一個人一定會照名字去猜色相。 */
+  --color-aqua: #6fe3ff;
+  /* accent 是 aqua 的別名，兩個名字都留著是刻意的：
+     站上 36 處眉標／強調點沿用 accent（語意：「本站的強調色」），
+     aqua 則用在明確要「主視覺那支青」的地方（Hero 的 2026、KV 線構圖高光）。
+     值必須永遠相同（刻意寫死而不是 var(--color-aqua)：Tailwind 的 /alpha 修飾詞會把它
+     包進 color-mix，指到另一支 token 只是多一層轉址、不會比較好維護）——
+     要換強調色，兩支一起換。 */
+  --color-accent: #6fe3ff;
 
-  /* --- 日別（Day 1 藍 / Day 2 紫，業主定案兩色制不變）---
-     KV 全是藍與青，眉標青會與 Day 1 撞色 → Day 1 往電光藍側（210°），accent 留在青側（192°）。
-     Day 2 的紫由舊的 #6d47c4（262°）調到 253°，比舊值藍，又與 KV 自己的 #0a19f9（236°）
-     差 17° 不會被讀成「同一個藍」。
-     刻意**不**加對稱的 --color-day1：orbit-sky 同時扛 Day 1 與全站 25 處無關的次要藍
-     （贊助勾選、FAQ 連結、Venue 連結…），拆出 day1 只會逼那 25 處二選一。 */
-  --color-orbit-sky: #4d9ff0; /* Day 1；同時是全站泛用次要藍 */
-  --color-day2: #977ef2; /* Day 2；收掉原本散在六個檔案、沒有 token 的孤兒色值 #6d47c4 */
-  --color-magenta: #b762aa; /* KV 社團 logo 的粉；同時取代舊的 orbit-rose */
+  /* --- orbit：主視覺光構圖取樣（深底上直接用亮色，不再加深）--- */
+  --color-orbit-blue: #2f5cff;
+  --color-orbit-sky: #58d3f7;
+  --color-orbit-violet: #9bb0ff;
+  --color-orbit-lilac: #b9a8ee;
+  --color-orbit-rose: #d992c4;
+  --color-coral: #ef9f8f;
+  --color-magenta: #d167ab;
+  /* 日別配色（業主定案的兩色制）：Day 1 走 orbit-sky 的青，Day 2 走這支紫。
+     取主視覺 logo 的紫端 #9072b2 往亮處提到深底可讀（對頁底 7.1:1）。
+     Day 1 刻意不另開 token —— orbit-sky 同時扛 Day 1 與全站數十處次要藍，
+     拆開只會逼那些呼叫點二選一。 */
+  --color-day2: #a98bff;
 
-  /* --- text（深底上的反轉文字階）---
-     對頁底的對比 17.2 / 12.0 / 7.5 / 5.8，四階全部優於淺色版（14.1 / 10.4 / 7.1 / 5.3）。
-     ink 取 KV 白字 #f8fcfe 往場域藍拉一點 —— 純白在深藍上會有輕微光暈感。 */
-  --color-ink: #f2f6ff;
-  --color-ink-2: #c3d0ec;
-  --color-ink-3: #94a5cc;
-  --color-ink-4: #7b90c0;
+  /* --- text（深色版：近白 → 淡藍 → 藍灰階）---
+     對 --color-bg 的對比：ink 17:1 / ink-2 11:1 / ink-3 7.2:1 / ink-4 4.8:1。
+     ink-4 只給 12px 以上的輔助文字，別拿它寫正文。 */
+  --color-ink: #f0f5ff;
+  --color-ink-2: #c6d4f5;
+  --color-ink-3: #9aabd8;
+  --color-ink-4: #7c8fc0;
 
   /* --- type --- */
   --font-sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
   --font-display: var(--font-montserrat), "Noto Sans TC", sans-serif;
 
   /* --- 字級：整組覆寫 Tailwind 內建的 text-xs ~ text-3xl ---
-     原始級距（xs 12 / sm 14 / base 16 / lg 18 / xl 20 / 2xl 24 / 3xl 30）在中文＋白霧底上
+     原始級距（xs 12 / sm 14 / base 16 / lg 18 / xl 20 / 2xl 24 / 3xl 30）在中文＋霧面底上
      整體偏小，經三輪上調後定為 16 / 17 / 18 / 20 / 22 / 26 / 32。
      是「整條」一起上移，不是只放大小字 —— 只動底部會讓標籤追上內文、階層被壓平。
      行高改用無單位比例（原生預設是綁定舊尺寸的絕對 rem，換字級後比例會跑掉）。
@@ -86,7 +101,7 @@
   --text-3xl: 32px;
   --text-3xl--line-height: 1.3;
 
-  /* --- radius：KV badge 是圓角矩形，全站沿用柔性圓角 --- */
+  /* --- radius：主視覺的「第四屆」徽章是圓角矩形，全站沿用柔性圓角 --- */
   --radius-card: 16px;
   --radius-pill: 999px;
 
@@ -99,13 +114,17 @@
     /* 不用 scroll-behavior: smooth —— 會讓「回上一頁」還原位置時從頂端平滑滑過去（先跳最上方再導航）。
        節點跳頁改由 ScrollSnapController 用各自的 scrollIntoView({behavior:"smooth"}) 處理。 */
     scroll-padding-top: 88px;
+    /* 深色版必備：告訴瀏覽器這是深色頁面 → 捲動過頭的橡皮筋區、表單控制項、
+       捲軸都跟著走深色，不會在頁面邊緣露出一條白。 */
+    color-scheme: dark;
+    background-color: #030621;
   }
   /* 節點吸附改由 JS（ScrollSnapController）獨佔掌控，不再用 CSS scroll-snap：
      CSS 吸附會與 JS 跳轉互相打架 → 「先卡一下再跳／體感像兩個節點」，也會把「回上一頁」
      還原的位置吸走。.snap-start / .snap-panel 保留，只當作 JS 查詢節點用的標記
      （其 scroll-snap-* 在沒有 scroll-snap-type 時無作用）。 */
   body {
-    /* 背景交由 layout 的固定背景圖層（霧化）處理，body 本身透明 */
+    /* 背景交由 layout 的 SiteBackdrop（固定層）處理，body 本身透明 */
     background: transparent;
     color: var(--color-ink);
     font-family: var(--font-sans);
@@ -113,10 +132,8 @@
     text-wrap: pretty;
   }
   ::selection {
-    /* 深色頁上的選取應該是「亮塊配深字」，不是反過來：
-       brand-bright 上放白字只有 2.09:1，放頁面底色是 9.79:1。 */
     background: var(--color-brand-bright);
-    color: var(--color-bg);
+    color: #05102e;
   }
   h1, h2, h3, h4 {
     text-wrap: balance;
@@ -133,41 +150,39 @@
 }
 
 @layer utilities {
-  /* 玻璃卡片 — 呼應 KV 的半透明環形玻璃體。
-     深色版是「低 alpha 的白」疊在深藍場上 → 提亮而不改色相，維持全站同一層霧的統一感。
-     淺色版的 0.62/0.44/0.55 不能直接反相成黑：深底上疊黑幾乎等於什麼都沒發生，
-     這和站內那批 bg-black/[0.03] 疊層在深底會整個消失是同一個物理。 */
+  /* 玻璃卡片 —— 深色版：藍霧玻璃 + 上緣一條淡藍稜線。
+     深底上不能沿用淺色版那種「白色半透明」：白霧在深底會整片泛灰、把層次吃平。
+     改成低透明度的藍色調 + 明顯一點的邊框，卡片邊界靠「線」而不是靠「色塊」立起來
+     —— 這也是主視覺本身的語彙（形體都由細線構成）。 */
   .glass {
     background: linear-gradient(
       160deg,
-      rgb(255 255 255 / 0.075) 0%,
-      rgb(255 255 255 / 0.04) 40%,
-      rgb(255 255 255 / 0.065) 100%
+      rgb(126 164 255 / 0.13) 0%,
+      rgb(48 78 190 / 0.07) 42%,
+      rgb(126 164 255 / 0.10) 100%
     );
     /* 捲動每幀成本主因是模糊半徑；14→8 明顯降耗、霜面感幾乎不變 */
     backdrop-filter: blur(8px);
-    border: 1px solid var(--color-line-soft);
+    border: 1px solid rgb(150 178 255 / 0.18);
   }
   .glass-strong {
-    background: linear-gradient(160deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0.075));
+    background: linear-gradient(160deg, rgb(140 176 255 / 0.20), rgb(56 88 205 / 0.12));
     backdrop-filter: blur(11px);
-    border: 1px solid var(--color-line);
+    border: 1px solid rgb(160 190 255 / 0.26);
   }
 
   /* ===== 玻璃按鈕 =====
      半透明底 + 霧化 + 上緣鏡面稜線 + 頂部高光帶 + 常駐微光漂移。
      底色由各 variant 自帶（background-image / background-color），此處只負責「玻璃殼」。
 
-     淺色版的坑（保留紀錄，因為教訓仍然成立）：半透明底疊在白霧上會「變亮」，
-     brand-lift 降到 0.76 合成後是 rgb(116 146 219)，白字只有 3.08:1，AA 不可能達標，
-     只能靠 font-semibold + text-shadow 緩解，是使用者知情後保留白字的結果。
+     深色版把淺色版最大的一個包袱解掉了：
+     淺底時白字對比只有 3.08:1（低於 WCAG AA，是使用者知情後的選擇）；
+     換成深底之後，同一顆按鈕的合成色約 rgb(52 95 223)，白字對比 5.4:1 —— 直接過 AA。
+     所以下面那些「補償可讀性」的手段（font-semibold、text-shadow、高光帶避開字身）
+     現在是純視覺選擇，不再是救命索；要調整不必再擔心踩線。
 
-     深色版把這個問題整個消掉了：底色與背景同向往暗疊，同樣的 0.76 alpha 合成後約
-     rgb(23 56 169)，白字 9.65:1，AA 與 AAA 皆過。透明感因此變成免費的，
-     alpha 不必再為對比讓步 —— 所以各 variant 的 0.76 / 0.78 / 0.64 全部原樣保留。
-
-     但「把底色調深、再降 alpha」那條路仍然不能走：那是關於「合成後亮度必須真的上升，
-     看起來才會變淡」的物理，與明暗主題無關，在深色版一樣會把透明感抵銷掉。 */
+     仍然成立的一條舊教訓：別走「把底色調深、再降 alpha」那條路 ——
+     合成後會變回實心按鈕的樣子，等於自己把透明感抵銷掉。 */
   .btn-glass {
     position: relative;
     overflow: hidden;
@@ -176,24 +191,23 @@
        同時保住「手機版拿掉 backdrop-filter」時的行為。 */
     isolation: isolate;
     /* 按鈕面積遠小於 .glass 卡片，成本可接受。
-       底色 0.82 只讓約 18% 的背景透出來 → 拉高 saturate，讓透出的那一點帶彩度、
-       像有折射的玻璃，而不是一層灰霧。 */
-    backdrop-filter: blur(12px) saturate(1.25);
-    -webkit-backdrop-filter: blur(12px) saturate(1.25);
+       拉高 saturate 讓透出的背景帶彩度、像有折射的玻璃，而不是一層灰霧。 */
+    backdrop-filter: blur(12px) saturate(1.45);
+    -webkit-backdrop-filter: blur(12px) saturate(1.45);
     /* border 刻意不寫在這裡 —— ghost / outline 變體各有自己的邊框色，
        若在此下 border 會與 Tailwind 的 border-* utility 同特異度而變成「看載入順序」。
        各變體自行用 border-* 決定鏡框顏色。 */
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.42),   /* 上緣鏡面稜線：深底不必到 0.55 就立得住 */
-      inset 0 -1px 0 rgb(255 255 255 / 0.1),   /* 下緣微反光 */
-      0 10px 30px -12px rgb(27 69 207 / 0.55); /* 深底上投影看不見 → 改成 brand-fill 的外發光 */
+      inset 0 1px 0 rgb(255 255 255 / 0.4),    /* 上緣鏡面稜線 */
+      inset 0 -1px 0 rgb(120 180 255 / 0.18),  /* 下緣微反光（帶青，呼應主視覺高光） */
+      0 12px 34px -16px rgb(20 60 220 / 0.75); /* 深底上的投影改成藍光暈才看得見 */
   }
   /* hover 抬升：inset 高光必須一起重寫，否則整條 box-shadow 被覆蓋 → 鏡面高光會消失 */
   .btn-glass:hover {
     box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.45),
-      inset 0 -1px 0 rgb(255 255 255 / 0.14),
-      0 14px 36px -12px rgb(27 69 207 / 0.7);
+      inset 0 1px 0 rgb(255 255 255 / 0.46),
+      inset 0 -1px 0 rgb(140 200 255 / 0.24),
+      0 16px 40px -14px rgb(40 90 255 / 0.85);
   }
 
   /* 常駐微光：斜向亮帶緩慢左右漂移。只動 transform / opacity → 走合成層，不觸發重排重繪。 */
@@ -205,26 +219,24 @@
     background: linear-gradient(
       78deg,
       transparent 38%,
-      rgb(255 255 255 / 0.28) 50%,
+      rgb(210 240 255 / 0.42) 50%,
       transparent 62%
     );
-    /* 實際亮度 = 這裡的 0.28 × keyframe 的 opacity → 峰值約 0.078。
-     深底上白亮帶比淺底更醒目，故整體降一階。
+    /* 實際亮度 = 這裡的 0.42 × keyframe 的 opacity → 峰值約 0.12。
        覺得太隱晦／太搶眼，調這兩個數字其中一個即可，全站按鈕會一起變。 */
     animation: glass-drift 8s var(--ease-out-soft) infinite;
   }
 
   /* 頂部高光帶：從頂端往下漸淡，像光打在玻璃上半部。
-     底色 0.82 幾乎透不出背景，玻璃感主要就靠這條 + 上緣稜線撐起來。
      只蓋上緣 38%（inset 的 bottom 62%）—— 膠囊按鈕的文字垂直置中、大致只佔中間三分之一，
-     高光落在其上方的留白區，因此不會再吃掉本來就吃緊的白字對比。
+     高光落在其上方的留白區。
      宣告順序必須在 ::before（常駐微光）之後 → 疊在微光之上、文字之下。 */
   .btn-glass::after {
     content: "";
     position: absolute;
     inset: 0 0 62% 0;
     pointer-events: none;
-    background: linear-gradient(180deg, rgb(255 255 255 / 0.1), transparent);
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.15), transparent);
   }
 
   /* 兩層環境光都壓到內容之下。
@@ -241,40 +253,50 @@
      這支就是「報名鈕的底色」那一份。目前有兩個使用者：Hero 的主 CTA 與導覽列的報名鈕，
      兩者在首頁第一屏同時看得到、必須永遠同色，所以抽成一支，不要各自寫一份字串。
 
-     輪廓刻意不寫在這裡：這個填色對頁底只有 1.36:1，按鈕的形狀完全靠呼叫端的
+     業主 2026/9 定案：深藍玻璃 + KV 青描邊，鏡像的藍→紫漸層已撤（紫是舊方案 C 的遺留）。
+     輪廓刻意不寫在這裡：這個填色本身對背景幾乎沒有對比，按鈕的形狀完全靠呼叫端的
      border-accent 撐起來，而描邊亮度正是主／次 CTA 的區分方式（見 Hero 的註解）。 */
   .btn-gradient-primary {
     background-image: linear-gradient(110deg, rgb(28 43 96 / 0.9) 0%, rgb(22 34 78 / 0.82) 100%);
   }
 
-  /* 白字按鈕。深色版白字對比已有 9.65:1，這行不再是對比補償，
-     而是讓字緣在掃光掠過時仍保有邊界。 */
+  /* 白字按鈕。深色版對比已達 AA（見 .btn-glass 註解），text-shadow 純粹是讓字緣
+     在按鈕高光帶上不糊掉，不再承擔可讀性。 */
   .btn-glass-on-dark {
     color: #fff;
-    text-shadow: 0 1px 2px rgb(2 6 34 / 0.45);
+    text-shadow: 0 1px 2px rgb(4 12 48 / 0.45);
   }
 
-  /* 漸層文字 — KV 色帶：青 → 電光藍 → 紫 → logo 粉。
-     最暗的一停 #5f89ff 對深底 5.76:1，四停全部過 AA；呼叫端都是大字級（歷屆數字、贊助標題）。 */
+  /* 漸層文字 —— 主視覺色帶：青 → 電光藍 → 紫 → 洋紅（logo 三色的延伸） */
   .text-orbit {
     background: linear-gradient(
       104deg,
-      #7aeaf5 0%,
-      #5f89ff 40%,
-      #977ef2 76%,
-      #cf87c1 100%
+      #7ce9ff 0%,
+      #6f9bff 38%,
+      #a98bff 72%,
+      #e07fc0 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
   .text-fade {
-    /* 對應 ink → ink-3。淺色版是深到更深，深色版是亮到更暗。
-       目前全站沒有呼叫點，改版時無法靠截圖驗證；保留是因為它是 .text-orbit 的成對元件。 */
-    background: linear-gradient(180deg, var(--color-ink) 25%, rgb(148 165 204 / 0.85) 100%);
+    background: linear-gradient(180deg, #ffffff 20%, rgb(160 184 240 / 0.72) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+
+  /* 主視覺標題字：近白 → 淡藍的垂直漸層 + 一圈藍光暈。
+     取樣自 `背景.jpg` 的「台灣新創投資年會」（筆畫 #ddeff9，字身上白下藍）。
+     drop-shadow 而非 text-shadow：漸層文字用 background-clip 做，
+     text-shadow 會畫在被裁掉的實心字上（結果是一團色塊），drop-shadow 吃的是最終畫素。 */
+  .text-kv {
+    background: linear-gradient(178deg, #ffffff 6%, #e2edff 44%, #a8c1ee 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 28px rgb(120 170 255 / 0.32));
   }
 
   /* 巨型英文背景標 */
@@ -283,14 +305,12 @@
     font-weight: 700;
     letter-spacing: -0.02em;
     line-height: 0.85;
-    /* 深色版必須用「亮色低 alpha」：淺色版的 rgb(60 82 172 / 0.28) 比深藍底還暗 → 整個消失。
-       注意呼叫端還會再乘一層 opacity（Speakers.tsx 是 0.3、md 是 0.38），複合後實際只剩約 0.09 ——
-       這裡的 alpha 訂得比直覺高，就是為了吃掉那一層。 */
+    /* 深底上要「比底稍亮」才看得見，方向與淺色版相反；色相走主視覺的藍→紫→青 */
     background: linear-gradient(
       106deg,
-      rgb(95 137 255 / 0.3) -6%,
-      rgb(151 126 242 / 0.36) 44%,
-      rgb(104 209 238 / 0.26) 102%
+      rgb(96 140 255 / 0.20) -6%,
+      rgb(150 120 255 / 0.24) 44%,
+      rgb(90 200 255 / 0.16) 102%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -298,28 +318,20 @@
     user-select: none;
   }
 
-  /* 光暈 —— 深底上發光終於「有東西可發」，alpha 可以比淺色版高。
-     兩者目前皆無呼叫點，仍一併換色，免得日後啟用時還帶著淺色版的值。 */
-  .glow-brand { box-shadow: 0 0 48px rgb(95 137 255 / 0.3); }
-  .glow-soft  { box-shadow: 0 0 90px rgb(143 179 255 / 0.2); }
+  /* 光暈 */
+  .glow-brand { box-shadow: 0 0 48px rgb(70 120 255 / 0.34); }
+  .glow-soft  { box-shadow: 0 0 80px rgb(120 170 255 / 0.2); }
 
-  /* 細噪點，原意是避免深色大面積漸層產生色帶。
-     實情是它在深色版對大面積漸層近乎無效：mix-blend-mode: overlay 在底色低於 0.5 時
-     等於 2×base×blend，在近黑的頁底上幾乎不起作用。而且它只掛在 7 個區塊上，
-     色帶卻是橫跨整頁的，per-section 的做法本質上補不起來。
-     它仍然有用的地方是底色偏亮處（例如 speakers/[slug] 的人像照，base > 0.5）——
-     那裡 overlay 確實有效，所以這層保留。
-
-     mask 讓這層在區塊上下緣淡出，避免它 inset:0 的方框在區塊交界露出直角邊界。 */
+  /* 細噪點。主視覺本身就有明顯的顆粒質感，深色大面積漸層也需要它壓色帶。 */
   .grain::after {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.5;
-    mix-blend-mode: overlay;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+    opacity: 0.42;
+    /* soft-light 而非 overlay：overlay 在很暗的底上幾乎只會提亮，顆粒會變成一層灰霧；
+       soft-light 明暗雙向都作用，深底才留得住「顆粒」而不是「起霧」。 */
+    mix-blend-mode: soft-light;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
   }
 
@@ -336,15 +348,19 @@
     box-shadow: inset 0 0 28px rgb(1 4 34 / 0.5);
   }
 
-  /* 區塊上下的水平細線。深色版改吃 accent：KV 的弧線本來就是青，
-     淡青細線比中性白線更像主視覺的一部分。若 15 條分隔線的青味太重，
-     退路是換回中性的 rgb(255 255 255 / 0.16)。 */
+  /* 區塊上下的水平細線 */
   .hairline {
-    background: linear-gradient(
-      90deg,
-      transparent,
-      color-mix(in srgb, var(--color-accent) 22%, transparent),
-      transparent
+    background: linear-gradient(90deg, transparent, rgb(150 178 255 / 0.26), transparent);
+  }
+
+  /* 主視覺的細線填充：等距水平細線，用來填幾何塊面（三角形、方塊、弧帶）。
+     這是整張 KV 最有辨識度的語彙 —— SiteBackdrop 與需要「構成感」的裝飾塊共用這一條，
+     不要各自寫一份 repeating-linear-gradient，否則線距一定會慢慢走鐘。 */
+  .kv-hatch {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      rgb(177 190 232 / 0.30) 0 1px,
+      transparent 1px 9px
     );
   }
 
@@ -389,6 +405,12 @@
   0%, 100% { transform: translateX(-26%); opacity: 0.12; }
   50%      { transform: translateX(26%);  opacity: 0.28; }
 }
+/* SiteBackdrop 的青色高光呼吸。與 glass-drift 同一個坑：兩端必須一致，
+   關動效時才會停在低亮度而不是最亮。 */
+@keyframes kv-breathe {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 0.82; }
+}
 /* 橫向瀏覽箭頭的持續微動（暗示可往該方向切頁）；reduced-motion 於 base 層已全域關閉 */
 @keyframes nudge-r { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
 @keyframes nudge-l { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-5px); } }
@@ -409,8 +431,8 @@
   }
   .marquee-track-reverse { animation-name: marquee-right; }
 
-  /* 兩側羽化。用 mask 而非疊漸層色塊：本區塊底下是 layout 那張水墨背景圖，
-     不是純色，疊 from-bg-soft 的漸層蓋不住，卡片會被邊緣硬切一刀。
+  /* 兩側羽化。用 mask 而非疊漸層色塊：本區塊底下是 SiteBackdrop 的漸層與線構圖、
+     不是純色，疊 from-bg 的漸層蓋不住，卡片會被邊緣硬切一刀。
      mask 直接讓像素本身透明，底下是什麼都無所謂。 */
   .marquee-viewport {
     -webkit-mask-image: linear-gradient(
@@ -452,6 +474,8 @@
     animation-delay: var(--bd-delay, 0s);
   }
 
+  .animate-kv-breathe { animation: kv-breathe 11s var(--ease-out-soft) infinite; }
+
   @media (prefers-reduced-motion: reduce) {
     /* base 層的全域規則會把 duration 壓成 0.01ms —— 對位移動畫而言那不是「停止」，
        而是瞬間跳到終點 (-50%)。這裡必須明確關掉動畫並歸零，改由使用者自己橫向捲動。 */
@@ -473,7 +497,11 @@
 }
 
 /* ===== 翻牌時鐘（倒數）—— 單張牌 .flip 內含 .front / .back，牌面上下半由 ::before/::after 拆開，
-   數字用 content: attr(data-d) 動態帶入。向下翻：前牌上半下折、後牌下半下折歸位。 ===== */
+   數字用 content: attr(data-d) 動態帶入。向下翻：前牌上半下折、後牌下半下折歸位。
+
+   深色版：淺色版是「深色牌貼在白霧底上」，直接沿用會與深藍背景糊在一起、看不出是張牌。
+   改成「比背景更深的牌身 + 一圈藍色細框 + 藍光暈」，靠邊框與投影把牌立起來 ——
+   與全站「形體由細線構成」的主視覺語彙一致。 ===== */
 .flip {
   position: relative;
   display: inline-block;
@@ -481,14 +509,12 @@
   height: 1.3em;
   line-height: 1.3em;
   border-radius: 0.14em;
-  /* 原本的 #0c1424 是為了在淺色頁上當「深色牌」；新的頁底 #0a1030 比它還亮，
-     照留會讓整組倒數看起來像頁面破了個洞。改吃 surface 色階，牌身與牌面各差一階才有立體。 */
-  background: var(--color-surface-2);
-  color: var(--color-ink);
+  background: #050c2c;
+  color: #eaf3ff;
   text-align: center;
   box-shadow:
-    0 6px 18px -8px rgb(0 0 0 / 0.7),        /* 深底上陰影必須是真黑，靛藍陰影看不見 */
-    inset 0 0 0 1px rgb(255 255 255 / 0.08); /* 牌緣細框，把牌從頁面上「切」出來 */
+    0 0 0 1px rgb(150 178 255 / 0.22),
+    0 10px 24px -14px rgb(10 30 120 / 0.9);
 }
 .flip .digital { position: absolute; inset: 0; }
 .flip .digital::before,
@@ -499,15 +525,14 @@
   right: 0;
   overflow: hidden;
   box-sizing: border-box;
-  background: var(--color-surface-3);
+  background: #0e1c50;
 }
 .flip .digital::before {
   top: 0;
   bottom: 50%;
   border-radius: 0.14em 0.14em 0 0;
-  /* 0.34 → 0.45：牌面提亮後中縫要更深，才看得出這是「摺」而不是「縫隙」。
-     這條必須維持黑色 —— 它是上半片投在下半片上的影子，改成亮色翻牌動畫就沒立體感。 */
-  border-bottom: 1px solid rgb(0 0 0 / 0.45);
+  /* 上下半之間那條暗線是「摺線」，深底上要更暗才立體 */
+  border-bottom: 1px solid rgb(0 0 0 / 0.5);
 }
 .flip .digital::after {
   top: 50%;
