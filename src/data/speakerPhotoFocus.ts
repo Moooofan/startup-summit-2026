@@ -4,7 +4,7 @@
  * 簡報裡有幾位講者放的不是標準人像，而是活動背板、節目截圖或現場照，
  * 直接用 object-top 裁切會把人切掉。這裡以 object-position 校正焦點。
  *
- * 這是權宜措施 —— 取得正式頭像後應刪除對應項目。見 TODO.md。
+ * TODO: 這是權宜措施 —— 向講者取得正式頭像後，應刪除對應項目。
  * 本檔為手寫，不會被 gen_speakers.py 覆蓋。
  */
 const overrides: Record<string, string> = {

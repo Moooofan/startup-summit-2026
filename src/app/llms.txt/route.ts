@@ -18,6 +18,7 @@ export function GET() {
 
 ## 活動事實
 - 名稱：${event.fullName}（${event.nameEn}）
+- 本屆主軸：${event.theme}
 - 日期：${event.dateLabelLong}，每日 ${event.timeLabel}
 - 地點：${event.venue.name} ${event.venue.detail}（臺北市）
 - 規模：${event.capacity.seats} 席，${event.capacity.attendance}

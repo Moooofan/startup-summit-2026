@@ -107,7 +107,7 @@ export function Agenda() {
             <div className="snap-panel pb-16 pt-6 md:min-h-[100svh]">
               <div className="shell">
                 <Reveal>
-                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-black/8 pb-5">
+                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-line-soft pb-5">
                     <span className={cn("font-display text-sm font-semibold tracking-[0.2em]", tone.text)}>
                       {f.label}
                     </span>

@@ -25,11 +25,11 @@ import type { Edition, PastSpeaker } from "@/data/review";
 
 const CN_NO = ["一", "二", "三", "四"] as const;
 
-/** 日別配色：沿用全站「第一天藍／第二天紫」的色碼（同 Speakers.tsx 的 accent 對照表）。
+/** 日別配色：沿用全站「第一天藍／第二天紫」的 token（同 Speakers.tsx 的 accent 對照表）。
  *  以日序決定，與該日是創辦人場或投資人場無關 —— 各屆的日別性質本來就不一樣。 */
 const DAY_TONE = {
   1: "text-orbit-sky",
-  2: "text-[#6d47c4]",
+  2: "text-day2",
 } as const;
 
 /** 依 day 把名單切成連續區段。
@@ -96,7 +96,7 @@ function SessionTable({ items }: { items: PastSpeaker[] }) {
     <div className="hidden overflow-hidden rounded-card border border-line-soft md:block">
       <table className="w-full border-collapse text-left">
         <thead>
-          <tr className="bg-black/[0.03]">
+          <tr className="bg-white/[0.025]">
             <th
               scope="col"
               className="w-[46%] px-4 py-3 text-[17px] font-medium tracking-wide text-ink-4 md:px-5"
@@ -117,7 +117,7 @@ function SessionTable({ items }: { items: PastSpeaker[] }) {
               {group.map((s, i) => (
                 <tr
                   key={i}
-                  className="border-t border-line-soft align-top transition-colors hover:bg-black/[0.02]"
+                  className="border-t border-line-soft align-top transition-colors hover:bg-white/[0.035]"
                 >
                   {/* 一場多位講者時，講題只在該場的第一列出現並往下跨列、垂直置中 */}
                   {i === 0 && (
@@ -181,7 +181,7 @@ function EditionPanel({ edition: e }: { edition: Edition }) {
       {open && (
         <div id={panelId} className="space-y-8 pb-8">
           {list.length === 0 ? (
-            <p className="rounded-lg border border-dashed border-black/15 bg-black/[0.02] px-4 py-4 text-[18px] text-ink-4">
+            <p className="rounded-lg border border-dashed border-line bg-white/[0.018] px-4 py-4 text-[18px] text-ink-4">
               這一屆的議程與講者名單尚未取得，資料整理中。
             </p>
           ) : (

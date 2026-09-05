@@ -37,7 +37,7 @@ export function TicketGroupTable() {
       <div className="mt-4 hidden overflow-hidden rounded-card border border-line-soft md:block">
         <table className="w-full border-collapse text-left">
           <thead>
-            <tr className="bg-black/[0.03]">
+            <tr className="bg-white/[0.025]">
               <th scope="col" className="px-5 py-3 text-[17px] font-medium tracking-wide text-ink-4">
                 票種
               </th>
@@ -76,7 +76,7 @@ export function TicketGroupTable() {
       <div className="mt-4 overflow-hidden rounded-card border border-line-soft md:hidden">
         <table className="w-full border-collapse text-left">
           <thead>
-            <tr className="bg-black/[0.03]">
+            <tr className="bg-white/[0.025]">
               <th scope="col" className="px-4 py-3 text-[17px] font-medium tracking-wide text-ink-4">
                 人數
               </th>

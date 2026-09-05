@@ -6,9 +6,21 @@ export const site = {
     "2026 第四屆台灣新創投資年會・雙峰論壇。10/14 創辦人論壇、10/15 投資人論壇，38 位創業家與機構投資人齊聚華南金控國際會議中心。",
 };
 
-/** TODO: 尚未取得 Accupass 活動連結，先導向報名區塊。 */
-export const REGISTER_URL = "#tickets";
-export const REGISTER_READY = false;
+/**
+ * 報名去向（2026/9 業主提供 Accupass 活動頁後接上，先前是佔位錨點 "#tickets"）。
+ *
+ * 這兩支常數是全站報名的單一開關，改值不必動任何呼叫端：
+ * - `REGISTER_URL`：Hero、導覽列（含手機選單）、首頁票卡、/tickets 票卡都吃它。
+ *   值是外部網址時，Cta 與導覽列會自動加 target="_blank"（見 isExternalHref）。
+ * - `REGISTER_READY`：同時控制三件事 —— 導覽列報名鈕是否出現（Nav 的 showRegisterCta）、
+ *   票卡按鈕文字（「立即報名」／「報名即將開放」）、以及 Event JSON-LD 的
+ *   offers.availability（InStock／PreOrder）與 offers.url。
+ *
+ * 兩支要一起改：只把 READY 打開而 URL 還是錨點，JSON-LD 的 offers[].url 會變成
+ * "#tickets" 這種非絕對網址的非法值。
+ */
+export const REGISTER_URL = "https://www.accupass.com/event/2608171137481477207040";
+export const REGISTER_READY = true;
 
 /**
  * 暫時只對外開放的分頁（2026/8 業主指示）。
@@ -27,6 +39,16 @@ export function isPublicRoute(href: string): boolean {
   const path = href.split("#")[0].split("?")[0];
   if (!path.startsWith("/")) return true; // 外部連結／mailto 不受限
   return (PUBLIC_ROUTES as readonly string[]).includes(path);
+}
+
+/**
+ * 是否為站外網址（決定要不要開新分頁）。
+ *
+ * 只認 http(s)：mailto: 開新分頁沒有意義（/sponsor 的贊助洽談鈕就是把 mailto 丟給 Cta），
+ * 站內路徑與 #錨點更不該開新分頁。
+ */
+export function isExternalHref(href: string): boolean {
+  return /^https?:\/\//.test(href);
 }
 
 export const SPONSOR_CONTACT = "mailto:hm8827@gmail.com?subject=2026%20台灣新創投資年會%20贊助洽談";

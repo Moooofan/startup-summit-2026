@@ -24,7 +24,7 @@ export function MobileCta() {
   return (
     <div
       className={cn(
-        "fixed inset-x-0 bottom-0 z-40 border-t border-black/10 bg-bg/95 backdrop-blur-md transition-transform duration-400 md:hidden",
+        "fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg/95 backdrop-blur-md transition-transform duration-400 md:hidden",
         show ? "translate-y-0" : "translate-y-full"
       )}
     >
@@ -35,7 +35,7 @@ export function MobileCta() {
         </div>
         <Link
           href="/tickets"
-          className="rounded-pill bg-brand-lift px-6 py-3 text-sm font-medium text-white"
+          className="rounded-pill bg-brand-fill px-6 py-3 text-sm font-medium text-white"
         >
           立即報名
         </Link>

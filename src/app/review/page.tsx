@@ -34,10 +34,18 @@ export default function ReviewPage() {
   return (
     <>
       {/* 頁首 */}
-      <section className="grain relative overflow-hidden pb-12 pt-[132px] md:pb-16 md:pt-[176px]">
+      {/* overflow-x-clip 而非 overflow-hidden，**別順手改回去**：
+          區塊光暈是 880px 高，這個頁首只有約 400px（pt-176 + SectionHead + pb），裝不下。
+          overflow-hidden 會把光暈在區塊底部切出一條水平硬邊（業主 2026/9 回報）。
+          也不能用 overflow-x-hidden：CSS 規定只要一軸不是 visible，另一軸的 visible
+          就會被算成 auto → 反而在區塊內生出一個垂直捲動容器。
+          overflow: clip 沒有這個耦合，overflow-x: clip 搭 overflow-y: visible 合法且有效 ——
+          橫向仍擋住溢位（光暈定位在負值，超出視窗會產生水平捲軸），縱向放它自然溢出。
+          溢出不會蓋到下一段：後續 section 同為 relative 且 DOM 在後，內容畫在光暈之上。 */}
+      <section className="grain relative overflow-x-clip pb-12 pt-[132px] md:pb-16 md:pt-[176px]">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-[12%] -top-[20%] h-[52vw] max-h-[680px] w-[52vw] max-w-[680px] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.24)_0%,transparent_64%)]"
+          className="pointer-events-none absolute -right-[12%] -top-[20%] h-[64vw] max-h-[880px] w-[64vw] max-w-[880px] rounded-full bg-[radial-gradient(circle,rgb(95_137_255/0.07)_0%,rgb(95_137_255/0.025)_40%,transparent_72%)]"
         />
         <div className="shell relative">
           <Reveal>
@@ -126,7 +134,7 @@ export default function ReviewPage() {
                       href={m.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="glass group flex items-start justify-between gap-4 rounded-card p-5 transition-colors hover:border-black/20"
+                      className="glass group flex items-start justify-between gap-4 rounded-card p-5 transition-colors hover:border-white/22"
                     >
                       <span className="min-w-0">
                         <span className="block text-[18px] leading-relaxed text-ink-2 transition-colors group-hover:text-ink">

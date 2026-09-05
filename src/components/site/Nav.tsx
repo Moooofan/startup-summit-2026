@@ -8,7 +8,8 @@ import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { event } from "@/data/event";
 import { useCountdown } from "@/lib/useCountdown";
-import { isPublicRoute, REGISTER_URL, REGISTER_READY } from "@/lib/config";
+import { isPublicRoute, isExternalHref, REGISTER_URL, REGISTER_READY } from "@/lib/config";
+import { Sheen } from "@/components/ui/Sheen";
 
 /** 全站導覽項目。實際顯示的是下面經 isPublicRoute 過濾後的 links ——
  *  隱藏中的分頁保留在這裡不刪，恢復時只需改 config 的 PUBLIC_ROUTES。 */
@@ -26,6 +27,12 @@ const links = allLinks.filter((l) => isPublicRoute(l.href));
 /** 報名 CTA 的去向：/tickets 隱藏時就不該再指過去，改用設定的報名連結。 */
 const registerHref = isPublicRoute("/tickets") ? "/tickets" : REGISTER_URL;
 const showRegisterCta = isPublicRoute("/tickets") || REGISTER_READY;
+/* 導覽列這兩顆報名鈕沒有走 ui/Cta（它們有自己的玻璃樣式），所以外部連結的
+   target/rel 要在這裡自己算一次。判斷邏輯與 Cta 共用同一支 isExternalHref，
+   兩邊才不會在 REGISTER_URL 換值時分岔。 */
+const registerLinkProps = isExternalHref(registerHref)
+  ? { target: "_blank", rel: "noopener noreferrer" }
+  : {};
 
 function NavCountdown() {
   const t = useCountdown(event.startDate);
@@ -72,7 +79,7 @@ export function Nav() {
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
         scrolled
-          ? "border-b border-black/8 bg-bg/90 backdrop-blur-md"
+          ? "border-b border-line-soft bg-bg/90 backdrop-blur-md"
           : "border-b border-transparent bg-gradient-to-b from-bg/90 to-transparent"
       )}
     >
@@ -115,12 +122,24 @@ export function Nav() {
 
         <div className="flex items-center gap-4">
           <NavCountdown />
+          {/* 兩顆報名鈕（這裡與下方手機選單）的樣式對齊 Hero 的主 CTA ——
+              業主 2026/9：同一個動作在第一屏出現兩次，不該有兩種長相。
+              底色吃 .btn-gradient-primary、輪廓吃 border-accent，兩者都與 Hero 那顆同值。
+
+              刻意**不**改用 ui/Cta：那支的 gradient 變體高度是由箭頭容器撐出來的、
+              右側內距又為箭頭做過光學扣除，而這顆不要箭頭（業主指定），
+              沿用過去只會得到一顆矮扁、右邊又短一截的膠囊。這裡維持自己對稱的 px-5 py-2.5。
+
+              原本的 bg-brand-fill/76 必須拿掉：background-color 會墊在漸層底下改變合成亮度，
+              Hero 那兩顆是沒有 bg-* 的，留著就對不上色。 */}
           {showRegisterCta && (
             <Link
               href={registerHref}
-              className="btn-glass btn-glass-on-dark hidden rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:border-white/55 md:inline-flex"
+              {...registerLinkProps}
+              className="btn-glass btn-glass-on-dark btn-gradient-primary group hidden rounded-pill border border-accent/85 px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:border-accent md:inline-flex"
             >
-              立即報名
+              <Sheen />
+              <span className="relative">立即報名</span>
             </Link>
           )}
           <button
@@ -146,7 +165,7 @@ export function Nav() {
           bg-bg/95 就在導覽列正下方畫出一條白霧橫條 —— 因為容器是 lg:hidden，只有手機／平板看得到。 */}
       <div
         className={cn(
-          "grid border-t border-black/8 bg-bg/95 backdrop-blur-md transition-[grid-template-rows] duration-500 lg:hidden",
+          "grid border-t border-line-soft bg-bg/95 backdrop-blur-md transition-[grid-template-rows] duration-500 lg:hidden",
           open ? "grid-rows-[1fr]" : "grid-rows-[0fr] border-t-transparent"
         )}
       >
@@ -162,7 +181,7 @@ export function Nav() {
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="block border-b border-black/5 py-4 text-[18px] text-ink-2 transition-colors hover:text-ink"
+                  className="block border-b border-line-soft py-4 text-[18px] text-ink-2 transition-colors hover:text-ink"
                 >
                   {l.label}
                 </Link>
@@ -170,11 +189,16 @@ export function Nav() {
             ))}
             {showRegisterCta && (
               <li className="pt-5">
+                {/* 與桌機那顆同一組色與描邊（見上方註解）。維持 block 不改 inline-flex：
+                    這顆要全寬，而 inline-flex 的寬度由內容決定。掃光是絕對定位，
+                    在 block 上一樣蓋得滿整條按鈕。 */}
                 <Link
                   href={registerHref}
-                  className="btn-glass btn-glass-on-dark block rounded-pill border border-white/35 bg-[rgb(76_104_212/0.76)] py-3.5 text-center text-[18px] font-semibold"
+                  {...registerLinkProps}
+                  className="btn-glass btn-glass-on-dark btn-gradient-primary group block rounded-pill border border-accent/85 py-3.5 text-center text-[18px] font-semibold transition-all duration-300 hover:border-accent"
                 >
-                  立即報名
+                  <Sheen />
+                  <span className="relative">立即報名</span>
                 </Link>
               </li>
             )}

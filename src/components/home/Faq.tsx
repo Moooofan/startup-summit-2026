@@ -28,7 +28,7 @@ export function Faq() {
           </div>
 
           <Reveal delay={0.1} className="mt-12 lg:mt-0">
-            <ul className="divide-y divide-black/8 border-y border-black/8">
+            <ul className="divide-y divide-line-soft border-y border-line-soft">
               {faqs.map((f) => (
                 <li key={f.q}>
                   <details className="group">

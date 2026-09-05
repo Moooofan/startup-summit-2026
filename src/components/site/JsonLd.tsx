@@ -74,7 +74,7 @@ export function EventJsonLd({
         eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
         inLanguage: "zh-Hant-TW",
         url: site.url,
-        image: [`${site.url}/kv/kv-full.png`],
+        image: [`${site.url}/og-v2.png`],
         location: {
           "@type": "Place",
           name: `${event.venue.name} ${event.venue.detail}`,

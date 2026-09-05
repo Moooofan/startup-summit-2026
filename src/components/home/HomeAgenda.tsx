@@ -23,7 +23,7 @@ export function HomeAgenda() {
           <Fragment key={f.key}>
             <Reveal>
               {/* 標題列與 /agenda 課程格的那一列同構（含手機折行元素），視覺才連得起來 */}
-              <header className="mt-16 flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-black/8 pb-5 md:mt-20">
+              <header className="mt-16 flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-line-soft pb-5 md:mt-20">
                 <span
                   className={cn("font-display text-sm font-semibold tracking-[0.2em]", tone.text)}
                 >

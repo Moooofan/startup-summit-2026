@@ -22,18 +22,28 @@ const R_JITTER = [0, 10, -8, 6, -12, 8, -4, 12, -6, 4, -10];
 const LEN_JITTER = [0, -8, 6, -10, 4, -6, 10, -4, 8, -12, 6];
 const SKIP = new Set([7]);
 
+/* 深色版換色的兩條規則方向相反，不要一起「調亮」或「調暗」：
+   1) 有顏色的填色 alpha 要上調 —— 5% 的色疊在近白上看得見，疊在近黑上幾乎沒有變化。
+   2) 白色描邊與 inset 高光要下調 —— 白線在白底是稜線，在近黑底是刺眼的線框，
+      而這裡有九片乘十道，整個環會變成鉻線稿。
+   例外是鏡面掃光與外光暈：深底上它們才是「這是發光體」的主要線索，要上調。
+
+   亮端整組換成 KV 青階、暗端換成電光藍與深場藍。原本的暗端（#001a5e、#0c1730）
+   是更早那版深色主題的殘留 —— 色相方向對，但彩度太低，放在新的高飽和藍場上會讀成灰。
+   必須維持剛好 11 組：R_JITTER / LEN_JITTER 都是長度 11、查表是 GRADS[i % length]，
+   改數量會讓每一片碎玻璃默默換到別的顏色。 */
 const GRADS: [string, string][] = [
-  ["#D6F4FF", "#16233f"],
-  ["#7FB2FF", "#001a5e"],
-  ["#B4ADFF", "#123a9e"],
-  ["#D7BFFF", "#4a2b8e"],
-  ["#FFD0E7", "#7a2e6b"],
-  ["#F0A891", "#7a2a20"],
-  ["#FFC27A", "#a13f6e"],
-  ["#B6C1FF", "#0b4d63"],
-  ["#8FB0E0", "#0c1730"],
-  ["#A7C4FF", "#12224a"],
-  ["#E3D2FF", "#3a2a6e"],
+  ["#a9ffff", "#0326c4"],
+  ["#85f6fa", "#0220b7"],
+  ["#68d1ee", "#0319a7"],
+  ["#48a9e2", "#020877"],
+  ["#7aeaf5", "#0207e9"],
+  ["#2f85d7", "#02085e"],
+  ["#5fb8e8", "#0a19f9"],
+  ["#9fd8f2", "#010148"],
+  ["#44ade5", "#020455"],
+  ["#b762aa", "#2a1a8e"], // 全環唯一暖色：KV logo 粉，配一顆偏藍的紫暗端
+  ["#8fb8f5", "#010139"],
 ];
 
 function rgba(hex: string, a: number) {
@@ -100,8 +110,8 @@ export function OrbitRingCss({ className = "" }: { className?: string }) {
                   marginTop: -THICK / 2,
                   borderRadius: 5,
                   transform: `translateZ(${z}px)`,
-                  background: `linear-gradient(135deg, ${rgba(to, 0.55)}, ${rgba("#05070f", 0.7)})`,
-                  border: `1px solid ${rgba(from, 0.22)}`,
+                  background: `linear-gradient(135deg, ${rgba(to, 0.62)}, ${rgba("#000018", 0.72)})`,
+                  border: `1px solid ${rgba(from, 0.3)}`,
                 }}
               />
             );
@@ -118,12 +128,12 @@ export function OrbitRingCss({ className = "" }: { className?: string }) {
                   marginTop: -THICK / 2,
                   borderRadius: 5,
                   transform: `translateZ(${z}px)`,
-                  background: `linear-gradient(115deg, transparent 32%, ${rgba("#ffffff", 0.55)} 47%, transparent 56%), linear-gradient(135deg, ${rgba(from, 0.24)}, ${rgba(to, 0.14)})`,
-                  border: `1px solid ${rgba("#ffffff", 0.7)}`,
+                  background: `linear-gradient(115deg, transparent 32%, ${rgba("#d8fbff", 0.62)} 47%, transparent 56%), linear-gradient(135deg, ${rgba(from, 0.34)}, ${rgba(to, 0.22)})`,
+                  border: `1px solid ${rgba("#7aeaf5", 0.5)}`,
                   boxShadow: [
-                    `0 0 22px ${rgba(from, 0.4)}`,
-                    `inset 1px 1px 1.5px ${rgba("#ffffff", 0.75)}`,
-                    `inset -1px -2px 3px ${rgba("#05070f", 0.45)}`,
+                    `0 0 26px ${rgba(from, 0.55)}`,
+                    `inset 1px 1px 1.5px ${rgba("#e8feff", 0.6)}`,
+                    `inset -1px -2px 3px ${rgba("#000018", 0.55)}`,
                   ].join(", "),
                 }}
               />
@@ -140,11 +150,11 @@ export function OrbitRingCss({ className = "" }: { className?: string }) {
                 marginTop: -THICK / 2,
                 borderRadius: 5,
                 transform: `translateZ(${z}px)`,
-                background: `linear-gradient(135deg, ${rgba(from, 0.05 + front * 0.09)}, ${rgba(to, 0.04 + front * 0.07)})`,
-                border: `1px solid ${rgba("#ffffff", 0.1 + front * 0.28)}`,
+                background: `linear-gradient(135deg, ${rgba(from, 0.1 + front * 0.14)}, ${rgba(to, 0.07 + front * 0.1)})`,
+                border: `1px solid ${rgba("#7aeaf5", 0.08 + front * 0.22)}`,
                 boxShadow: [
-                  `inset 1px 1px 1px ${rgba("#ffffff", front * 0.35)}`,
-                  `inset -1px -1px 2px ${rgba("#05070f", 0.3)}`,
+                  `inset 1px 1px 1px ${rgba("#d8fbff", front * 0.3)}`,
+                  `inset -1px -1px 2px ${rgba("#000018", 0.4)}`,
                 ].join(", "),
               }}
             />
@@ -160,8 +170,8 @@ export function OrbitRingCss({ className = "" }: { className?: string }) {
       aria-hidden
       className={`pointer-events-none relative aspect-square w-full ${className}`}
     >
-      <div className="absolute inset-[10%] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.28)_0%,transparent_62%)] blur-2xl" />
-      <div className="absolute inset-[26%] rounded-full bg-[radial-gradient(circle,rgb(176_68_122/0.16)_0%,transparent_66%)] blur-2xl" />
+      <div className="absolute inset-[10%] rounded-full bg-[radial-gradient(circle,rgb(95_137_255/0.34)_0%,transparent_62%)] blur-2xl" />
+      <div className="absolute inset-[26%] rounded-full bg-[radial-gradient(circle,rgb(183_98_170/0.2)_0%,transparent_66%)] blur-2xl" />
 
       <div className="absolute inset-0 grid place-items-center">
         <div
