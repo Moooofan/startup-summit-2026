@@ -55,7 +55,12 @@
 
   /* --- orbit：主視覺光構圖取樣（深底上直接用亮色，不再加深）--- */
   --color-orbit-blue: #2f5cff;
-  --color-orbit-sky: #58d3f7;
+  /* Day 1 的藍，同時是全站數十處泛用次要藍。
+     值刻意**不**取 KV 弧線的青（#58d3f7，色相 194 度）—— 那和眉標的 accent（192 度）
+     只差 2 度，會讓「Day 1 藍」與「全站強調青」讀成同一支顏色，
+     票卡的青紫漸變也會少掉一整段色相行程。往電光藍側移到 210 度，與 accent 拉開 17 度。
+     調這支之前先算一次它與 --color-accent 的色相差，別讓它掉回 200 度以內。 */
+  --color-orbit-sky: #4d9ff0;
   --color-orbit-violet: #9bb0ff;
   --color-orbit-lilac: #b9a8ee;
   --color-orbit-rose: #d992c4;

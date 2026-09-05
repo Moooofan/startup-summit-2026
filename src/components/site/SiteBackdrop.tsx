@@ -14,12 +14,29 @@
  * 純 Server Component：整層沒有任何互動、也不需要瀏覽器 API，
  * 唯一的動態是 .animate-kv-breathe（CSS，reduced-motion 於 globals.css 已全域處理）。
  *
- * preserveAspectRatio 用 xMaxYMid slice 而非常見的 xMidYMid：
- * 直立手機（比例 0.46 vs viewBox 的 1.78）會被裁掉大半寬度，xMid 會只留下中間那段
- * 空白的過渡區；xMax 保證「右側的弧帶與方塊」永遠在畫面內，構圖才不會整個消失。
+ * ## 橫式與直式是兩套構圖，不是同一套的裁切
+ *
+ * 起初只有一套 16:9 的 viewBox，配 `xMaxYMid slice` 讓它在各尺寸「填滿」。
+ * 那在桌機成立，在直式手機上會壞掉，而且壞得很徹底：slice 是靠**高度**撐滿的，
+ * 390x844 的螢幕只看得到 1600 單位裡的約 416 單位、還靠右對齊，
+ * 於是住在 x 620-1210 的「4」只剩 4% 在畫面內 —— 主視覺最有辨識度的量體整個消失。
+ * 實測「4」的入鏡比例：iPhone SE 20%、iPhone 14 4%、Pixel 7 3%、iPad 48%、桌機 100%。
+ *
+ * 這不是參數調得不夠好，是 16:9 的橫式構圖放不進 0.46 的直式畫面 ——
+ * 任何裁切法都得犧牲掉某一半。所以手機給一套自己的直式構圖：
+ * 同一組語彙（斜筆「4」、同心弧、青色橫帶、細線填充、細線扇），重新排位。
+ *
+ * 直式 viewBox 440x950（比例 0.463）刻意貼著主流手機：
+ * 390x844 上縮放約 0.888，等於幾乎 1:1 對映，上下左右都不太裁 ——
+ * 座標可以當成「就是螢幕上的位置」來調，不必再心算裁切後的可見範圍。
+ *
+ * 兩顆 svg 的 `<defs>` 一律用 `gradientUnits="userSpaceOnUse"`，座標綁在各自的 viewBox 上，
+ * 所以**不能共用一組 defs**，id 一律加 `-m` 後綴區分（兩顆都在 DOM 裡，撞 id 會取到前一個）。
  */
 
-// viewBox 尺寸：與 KV 同為 16:9，座標值可直接照原圖比例換算
+/* ==========================================================================
+   橫式（md 以上）：16:9，對應 KV 原稿的比例
+   ========================================================================== */
 const VB_W = 1600;
 const VB_H = 900;
 
@@ -33,17 +50,34 @@ const WEDGE_OUTLINE = "512,900 1150,60 1150,240";
 const ARC_CENTER = { x: 1180, y: 620 };
 const ARC_RADII = [188, 201, 214, 227, 240, 253, 266, 279];
 
+/* ==========================================================================
+   直式（md 以下）：440x950
+
+   量體佔畫面的比例比橫式版大一階是刻意的 —— 直式畫面窄，同樣的視覺重量需要更大的佔比，
+   照橫式的比例等比縮小會變成「角落一個小圖示」，等於換個方式再消失一次。
+   ========================================================================== */
+const VB_W_M = 440;
+const VB_H_M = 950;
+
+const WEDGE_M = "110,790 365,205 365,790";
+const WEDGE_OUTLINE_M = "58,845 328,118 328,232";
+
+/* 弧帶圓心壓在接近右邊界處：右半圓有一半在畫面外，讓構圖「出血」而不是擺一個完整的圓
+   —— 完整的圓會讀成一個圖示，半個才讀得出是更大構圖的一部分。
+   半徑間距 12（橫式是 13）：直式縮放約 0.888、橫式約 0.9，間距等比縮才對得起來。 */
+const ARC_CENTER_M = { x: 378, y: 585 };
+const ARC_RADII_M = [126, 138, 150, 162, 174, 186, 198, 210];
+
 /** 右半圓路徑：從正上方順時針掃到正下方。 */
-function halfArc(r: number) {
-  const { x, y } = ARC_CENTER;
-  return `M ${x} ${y - r} A ${r} ${r} 0 0 1 ${x} ${y + r}`;
+function halfArc(r: number, c: { x: number; y: number }) {
+  return `M ${c.x} ${c.y - r} A ${r} ${r} 0 0 1 ${c.x} ${c.y + r}`;
 }
 
 export function SiteBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
       {/* 1／底色：深靛。取樣自 KV 左半（#01003d 一帶），往右上與右下各放一團藍光，
-          對應原圖「右上中藍、右下電光藍」的分佈。 */}
+          對應原圖「右上中藍、右下電光藍」的分佈。橫式直式共用這一層。 */}
       <div
         className="absolute inset-0"
         style={{
@@ -56,8 +90,10 @@ export function SiteBackdrop() {
         }}
       />
 
-      {/* 2／線構圖。手機降透明度：xMax 裁切後弧帶會放得很大、直接壓在正文後方。 */}
-      <div className="absolute inset-0 opacity-50 md:opacity-100">
+      {/* 2a／線構圖・橫式。
+          xMaxYMid 而非常見的 xMidYMid：md-lg 之間仍會裁掉一些寬度，
+          xMax 保證「右側的弧帶與方塊」永遠在畫面內，構圖不會只剩中間的空白過渡區。 */}
+      <div className="absolute inset-0 hidden md:block">
         <svg
           className="h-full w-full"
           viewBox={`0 0 ${VB_W} ${VB_H}`}
@@ -122,7 +158,7 @@ export function SiteBackdrop() {
           {/* 右側同心弧帶 */}
           <g stroke="url(#kv-arc)" strokeWidth="1.25">
             {ARC_RADII.map((r) => (
-              <path key={r} d={halfArc(r)} />
+              <path key={r} d={halfArc(r, ARC_CENTER)} />
             ))}
           </g>
 
@@ -130,15 +166,90 @@ export function SiteBackdrop() {
           <g stroke="#b1bee8" strokeOpacity="0.14" strokeWidth="1">
             {Array.from({ length: 9 }, (_, i) => {
               const t = i / 8;
-              return (
-                <line
-                  key={i}
-                  x1={640 + t * 250}
-                  y1={900}
-                  x2={1150}
-                  y2={620 - t * 430}
-                />
-              );
+              return <line key={i} x1={640 + t * 250} y1={900} x2={1150} y2={620 - t * 430} />;
+            })}
+          </g>
+        </svg>
+      </div>
+
+      {/* 2b／線構圖・直式（手機）。
+          opacity 0.72：直式版的「4」佔畫面近三分之二高，滿版強度會壓過正文；
+          橫式版不需要這層折減，因為量體大半落在文字區之外。
+          舊版這裡是 0.5，是為了壓住「被 xMax 裁切後放得過大的弧帶」——
+          那個成因已經不存在（手機不再吃橫式構圖），所以折減可以放鬆。
+          要調整手機背景的存在感，改這個數字就好，別去動幾何。 */}
+      <div className="absolute inset-0 opacity-[0.72] md:hidden">
+        <svg
+          className="h-full w-full"
+          viewBox={`0 0 ${VB_W_M} ${VB_H_M}`}
+          preserveAspectRatio="xMidYMid slice"
+          fill="none"
+        >
+          <defs>
+            {/* 線距與橫式版同為 9 / 6：兩邊的縮放比接近（0.888 vs 0.9），
+                同一種材質在手機與桌機上的線距才會是同一個視覺密度。
+                改這裡要連 globals.css 的 .kv-hatch 一起改。 */}
+            <pattern id="kv-hatch-m" width="10" height="9" patternUnits="userSpaceOnUse">
+              <rect width="10" height="1" fill="#b1bee8" opacity="0.34" />
+            </pattern>
+            <pattern id="kv-hatch-dense-m" width="10" height="6" patternUnits="userSpaceOnUse">
+              <rect width="10" height="1" fill="#cfe6ff" opacity="0.3" />
+            </pattern>
+
+            <linearGradient id="kv-wedge-m" x1="110" y1="790" x2="365" y2="205" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stopColor="#050b34" stopOpacity="0" />
+              <stop offset="0.45" stopColor="#12308f" stopOpacity="0.5" />
+              <stop offset="1" stopColor="#2b5cff" stopOpacity="0.72" />
+            </linearGradient>
+
+            <linearGradient id="kv-cyan-m" x1="150" y1="0" x2="440" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stopColor="#1a4ae0" stopOpacity="0.15" />
+              <stop offset="0.62" stopColor="#5fd8f5" stopOpacity="0.62" />
+              <stop offset="1" stopColor="#8cf5ff" stopOpacity="0.28" />
+            </linearGradient>
+
+            <linearGradient id="kv-arc-m" x1="378" y1="375" x2="378" y2="950" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stopColor="#b1bee8" stopOpacity="0.12" />
+              <stop offset="0.45" stopColor="#cfe6ff" stopOpacity="0.55" />
+              <stop offset="1" stopColor="#7fa0ff" stopOpacity="0.1" />
+            </linearGradient>
+
+            <linearGradient id="kv-block-m" x1="296" y1="86" x2="440" y2="300" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stopColor="#1836b8" stopOpacity="0.42" />
+              <stop offset="1" stopColor="#0a1663" stopOpacity="0.1" />
+            </linearGradient>
+          </defs>
+
+          {/* 右上色塊：橫式版右緣有兩片矩形，直式畫面只容得下一片。
+              擺在「4」的頂點旁邊當支點，右邊界出血。 */}
+          <rect x="296" y="86" width="144" height="212" fill="url(#kv-block-m)" />
+          <rect x="296" y="86" width="144" height="212" fill="url(#kv-hatch-m)" opacity="0.4" />
+
+          {/* 「4」斜筆：量體 + 線填充 + 亮邊，疊法與橫式版相同（理由見上）。
+              頂點 y=205、底邊 y=790 —— 在 390x844 上約等於距頂 182px、距頂 702px，
+              也就是整個畫面高度的六成，這就是「手機上看得到主視覺」的那個尺寸。 */}
+          <polygon points={WEDGE_M} fill="url(#kv-wedge-m)" />
+          <polygon points={WEDGE_M} fill="url(#kv-hatch-m)" opacity="0.55" />
+          <polygon points={WEDGE_OUTLINE_M} stroke="#b1bee8" strokeOpacity="0.22" strokeWidth="1" />
+
+          {/* 青色橫帶：橫過畫面中段並穿出右邊界，與「4」交會處就是視覺焦點 */}
+          <g>
+            <rect x="150" y="468" width="290" height="92" fill="url(#kv-cyan-m)" />
+            <rect x="150" y="468" width="290" height="92" fill="url(#kv-hatch-dense-m)" />
+          </g>
+
+          {/* 同心弧帶：圓心壓在接近右邊界處，只看得到左半段的弧線 */}
+          <g stroke="url(#kv-arc-m)" strokeWidth="1.25">
+            {ARC_RADII_M.map((r) => (
+              <path key={r} d={halfArc(r, ARC_CENTER_M)} />
+            ))}
+          </g>
+
+          {/* 細線扇：七條（橫式九條）—— 直式寬度只有一半，九條會擠成一片灰 */}
+          <g stroke="#b1bee8" strokeOpacity="0.14" strokeWidth="1">
+            {Array.from({ length: 7 }, (_, i) => {
+              const t = i / 6;
+              return <line key={i} x1={104 + t * 130} y1={950} x2={330} y2={600 - t * 320} />;
             })}
           </g>
         </svg>
@@ -146,9 +257,10 @@ export function SiteBackdrop() {
 
       {/* 3／青色高光：疊在弧帶與橫帶交會處，緩慢呼吸。
           放在 SVG 之外用 CSS 漸層做，是為了讓它吃 mix-blend-mode: screen ——
-          SVG 內的 filter 在 Safari 上對 slice 裁切後的座標系表現不一致。 */}
+          SVG 內的 filter 在 Safari 上對 slice 裁切後的座標系表現不一致。
+          直式構圖的交會處比橫式高一些、畫面也窄，故手機另給一組 top 與尺寸。 */}
       <div
-        className="animate-kv-breathe absolute right-[-6%] top-[46%] h-[46vw] max-h-[620px] w-[46vw] max-w-[620px] -translate-y-1/2 rounded-full"
+        className="animate-kv-breathe absolute right-[-6%] top-[40%] h-[52vw] max-h-[620px] w-[52vw] max-w-[620px] -translate-y-1/2 rounded-full md:top-[46%] md:h-[46vw] md:w-[46vw]"
         style={{
           background:
             "radial-gradient(circle, rgb(120 235 255 / 0.3) 0%, rgb(50 120 255 / 0.16) 42%, transparent 68%)",
@@ -157,7 +269,9 @@ export function SiteBackdrop() {
       />
 
       {/* 4／左側 scrim：KV 的左半本來就是近乎純色的深靛（給文字用）。
-          這層同時是全站文字對比的地板，見檔頭說明。 */}
+          這層同時是全站文字對比的地板，見檔頭說明。
+          100deg 在直式畫面上會變成「左上暗、右下透」，正好把直式構圖偏右下的「4」讓出來，
+          所以手機不必另寫一條 —— 但這代表調角度時兩種畫面都要看過。 */}
       <div
         className="absolute inset-0"
         style={{
