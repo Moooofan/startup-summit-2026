@@ -173,12 +173,18 @@ export function SiteBackdrop() {
       </div>
 
       {/* 2b／線構圖・直式（手機）。
-          opacity 0.72：直式版的「4」佔畫面近三分之二高，滿版強度會壓過正文；
-          橫式版不需要這層折減，因為量體大半落在文字區之外。
-          舊版這裡是 0.5，是為了壓住「被 xMax 裁切後放得過大的弧帶」——
-          那個成因已經不存在（手機不再吃橫式構圖），所以折減可以放鬆。
+          直式版的每一層都比橫式版**強**，這是必要的補償而不是喜好：
+          手機上「4」的正上方同時壓著兩層會吃掉對比的東西 ——
+          第 4 層 scrim 在斜筆所在位置還有約 0.28 的壓暗，
+          第 3 層青色光暈是 screen 疊加、會把圖形與其背景一起提亮（等於一層霧）。
+          橫式版沒有這個問題：量體大半落在文字區之外、也不在光暈正下方。
+
+          opacity 從 0.5 -> 0.72 -> 0.9 走過兩輪。0.5 是為了壓住「被 xMax 裁切後放得
+          過大的弧帶」，那個成因已隨直式構圖消失；0.72 實測仍然太弱（使用者回報看不清）。
+          0.9 是有算過的：斜筆最亮處合成後白字仍有 8.7:1、ink-2 有 5.9:1，
+          離 AA 還很遠 —— 也就是說可讀性不是這裡的限制條件，不必為它讓步。
           要調整手機背景的存在感，改這個數字就好，別去動幾何。 */}
-      <div className="absolute inset-0 opacity-[0.72] md:hidden">
+      <div className="absolute inset-0 opacity-[0.9] md:hidden">
         <svg
           className="h-full w-full"
           viewBox={`0 0 ${VB_W_M} ${VB_H_M}`}
@@ -196,10 +202,13 @@ export function SiteBackdrop() {
               <rect width="10" height="1" fill="#cfe6ff" opacity="0.3" />
             </pattern>
 
+            {/* 底端不是 0 而是 0.25：橫式版的斜筆很寬，左下角淡出去只是「量體漸消」；
+                直式版整個「4」就這一塊，底端歸零等於半個字形不見，
+                看起來會像一條斜線而不是一個 4。三個停點整體比橫式版高一階。 */}
             <linearGradient id="kv-wedge-m" x1="110" y1="790" x2="365" y2="205" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stopColor="#050b34" stopOpacity="0" />
-              <stop offset="0.45" stopColor="#12308f" stopOpacity="0.5" />
-              <stop offset="1" stopColor="#2b5cff" stopOpacity="0.72" />
+              <stop offset="0" stopColor="#050b34" stopOpacity="0.25" />
+              <stop offset="0.45" stopColor="#12308f" stopOpacity="0.62" />
+              <stop offset="1" stopColor="#2b5cff" stopOpacity="0.85" />
             </linearGradient>
 
             <linearGradient id="kv-cyan-m" x1="150" y1="0" x2="440" y2="0" gradientUnits="userSpaceOnUse">
@@ -229,8 +238,19 @@ export function SiteBackdrop() {
               頂點 y=205、底邊 y=790 —— 在 390x844 上約等於距頂 182px、距頂 702px，
               也就是整個畫面高度的六成，這就是「手機上看得到主視覺」的那個尺寸。 */}
           <polygon points={WEDGE_M} fill="url(#kv-wedge-m)" />
-          <polygon points={WEDGE_M} fill="url(#kv-hatch-m)" opacity="0.55" />
-          <polygon points={WEDGE_OUTLINE_M} stroke="#b1bee8" strokeOpacity="0.22" strokeWidth="1" />
+          <polygon points={WEDGE_M} fill="url(#kv-hatch-m)" opacity="0.85" />
+          <polygon points={WEDGE_OUTLINE_M} stroke="#b1bee8" strokeOpacity="0.38" strokeWidth="1" />
+          {/* 斜邊 + 右側直邊的亮邊。這是直式版新增的、也是「讀不讀得出是個 4」最關鍵的一筆：
+              量體本身是藍底上的藍，形狀主要靠邊界立起來，而三角形的辨識度幾乎全在這兩條邊上。
+              用 polyline 而非 polygon：底邊刻意不描 —— KV 的斜筆是往畫面外延伸的，
+              把三邊都框起來會讀成「一個三角形圖示」而不是「一個更大構圖的一部分」。 */}
+          <polyline
+            points={WEDGE_M}
+            fill="none"
+            stroke="#cfe6ff"
+            strokeOpacity="0.5"
+            strokeWidth="1.5"
+          />
 
           {/* 青色橫帶：橫過畫面中段並穿出右邊界，與「4」交會處就是視覺焦點 */}
           <g>
@@ -258,9 +278,13 @@ export function SiteBackdrop() {
       {/* 3／青色高光：疊在弧帶與橫帶交會處，緩慢呼吸。
           放在 SVG 之外用 CSS 漸層做，是為了讓它吃 mix-blend-mode: screen ——
           SVG 內的 filter 在 Safari 上對 slice 裁切後的座標系表現不一致。
-          直式構圖的交會處比橫式高一些、畫面也窄，故手機另給一組 top 與尺寸。 */}
+
+          手機的 top 從 40% 移到 62%：40% 換算後中心落在 (311, 338)，正好壓在斜筆上半部，
+          而 screen 疊加會把圖形與其背景**一起**提亮 —— 對比被壓平，「4」就糊掉了。
+          62% 對齊直式弧帶的圓心（vb 378,585 -> 約螢幕 61.5%），
+          光暈回到它該待的地方：照亮弧帶與青帶的交會處，不是照在字形上。 */}
       <div
-        className="animate-kv-breathe absolute right-[-6%] top-[40%] h-[52vw] max-h-[620px] w-[52vw] max-w-[620px] -translate-y-1/2 rounded-full md:top-[46%] md:h-[46vw] md:w-[46vw]"
+        className="animate-kv-breathe absolute right-[-6%] top-[62%] h-[52vw] max-h-[620px] w-[52vw] max-w-[620px] -translate-y-1/2 rounded-full md:top-[46%] md:h-[46vw] md:w-[46vw]"
         style={{
           background:
             "radial-gradient(circle, rgb(120 235 255 / 0.3) 0%, rgb(50 120 255 / 0.16) 42%, transparent 68%)",
