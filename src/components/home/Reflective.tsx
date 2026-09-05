@@ -34,7 +34,7 @@ type Props = {
 
 export function Reflective({
   mode = "frame",
-  color = "#6a86ff",
+  color = "#7cc9ff",
   intensity = 1,
   radius = 0.2,
   className = "",
@@ -54,12 +54,13 @@ export function Reflective({
           mode === "frame"
             ? {
                 borderRadius: "inherit",
-                boxShadow: `inset 0 0 24px rgb(106 134 255 / 0.18)`,
+                // 深底上內陰影要更實才看得見（淺色版是 0.18）
+                boxShadow: `inset 0 0 26px rgb(120 200 255 / 0.3)`,
               }
             : {
                 borderRadius: "inherit",
                 background:
-                  "linear-gradient(120deg, transparent 30%, rgb(255 255 255 / 0.35) 50%, transparent 70%)",
+                  "linear-gradient(120deg, transparent 30%, rgb(180 225 255 / 0.22) 50%, transparent 70%)",
               }
         }
       />
