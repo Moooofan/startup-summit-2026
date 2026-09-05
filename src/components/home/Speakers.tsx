@@ -14,13 +14,13 @@ type Forum = (typeof forums)[number];
 const accent: Record<Forum["accent"], { text: string; glow: string; line: string }> = {
   sky: {
     text: "text-orbit-sky",
-    glow: "rgb(94 174 220 / 0.10)",
+    glow: "rgb(77 159 240 / 0.15)",
     line: "via-orbit-sky/70",
   },
   violet: {
-    text: "text-[#6d47c4]",
-    glow: "rgb(182 185 220 / 0.10)",
-    line: "via-[#6d47c4]/60",
+    text: "text-day2",
+    glow: "rgb(151 126 242 / 0.15)",
+    line: "via-day2/60",
   },
 };
 
@@ -39,7 +39,7 @@ function SpeakerCard({
         href={`/speakers/${s.slug}`}
         className="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-glow"
       >
-        <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-black/8 bg-surface">
+        <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-line-soft bg-surface">
           <Image
             src={s.photo}
             alt={`${s.name}｜${s.org} ${s.title}`}
@@ -49,6 +49,7 @@ function SpeakerCard({
             className="object-cover transition-transform duration-500 group-hover:scale-[1.07]"
             loading={index < 8 ? "eager" : "lazy"}
           />
+          <span aria-hidden className="photo-sink" />
           {s.status === "pending" && (
             <span className="absolute right-3 top-3 rounded-pill bg-bg/80 px-2.5 py-1 text-[16px] text-ink-3 backdrop-blur">
               確認中
@@ -171,7 +172,7 @@ export function Speakers() {
       <div className="snap-panel relative flex items-center overflow-hidden pb-4 pt-24 md:min-h-[100svh] md:pb-0 md:pt-0">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-[10%] top-[12%] h-[34vw] max-h-[440px] w-[34vw] max-w-[440px] rounded-full bg-[radial-gradient(circle,rgb(76_104_212/0.08)_0%,transparent_66%)]"
+          className="pointer-events-none absolute -right-[10%] top-[12%] h-[58vw] max-h-[800px] w-[58vw] max-w-[800px] rounded-full bg-[radial-gradient(circle,rgb(95_137_255/0.07)_0%,rgb(95_137_255/0.025)_40%,transparent_72%)]"
         />
         <div className="shell relative w-full">
           <Reveal>
@@ -207,7 +208,7 @@ export function Speakers() {
             <div className="snap-panel pb-16 pt-6 md:min-h-[100svh]">
               <div className="shell">
                 <Reveal>
-                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-black/8 pb-5">
+                  <header className="flex flex-wrap items-baseline gap-x-5 gap-y-2 border-b border-line-soft pb-5">
                     <span className={cn("font-display text-xs font-semibold tracking-[0.2em]", a.text)}>
                       {f.label}
                     </span>

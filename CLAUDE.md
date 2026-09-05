@@ -17,7 +17,7 @@ Next.js 15 App Router + React 19 + TypeScript + Tailwind v4 + motion + three。�
   （警告三角、打勾、火焰、表情臉那類）。要強調就用文字或 `**粗體**`，不要用符號。
   排版標點不在此限，可以繼續用：`—` `·` `・` `｜` `※` `→` `⟶` `©` `®`。
   自我檢查（應無輸出）：
-  `rg --pcre2 '[\x{1F000}-\x{1FAFF}\x{2600}-\x{27BF}\x{2B00}-\x{2BFF}\x{FE0F}]' src CLAUDE.md TODO.md`
+  `rg --pcre2 '[\x{1F000}-\x{1FAFF}\x{2600}-\x{27BF}\x{2B00}-\x{2BFF}\x{FE0F}]' src CLAUDE.md`
 
 ## 指令
 
@@ -52,7 +52,7 @@ npm run dev       # 由「使用者」執行（--turbopack）
 `event.ts` 的 `forums` 陣列導出 `ForumKey` 型別（`founder` / `investor`），
 講者、主題軌都用它綁定日別 —— 改 forums 的 key 會連鎖影響整個型別系統。
 
-`TODO.md` 記錄所有「簡報沒寫、需向主辦方索取」的缺口，改資料前先看它。
+「簡報沒寫、需向主辦方索取」的缺口記在各資料檔自己的 `// TODO` 註解裡，改資料前先掃過。
 
 ### 資料的下游有三處，改資料要一起想
 
@@ -93,17 +93,44 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
 
 ## 設計系統
 
-**淺色主題**：全站底層是 `layout.tsx` 固定的 `/bg.jpg` 水墨圖 + `blur(26px)` + 一層
-`bg-white/64` 白霧；區塊本身不自帶底色（`--color-bg-soft: transparent`），所以整站色調統一。
+**深色主題**（2026/9 改版，原為淺色）：全站底層是 `layout.tsx` 固定的 `/bg.jpg` 水墨圖 +
+`blur(26px)` + 一層 `bg-[#030929]/96` 深藍霧；區塊本身不自帶底色（`--color-bg-soft: transparent`），
+所以整站色調統一。合成後的頁面底色 ≈ **`#0a1030`** —— 全站對比數字都以它為基準，改霧的 alpha 要重算。
 
-色票取自主視覺方案 C（VM｜布爾喬亞提案，2026/8/17）。
+色票取自 2026 新主視覺，色值由 KV 原圖逐點取樣（深場 `#010139` / 電光藍 `#0326c4` / 青 `#68d1ee`）。
 所有 token 定義在 `src/app/globals.css` 的 `@theme` 區塊 —— **改色只改那裡**。
 
-- 主色 `--color-brand: #324997`（KV 靛藍），另有 `brand-lift` / `brand-bright` / `brand-glow`
-- 光軌色系 `orbit-blue / orbit-sky / orbit-violet / orbit-lilac / orbit-rose` + `coral` / `magenta`
-- 文字階 `ink / ink-2 / ink-3 / ink-4`（深藍 → 冷灰）
-- 工具類：`.glass`、`.glass-strong`、`.text-orbit`、`.text-fade`、`.ghost-head`、`.grain`、`.shell`
+- 底色階 `bg / surface / surface-2 / surface-3`：深色版改用**不透明**色階，
+  因為半透明白再吃 `/60` 這類修飾詞會複合到幾乎看不見
+- 主色 `--color-brand: #0d2a9e`（**只能當大面積色塊底，對頁底只有 1.63:1，不可用於文字**），
+  另有 `brand-fill`（按鈕實底，白字 9.65:1）/ `brand-lift`（連結）/ `brand-bright` / `brand-glow`
+- 強調色 `--color-accent: #68d1ee`（KV 青）—— 取代舊的 `--color-gold`，新 KV 沒有任何金色
+- 日別 `orbit-sky`（Day 1，同時是全站泛用次要藍）/ `day2`（Day 2 紫）/ `magenta`（KV logo 粉）。
+  舊的 `orbit-blue / orbit-lilac / orbit-violet / orbit-rose / coral` 已移除
+- 文字階 `ink / ink-2 / ink-3 / ink-4`（冷白 → 淺藍灰），對頁底 17.2 / 12.0 / 7.5 / 5.8，**四階全過 AA**
+- 工具類：`.glass`、`.glass-strong`、`.text-orbit`、`.text-fade`、`.ghost-head`、`.grain`、`.photo-sink`、`.shell`
 - `.glass` 的 blur 半徑是**捲動效能主因**，已從 14 調到 8，不要調回去
+- **玻璃卡的「玻璃感」不要靠邊框或亮帶去做**（試過漸層邊框＋鏡面稜線＋斜向亮帶，業主評為「生硬」）。
+  站上認可的做法是論壇卡那套：`.glass` + `overflow-hidden` + 卡外角落一顆
+  `h-64 w-64 rounded-full blur-3xl` 的彩色光暈被裁進來（見 `ForumCards.tsx` 的 `ForumCard`
+  與 `FounderNote.tsx` 的引言卡）。理由是背景那層深藍霧幾乎不透光，`backdrop-filter`
+  沒東西可折射，光只能由卡片自己帶進來
+- 深色版換色的兩條規則方向相反：**有顏色的填色 alpha 要上調**（疊色在近黑上幾乎沒變化）、
+  **白色描邊與 inset 高光要下調**（白線在深底會變成刺眼線框）。
+  黑白疊層互換時 alpha 不能 1:1 照搬 —— 依 ΔL* 對齊，`bg-black/[0.03]` 對應的是 `bg-white/[0.025]`
+- `.marquee-viewport` 與 `HomeBackdrop` 的 `#000`／`#fff` 是**亮度遮罩不是塗色**，改了整層會消失
+- **區塊光暈是一整套，共 9 顆**（Hero ×2、Tickets ×2、Speakers 開場、review、sponsor、
+  speakers 內頁、TicketsGallery）：尺寸統一在 58–70vw / 上限 800–900px，
+  峰值 alpha 統一 `0.07`、中間停 `0.025`，收邊一律 `transparent 72%`。
+  光暈高達 880px，**放它的容器若比它矮（例如 /review、/sponsor 的頁首）不能用
+  `overflow-hidden`**，否則會在區塊底部切出一條水平硬邊 —— 要用 `overflow-x-clip`
+  （`overflow-x-hidden` 不行，會連帶讓 y 軸變成 auto 而生出捲動容器）
+  **要調就整組一起調** —— 它們原本從 34vw/440px 到 70vw/900px 漂移了兩倍多，
+  小的那幾顆在深底上會讀成「黏在邊上的一團」而不是環境光。
+  置中在大字報後方的節點光暈（`Agenda.tsx` / `Speakers.tsx` 的 `left-1/2 top-1/2`）
+  不屬於這一套，別一起改
+- `OrbitGlass` 的折射底色（`new THREE.Color("#071a72")`）是「玻璃眼中的背景」，
+  WebGL 取樣不到 DOM —— 動到 layout 的霧色時必須連它一起改，否則玻璃環會變成不透明色盤
 
 ### 素材是加工過的，且產生器不在 repo 裡
 
@@ -118,7 +145,7 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
 
 ## 慣例
 
-- 事實一律以簡報為準；簡報沒寫的**不要編**，寫成「將於⋯⋯公布」並留 `// TODO`，同步記進 `TODO.md`
+- 事實一律以簡報為準；簡報沒寫的**不要編**，寫成「將於⋯⋯公布」並在該處留 `// TODO`
 - 講者 bio 逐字保留簡報原文，不潤飾
 - 動效一律尊重 `prefers-reduced-motion`（`Reveal`、`Hero`、`OrbitRing`、globals.css 都已處理）
 - 圖片換檔請一併換檔名（加 `-v2` 之類），否則會撞 next/image 快取

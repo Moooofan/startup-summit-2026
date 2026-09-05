@@ -49,8 +49,8 @@ export function SectionHead({
               Montserrat 的字身在行框內約落在 0.06em–0.76em，視覺中心約在 51%，
               所以 top-1/2 + -translate-y-1/2 就能跟左對齊版對齊，且字級隨視窗縮放時不會再跑掉。 */}
           {eyebrow && (
-            <p className="mb-3 flex items-center justify-center gap-3 text-[16px] font-medium tracking-[0.24em] text-gold md:absolute md:left-1 md:top-1/2 md:mb-0 md:-translate-y-1/2 md:justify-start">
-              <span aria-hidden className="h-px w-8 bg-gold/60" />
+            <p className="mb-3 flex items-center justify-center gap-3 text-[16px] font-medium tracking-[0.24em] text-accent md:absolute md:left-1 md:top-1/2 md:mb-0 md:-translate-y-1/2 md:justify-start">
+              <span aria-hidden className="h-px w-8 bg-accent/60" />
               {eyebrow}
             </p>
           )}
@@ -86,8 +86,8 @@ export function SectionHead({
       )}
       <div className="relative">
         {eyebrow && (
-          <p className="relative -left-1 -top-3 mb-3 flex items-center gap-3 text-[16px] font-medium tracking-[0.24em] text-gold">
-            <span aria-hidden className="h-px w-8 bg-gold/60" />
+          <p className="relative -left-1 -top-3 mb-3 flex items-center gap-3 text-[16px] font-medium tracking-[0.24em] text-accent">
+            <span aria-hidden className="h-px w-8 bg-accent/60" />
             {eyebrow}
           </p>
         )}

@@ -4,6 +4,25 @@ import { Reveal } from "@/components/ui/Reveal";
 import { ForumCards } from "@/components/home/ForumCards";
 import { HomeAgenda } from "@/components/home/HomeAgenda";
 
+/**
+ * 區塊導言（業主 2026/9 交付的定位文案，四段）。
+ *
+ * 為什麼不放進 SectionHead 的 lead：那支 prop 被包在**單一 <p>** 裡
+ * （見 ui/SectionHead.tsx 左對齊分支），塞多個段落會變成 <p> 巢狀 ——
+ * 瀏覽器 parser 會自行拆開，跟 React 的輸出對不上而產生 hydration 警告。
+ * 改用站內既有的多段落寫法（同 FounderNote 與講者內頁），行高取 1.9 而非那兩處的 2，
+ * 是為了對齊原本 lead 的樣式，讀起來仍是同一段導言而不是另一種內文。
+ *
+ * 四個內插值與 event.ts 的欄位一字不差（5 萬名成員／台灣新創投資社團／第四屆／雙峰論壇），
+ * 刻意不寫死：社團人數與屆數每年都會動，寫死就得記得回來改這一段。
+ */
+const intro = [
+  "AI、半導體供應鏈與資本市場正在重塑，創辦人和投資人必須更早做決定。如果你正在決定公司未來的發展和投資方向，你將在這場新創投資年會獲得啟發。講者們走過創業、投資、上市櫃、併購與海外擴張等階段，會分享他們如何解構與定義高變動性的現代，以及如何做出帶來長期優勢的決策。",
+  `2023 年起，${event.name}集結全台頂尖早期投資人與創業者，並由擁有 ${event.organizer.members}的${event.organizer.name}主辦，今年邁入${event.editionLabel}，以「${event.subtitle}」形式舉行 — 一天屬於創辦人，一天屬於投資人。`,
+  `今年的主軸是「${event.theme}」，將探討當過去的規則失效，未來局勢又尚未明朗時，如何提出深刻的洞察、整合跨領域的資訊，為產業注入創新的影響力。`,
+  "用兩天的時間，與在場的創業家、投資人鏈結，共創台灣新創投資圈的嶄新價值。",
+];
+
 export function About() {
   return (
     <section
@@ -13,24 +32,21 @@ export function About() {
       <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
       <div className="shell">
         <Reveal>
-          <SectionHead
-            eyebrow="ABOUT THE SUMMIT"
-            ghost="SUMMIT"
-            title={
-              <>
-                一年一度，
-                <br className="sm:hidden" />
-                台灣資本與創新的交會點
-              </>
-            }
-            lead={
-              <>
-                {event.fullName}以「{event.subtitle}」形式舉行 —— 一天屬於創辦人，一天屬於投資人。
-                由擁有 {event.organizer.members}的{event.organizer.name}主辦，
-                自 2023 年起連續舉辦四屆，是台灣少數把投融資交易本身當作主題的年度論壇。
-              </>
-            }
-          />
+          {/* 大標即本屆主軸，字串來自 event.theme —— 標題與下方第三段內文引用同一個常數，
+              不在這裡另外補「 · 」之類的標點。標題只有 9 個字元，手機不需要強制折行，
+              所以舊版那個 <br className="sm:hidden" /> 一併移除。 */}
+          <SectionHead eyebrow="ABOUT THE SUMMIT" ghost="SUMMIT" title={event.theme} />
+        </Reveal>
+
+        <Reveal delay={0.06}>
+          {/* max-w-2xl 與原本 SectionHead 的 lead 同寬，換行位置因此不會跳掉 */}
+          <div className="mt-5 max-w-2xl space-y-5">
+            {intro.map((p, i) => (
+              <p key={i} className="text-[18px] leading-[1.9] text-ink-2">
+                {p}
+              </p>
+            ))}
+          </div>
         </Reveal>
 
         {/* 兩天論壇（桌機並排 / 手機滑動牌堆，見 ForumCards） */}

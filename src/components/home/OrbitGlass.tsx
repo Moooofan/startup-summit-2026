@@ -32,15 +32,18 @@ const BANDS: { r: number; count: number; z: number }[] = [
   { r: 0.18, count: 3, z: 0.68 },
 ];
 
-// 每條的漸層色停（淺色 KV 光軌調）；不同條配不同色對 → 每塊顏色不一
+/* 每條的漸層色停（KV 青藍階）；不同條配不同色對 → 每塊顏色不一。
+   頂點色是「相乘」的：把它們壓暗會讓玻璃變黑，所以深色版改的是彩度與色相、**明度必須留住**。
+   舊的粉彩色階（#ffe6cd / #ffcbe6 那類）是為白底調的，放在深底上整環會糊成一片沒有色相的淡霧。
+   維持剛好 7 組：抽色是 CPAIRS[floor(rand() * length)]，改長度會重洗每片碎玻璃的配色。 */
 const CPAIRS: [string, string][] = [
-  ["#dcf4ff", "#a9c0ff"],
-  ["#b3d3ff", "#d3ccff"],
-  ["#e4dbff", "#ffcbe6"],
-  ["#ffe6cd", "#ffcbdd"],
-  ["#cef2ff", "#c2c8ff"],
-  ["#e8e1ff", "#c7dcff"],
-  ["#ffdcf1", "#cde0ff"],
+  ["#a9ffff", "#68d1ee"],
+  ["#85f6fa", "#48a9e2"],
+  ["#7aeaf5", "#2f85d7"],
+  ["#c9f2ff", "#5f9ee6"],
+  ["#68d1ee", "#1f60c1"],
+  ["#dff6ff", "#7aeaf5"],
+  ["#e3c8f0", "#8fb8ee"], // 一組偏紫粉：呼應 KV logo 的粉，保住整環的暖色點
 ];
 
 // 傾斜（上下鏡射）
@@ -67,9 +70,9 @@ const MATERIAL_PROPS = {
   samples: 3, // 保持效能預算（先前使用者抱怨捲動卡 → 別調高）
   resolution: 144, // 同上，維持 144
   backsideThickness: 0.3,
-  color: "#e3e9ff", // 微冷白 body tint
-  attenuationColor: "#4c68d4", // brand-lift 藍 → 厚處淡淡染藍
-  attenuationDistance: 8, // 拉長 → 吸收變弱 → 更通透（僅厚處帶一點藍）
+  color: "#cfeeff", // 冷白偏青的 body tint。相乘色：明度不能壓，只轉色相
+  attenuationColor: "#1b45cf", // brand-fill 電光藍 → 厚處染 KV 藍
+  attenuationDistance: 5.5, // 淺底時拉長是為了更通透；深底沒有底光沖淡吸收，要縮短才染得出藍
 };
 
 // 種子亂數（mulberry32）→ 排列可重現、好微調
@@ -243,8 +246,14 @@ type Groups = { outer: BufferGeometry; mid: BufferGeometry; dome: BufferGeometry
 
 function Ring({ onReady }: { onReady?: () => void }) {
   const [groups, setGroups] = useState<Groups | null>(null);
-  // 玻璃折射看到的底色：拉亮成藍調 → 玻璃本體更淺、更通透
-  const bg = useMemo(() => new THREE.Color("#a9c1ea"), []);
+  /* 玻璃折射看到的底色。**這是整個深色改版最容易出事的一行。**
+     WebGL 取樣不到 DOM，所以這個值就是「玻璃眼中的背景」。淺色版時頁面合成後約
+     rgb(238 241 247)、這裡給 #a9c1ea，兩者接近 → 玻璃讀起來是透明的。
+     頁面改成 #0a1030 之後若還留著淺藍，玻璃會透出淺藍、而背後其實是近黑
+     → 整個環變成「浮在深底上的不透明淺藍圓盤」，而且 tsc 與 lint 都看不出來。
+     取值原則：貼近環後方實際合成出來的頁面色，再亮一階即可。
+     日後若調動 layout 的深藍霧 alpha，這個值要跟著一起改。 */
+  const bg = useMemo(() => new THREE.Color("#071a72"), []);
 
   // 分幀建構：把 ~44 塊玻璃拆成每幀幾塊，之間讓出主執行緒 → 進場不再一次性凍格。
   // computeSpecs 保留原亂數順序 → 幾何與同步版完全一致（純效能重構，外觀不變）。
@@ -302,13 +311,16 @@ function Ring({ onReady }: { onReady?: () => void }) {
 function Lights() {
   return (
     <Environment resolution={128} frames={1}>
-      {/* 淺色、airy 的環境光：亮白主光 + 淡藍/青/紫虹彩，取自 KV 光軌色 */}
-      <Lightformer form="ring" intensity={3.4} color="#d6f4ff" position={[0, 3.5, -4]} scale={7} />
-      <Lightformer form="rect" intensity={4.2} color="#9cc6ff" position={[-5, 1, -2]} scale={[3, 7, 1]} />
-      <Lightformer form="rect" intensity={3.6} color="#b4adff" position={[5, -1.5, -2]} scale={[3, 7, 1]} />
-      <Lightformer form="rect" intensity={2.6} color="#ffd3a8" position={[0, -4, -3]} scale={6} />
-      <Lightformer form="rect" intensity={6} color="#ffffff" position={[1, 4, 4]} scale={5} />
-      <Lightformer form="circle" intensity={3} color="#e7ecff" position={[-3, -3, 3]} scale={3.5} />
+      {/* 淺底上玻璃靠折射白紙就有形；深底上唯一還在替它造形的是這組光片的鏡面反射
+          → intensity 整組上調，並把暖桃色（金色時代的補光）換成 KV logo 粉。
+          主光維持純白不動色相：它負責的是形狀，不是顏色。
+          注意這些是「光」不是塗色 —— 把它們改暗會讓玻璃直接變黑。 */}
+      <Lightformer form="ring" intensity={4.6} color="#a9ffff" position={[0, 3.5, -4]} scale={7} />
+      <Lightformer form="rect" intensity={5.4} color="#48a9e2" position={[-5, 1, -2]} scale={[3, 7, 1]} />
+      <Lightformer form="rect" intensity={4.6} color="#2f85d7" position={[5, -1.5, -2]} scale={[3, 7, 1]} />
+      <Lightformer form="rect" intensity={3} color="#b762aa" position={[0, -4, -3]} scale={6} />
+      <Lightformer form="rect" intensity={7.5} color="#ffffff" position={[1, 4, 4]} scale={5} />
+      <Lightformer form="circle" intensity={3.8} color="#85f6fa" position={[-3, -3, 3]} scale={3.5} />
     </Environment>
   );
 }
@@ -331,11 +343,11 @@ export default function OrbitGlass({
       style={{ background: "transparent" }}
       onCreated={({ gl }) => {
         gl.setClearColor(0x000000, 0);
-        gl.toneMappingExposure = 1.35; // 提亮，整體更淺
+        gl.toneMappingExposure = 1.15; // 1.35 是對著白底調的「提亮」，深底上同一組值會把高光打爆成死白
       }}
     >
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[4, 6, 5]} intensity={1.4} />
+      <ambientLight intensity={0.35} />
+      <directionalLight position={[4, 6, 5]} intensity={1.2} />
       <Ring onReady={onReady} />
       <Lights />
       {/* 不用 EffectComposer/Bloom：套後製會讓整個 canvas 方形輸出成不透明 → 玻璃盤周圍出現方塊色差；

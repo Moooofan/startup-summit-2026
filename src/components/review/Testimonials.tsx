@@ -30,7 +30,7 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
               </span>
             </p>
           </blockquote>
-          <footer className="mt-6 border-t border-black/8 pt-5">
+          <footer className="mt-6 border-t border-line-soft pt-5">
             {t.consent ? (
               <>
                 <p className="text-[18px] font-medium text-ink">{t.name}</p>

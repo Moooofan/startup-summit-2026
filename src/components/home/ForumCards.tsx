@@ -51,13 +51,18 @@ function ForumCard({ f }: { f: Forum }) {
        那是把「Day 1」當中文字用 17px 估出來的。它其實是 Montserrat 拉丁字（16px）加
        tracking-[0.22em] ＝ 59.7px，右側 10 / 14 是 font-display 26px ＝ 88.4px，
        再加（三）59px 與 gap-4，實際要 223px > 195px。正解見日期列自己的註解。 */
-    <article className="glass group relative h-full overflow-hidden rounded-card p-6 transition-colors duration-500 hover:border-black/20 sm:p-8 md:p-10">
+    <article className="glass group relative h-full overflow-hidden rounded-card p-6 transition-colors duration-500 hover:border-white/22 sm:p-8 md:p-10">
+      {/* 右上角裝飾光暈。**兩支的 alpha 與 opacity 必須一致，三元式只准換顏色。**
+          淺色版時 Day 2 是 bg-day2/40 + opacity-90（有效 0.36），Day 1 只有 0.10 ——
+          差 3.6 倍。那是為了讓當年很淡的紫（#b6b9dc）在近白頁面上看得見而加的補償。
+          深底上光暈變成加法疊加，同一組值就爆成一團明顯的紫霧，兩張卡一眼就不對稱。
+          新色票不需要那個補償：day2 #977ef2 與 orbit-sky #4d9ff0 的相對亮度幾乎相同
+          （141 vs 143），同 alpha 即同強度。
+          opacity 因此提到共用的靜態 class，只留顏色交給三元式決定。 */}
       <div
         aria-hidden
-        className={`pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full blur-3xl transition-opacity duration-500 group-hover:opacity-80 ${
-          f.accent === "sky"
-            ? "bg-orbit-sky/20 opacity-50"
-            : "bg-[rgb(150_115_225)]/40 opacity-90"
+        className={`pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full opacity-50 blur-3xl transition-opacity duration-500 group-hover:opacity-80 ${
+          f.accent === "sky" ? "bg-orbit-sky/20" : "bg-day2/20"
         }`}
       />
       <div className="relative">
@@ -78,7 +83,7 @@ function ForumCard({ f }: { f: Forum }) {
         </div>
 
         <h3 className="mt-6 text-2xl font-bold text-ink md:text-[1.75rem]">{f.name}</h3>
-        <p className="font-display mt-1.5 text-xs font-semibold tracking-[0.14em] text-gold">
+        <p className="font-display mt-1.5 text-xs font-semibold tracking-[0.14em] text-accent">
           {f.nameEn.toUpperCase()}
         </p>
 

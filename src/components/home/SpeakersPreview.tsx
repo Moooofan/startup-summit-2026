@@ -31,7 +31,7 @@ const SECONDS_PER_CARD = 4.5;
 
 const accent = {
   sky: { text: "text-orbit-sky", line: "via-orbit-sky/70" },
-  violet: { text: "text-[#6d47c4]", line: "via-[#6d47c4]/60" },
+  violet: { text: "text-day2", line: "via-day2/60" },
 } as const;
 
 type Tone = (typeof accent)[keyof typeof accent];
@@ -42,7 +42,7 @@ function SpeakerCard({ s, tone }: { s: Speaker; tone: Tone }) {
       href={`/speakers/${s.slug}`}
       className="group block w-[172px] shrink-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-glow sm:w-[196px]"
     >
-      <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-black/8 bg-surface">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-card border border-line-soft bg-surface">
         <Image
           src={s.photo}
           alt={`${s.name}｜${s.org} ${s.title}`}
@@ -51,6 +51,7 @@ function SpeakerCard({ s, tone }: { s: Speaker; tone: Tone }) {
           style={{ objectPosition: photoFocus(s.slug) }}
           className="object-cover transition-transform duration-500 group-hover:scale-[1.07]"
         />
+        <span aria-hidden className="photo-sink" />
         {s.status === "pending" && (
           <span className="absolute right-2.5 top-2.5 rounded-pill bg-bg/80 px-2.5 py-1 text-[15px] text-ink-3 backdrop-blur">
             確認中

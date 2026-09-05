@@ -22,7 +22,7 @@ export function Tickets() {
       >
         <div
           aria-hidden
-          className="pointer-events-none absolute right-[-10%] top-0 h-[40vw] max-h-[540px] w-[40vw] max-w-[540px] rounded-full bg-[radial-gradient(circle,rgb(106_134_255/0.18)_0%,transparent_65%)]"
+          className="pointer-events-none absolute right-[-10%] top-0 h-[62vw] max-h-[880px] w-[62vw] max-w-[880px] rounded-full bg-[radial-gradient(circle,rgb(143_179_255/0.07)_0%,rgb(143_179_255/0.025)_40%,transparent_72%)]"
         />
         <div className="shell relative w-full">
           <Reveal>
@@ -52,7 +52,7 @@ export function Tickets() {
       >
         <div
           aria-hidden
-          className="pointer-events-none absolute left-[-8%] bottom-[6%] h-[38vw] max-h-[520px] w-[38vw] max-w-[520px] rounded-full bg-[radial-gradient(circle,rgb(109_71_196/0.16)_0%,transparent_65%)]"
+          className="pointer-events-none absolute left-[-8%] bottom-[6%] h-[60vw] max-h-[840px] w-[60vw] max-w-[840px] rounded-full bg-[radial-gradient(circle,rgb(151_126_242/0.07)_0%,rgb(151_126_242/0.025)_40%,transparent_72%)]"
         />
         <div className="shell relative w-full">
           <Reveal>

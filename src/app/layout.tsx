@@ -42,13 +42,13 @@ export const metadata: Metadata = {
     siteName: site.name,
     title: `${site.name}｜${event.subtitle}`,
     description: site.description,
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: site.name }],
+    images: [{ url: "/og-v2.png", width: 1200, height: 630, alt: site.name }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${site.name}｜${event.subtitle}`,
     description: site.description,
-    images: ["/og.png"],
+    images: ["/og-v2.png"],
   },
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
@@ -67,15 +67,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="text-ink antialiased">
-        {/* 全站背景：淺色流動水墨圖，模糊霧化 + 一層白霧提升文字可讀性（固定不隨捲動） */}
+        {/* 全站背景：水墨圖模糊霧化 + 一層深藍霧（固定不隨捲動）。
+            深色版只把白霧換成深藍霧，架構不動 —— 區塊仍不自帶底色，全站只吃這一層 = 色調統一。
+            0.96 這個 alpha 是算出來的、不是調出來的：bg.jpg 模糊後平均約 rgb(187 190 191)，
+            0.96 × (3,9,41) + 0.04 × (187,190,191) ≈ rgb(10 16 47) = #0a1030，
+            正好落在 --color-bg 上 —— 全站所有對比數字都以這個合成結果為基準，改這裡要重算。
+            水墨的明暗起伏在這個 alpha 下只剩 #080d2d–#0c1231 的範圍，是紋理不是圖案。
+            這正是要的：新 KV 是幾何線條風格，底圖只該留一點呼吸感，不該還認得出是水墨。 */}
         <div aria-hidden className="pointer-events-none fixed inset-0 -z-10">
-          {/* 統一淺色霧面：白霧覆蓋整張圖 → 全站均勻淺色，任何區塊都不透出深墨浪 */}
           <div className="absolute inset-0 scale-110 bg-[url('/bg.jpg')] bg-cover bg-center blur-[26px]" />
-          <div className="absolute inset-0 bg-white/64" />
+          <div className="absolute inset-0 bg-[#030929]/96" />
         </div>
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-brand-bright focus:px-4 focus:py-2 focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-brand-fill focus:px-4 focus:py-2 focus:text-white"
         >
           跳到主要內容
         </a>

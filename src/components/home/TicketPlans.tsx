@@ -76,25 +76,26 @@ export function TicketPlans() {
 
 /**
  * 票卡：平面雙層相框（沿用 /tickets）——
- * 外白框 + 內襯漸層（左上藍 orbit-sky → 右下紫 #6d47c4），內含票價、含括權益與報名鈕。
+ * 外框 + 內襯漸層（左上藍 orbit-sky → 右下紫 day2），內含票價、含括權益與報名鈕。
+ * 深色版外框由白 0.85 改成白 0.08：深底上一塊 85% 的白會變成發亮的板子。
  */
 function TicketCard({ plan }: { plan: Plan }) {
   return (
     <div
       className={cn(
-        "h-full rounded-[20px] border bg-white/85 p-2.5 shadow-[0_28px_70px_-28px_rgba(24,34,66,0.4)] sm:p-3",
+        "h-full rounded-[20px] border bg-white/[0.08] p-2.5 shadow-[0_28px_70px_-28px_rgba(0,0,0,0.75)] sm:p-3",
         plan.featured ? "border-brand-lift/45" : "border-line"
       )}
     >
       <div
         className={cn(
           // flex-col + 下方 CTA 區 mt-auto：兩張卡等高時把「報名」鈕推到底端 → 左右卡水平對齊。
-          "relative flex h-full flex-col overflow-hidden rounded-[13px] border bg-gradient-to-br from-orbit-sky/18 via-white/45 to-[#6d47c4]/18 p-5 sm:p-7",
+          "relative flex h-full flex-col overflow-hidden rounded-[13px] border bg-gradient-to-br from-orbit-sky/18 via-white/[0.06] to-day2/18 p-5 sm:p-7",
           plan.featured ? "border-brand-lift/30" : "border-line-soft"
         )}
       >
         {plan.featured && (
-          <span className="absolute right-4 top-4 inline-flex items-center rounded-pill border-2 border-gold/60 bg-gold/15 px-3 py-1 text-[16px] font-bold text-gold sm:right-5 sm:top-5">
+          <span className="absolute right-4 top-4 inline-flex items-center rounded-pill border-2 border-accent/60 bg-accent/15 px-3 py-1 text-[16px] font-bold text-accent sm:right-5 sm:top-5">
             限量
           </span>
         )}
@@ -150,7 +151,9 @@ function TicketCard({ plan }: { plan: Plan }) {
 
         <div className="mt-auto pt-4 sm:pt-5">
           <Cta href={REGISTER_URL} size="md" variant="outline">
-            {REGISTER_READY ? "前往報名" : "報名即將開放"}
+            {/* 三元判斷保留：REGISTER_READY 是報名尚未開放時的退路，也是這支常數的意義。
+                開放後的用字與 Hero、導覽列統一成「立即報名」（業主 2026/9 指定）。 */}
+            {REGISTER_READY ? "立即報名" : "報名即將開放"}
           </Cta>
         </div>
 

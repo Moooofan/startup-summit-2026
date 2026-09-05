@@ -67,9 +67,9 @@ const channels = [
 
 // 三張聯絡卡右上角漸層（各自飽和、都讀得出來）：紫 / 藍紫 / 淺藍
 const cornerBlob = [
-  "radial-gradient(circle, rgb(147 97 226 / 0.55) 0%, rgb(147 97 226 / 0.16) 45%, transparent 70%)",
-  "radial-gradient(circle, rgb(108 122 236 / 0.52) 0%, rgb(108 122 236 / 0.15) 45%, transparent 70%)",
-  "radial-gradient(circle, rgb(84 160 232 / 0.52) 0%, rgb(84 160 232 / 0.15) 45%, transparent 70%)",
+  "radial-gradient(circle, rgb(151 126 242 / 0.55) 0%, rgb(151 126 242 / 0.16) 45%, transparent 70%)",
+  "radial-gradient(circle, rgb(95 137 255 / 0.52) 0%, rgb(95 137 255 / 0.15) 45%, transparent 70%)",
+  "radial-gradient(circle, rgb(77 159 240 / 0.52) 0%, rgb(77 159 240 / 0.15) 45%, transparent 70%)",
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -140,7 +140,7 @@ export function TicketsGallery() {
       {/* 柔光背景 */}
       <div
         aria-hidden
-        className="pointer-events-none absolute right-[-8%] top-[8%] h-[42vw] max-h-[560px] w-[42vw] max-w-[560px] rounded-full bg-[radial-gradient(circle,rgb(106_134_255/0.16)_0%,transparent_65%)]"
+        className="pointer-events-none absolute right-[-8%] top-[8%] h-[60vw] max-h-[840px] w-[60vw] max-w-[840px] rounded-full bg-[radial-gradient(circle,rgb(143_179_255/0.07)_0%,rgb(143_179_255/0.025)_40%,transparent_72%)]"
       />
 
       {/* 橫向三頁軌道 */}
@@ -167,7 +167,7 @@ export function TicketsGallery() {
           onClick={() => go(page - 1)}
           disabled={page === 0}
           aria-label={page > 0 ? `上一頁：${PAGE_NAMES[page - 1]}` : "上一頁"}
-          className="btn-glass grid h-10 w-10 place-items-center rounded-full border border-line bg-white/55 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
+          className="btn-glass grid h-10 w-10 place-items-center rounded-full border border-line bg-white/[0.08] text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
         >
           <ChevronLeft size={18} aria-hidden />
         </button>
@@ -184,7 +184,7 @@ export function TicketsGallery() {
                 // 主要換頁控制，8px 高的觸控目標在手機上按不到。用偽元素而非加 padding／改高度，
                 // 是為了不動視覺位置（這一列是 absolute bottom-6，改高度會把點往上推）。
                 "relative after:absolute after:-inset-x-0.5 after:-inset-y-4 after:content-['']",
-                i === page ? "w-7 bg-[rgb(76_104_212/0.76)]" : "w-2 bg-ink/20 hover:bg-ink/40"
+                i === page ? "w-7 bg-brand-lift" : "w-2 bg-ink/20 hover:bg-ink/40"
               )}
             />
           ))}
@@ -193,7 +193,7 @@ export function TicketsGallery() {
           onClick={() => go(page + 1)}
           disabled={page === 2}
           aria-label={page < 2 ? `下一頁：${PAGE_NAMES[page + 1]}` : "下一頁"}
-          className="btn-glass grid h-10 w-10 place-items-center rounded-full border border-line bg-white/55 text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
+          className="btn-glass grid h-10 w-10 place-items-center rounded-full border border-line bg-white/[0.08] text-ink-3 transition-colors hover:text-brand-lift disabled:pointer-events-none disabled:opacity-30 sm:hidden"
         >
           <ChevronRight size={18} aria-hidden />
         </button>
@@ -228,10 +228,10 @@ function NavArrow({
     >
       <span
         className={cn(
-          "btn-glass grid h-12 w-12 place-items-center rounded-full border border-line bg-white/55 text-ink-3 transition-all duration-300",
+          "btn-glass grid h-12 w-12 place-items-center rounded-full border border-line bg-white/[0.08] text-ink-3 transition-all duration-300",
           // hover 光暈要連 inset 高光一起寫，否則整條 box-shadow 被蓋掉 → 玻璃的上緣鏡面線會消失
           "group-hover:border-orbit-sky group-hover:bg-orbit-sky/12 group-hover:text-orbit-sky",
-          "group-hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.58),inset_0_-1px_0_rgb(255_255_255/0.16),0_0_20px_rgb(47_127_176/0.28)]",
+          "group-hover:shadow-[inset_0_1px_0_rgb(255_255_255/0.45),inset_0_-1px_0_rgb(255_255_255/0.14),0_0_20px_rgb(77_159_240/0.4)]",
           dir === "left" ? "animate-nudge-l" : "animate-nudge-r"
         )}
       >
@@ -300,22 +300,22 @@ function IntroPanel({ active, onNext }: { active: boolean; onNext: () => void })
           aria-label="向右瀏覽票種與聯絡資訊"
           className="group mx-auto mt-11 block w-[min(90vw,680px)]"
         >
-          <span className="block text-[17px] font-medium tracking-wide text-ink-3 transition-colors group-hover:text-gold">
+          <span className="block text-[17px] font-medium tracking-wide text-ink-3 transition-colors group-hover:text-accent">
             向右瀏覽票種與聯絡資訊
           </span>
           <span className="relative mt-3 block h-8 w-full overflow-hidden">
             {/* 靜態底軌 */}
             <span
               aria-hidden
-              className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-gold/15"
+              className="absolute inset-x-0 top-1/2 h-[3px] -translate-y-1/2 rounded-full bg-accent/15"
             />
             {/* 移動能量：漸層拖尾 + 前端大箭頭，一起向右掃 → 明確指向右方 */}
             <span
               aria-hidden
               className="animate-track-right absolute inset-y-0 left-0 flex w-1/3 items-center"
             >
-              <span className="h-[3px] flex-1 rounded-full bg-gradient-to-r from-transparent to-gold" />
-              <ChevronRight size={30} strokeWidth={3} className="-ml-3 shrink-0 text-gold" />
+              <span className="h-[3px] flex-1 rounded-full bg-gradient-to-r from-transparent to-accent" />
+              <ChevronRight size={30} strokeWidth={3} className="-ml-3 shrink-0 text-accent" />
             </span>
           </span>
         </button>
@@ -409,7 +409,7 @@ function TicketsPanel({
                 "btn-glass rounded-pill border-2 px-5 py-2 text-sm font-bold transition-all duration-300",
                 i === ticket
                   ? "border-brand-lift bg-brand-lift/18 text-brand-lift"
-                  : "border-line bg-white/42 text-ink-3 hover:border-brand-lift/50 hover:text-brand-lift"
+                  : "border-line bg-white/[0.06] text-ink-3 hover:border-brand-lift/50 hover:text-brand-lift"
               )}
             >
               {p.name}
@@ -437,18 +437,18 @@ function TicketCard({
     // 相框：平面（無玻璃）— 外框 + 內襯，呼應畫廊相框
     <div
       className={cn(
-        "rounded-[20px] border bg-white/85 p-2.5 shadow-[0_28px_70px_-28px_rgba(24,34,66,0.4)] sm:p-3",
+        "rounded-[20px] border bg-white/[0.08] p-2.5 shadow-[0_28px_70px_-28px_rgba(0,0,0,0.75)] sm:p-3",
         plan.featured ? "border-brand-lift/45" : "border-line"
       )}
     >
       <div
         className={cn(
-          "relative overflow-hidden rounded-[13px] border bg-gradient-to-br from-orbit-sky/18 via-white/45 to-[#6d47c4]/18 p-5 sm:p-7",
+          "relative overflow-hidden rounded-[13px] border bg-gradient-to-br from-orbit-sky/18 via-white/[0.06] to-day2/18 p-5 sm:p-7",
           plan.featured ? "border-brand-lift/30" : "border-line-soft"
         )}
       >
         {plan.featured && (
-          <span className="absolute right-4 top-4 inline-flex items-center rounded-pill border-2 border-gold/60 bg-gold/15 px-3 py-1 text-[16px] font-bold text-gold sm:right-5 sm:top-5">
+          <span className="absolute right-4 top-4 inline-flex items-center rounded-pill border-2 border-accent/60 bg-accent/15 px-3 py-1 text-[16px] font-bold text-accent sm:right-5 sm:top-5">
             限量
           </span>
         )}
@@ -509,7 +509,8 @@ function TicketCard({
             variant="outline"
             className={interactive ? "" : "pointer-events-none"}
           >
-            {REGISTER_READY ? "前往報名" : "報名即將開放"}
+            {/* 用字與首頁票卡（home/TicketPlans）一致 —— 同一個動作不要有兩種說法 */}
+            {REGISTER_READY ? "立即報名" : "報名即將開放"}
           </Cta>
         </div>
 
@@ -544,7 +545,7 @@ function ContactPanel() {
               key={label}
               href={href}
               {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-              className="group relative block h-full overflow-hidden rounded-[16px] border border-line bg-white/45 p-2 shadow-[0_18px_50px_-24px_rgba(24,34,66,0.35)] transition-colors duration-300 hover:border-brand-lift/45"
+              className="group relative block h-full overflow-hidden rounded-[16px] border border-line bg-white/[0.06] p-2 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.7)] transition-colors duration-300 hover:border-brand-lift/45"
             >
               <span
                 aria-hidden
@@ -552,12 +553,12 @@ function ContactPanel() {
                 style={{ background: cornerBlob[i] }}
               />
               {/* 相框內襯（比照早鳥票的外框＋內襯，但更透明） */}
-              <div className="relative flex h-full flex-row items-center gap-4 rounded-[10px] border border-line-soft bg-white/25 p-4 sm:flex-col sm:items-start sm:gap-0 sm:p-5">
+              <div className="relative flex h-full flex-row items-center gap-4 rounded-[10px] border border-line-soft bg-white/[0.04] p-4 sm:flex-col sm:items-start sm:gap-0 sm:p-5">
                 <span className="shrink-0 text-brand-lift">
                   <Icon size={26} aria-hidden />
                 </span>
                 <span className="min-w-0 sm:mt-5">
-                  <span className="block text-[17px] tracking-[0.14em] text-gold">{label}</span>
+                  <span className="block text-[17px] tracking-[0.14em] text-accent">{label}</span>
                   <span className="mt-1 flex items-center gap-1.5 text-[18px] font-medium text-ink transition-colors group-hover:text-brand-lift sm:mt-1.5">
                     {value}
                     <ArrowUpRight size={14} className="shrink-0 text-ink-4 transition-colors group-hover:text-brand-lift" />

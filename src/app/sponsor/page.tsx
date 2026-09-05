@@ -59,10 +59,18 @@ export default function SponsorPage() {
   return (
     <>
       {/* 頁首 */}
-      <section className="grain relative overflow-hidden pb-16 pt-[132px] md:pb-24 md:pt-[176px]">
+      {/* overflow-x-clip 而非 overflow-hidden，**別順手改回去**：
+          區塊光暈是 880px 高，這個頁首只有約 400px（pt-176 + SectionHead + pb），裝不下。
+          overflow-hidden 會把光暈在區塊底部切出一條水平硬邊（業主 2026/9 回報）。
+          也不能用 overflow-x-hidden：CSS 規定只要一軸不是 visible，另一軸的 visible
+          就會被算成 auto → 反而在區塊內生出一個垂直捲動容器。
+          overflow: clip 沒有這個耦合，overflow-x: clip 搭 overflow-y: visible 合法且有效 ——
+          橫向仍擋住溢位（光暈定位在負值，超出視窗會產生水平捲軸），縱向放它自然溢出。
+          溢出不會蓋到下一段：後續 section 同為 relative 且 DOM 在後，內容畫在光暈之上。 */}
+      <section className="grain relative overflow-x-clip pb-16 pt-[132px] md:pb-24 md:pt-[176px]">
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-[10%] -top-[16%] h-[50vw] max-h-[640px] w-[50vw] max-w-[640px] rounded-full bg-[radial-gradient(circle,rgb(106_134_255/0.22)_0%,transparent_64%)]"
+          className="pointer-events-none absolute -left-[10%] -top-[16%] h-[62vw] max-h-[860px] w-[62vw] max-w-[860px] rounded-full bg-[radial-gradient(circle,rgb(143_179_255/0.07)_0%,rgb(143_179_255/0.025)_40%,transparent_72%)]"
         />
         <div className="shell relative">
           <Reveal>
@@ -210,7 +218,7 @@ export default function SponsorPage() {
                   </header>
                   <p className="mt-4 text-[18px] leading-relaxed text-ink-2">{t.tagline}</p>
                   {t.limited && <p className="mt-2 text-[17px] text-ink-4">{t.limited}</p>}
-                  <dl className="mt-5 divide-y divide-black/6 border-t border-black/6">
+                  <dl className="mt-5 divide-y divide-line-soft border-t border-line-soft">
                     {benefitRows.map((row) => {
                       const v = t.benefits[row.key];
                       if (v === false) return null;

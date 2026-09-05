@@ -16,6 +16,13 @@ export const event = {
   tagline: "資本連結創新",
   taglineSub: "讓每一次連結，成為新價值的起點",
 
+  /** 本屆主軸（業主 2026/9 提供）。與 tagline「資本連結創新」分工：
+   *  tagline 是年會這個品牌的長期定位，theme 是「今年這一屆」要談的題目，每屆會換。
+   *  下游：首頁 About 的區塊大標與內文各引用一次、llms.txt 的活動事實區段。
+   *  中間的「 · 」前後各留一個半形空格 —— 大標與內文吃的是同一個字串，
+   *  不要在呼叫端各自補標點，否則兩處的寫法會慢慢分岔。 */
+  theme: "等待黎明 · 擁抱變革",
+
   /** ISO 8601（台北時間）— 給倒數計時與 Event JSON-LD 用 */
   startDate: "2026-10-14T09:00:00+08:00",
   endDate: "2026-10-15T17:00:00+08:00",
@@ -53,7 +60,7 @@ export const event = {
       { people: 5, label: "5 人", earlyBird: 2000, full: 2500 },
       { people: 10, label: "10 人", earlyBird: 1500, full: 2000 },
     ],
-    // TODO: Accupass 連結未定，先以 # 佔位（見 lib/config.ts）
+    // 報名連結見 lib/config.ts 的 REGISTER_URL（2026/9 已接上 Accupass 活動頁）
     note: "早鳥票數量有限，售完為止",
   },
 
@@ -94,7 +101,7 @@ export const forums = [
     time: "09:00 – 17:00",
     audience: "新創創辦人",
     description:
-      "從 Keynote、新 IPO 創業家對談，到 Edge AI、AI 軟體、半導體硬科技三條分軌，一天內看完台灣創業現場的縱深。",
+      "議程分為 Edge AI、AI 軟體、半導體硬科技三條路線。談論當公司從草創走向資本市場，或是到了考慮併購或海外擴張的節點，該如何進行關鍵決策。",
     accent: "sky" as const,
   },
   {
@@ -109,7 +116,9 @@ export const forums = [
     time: "09:00 – 17:00",
     audience: "創投 / CVC / 基金 LP / 高資產投資人",
     description:
-      "焦點機構投資人齊聚主論壇，下午分為 AI 投資與生醫投資兩軌，聚焦真實的資本動態與交易邏輯。",
+      "談論在硬科技、AI 與生醫領域中，正在經歷哪些市場變化，投資人又該如何辨別機會與風險，做出長期有利的決斷，展望未來的資本動態。",
+    // "violet" 現在解析到 --color-day2（#977ef2），不再是舊的 #6d47c4。
+    // 這個 key 是「日別色的名字」不是色值本身，深色改版刻意不動它。
     accent: "violet" as const,
   },
 ];

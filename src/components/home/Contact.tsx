@@ -51,7 +51,7 @@ export function Contact() {
                 key={label}
                 href={href}
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="glass group flex flex-col rounded-card p-7 transition-colors duration-500 hover:border-black/20"
+                className="glass group flex flex-col rounded-card p-7 transition-colors duration-500 hover:border-white/22"
               >
                 <span className="text-brand-lift">
                   <Icon size={26} aria-hidden />

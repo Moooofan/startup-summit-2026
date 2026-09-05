@@ -41,10 +41,10 @@ const TOP_RIGHT_X = 1260;
 const BOT_RIGHT_X = 650;
 const GRAY_GAP = 26; // 灰色底襯比照片右緣多外擴多少 → 露出的鑲邊寬度
 const TEAR_SCALE = 24; // 撕裂強度：位移越大鋸齒越明顯
-const GRAY = "#9aa3b2"; // 鑲邊灰（冷調）
-const TINT = "#28324e"; // 照片統一色（靛藍）
-const TINT_OPACITY = 0.3;
-const LAYER_OPACITY = 0.22; // 整層透明度：越低越不搶文字
+const GRAY = "#2f85d7"; // 鑲邊：淺底時是「紙的底襯」；深底上灰色只會合成成髒灰 → 改 KV 青，撕痕變成沿邊漏出的光
+const TINT = "#020867"; // 照片統一色：工作從「壓掉雜色照片的暖調」改成「把照片染進 KV 深場」
+const TINT_OPACITY = 0.38; // 深底上沒有白霧幫忙收斂色相，統一色得自己扛，否則照片會以原色跳出來
+const LAYER_OPACITY = 0.24; // 整層透明度：越低越不搶文字。深底上這層由「減光」變成「加光」，微調上去
 
 // 左／上／下外擴到畫面外，確保滿版且撕裂位移不會在邊緣露出破口
 const PHOTO_SHAPE = `-80,-60 ${TOP_RIGHT_X},-60 ${BOT_RIGHT_X},${VB_H + 60} -80,${VB_H + 60}`;
@@ -61,8 +61,10 @@ export function HomeBackdrop() {
         className="h-full w-full"
         viewBox={`0 0 ${VB_W} ${VB_H}`}
         preserveAspectRatio="xMidYMid slice"
-        // 照片降飽和、微提亮 → 融進冷色調、不喧賓奪主
-        style={{ filter: "saturate(0.7) brightness(1.03)" }}
+        // brightness 的方向在深色版必須反過來：1.03 原本是防止照片在白霧上打出「暗洞」，
+        // 深底上照片本來就是最亮的東西，再提亮會變成打出「亮洞」。
+        // 這個 filter 掛在 <svg> 上，會一併作用到 GRAY 與 TINT —— 四個值要一起看、一起截圖。
+        style={{ filter: "saturate(0.8) brightness(0.92)" }}
       >
         <defs>
           {/* 撕紙邊緣濾鏡：亂數雜訊 → 位移貼在遮罩形狀上。filter 區域放大避免鋸齒被裁掉 */}

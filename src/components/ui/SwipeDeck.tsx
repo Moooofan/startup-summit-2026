@@ -108,7 +108,7 @@ export function SwipeDeck<T>({
                 "btn-glass rounded-pill border-2 px-5 py-2 text-sm font-bold transition-all duration-300",
                 i === active
                   ? "border-brand-lift bg-brand-lift/18 text-brand-lift"
-                  : "border-line bg-white/42 text-ink-3 hover:border-brand-lift/50 hover:text-brand-lift"
+                  : "border-line bg-white/[0.06] text-ink-3 hover:border-brand-lift/50 hover:text-brand-lift"
               )}
             >
               {label}

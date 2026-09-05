@@ -8,8 +8,12 @@
  * 陣列順序刻意對齊 data/agenda.ts 的議程順序（同一場次的講者相鄰）——
  * /speakers 的網格是按陣列順序鋪的，順序打亂同場次的人就會被拆散。
  *
- * 議程表上還有三位不在這裡：田建中（證交所）與兩位分段主持人劉宥彤、張提提 ——
- * 他們只出現在議程圖裡，0817 簡報沒有介紹與照片，補到才上站（見 TODO.md）。
+ * 議程表上有六位不在這裡：田建中（證交所）、金東昊（Korea Credit Data）、陳怡蓉（識富天使會）、
+ * 韓宗憲（ITIC 創投），與兩位分段主持人劉宥彤、張提提 —— 他們只出現在議程表上，
+ * 沒有介紹與照片，向主辦方索取後才上站。
+ *
+ * 反過來，朱宜振（IrisGo.AI）留在這裡但 0902 議程總表上沒有他的場次 ——
+ * 講者內頁的場次膠囊會自動不渲染（findSpeakerSlot 回 undefined），是否仍出席待業主確認。
  */
 import type { ForumKey } from "./event";
 
@@ -189,19 +193,6 @@ export const speakers: Speaker[] = [
     bio: "宋捷仁是跨國共享車位平台USPACE執行長。2016 年因車輛遭拖吊創立悠勢科技，透過 IoT 地鎖活化閒置車位。他近年推動國際化，2024 年全資併購日本共享停車新創「軒先」，成功輸出 AI 車牌辨識並帶領營收翻倍，將公司打造為涵蓋台、日、東南亞的跨國出行生態圈。",
     tags: ["共享停車", "IoT 地鎖", "跨國併購", "出行生態圈"],
   },
-  {
-    slug: "adams-chung",
-    name: "鍾哲民",
-    nameEn: "Adams Chung",
-    title: "創辦人兼執行長",
-    org: "MoBagel 行動貝果",
-    day: "founder",
-    track: "ma-global",
-    status: "confirmed",
-    photo: "/speakers/adams-chung.jpg",
-    bio: "Mobagel（美商行動貝果）是一家專精於 AI 數據分析的軟體公司，提供企業級 AI 代理與邊緣運算方案。創辦人兼執行長鍾哲民具備 MIT 統計背景，他帶領團隊從 SaaS 轉型軟硬整合，致力幫助全球企業將 AI 實際落地以創造商業成效。",
-    tags: ["AI 數據分析", "企業級 AI 代理", "邊緣運算", "軟硬整合"],
-  },
 
   // 《Edge AI 趨勢對談》
   {
@@ -257,6 +248,19 @@ export const speakers: Speaker[] = [
   },
 
   // 《AI 軟體創業家分享》
+  {
+    slug: "adams-chung",
+    name: "鍾哲民",
+    nameEn: "Adams Chung",
+    title: "創辦人兼執行長",
+    org: "MoBagel 行動貝果",
+    day: "founder",
+    track: "ai-software",
+    status: "confirmed",
+    photo: "/speakers/adams-chung.jpg",
+    bio: "Mobagel（美商行動貝果）是一家專精於 AI 數據分析的軟體公司，提供企業級 AI 代理與邊緣運算方案。創辦人兼執行長鍾哲民具備 MIT 統計背景，他帶領團隊從 SaaS 轉型軟硬整合，致力幫助全球企業將 AI 實際落地以創造商業成效。",
+    tags: ["AI 數據分析", "企業級 AI 代理", "邊緣運算", "軟硬整合"],
+  },
   {
     slug: "xue-jin",
     name: "薛覲",
@@ -439,7 +443,7 @@ export const speakers: Speaker[] = [
     tags: ["醫材", "盡職調查"],
   },
   {
-    // 0817 講者介紹頁標「已確認」，但四張議程表沒有排到他的時段 —— 落差待業主確認（見 TODO.md）
+    // TODO: 0817 講者介紹頁標「已確認」，但四張議程表沒有排到他的時段 —— 落差待業主確認
     slug: "lin-chuanen",
     name: "林傳恩",
     title: "總經理暨共同創辦人",

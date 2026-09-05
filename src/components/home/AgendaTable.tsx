@@ -3,20 +3,22 @@ import type { AgendaItem, AgendaSpeaker } from "@/data/agenda";
 import { cn } from "@/lib/utils";
 
 /** 日別色調：Day 1 藍 / Day 2 紫，全站一致。
- *  原本住在 TrackCards.tsx，2026/9 主題軌整組移除後搬到這裡（色值未動），
- *  由議程表與 /agenda 的日別節點共用。 */
+ *  原本住在 TrackCards.tsx，2026/9 主題軌整組移除後搬到這裡，
+ *  由議程表與 /agenda 的日別節點共用。
+ *  2026/9 深色改版：色值改讀 token（orbit-sky / day2），不再寫死 ——
+ *  舊的 #6d47c4 沒有任何 token，散在六個檔案共 13 處，是全站最嚴重的色值重複。 */
 export const dayTone = {
   sky: {
     text: "text-orbit-sky",
     badge: "bg-orbit-sky/15 text-orbit-sky",
-    glow: "rgb(47 127 176 / 0.12)",
+    glow: "rgb(77 159 240 / 0.16)",
     line: "via-orbit-sky/60",
   },
   violet: {
-    text: "text-[#6d47c4]",
-    badge: "bg-[#6d47c4]/15 text-[#6d47c4]",
-    glow: "rgb(109 71 196 / 0.12)",
-    line: "via-[#6d47c4]/60",
+    text: "text-day2",
+    badge: "bg-day2/15 text-day2",
+    glow: "rgb(151 126 242 / 0.16)",
+    line: "via-day2/60",
   },
 } as const;
 
@@ -105,9 +107,11 @@ function GroupHead({ item }: { item: Extract<AgendaItem, { type: "group" }> }) {
       {/* 分段標題刻意**不**吃日別色調（業主 2026/9：兩天議程要同一個格式）——
           接回 tone.text 的話 Day 2 會變成紫色，兩天的表看起來就不一樣了。
           區分兩天是上方「Day 1／Day 2」標籤的職責，不是議程內容的。
-          用品牌靛藍而非任一日別色：與這一列的藍霧底 rgb(76 104 212 / 0.06) 同色系但更深，
-          且刻意避開 Day 1 的 #2f7fb0 與 Day 2 的 #6d47c4，免得看起來還在標日別。 */}
-      <span className="text-[18px] font-bold text-brand">{item.title}</span>
+          用品牌藍而非任一日別色：與這一列的藍霧底同色系，且刻意避開 Day 1 的 orbit-sky
+          與 Day 2 的 day2，免得看起來還在標日別。
+          深色版用 brand-bright 而非 brand：brand 是給大面積色塊當底的深藍，
+          對頁底只有 1.63:1，拿來當文字會直接看不見。 */}
+      <span className="text-[18px] font-bold text-brand-bright">{item.title}</span>
       {item.host && (
         <span className="mt-1 block text-[16px] text-ink-4 sm:mt-0 sm:ml-3 sm:inline">
           主持｜{item.host}
@@ -124,14 +128,14 @@ function AgendaCards({ items }: { items: AgendaItem[] }) {
       {items.map((item, i) => {
         if (item.type === "group") {
           return (
-            <li key={i} className="bg-black/[0.03] px-4 py-3">
+            <li key={i} className="bg-white/[0.025] px-4 py-3">
               <GroupHead item={item} />
             </li>
           );
         }
         if (item.type === "break") {
           return (
-            <li key={i} className="flex flex-wrap items-baseline gap-x-3 bg-black/[0.02] px-4 py-3">
+            <li key={i} className="flex flex-wrap items-baseline gap-x-3 bg-white/[0.018] px-4 py-3">
               {item.time && (
                 <span className="font-display tabular-nums text-[16px] text-ink-4">
                   {item.time}
@@ -203,7 +207,7 @@ function AgendaGrid({ items }: { items: AgendaItem[] }) {
     <div className="mt-8 hidden overflow-hidden rounded-card border border-line-soft md:block">
       <table className="w-full border-collapse text-left">
         <thead>
-          <tr className="bg-black/[0.03]">
+          <tr className="bg-white/[0.025]">
             <th
               scope="col"
               className="w-[14%] px-5 py-3 text-[17px] font-medium tracking-wide text-ink-4"
@@ -228,7 +232,7 @@ function AgendaGrid({ items }: { items: AgendaItem[] }) {
           {items.map((item, i) => {
             if (item.type === "group") {
               return (
-                <tr key={i} className="border-t border-line-soft bg-[rgb(76_104_212/0.06)]">
+                <tr key={i} className="border-t border-line-soft bg-[rgb(95_137_255/0.1)]">
                   <td colSpan={3} className="px-5 py-3">
                     <GroupHead item={item} />
                   </td>
@@ -237,7 +241,7 @@ function AgendaGrid({ items }: { items: AgendaItem[] }) {
             }
             if (item.type === "break") {
               return (
-                <tr key={i} className="border-t border-line-soft bg-black/[0.02]">
+                <tr key={i} className="border-t border-line-soft bg-white/[0.018]">
                   <td className="px-5 py-3 align-top">
                     <Time time={item.time} duration={item.duration} />
                   </td>
@@ -250,15 +254,19 @@ function AgendaGrid({ items }: { items: AgendaItem[] }) {
             return (
               <tr
                 key={i}
-                className="border-t border-line-soft align-top transition-colors hover:bg-black/[0.02]"
+                className="border-t border-line-soft align-top transition-colors hover:bg-white/[0.035]"
               >
                 <td className="px-5 py-4">
                   <Time time={item.time} duration={item.duration} />
                 </td>
                 {/* 沒講題時只由連續段的第一列輸出一個跨列的格，其餘各列不輸出本欄。
-                    align-middle 是拿來蓋掉 <tr> 的 align-top，讓佔位字垂直置中在整段上。 */}
+                    講題／佔位字／嘉賓三格一律 align-middle（業主 2026/9）——
+                    <tr> 的 align-top 因此只剩時間欄在吃，那是刻意的：時間是這一列的錨點，
+                    四人 Panel 那種高列要讓時間釘在頂端、講題與講者落在中間。 */}
                 {item.topic ? (
-                  <td className="px-5 py-4 text-[18px] leading-relaxed text-ink">{item.topic}</td>
+                  <td className="px-5 py-4 align-middle text-[18px] leading-relaxed text-ink">
+                    {item.topic}
+                  </td>
                 ) : tbaSpans[i] > 0 ? (
                   <td
                     rowSpan={tbaSpans[i]}
@@ -267,7 +275,7 @@ function AgendaGrid({ items }: { items: AgendaItem[] }) {
                     {TBA}
                   </td>
                 ) : null}
-                <td className="px-5 py-4">
+                <td className="px-5 py-4 align-middle">
                   <Speakers list={item.speakers} />
                 </td>
               </tr>
