@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { event } from "@/data/event";
+import { event, forums } from "@/data/event";
 
 /* 頁尾的兩欄導覽（活動／參與，共八條連結）2026/9 移除。
    直接原因是它讀起來像壞掉的：PUBLIC_ROUTES 目前只開 / 、/speakers、/review，
@@ -9,10 +9,9 @@ import { event } from "@/data/event";
    注意根因是路由被隱藏、不是這份清單有問題 —— 之後 /about、/agenda、/tickets、
    /sponsor 開放時，把這一段連同 cols 的過濾邏輯從 git 歷史取回即可（此 commit 的父版本）。 */
 
-// event.dateLabelLong 是「起 — 迄」的長日期，字串裡的半形空格讓瀏覽器可以斷在
-// 「10 月 15」和「日（四）」中間 —— 日期被腰斬。拆成破折號前後兩半、各自鎖成不可斷的整體，
-// 要斷就只能斷在破折號後面。相依於 dateLabelLong 內含「—」；event.ts 改格式時這裡要跟著改。
-const [dateFrom, dateTo] = event.dateLabelLong.split("—");
+// 頁尾用短寫法，不吃 event.dateLabelLong：長寫法在 17px 下約 356px，
+// 320px 螢幕的內容寬只有 280px，一定會折成兩行（業主要求一行）。短寫法約 257px。
+const dateCompact = `${event.year}.${event.dateFrom}（${forums[0].weekday}）— ${event.dateTo}（${forums[1].weekday}）`;
 
 export function Footer() {
   return (
@@ -40,18 +39,17 @@ export function Footer() {
             <span className="text-sm font-bold text-ink">{event.organizer.name}</span>
           </div>
           {/* max-w-xs 只留給 md 以上：手機是單欄堆疊，.shell 給的內容寬是 350px，
-              320px 的上限等於自己少用 30px；md（兩欄各 320px）與 lg（1.4fr 約 309px）
-              欄寬本來就 ≤320px，那兩檔的上限是 no-op，視覺不受影響。 */}
+              320px 的上限等於自己少用 30px；md 兩欄各 320px 是 no-op，
+              lg 的品牌欄約 599px（1.4fr）才真的被這個上限收住。 */}
           <p className="mt-5 text-sm leading-relaxed text-ink-3 md:max-w-xs">
             {/* 中文沒有詞界，預設任何字元邊界都能斷 ——「雙峰論壇」會被拆成「雙峰 ／ 論壇」。
                 活動全名與副標各自鎖成整體後，放不下時只會斷在中間的「・」之後。
-                只鎖這四段、不整段 nowrap：nowrap 撐不下時會溢出而非斷行，footer 的
-                overflow-hidden 會把字裁掉。這四段在 320px（內容寬 280px）都放得下。 */}
+                只鎖這三段、不整段 nowrap：nowrap 撐不下時會溢出而非斷行，footer 的
+                overflow-hidden 會把字裁掉。三段在 320px（內容寬 280px）都放得下。 */}
             <span className="whitespace-nowrap">{event.fullName}</span>・
             <span className="whitespace-nowrap">{event.subtitle}</span>
             <br />
-            <span className="whitespace-nowrap">{dateFrom.trimEnd()}—</span>{" "}
-            <span className="whitespace-nowrap">{dateTo.trim()}</span>
+            <span className="whitespace-nowrap">{dateCompact}</span>
           </p>
           <p className="font-display mt-4 text-balance text-xs tracking-[0.16em] text-ink-4">
             {event.nameEn.toUpperCase()}
