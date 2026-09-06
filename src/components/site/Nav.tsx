@@ -39,7 +39,7 @@ function NavCountdown() {
   if (!t || t.done) return null;
   return (
     <div className="hidden items-center gap-2 text-xs text-ink-3 xl:flex">
-      <span className="tracking-wide">距開幕</span>
+      <span className="tracking-wide">距離開幕</span>
       <span className="font-display text-sm font-semibold tabular-nums text-ink">
         {t.days}
         <span className="mx-0.5 text-ink-3">天</span>
@@ -120,7 +120,11 @@ export function Nav() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-4">
+        {/* 右側整組往左推一段（業主 2026/9：報名鈕太靠右）。
+            .shell 在 md 以上給的是 40px 內距，與左側 logo 對稱；業主要的是視覺上再收一點，
+            所以額外加 16px、合計距畫面右緣 56px。只加在 md 以上 ——
+            手機那一側最後一個元素是漢堡鈕，它的觸控範圍本來就該貼著邊。 */}
+        <div className="flex items-center gap-4 md:pr-4">
           <NavCountdown />
           {/* 兩顆報名鈕（這裡與下方手機選單）的樣式對齊 Hero 的主 CTA ——
               業主 2026/9：同一個動作在第一屏出現兩次，不該有兩種長相。
