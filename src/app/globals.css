@@ -170,6 +170,20 @@
     backdrop-filter: blur(8px);
     border: 1px solid rgb(150 178 255 / 0.18);
   }
+  /* 內容卡的實底。`.glass` 這類半透明卡在 SiteBackdrop 上會被主視覺的線與青帶穿透，
+     字直接被吃掉（業主 2026/9 連續回報兩次）。凡是「卡片裡有要讀的內容」就疊這一支。
+
+     0.92 是「還看得出是卡片、但背後的 KV 已經不參與閱讀」的位置 ——
+     0.86 試過仍嫌透（業主：「透明度可以再低一點」）。要再調就只改這一個數字，
+     論壇卡、票卡、團報表吃的都是這一支。
+
+     只設 background-color：`.glass` 用的是 background 簡寫（含 background-image 漸層），
+     本支只覆蓋顏色那一格，霧面漸層與 backdrop-filter 原樣保留。
+     宣告順序必須在 .glass 之後，才蓋得掉簡寫重設的 transparent。 */
+  .card-solid {
+    background-color: rgb(9 16 58 / 0.92);
+  }
+
   .glass-strong {
     background: linear-gradient(160deg, rgb(140 176 255 / 0.20), rgb(56 88 205 / 0.12));
     backdrop-filter: blur(11px);

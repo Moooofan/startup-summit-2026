@@ -95,7 +95,7 @@ function TicketCard({ plan }: { plan: Plan }) {
           // 最壞情況（亮青帶正後方）白字對比只有 2.2:1；墊上這層實底後回到 13:1 以上。
           // bg-[...] 設 background-color、bg-gradient-* 設 background-image，兩者疊加不互斥 ——
           // 青→紫漸層原樣保留（那是業主定案的日別配色），只是底下多了一片不透光的底。
-          "relative flex h-full flex-col overflow-hidden rounded-[13px] border bg-[rgb(9_16_58/0.86)] bg-gradient-to-br from-orbit-sky/18 via-white/[0.06] to-day2/18 p-5 sm:p-7",
+          "relative flex h-full flex-col overflow-hidden rounded-[13px] border card-solid bg-gradient-to-br from-orbit-sky/18 via-white/[0.06] to-day2/18 p-5 sm:p-7",
           plan.featured ? "border-brand-lift/30" : "border-line-soft"
         )}
       >

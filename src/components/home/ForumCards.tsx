@@ -51,7 +51,7 @@ function ForumCard({ f }: { f: Forum }) {
        那是把「Day 1」當中文字用 17px 估出來的。它其實是 Montserrat 拉丁字（16px）加
        tracking-[0.22em] ＝ 59.7px，右側 10 / 14 是 font-display 26px ＝ 88.4px，
        再加（三）59px 與 gap-4，實際要 223px > 195px。正解見日期列自己的註解。 */
-    <article className="glass group relative h-full overflow-hidden rounded-card p-6 transition-colors duration-500 hover:border-white/22 sm:p-8 md:p-10">
+    <article className="glass card-solid group relative h-full overflow-hidden rounded-card p-6 transition-colors duration-500 hover:border-white/22 sm:p-8 md:p-10">
       {/* 右上角裝飾光暈。**兩支的 alpha 與 opacity 必須一致，三元式只准換顏色。**
           淺色版時 Day 2 是 bg-day2/40 + opacity-90（有效 0.36），Day 1 只有 0.10 ——
           差 3.6 倍。那是為了讓當年很淡的紫（#b6b9dc）在近白頁面上看得見而加的補償。

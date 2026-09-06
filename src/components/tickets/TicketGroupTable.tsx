@@ -36,7 +36,7 @@ export function TicketGroupTable() {
       {/* md 以上：人數當欄 */}
       {/* 表格也要實底 —— 原本整張表透明，KV 的線與青帶會穿到數字後面
           （業主回報「這邊底圖也是，字被主視覺吃掉」）。值與票卡同步。 */}
-      <div className="mt-4 hidden overflow-hidden rounded-card border border-line-soft bg-[rgb(9_16_58/0.86)] md:block">
+      <div className="mt-4 hidden overflow-hidden rounded-card border border-line-soft card-solid md:block">
         <table className="w-full border-collapse text-left">
           <thead>
             <tr className="bg-white/[0.025]">
@@ -75,7 +75,7 @@ export function TicketGroupTable() {
       </div>
 
       {/* md 以下：轉置，人數當列 */}
-      <div className="mt-4 overflow-hidden rounded-card border border-line-soft bg-[rgb(9_16_58/0.86)] md:hidden">
+      <div className="mt-4 overflow-hidden rounded-card border border-line-soft card-solid md:hidden">
         <table className="w-full border-collapse text-left">
           <thead>
             <tr className="bg-white/[0.025]">

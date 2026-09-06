@@ -86,28 +86,34 @@ export function SwipeDeck<T>({
                   會穿過前卡跟前卡的字疊在一起。blur 下在內容這層、不下在外層 ——
                   外層還包著切換鈕與下方那圈外框，一起糊掉會看不見鍵盤焦點框。
 
-                  **透明度也下在這一層**（原本在外層）：外層若被乘上 0.40，
+                  **透明度也下在這一層**（原本在外層）：外層若被乘上透明度，
                   下面那圈用來宣告「後面還有一張卡」的外框會跟著淡到看不見。
-                  overflow-hidden 把 blur 溢出的暈邊裁回卡片形狀，外框才貼得住邊緣。 */}
+                  overflow-hidden 把 blur 溢出的暈邊裁回卡片形狀，外框才貼得住邊緣。
+
+                  0.40 -> 0.62、blur 5 -> 3：前卡改吃 .card-solid（0.92 實底）之後，
+                  「後卡的字會透過前卡讀出來」這個限制已經不成立 —— 那才是當初壓到 0.40
+                  加 5px 的唯一理由。限制解除，後卡就能拉回看得清楚的程度。
+                  **前卡若哪天調回半透明，這兩個值要一起退回去。** */}
               <div
                 inert={!isActive}
                 className={cn(
                   "transition-opacity duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-                  !isActive && "pointer-events-none overflow-hidden rounded-card opacity-[0.40] blur-[5px]"
+                  !isActive && "pointer-events-none overflow-hidden rounded-card opacity-[0.62] blur-[3px]"
                 )}
               >
                 {renderItem(item, isActive)}
               </div>
 
-              {/* 側卡的實線外框。內容糊掉之後，卡片邊界跟著糊 → 讀起來像邊上的一團陰影，
-                  沒有人知道那是「另一張可以滑過來的卡」（業主 2026/9 回報）。
-                  框線刻意畫在**外層**、不吃 blur 也不吃上面那個 0.40，是這一疊唯一銳利的東西。
-                  還是太淡的話把 border-line 換成 border-white/30，不要去動內容的透明度 ——
-                  那一項的上限是「後卡的字不能透過前卡讀出來」。 */}
+              {/* 側卡的外框。業主 2026/9 指定實體黑線 —— 前卡吃了 .card-solid 之後是近乎
+                  實心的一片，卡與卡之間需要一道**硬邊**才分得開，亮色細線在這裡反而糊。
+                  2px 純黑：深靛底上它讀起來是一道凹槽／陰影，是「後面還有一張」最直接的線索。
+                  再補一條極淡的內亮邊 —— 黑線在近黑的背景上單獨存在時會消失，
+                  有了內亮邊，邊界不論落在深底還是落在卡面上都立得住。
+                  框畫在**外層**，不吃內容那層的 blur 與透明度。 */}
               {!isActive && (
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 rounded-card border border-line"
+                  className="pointer-events-none absolute inset-0 rounded-card border-2 border-black shadow-[inset_0_0_0_1px_rgb(150_178_255/0.28)]"
                 />
               )}
 

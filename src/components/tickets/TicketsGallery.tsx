@@ -400,24 +400,25 @@ function TicketsPanel({
                 }}
               >
                 {/* 景深與淡化下在內容這層、不下在外層 —— 外層還掛著下面那圈外框，
-                    一起淡掉就等於沒加。相框幾乎透明（只擋得住約四分之一），不糊掉的話
-                    側卡的字會穿過前卡跟前卡的字疊在一起。值與 ui/SwipeDeck 同步。 */}
+                    一起淡掉就等於沒加。0.62 / 3px 的由來見 ui/SwipeDeck 的同一段
+                    （前卡吃了 .card-solid 之後，防止後卡的字透過前卡的限制已解除）。
+                    值與 ui/SwipeDeck 同步。 */}
                 <div
                   className={cn(
                     "transition-opacity duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
                     !isActive &&
-                      "overflow-hidden rounded-[20px] opacity-[0.40] blur-[5px] group-hover:opacity-60"
+                      "overflow-hidden rounded-[20px] opacity-[0.62] blur-[3px] group-hover:opacity-80"
                   )}
                 >
                   <TicketCard plan={p} interactive={isActive} />
                 </div>
 
-                {/* 側卡的實線外框：這一疊唯一銳利的東西，用來宣告「後面還有一張卡」。
-                    半徑對齊 TicketCard 的外相框（rounded-[20px]）。理由見 ui/SwipeDeck 的同一段。 */}
+                {/* 側卡的實體黑線外框，理由與寫法見 ui/SwipeDeck 的同一段。
+                    半徑對齊 TicketCard 的外相框（rounded-[20px]）。 */}
                 {!isActive && (
                   <span
                     aria-hidden
-                    className="pointer-events-none absolute inset-0 rounded-[20px] border border-line"
+                    className="pointer-events-none absolute inset-0 rounded-[20px] border-2 border-black shadow-[inset_0_0_0_1px_rgb(150_178_255/0.28)]"
                   />
                 )}
               </div>
@@ -475,7 +476,7 @@ function TicketCard({
       <div
         className={cn(
           // 實底的理由見 home/TicketPlans.tsx 的同一行註解。兩處必須同步。
-          "relative overflow-hidden rounded-[13px] border bg-[rgb(9_16_58/0.86)] bg-gradient-to-br from-orbit-sky/18 via-white/[0.06] to-day2/18 p-5 sm:p-7",
+          "relative overflow-hidden rounded-[13px] border card-solid bg-gradient-to-br from-orbit-sky/18 via-white/[0.06] to-day2/18 p-5 sm:p-7",
           plan.featured ? "border-brand-lift/30" : "border-line-soft"
         )}
       >
