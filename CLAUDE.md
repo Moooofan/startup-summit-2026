@@ -24,7 +24,7 @@ Next.js 15 App Router + React 19 + TypeScript + Tailwind v4 + motion + three。�
 ```bash
 npx tsc --noEmit  # Claude 可用（型別檢查）
 npm run lint      # Claude 可用（eslint，flat config + next/core-web-vitals）
-npm run build     # 由「使用者」執行；會預先渲染 38 個講者頁
+npm run build     # 由「使用者」執行；會預先渲染 37 個講者頁
 npm run dev       # 由「使用者」執行（--turbopack）
 ```
 
@@ -40,7 +40,7 @@ npm run dev       # 由「使用者」執行（--turbopack）
 | 檔案 | 內容 | 來源 |
 |---|---|---|
 | `data/event.ts` | 日期／地點／票價／主辦單位／`forums`／`stats` | 企劃 pptx |
-| `data/speakers.ts` | 38 位講者 + `hostSpeaker` | **自簡報產生，見下方警告** |
+| `data/speakers.ts` | 38 位講者（對外 37，見下）+ `hostSpeaker` | **自簡報產生，見下方警告** |
 | `data/agenda.ts` | 兩天逐時段議程 + `findSpeakerSlot`／`talkCount`／`agendaMarkdown` | 議程總表 0902 xlsx |
 | `data/sponsors.ts` | 五級贊助方案、展位、`benefitRows` | 企劃 pptx |
 | `data/review.ts` | 歷屆回顧（第三屆 35 場議程／64 則媒體／贊助 logo） | 企劃 pptx + 網路查證 |
@@ -48,6 +48,13 @@ npm run dev       # 由「使用者」執行（--turbopack）
 | `data/faq.ts` | 常見問題 | 人工撰寫 |
 | `data/speakerPhotoFocus.ts` | 少數爛照片的 `object-position` 校正 | 人工 |
 | `lib/config.ts` | 網域、Accupass 連結、贊助信箱 | **上線前必改** |
+
+**未確認出席的講者整個不對外出現**（業主 2026/9：「確認中就當沒有這個人，確認後再補」）。
+`speakers.ts` 內部的 `allSpeakers` 收完整名單，導出的 `speakers` 已濾掉 `status: "pending"` ——
+列表、跑馬燈、講者內頁、sitemap、llms.txt、JSON-LD 全部吃導出的那一份。
+要讓某人上架就把 `status` 改成 `"confirmed"`，不必動任何元件。
+**但 `event.ts` 的 `stats`「已公布講者」是寫死的**（event.ts 不能 import speakers.ts，會循環），
+改名單時要手動同步那個數字，還有 `/speakers` 與 `/sponsor` 兩頁 metadata 裡的講者數。
 
 `event.ts` 的 `forums` 陣列導出 `ForumKey` 型別（`founder` / `investor`），
 講者、議程都用它綁定日別 —— 改 forums 的 key 會連鎖影響整個型別系統。
@@ -71,7 +78,7 @@ npm run dev       # 由「使用者」執行（--turbopack）
 - `/`（`app/page.tsx`）是六段單頁：Hero → FounderNote → About（內含 HomeAgenda）→ Tickets
   → SpeakersPreview → Faq。`app/page.tsx` 只排順序，區塊實作全在 `components/home/`。
 - `/about` `/speakers` `/agenda` `/tickets` `/sponsor` `/review`：各自獨立頁
-- `/speakers/[slug]`：`generateStaticParams()` 從 `speakers` 產生 38 頁靜態頁，
+- `/speakers/[slug]`：`generateStaticParams()` 從 `speakers` 產生 37 頁靜態頁，
   各自有 `generateMetadata` 與 PersonJsonLd，含上下位講者導覽
 
 ### 中文字型走 CDN，不是 next/font（重要）

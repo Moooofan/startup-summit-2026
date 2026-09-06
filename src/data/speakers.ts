@@ -37,7 +37,9 @@ export interface Speaker {
   tags?: string[];
 }
 
-export const speakers: Speaker[] = [
+/* 完整名單（含尚未確認出席者）。**站上不直接用這一份** —— 對外一律走下方的 `speakers`。
+   保留未確認者在這裡而不是刪掉，是為了確認後只要把 status 改成 "confirmed" 就會自動上架。 */
+const allSpeakers: Speaker[] = [
   // ───────── 10/14 創辦人論壇 ─────────
   // 《焦點創業家分享》
   {
@@ -550,6 +552,16 @@ export const hostSpeaker: Speaker = {
     bio: "林文欽Vincent現任台大創創中心執行長。負責運營台大車庫/台大創創加速器/台大天使會等業務服務。\n\n曾任中國最高市值企業騰訊科技事業部副總經理，京東商城市場副總裁。2022年返台後積極參與新創投資，光速火箭及展逸國際等上櫃企業的獨立董事，震豪科技等多家企業董事。其創辦的Facebook台灣新創投資社團目前是台灣影響力最大的新創投資網路社群。\n\n2023年開始每年舉辦備受新創圈矚目的「台灣新創投資年會」，邀請實力派的講師或新世代創業家呈現最精彩的演講內容，期望為台灣新創投資圈帶來不同的視野，並促進更多高資產投資人認識台灣頂尖創投與創辦人，進而積極參與投資台灣新創企業。",
     tags: ["年會主辦人", "新創投資社群"],
 };
+
+/* 對外的講者名單：只收 confirmed。
+   業主 2026/9 定案：「確認中就當沒有這個人，確認後再補」——
+   不是隱藏照片、也不是標註「確認中」，而是列表、跑馬燈、講者內頁、sitemap、
+   llms.txt 與 JSON-LD 全部都不該出現他。
+
+   過濾放在資料層而不是各個呼叫端，是因為下游有六處（見 CLAUDE.md「資料的下游有三處」），
+   漏掉任何一處就會露出一個沒有入口卻搜尋得到的孤兒頁。
+   generateStaticParams 也吃這一份 → 未確認者的 /speakers/[slug] 根本不會被產生。 */
+export const speakers: Speaker[] = allSpeakers.filter((s) => s.status !== "pending");
 
 export function getSpeaker(slug: string): Speaker | undefined {
   return speakers.find((s) => s.slug === slug);

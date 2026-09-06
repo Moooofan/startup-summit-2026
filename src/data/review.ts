@@ -1054,191 +1054,166 @@ const firstEditionSpeakers: PastSpeaker[] = [
  *
  *  其餘一律逐字保留 pptx 原文（半形冒號、以 / 分隔的複合職稱、中英夾雜的姓名寫法都不潤飾），
  *  比照第三屆議程的處理原則。 */
+/* 第二屆是單日場（2024/10/18）。名單原本依 10/16 投資人專場 / 10/18 主會場拆成兩組，
+   業主 2026/9 更正：那一屆只有 10/18 一天，26 場全在同一天 —— day 標記整批移除，
+   PastSpeakerRoster 沒有 day 就不掛日別標題，維持單一張表（同第一屆）。 */
 const secondEditionSpeakers: PastSpeaker[] = [
-  // Day 1｜10/16 投資人專場
   {
     name: "林桂光 Kay",
     org: "達盈創投",
     title: "總經理",
     topic: "創投的人工/工人智慧",
-    day: 1,
   },
   {
     name: "沈立平Robin",
     org: "益鼎創投",
     title: "資深協理",
     topic: "台灣新創的挑戰",
-    day: 1,
   },
   {
     name: "王永達 William",
     org: "中華開發資本管顧",
     title: "資深協理",
     topic: "新創賦能-財務投資人的策略投資",
-    day: 1,
   },
   {
     name: "鄭靖偉Peter",
     org: "靖亞資本Eminence Capital",
     title: "創始管理合夥人",
     topic: "AI Cloud賽道投資新趨勢",
-    day: 1,
   },
   {
     name: "陳明明 Ming",
     org: "KKday",
     title: "創辦人兼CEO",
     topic: "領導KKday走過疫情，乘風破浪的故事",
-    day: 1,
   },
   {
     name: "林靖德Mark",
     org: "Rybit運點科技",
     title: "創辦人兼執行長",
     topic: "騎向國際的Rybit E-Bike（Moovo）",
-    day: 1,
   },
   {
     name: "邱彥錡",
     org: "SparkLabs Taiwan",
     title: "共同創辦人暨管理合夥人",
     topic: "加速器創投基金投資策略：打造新創與創投之間的成功合作模式",
-    day: 1,
   },
   {
     name: "方俊傑",
     org: "AVA Angels",
     title: "創辦人兼CEO",
     topic: "從天使投資的視角探索另類創業投資：創新機遇與挑戰",
-    day: 1,
   },
   {
     name: "黃沛聲律師",
     org: "立勤國際法律事務所/TGA Angels",
     title: "共同創辦人",
     topic: "台灣投資人在美國的機會與挑戰：TGA 三年來的經驗與成果",
-    day: 1,
   },
   {
     name: "林家振",
     org: "安卓樂資本Andra Capital",
     title: "合夥人",
     topic: "美國AI的價值鏈發展與投資趨勢",
-    day: 1,
   },
   {
     name: "邱敬媛",
     org: "AppWorks",
     title: "Principal",
     topic: "AppWorks的生態以及基金投資策略介紹",
-    day: 1,
   },
   {
     name: "吳敏哲",
     org: "Upstream Ventures上游創投",
     title: "合夥人",
     topic: "《天使代表》從穩健到創新：上市櫃投資者的創投新征途",
-    day: 1,
   },
 
-  // Day 2｜10/18 主會場
   {
     name: "林束珊Susan",
     org: "中華開發資本管顧",
     title: "資深副總經理",
     topic: "中華開發創投策略及分享",
-    day: 2,
   },
   {
     name: "林宇聲Vincent",
     org: "台新創投",
     title: "總經理/創投公會副理事長",
     topic: "Spotlight on Startups - 新創競賽剖析",
-    day: 2,
   },
   {
     name: "范秉航",
     org: "台灣經濟研究院研究六所",
     title: "副所長",
     topic: "臺灣早期投資趨勢觀察與解讀",
-    day: 2,
   },
   {
     name: "鄭靖偉Peter",
     org: "靖亞資本Eminence Capital",
     title: "創始管理合夥人",
     topic: "創業、創投20年：給台灣創業者的成長建議",
-    day: 2,
   },
   {
     name: "劉榮太Terence",
     org: "Txone 睿控網安",
     title: "創辦人兼執行長",
     topic: "25年創業之路：經營、募資、與國際化的心得分享",
-    day: 2,
   },
   {
     name: "黃俊傑Amos",
     org: "SIC永續影響力投資",
     title: "共同創辦人",
     topic: "影響力投資的趨勢與實踐",
-    day: 2,
   },
   {
     name: "藍兆君",
     org: "台灣大哥大",
     title: "策略與投資總監",
     topic: "Telco+Tech: 台灣大哥大戰略投資分享",
-    day: 2,
   },
   {
     name: "林薇真Amber",
     org: "好食好事基金會",
     title: "副執行長",
     topic: "東南亞食農新創發展及構建台灣生態圈",
-    day: 2,
   },
   {
     name: "楊曜陽Denny",
     org: "紅樓資本",
     title: "共同創辦人",
     topic: "Web3 科技創業如何反轉台灣在海外的新創地位及創造財富效應",
-    day: 2,
   },
   {
     name: "江旻峻Brandon",
     org: "Addin Capital富旌創投",
     title: "合夥人/布蘭登觀點作者",
     topic: "AI / LLM 時代，數位軟體新創的下一波機會",
-    day: 2,
   },
   {
     name: "余常任 Jonathan Yu",
     org: "杰倫智能科技",
     title: "全球業務總經理",
     topic: "AI驅動的製造業高效轉型:Profet AI的全球足跡與增長策略",
-    day: 2,
   },
   {
     name: "詹益鑑",
     org: "Taiwan Global Angels",
     title: "創辦人",
     topic: "獨角獸與捕鯨人",
-    day: 2,
   },
   {
     name: "吳德威David",
     org: "Acorn Pacific Ventures",
     title: "合夥人/天使投資人",
     topic: "美國與台灣初創團隊的思維差異",
-    day: 2,
   },
   {
     name: "李明哲",
     org: "Visionary Capital",
     title: "董事長/前文策院院長/前Kkbox總裁",
     topic: "《天使代表》從寫 BUG 到抓獨角獸：鬼才知道の新創投資鬼才之道",
-    day: 2,
   },
 ];
 
@@ -1537,14 +1512,13 @@ export const editions: Edition[] = [
   {
     no: 2,
     year: 2024,
-    // 這一屆是「非連續的兩天」，故用「、」而非「－」。時間為兩天的涵蓋區間
-    // （10/16 場 08:30－17:30、10/18 場 08:30－17:20，見第二屆議程 pptx）。
-    // 先前依《第四屆企劃 pptx》寫成「單日 10/16 09:00－17:00」，2026/9 依當屆議程更正。
-    dateLabel: "2024年10月16日（三）、10月18日（五）　08:30－17:30",
+    /* 單日場。這欄改過兩次：先依《第四屆企劃 pptx》寫「10/16 09:00－17:00」，
+       再依當屆議程 pptx 改成「10/16、10/18 兩天」，2026/9 業主更正為只有 10/18 一天。
+       時間取當屆議程 pptx 上 10/18 那場的區間。**下次要改請先向主辦方確認，別再依簡報推。** */
+    dateLabel: "2024年10月18日（五）　08:30－17:20",
     venue: "台大集思會議中心 蘇格拉底廳",
     venueAddress: "台北市羅斯福路四段 85 號 B1",
     stats: [
-      { label: "論壇天數", value: "2 天" },
       { label: "投資機構", value: "20 家" },
       { label: "票價", value: "NT$750" },
       { label: "報名方式", value: "審核制" },
@@ -1552,11 +1526,11 @@ export const editions: Edition[] = [
       { label: "天使輪後至成長期創辦人", value: "20%" },
     ],
     highlights: [
-      "分兩日舉行：10 月 16 日投資人專場、10 月 18 日主會場，皆於台大集思會議中心蘇格拉底廳，兩天合計 26 場演講。",
+      "於台大集思會議中心蘇格拉底廳舉行，共 26 場演講。",
       "採審核制報名、票價 NT$750，閉門不直播，確保現場交流品質。",
       "出席結構為 80% 專業投資機構與個人投資人、20% 天使輪後至成長期創辦人。",
     ],
-    oneLiner: "分投資人專場與主會場兩日，26 場演講。",
+    oneLiner: "台大集思會議中心的單日場，26 場演講、20 家投資機構到場。",
     heroPhoto: "/review/second-edition-audience.jpg",
     growth: {
       attendees: 120,
@@ -1564,7 +1538,7 @@ export const editions: Edition[] = [
       // 名單只收「有講題的場次」，官方數字算的是另一套口徑。別為了對齊而改任一邊。
       speakers: 10,
       institutions: 20,
-      days: 2,
+      days: 1,
     },
     pastSpeakers: secondEditionSpeakers,
     dataComplete: true,

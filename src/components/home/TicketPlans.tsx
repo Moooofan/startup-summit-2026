@@ -90,13 +90,18 @@ function TicketCard({ plan }: { plan: Plan }) {
       <div
         className={cn(
           // flex-col + 下方 CTA 區 mt-auto：兩張卡等高時把「報名」鈕推到底端 → 左右卡水平對齊。
-          "relative flex h-full flex-col overflow-hidden rounded-[13px] border bg-gradient-to-br from-orbit-sky/18 via-white/[0.06] to-day2/18 p-5 sm:p-7",
+          // 卡面必須有實底：漸層中段只有 6% 白，等於卡片中央近乎全透明，
+          // SiteBackdrop 的青色橫帶會直接穿過去壓在字上（業主回報「底圖太淡、字被主視覺吃掉」）。
+          // 最壞情況（亮青帶正後方）白字對比只有 2.2:1；墊上這層實底後回到 13:1 以上。
+          // bg-[...] 設 background-color、bg-gradient-* 設 background-image，兩者疊加不互斥 ——
+          // 青→紫漸層原樣保留（那是業主定案的日別配色），只是底下多了一片不透光的底。
+          "relative flex h-full flex-col overflow-hidden rounded-[13px] border bg-[rgb(9_16_58/0.86)] bg-gradient-to-br from-orbit-sky/18 via-white/[0.06] to-day2/18 p-5 sm:p-7",
           plan.featured ? "border-brand-lift/30" : "border-line-soft"
         )}
       >
         {plan.featured && (
           <span className="absolute right-4 top-4 inline-flex items-center rounded-pill border-2 border-accent/60 bg-accent/15 px-3 py-1 text-[16px] font-bold text-accent sm:right-5 sm:top-5">
-            限量
+            額滿即止
           </span>
         )}
         <p className="text-sm font-medium text-ink">{plan.name}</p>

@@ -5,7 +5,6 @@ import { forums } from "@/data/event";
 import { speakersByDay } from "@/data/speakers";
 import type { Speaker } from "@/data/speakers";
 import { photoFocus } from "@/data/speakerPhotoFocus";
-import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/lib/utils";
 
 /**
@@ -52,11 +51,6 @@ function SpeakerCard({ s, tone }: { s: Speaker; tone: Tone }) {
           className="object-cover transition-transform duration-500 group-hover:scale-[1.07]"
         />
         <span aria-hidden className="photo-sink" />
-        {s.status === "pending" && (
-          <span className="absolute right-2.5 top-2.5 rounded-pill bg-bg/80 px-2.5 py-1 text-[15px] text-ink-3 backdrop-blur">
-            確認中
-          </span>
-        )}
         <span
           aria-hidden
           className={cn(
@@ -188,13 +182,6 @@ export function SpeakersPreview() {
         <MarqueeRow list={list2} tone={accent[day2.accent]} reverse />
       </div>
 
-      <div className="shell">
-        <Reveal delay={0.1}>
-          <p className="mt-10 text-[17px] text-ink-4">
-            ※ 標示「確認中」者為邀請中，最終陣容以官方公告為準。點日別標題可看該日完整講者。
-          </p>
-        </Reveal>
-      </div>
     </section>
   );
 }

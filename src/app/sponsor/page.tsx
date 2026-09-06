@@ -18,7 +18,7 @@ import { Cta } from "@/components/ui/Cta";
 export const metadata: Metadata = {
   title: "贊助方案",
   description:
-    "2026 第四屆台灣新創投資年會贊助方案：旗艦、領航、同航三級主贊助，以及攤位贊助與友情贊助。600+ 現場席次、34 位講者、5 萬人社群曝光。",
+    "2026 第四屆台灣新創投資年會贊助方案：旗艦、領航、同航三級主贊助，以及攤位贊助與友情贊助。600+ 現場席次、37 位講者、5 萬人社群曝光。",
   alternates: { canonical: "/sponsor" },
 };
 

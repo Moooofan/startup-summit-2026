@@ -16,6 +16,7 @@ import { REGISTER_URL, REGISTER_READY, SPONSOR_CONTACT } from "@/lib/config";
 import { Cta } from "@/components/ui/Cta";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { TicketGroupTable } from "@/components/tickets/TicketGroupTable";
+import { SwipeHint } from "@/components/ui/SwipeHint";
 import { cn } from "@/lib/utils";
 
 /* ==========================================================================
@@ -336,6 +337,8 @@ function TicketsPanel({
   // 票卡舞台上「橫向滑動」→ 切票種，並 stopPropagation 讓外層不切頁；
   // 舞台以外的橫向滑動仍由外層 section 處理 → 切頁。桌機點側邊卡（onClick）照舊。
   const swipeX = useRef<number | null>(null);
+  // 切過一次票種就淡出滑動提示（同 ui/SwipeDeck 的處理，理由見 ui/SwipeHint 檔頭）
+  const [used, setUsed] = useState(false);
   const clampT = (n: number) => Math.max(0, Math.min(plans.length - 1, n));
   const onStageDown = (e: React.PointerEvent) => {
     swipeX.current = e.clientX;
@@ -348,6 +351,7 @@ function TicketsPanel({
     if (s == null) return;
     const dx = e.clientX - s;
     if (Math.abs(dx) < 40) return; // 位移太小 → 視為點擊，交給卡片 onClick
+    setUsed(true);
     setTicket(clampT(ticket + (dx < 0 ? 1 : -1)));
   };
   return (
@@ -380,7 +384,11 @@ function TicketsPanel({
             return (
               <div
                 key={p.key}
-                onClick={() => !isActive && setTicket(i)}
+                onClick={() => {
+                  if (isActive) return;
+                  setUsed(true);
+                  setTicket(i);
+                }}
                 aria-hidden={!isActive}
                 className={cn(
                   // 手機縮窄 → 側邊卡露出可點；桌機固定寬
@@ -389,7 +397,7 @@ function TicketsPanel({
                     ? "z-20 scale-100 opacity-100"
                     : // 側卡加景深：相框幾乎透明（只擋得住約四分之一），不糊掉的話
                       // 側卡的字會穿過前卡跟前卡的字疊在一起。值與 ui/SwipeDeck 同步。
-                      "z-10 scale-[0.82] cursor-pointer opacity-[0.32] blur-[5px] hover:opacity-60"
+                      "z-10 scale-[0.82] cursor-pointer opacity-[0.40] blur-[5px] hover:opacity-60"
                 )}
                 style={{
                   transform: `translateX(${side * 58}%) scale(${isActive ? 1 : 0.82})`,
@@ -401,8 +409,13 @@ function TicketsPanel({
           })}
         </div>
 
+        {/* 滑動提示。sm 以上隱藏：桌機是點側卡切換，對滑鼠使用者講「滑動」不對。 */}
+        <SwipeHint
+          className={cn("mt-7 transition-opacity duration-500 sm:hidden", used && "opacity-0")}
+        />
+
         {/* 票種切換頁籤 */}
-        <div className="mt-9 flex items-center justify-center gap-3">
+        <div className="mt-5 flex items-center justify-center gap-3 sm:mt-9">
           {plans.map((p, i) => (
             <button
               key={p.key}
@@ -445,13 +458,14 @@ function TicketCard({
     >
       <div
         className={cn(
-          "relative overflow-hidden rounded-[13px] border bg-gradient-to-br from-orbit-sky/18 via-white/[0.06] to-day2/18 p-5 sm:p-7",
+          // 實底的理由見 home/TicketPlans.tsx 的同一行註解。兩處必須同步。
+          "relative overflow-hidden rounded-[13px] border bg-[rgb(9_16_58/0.86)] bg-gradient-to-br from-orbit-sky/18 via-white/[0.06] to-day2/18 p-5 sm:p-7",
           plan.featured ? "border-brand-lift/30" : "border-line-soft"
         )}
       >
         {plan.featured && (
           <span className="absolute right-4 top-4 inline-flex items-center rounded-pill border-2 border-accent/60 bg-accent/15 px-3 py-1 text-[16px] font-bold text-accent sm:right-5 sm:top-5">
-            限量
+            額滿即止
           </span>
         )}
         <p className="text-sm font-medium text-ink">{plan.name}</p>

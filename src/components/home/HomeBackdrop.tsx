@@ -18,16 +18,14 @@
  * 不為了輪播把它變成 client；prefers-reduced-motion 下只顯示第一張。
  */
 
-// 歷屆活動照（大合照／觀眾席／舞台），輪流淡入淡出
-const PHOTOS = [
-  "/review/group-photo.jpg",
-  "/review/second-edition-audience.jpg",
-  "/review/stage-keynote-venture-plus.jpg",
-  "/review/audience-and-stage.jpg",
-  "/review/third-edition-keynote-hofeipeng.jpg",
-];
+/* 首頁第一屏的底圖。2026/9 業主指定固定為第三屆主講照，不再輪播 ——
+   原本是五張歷屆活動照淡入淡出（大合照／觀眾席／舞台）。
 
-const CYCLE_SECONDS = 30; // 一輪走完所有照片的總時間
+   陣列與輪播機制刻意保留：只要放回兩張以上就會自動恢復輪播（見下方 PHOTOS.length 判斷），
+   要換圖也只改這裡。CYCLE_SECONDS 在單張時不生效。 */
+const PHOTOS = ["/review/third-edition-keynote-hofeipeng.jpg"];
+
+const CYCLE_SECONDS = 30; // 一輪走完所有照片的總時間（單張時不生效）
 
 // viewBox 用橫幅比例（貼近桌機 Hero）→ slice 裁切少，斜線角度比較接近設定值
 const VB_W = 1600;
@@ -118,13 +116,16 @@ export function HomeBackdrop() {
           {/* 灰色底襯（右緣多外擴 → 露出撕紙鑲邊），墊在照片後方 */}
           <polygon points={GRAY_SHAPE} fill={GRAY} filter="url(#bd-tear)" />
 
-          {/* 照片輪播，整組裁進撕紙形狀 */}
+          {/* 照片，整組裁進撕紙形狀。兩張以上才輪播。 */}
           <g mask="url(#bd-shape)">
             {PHOTOS.map((src, i) => (
               <image
                 key={src}
                 href={src}
-                className="bd-slide"
+                /* 只有一張時**不能**掛 .bd-slide：那組 keyframes 是為輪播寫的
+                   （0% 透明 → 3% 顯示 → 22% 又淡回透明 → 100% 維持透明），
+                   單張掛上去會變成「閃一下就消失、每 30 秒再閃一次」。 */
+                className={PHOTOS.length > 1 ? "bd-slide" : undefined}
                 x={-80}
                 y={-60}
                 width={TOP_RIGHT_X + GRAY_GAP + 160}

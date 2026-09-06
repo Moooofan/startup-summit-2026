@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { SwipeHint } from "@/components/ui/SwipeHint";
 
 /* ==========================================================================
    SwipeDeck — 手機端「重疊卡片＋滑動切換」牌堆（參考 /tickets 的 TicketsPanel）。
@@ -27,6 +28,10 @@ export function SwipeDeck<T>({
   className?: string;
 }) {
   const [active, setActive] = useState(0);
+  /* 使用者只要成功切過一次卡（滑動、點側卡、或點頁籤），提示就淡出 —— 它的任務結束了。
+     用 opacity 而不是解除掛載：拿掉節點會讓下面那排頁籤往上跳一段，
+     而那正好發生在使用者剛完成手勢、視線還在這一區的時候。 */
+  const [used, setUsed] = useState(false);
   const clamp = (n: number) => Math.max(0, Math.min(items.length - 1, n));
 
   // 橫向滑動切卡；位移太小視為點擊。垂直捲動留給頁面（touchAction: pan-y）。
@@ -45,6 +50,7 @@ export function SwipeDeck<T>({
     const dx = e.clientX - s;
     if (Math.abs(dx) < 40) return;
     swiped.current = true;
+    setUsed(true);
     setActive((a) => clamp(a + (dx < 0 ? 1 : -1)));
   };
 
@@ -68,7 +74,9 @@ export function SwipeDeck<T>({
               className={cn(
                 // 同格重疊 → 容器高＝最高卡；卡片本身窄於容器並置中，側卡才有空間 peek
                 "relative col-start-1 row-start-1 mx-auto w-[76vw] max-w-[360px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-                isActive ? "z-20 opacity-100" : "z-10 opacity-[0.32]"
+                                // 側卡 0.32 -> 0.40（2026/9）：糊掉之後 0.32 讀起來像邊上的一團陰影，
+                // 不像另一張卡。blur 不能動（見下方註解），只能從透明度這一側補。
+                isActive ? "z-20 opacity-100" : "z-10 opacity-[0.40]"
               )}
               style={{ transform: `translateX(${side * 58}%) scale(${isActive ? 1 : 0.82})` }}
             >
@@ -93,6 +101,7 @@ export function SwipeDeck<T>({
                   type="button"
                   onClick={() => {
                     if (swiped.current) return; // 滑動後補發的 click，不重複切換
+                    setUsed(true);
                     setActive(i);
                   }}
                   aria-label={labels?.[i] ? `切換到${labels[i]}` : `切換到第 ${i + 1} 張`}
@@ -104,12 +113,19 @@ export function SwipeDeck<T>({
         })}
       </div>
 
+      {items.length > 1 && (
+        <SwipeHint className={cn("mt-5 transition-opacity duration-500", used && "opacity-0")} />
+      )}
+
       {labels && (
-        <div className="mt-6 flex items-center justify-center gap-3">
+        <div className="mt-4 flex items-center justify-center gap-3">
           {labels.map((label, i) => (
             <button
               key={label}
-              onClick={() => setActive(i)}
+              onClick={() => {
+                setUsed(true);
+                setActive(i);
+              }}
               className={cn(
                 "btn-glass rounded-pill border-2 px-5 py-2 text-sm font-bold transition-all duration-300",
                 i === active

@@ -1,34 +1,13 @@
-import Link from "next/link";
-import { isPublicRoute } from "@/lib/config";
 import Image from "next/image";
 import { event } from "@/data/event";
 
-// 隱藏中的分頁保留在清單裡不刪，僅由 isPublicRoute 過濾掉（見 lib/config）
-const allCols = [
-  {
-    title: "活動",
-    links: [
-      { href: "/about", label: "關於年會" },
-      { href: "/speakers", label: "講者陣容" },
-      { href: "/agenda", label: "論壇主題" },
-      { href: "/about#venue", label: "活動場地" },
-    ],
-  },
-  {
-    title: "參與",
-    links: [
-      { href: "/tickets", label: "報名資訊" },
-      { href: "/sponsor", label: "贊助方案" },
-      { href: "/review", label: "歷屆回顧" },
-      { href: "/about#faq", label: "常見問題" },
-    ],
-  },
-];
+/* 頁尾的兩欄導覽（活動／參與，共八條連結）2026/9 移除。
+   直接原因是它讀起來像壞掉的：PUBLIC_ROUTES 目前只開 / 、/speakers、/review，
+   八條裡有六條被 isPublicRoute 濾掉，畫面上只剩「活動：講者陣容」「參與：歷屆回顧」
+   兩個各只有一項的欄位（業主回報「最下面這幾個好像怪怪的，不知道要幹嘛的」）。
 
-// 逐組過濾掉隱藏分頁；整組都被濾光就不渲染該欄
-const cols = allCols
-  .map((c) => ({ ...c, links: c.links.filter((l) => isPublicRoute(l.href)) }))
-  .filter((c) => c.links.length > 0);
+   注意根因是路由被隱藏、不是這份清單有問題 —— 之後 /about、/agenda、/tickets、
+   /sponsor 開放時，把這一段連同 cols 的過濾邏輯從 git 歷史取回即可（此 commit 的父版本）。 */
 
 // event.dateLabelLong 是「起 — 迄」的長日期，字串裡的半形空格讓瀏覽器可以斷在
 // 「10 月 15」和「日（四）」中間 —— 日期被腰斬。拆成破折號前後兩半、各自鎖成不可斷的整體，
@@ -49,7 +28,9 @@ export function Footer() {
         className="shell grid gap-12 py-16 md:grid-cols-2 md:py-20 lg:grid-cols-(--footer-cols)"
         style={
           {
-            "--footer-cols": `1.4fr ${cols.map(() => "1fr").join(" ")} 1.2fr`,
+            // 導覽兩欄移除後只剩品牌欄與聯絡欄。保留自訂變數而不寫死 grid-cols-2：
+            // 欄寬比例（品牌較寬、聯絡次之）仍然要，且日後加回欄位只改這一行。
+            "--footer-cols": "1.4fr 1.2fr",
           } as React.CSSProperties
         }
       >
@@ -77,20 +58,6 @@ export function Footer() {
           </p>
         </div>
 
-        {cols.map((col) => (
-          <nav key={col.title} aria-label={col.title} className="min-w-0">
-            <h2 className="text-xs font-semibold tracking-[0.16em] text-ink-4">{col.title}</h2>
-            <ul className="mt-5 space-y-3">
-              {col.links.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="text-sm text-ink-2 transition-colors hover:text-ink">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ))}
 
         <div className="min-w-0">
           <h2 className="text-xs font-semibold tracking-[0.16em] text-ink-4">聯絡</h2>

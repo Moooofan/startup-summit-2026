@@ -164,11 +164,6 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
                 <p className="mt-4 text-lg text-orbit-sky">{s.org}</p>
                 <p className="mt-1 text-[18px] text-ink-2">{s.title}</p>
 
-                {s.status === "pending" && (
-                  <p className="mt-5 inline-block rounded-lg border border-line-soft bg-white/[0.025] px-4 py-2 text-[17px] text-ink-3">
-                    出席確認中，最終陣容以官方公告為準
-                  </p>
-                )}
 
                 {s.tags && s.tags.length > 0 && (
                   <ul className="mt-7 flex flex-wrap gap-2">

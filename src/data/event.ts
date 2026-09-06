@@ -129,7 +129,9 @@ export type ForumKey = (typeof forums)[number]["key"];
 
 /** 首頁數據條 — 全部可從簡報與公開資料佐證 */
 export const stats = [
-  { value: "38", label: "已公布講者" },
+  // 只算已確認出席者（speakers.ts 會濾掉 status: "pending"）。
+  // event.ts 不能 import speakers.ts（後者 import 本檔的 ForumKey，會循環），故手動同步。
+  { value: "37", label: "已公布講者" },
   { value: "2", label: "天雙峰論壇" },
   { value: "600+", label: "現場席次" },
   { value: "5 萬", label: "社團成員" },

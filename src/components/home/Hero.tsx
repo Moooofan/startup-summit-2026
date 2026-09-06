@@ -306,7 +306,7 @@ export function Hero() {
             custom={6}
             className="mt-6 border-t border-line-soft pt-4"
           >
-            <p className="mb-3 text-[16px] tracking-[0.24em] text-ink-4">距離開幕</p>
+            <p className="mb-3 text-[16px] tracking-[0.24em] text-ink-4">距離活動</p>
             <FlipClock target={event.startDate} />
           </motion.div>
         </div>

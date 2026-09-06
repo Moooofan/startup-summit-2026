@@ -9,10 +9,11 @@
 export const founderProfile = {
   name: "林文欽",
   nameEn: "Vincent Lin",
-  // title 與 subtitle 在 FounderNote 是上下兩行，不能同義。
-  // title 放「這場活動裡他是誰」，subtitle 放社團身分。
-  title: "台灣新創投資年會 主辦人",
-  subtitle: "台灣新創投資社團 創辦人",
+  /* 姓名下方只留這一行（業主 2026/9）。原本是 title「台灣新創投資年會 主辦人」
+     ＋ subtitle「台灣新創投資社團 創辦人」上下兩行，業主要求只留社團身分。
+     subtitle 欄位一併移除，不留沒有呼叫點的資料。
+     title 同時是 Person JSON-LD 的 jobTitle 與 FounderNote 頭像的 alt。 */
+  title: "台灣新創投資社團 創辦人",
   photo: "/founder.jpg",
   // 台大創創官網團隊頁亦有官方照：https://tec.ntu.edu.tw/images/team/vincent-lin.png
   career: [
@@ -56,7 +57,6 @@ export const founderNarrative = [
   "林文欽 Vincent 曾任騰訊科技事業部副總經理、京東商城市場副總裁，2022 年返台後投入新創投資，現為光速火箭、展逸國際等上櫃企業的獨立董事。",
   "Vincent 創辦的 Facebook「台灣新創投資社團」把散落各處的創辦人、創投與天使投資人聚進同一個討論串，成員從初期的一萬多人長到五萬人，是目前台灣規模最大的新創投資社群。",
   "年會自 2023 年起每年舉辦，讓實力派講者與新世代創業家同場，也讓更多高資產投資人認識台灣的創投與創辦人，進而實際參與投資。",
-  "前兩屆以投資人為主，第三屆起改為「雙峰論壇」—— 一天給創辦人，一天給投資人。改制的理由很直接：創辦人不必先通過投資年會的審核也能進場，聽見同一批人正在談的事。",
 ];
 
 /** 待補：本人親筆全文 */

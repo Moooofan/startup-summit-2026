@@ -132,11 +132,20 @@ function EditionRow({ edition: e, index }: { edition: Edition; index: number }) 
           )}
 
           {g && (
-            <dl className="mt-8 grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-4">
+            /* 「論壇天數」只在兩天以上才出現（業主 2026/9）：第一屆是單日場，
+               印出「1 天／論壇天數」不但沒有資訊量，還會被讀成規模上的短處。
+               欄數跟著metric 數走，否則四欄版型會在最右邊留一個空格。 */
+            <dl
+              className={`mt-8 grid grid-cols-2 gap-x-6 gap-y-7 ${
+                g.days !== null && g.days > 1 ? "sm:grid-cols-4" : "sm:grid-cols-3"
+              }`}
+            >
               <Metric value={g.attendees} unit="人次" label="參與人次" primary />
               <Metric value={g.speakers} unit="位" label="講者數量" primary />
               <Metric value={g.institutions} unit="家" label="投資機構" />
-              <Metric value={g.days} unit="天" label="論壇天數" />
+              {g.days !== null && g.days > 1 && (
+                <Metric value={g.days} unit="天" label="論壇天數" />
+              )}
             </dl>
           )}
 

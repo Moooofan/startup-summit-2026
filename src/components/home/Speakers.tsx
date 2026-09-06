@@ -50,11 +50,6 @@ function SpeakerCard({
             loading={index < 8 ? "eager" : "lazy"}
           />
           <span aria-hidden className="photo-sink" />
-          {s.status === "pending" && (
-            <span className="absolute right-3 top-3 rounded-pill bg-bg/80 px-2.5 py-1 text-[16px] text-ink-3 backdrop-blur">
-              確認中
-            </span>
-          )}
           <span
             aria-hidden
             className={cn(
@@ -125,10 +120,6 @@ function ForumNode({ f, order, count }: { f: Forum; order: number; count: number
           </h3>
           <p className="mt-6 font-display text-lg text-ink-2 md:text-xl">
             {f.dateLabel}（{f.weekday}）· {f.time}
-          </p>
-          {/* max-w-[34ch]：Day 2 的「創投 / CVC / 基金 LP / 高資產投資人」在 390px 會頂到兩邊 */}
-          <p className="mt-2 max-w-[34ch] text-[17px] tracking-wide text-ink-4 md:max-w-none">
-            對象 · {f.audience}
           </p>
           <p className="mt-8 max-w-xl text-[18px] leading-[1.9] text-ink-2 md:mx-auto">
             {f.description}
@@ -238,7 +229,6 @@ export function Speakers() {
 
                 {isLast && (
                   <p className="mt-14 text-[17px] leading-relaxed text-ink-4">
-                    ※ 標示「確認中」者為邀請中或行程確認中的講者，最終陣容以官方公告為準。
                   </p>
                 )}
               </div>

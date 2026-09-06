@@ -61,7 +61,6 @@ export function FounderNote() {
                     </span>
                   </p>
                   <p className="mt-1 text-[17px] text-ink-3">{founderProfile.title}</p>
-                  <p className="text-[17px] text-ink-3">{founderProfile.subtitle}</p>
                 </figcaption>
               </figure>
             </Reveal>
