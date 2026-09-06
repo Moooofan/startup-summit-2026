@@ -362,10 +362,16 @@
      這是整張 KV 最有辨識度的語彙 —— SiteBackdrop 與需要「構成感」的裝飾塊共用這一條，
      不要各自寫一份 repeating-linear-gradient，否則線距一定會慢慢走鐘。 */
   .kv-hatch {
+    /* 柔邊帶而非 1px 硬線 —— 與 SiteBackdrop 的 <pattern> 同一套做法、同一組數值。
+       硬線在正文後方會與中文筆畫爭圖地關係（2026/9 使用者回報影響閱讀）；
+       把同一份亮度攤到 4.5px 上，整體亮度幾乎不變、峰值對比降到約四成。
+       線距 9px 兩邊必須一致，否則同一種材質會出現兩種密度。 */
     background-image: repeating-linear-gradient(
       to bottom,
-      rgb(177 190 232 / 0.30) 0 1px,
-      transparent 1px 9px
+      rgb(177 190 232 / 0) 0px,
+      rgb(177 190 232 / 0.13) 1.2px,
+      rgb(177 190 232 / 0) 4.5px,
+      rgb(177 190 232 / 0) 9px
     );
   }
 

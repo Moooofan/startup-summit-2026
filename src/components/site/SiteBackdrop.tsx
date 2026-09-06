@@ -104,11 +104,32 @@ export function SiteBackdrop() {
             {/* KV 的招牌質感：塊面不是實心填色，而是等距水平細線。
                 patternUnits 用 userSpaceOnUse → 線距固定在 viewBox 座標，
                 塊面大小改變時線不會跟著被拉粗或壓扁。 */}
+            {/* 線條是「預先霧化」的：不是 1px 實線，而是上緣起、往下淡出的柔邊帶。
+                原本 1px @ 0.34 的硬線在正文後方會與中文筆畫爭圖地關係（2026/9 使用者回報
+                「4 的區塊是線條組成的，影響閱讀」）。細線的線寬與中文筆畫粗細相當，
+                眼睛會把它一起讀進字形裡。
+
+                改法是把同一份亮度攤到約 4.5px 上：面積積分 0.0325 對原本的 0.0378，
+                整體亮度幾乎不變，但**峰值對比降到約四成** —— 峰值才是眼睛真正抓到的量。
+                所以「霧化」不必犧牲塊面的存在感，這兩件事可以分開調。
+
+                刻意不用 feGaussianBlur：那是逐幀的濾鏡成本，而這一層是全站固定背景，
+                把模糊烘進 pattern 一次算完即可，線距與衰減曲線也都還看得見、可調。 */}
+            <linearGradient id="kv-hatch-band" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#b1bee8" stopOpacity="0" />
+              <stop offset="0.13" stopColor="#b1bee8" stopOpacity="0.13" />
+              <stop offset="0.5" stopColor="#b1bee8" stopOpacity="0" />
+            </linearGradient>
             <pattern id="kv-hatch" width="10" height="9" patternUnits="userSpaceOnUse">
-              <rect width="10" height="1" fill="#b1bee8" opacity="0.34" />
+              <rect width="10" height="9" fill="url(#kv-hatch-band)" />
             </pattern>
+            <linearGradient id="kv-hatch-band-dense" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#cfe6ff" stopOpacity="0" />
+              <stop offset="0.2" stopColor="#cfe6ff" stopOpacity="0.16" />
+              <stop offset="0.5" stopColor="#cfe6ff" stopOpacity="0" />
+            </linearGradient>
             <pattern id="kv-hatch-dense" width="10" height="6" patternUnits="userSpaceOnUse">
-              <rect width="10" height="1" fill="#cfe6ff" opacity="0.3" />
+              <rect width="10" height="6" fill="url(#kv-hatch-band-dense)" />
             </pattern>
 
             {/* 斜筆的量體漸層：左下暗、右上帶電光藍，與底層的光團同向 */}
@@ -198,11 +219,23 @@ export function SiteBackdrop() {
             {/* 線距與橫式版同為 9 / 6：兩邊的縮放比接近（0.888 vs 0.9），
                 同一種材質在手機與桌機上的線距才會是同一個視覺密度。
                 改這裡要連 globals.css 的 .kv-hatch 一起改。 */}
+            {/* 柔邊帶同橫式版，理由見上。手機更需要這件事：直式構圖的「4」就壓在正文正後方，
+                而橫式版的量體大半落在文字區之外。 */}
+            <linearGradient id="kv-hatch-band-m" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#b1bee8" stopOpacity="0" />
+              <stop offset="0.13" stopColor="#b1bee8" stopOpacity="0.13" />
+              <stop offset="0.5" stopColor="#b1bee8" stopOpacity="0" />
+            </linearGradient>
             <pattern id="kv-hatch-m" width="10" height="9" patternUnits="userSpaceOnUse">
-              <rect width="10" height="1" fill="#b1bee8" opacity="0.34" />
+              <rect width="10" height="9" fill="url(#kv-hatch-band-m)" />
             </pattern>
+            <linearGradient id="kv-hatch-band-dense-m" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stopColor="#cfe6ff" stopOpacity="0" />
+              <stop offset="0.2" stopColor="#cfe6ff" stopOpacity="0.16" />
+              <stop offset="0.5" stopColor="#cfe6ff" stopOpacity="0" />
+            </linearGradient>
             <pattern id="kv-hatch-dense-m" width="10" height="6" patternUnits="userSpaceOnUse">
-              <rect width="10" height="1" fill="#cfe6ff" opacity="0.3" />
+              <rect width="10" height="6" fill="url(#kv-hatch-band-dense-m)" />
             </pattern>
 
             {/* 底端不是 0 而是 0.25：橫式版的斜筆很寬，左下角淡出去只是「量體漸消」；
