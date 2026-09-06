@@ -74,9 +74,7 @@ export function SwipeDeck<T>({
               className={cn(
                 // 同格重疊 → 容器高＝最高卡；卡片本身窄於容器並置中，側卡才有空間 peek
                 "relative col-start-1 row-start-1 mx-auto w-[76vw] max-w-[360px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-                                // 側卡 0.32 -> 0.40（2026/9）：糊掉之後 0.32 讀起來像邊上的一團陰影，
-                // 不像另一張卡。blur 不能動（見下方註解），只能從透明度這一側補。
-                isActive ? "z-20 opacity-100" : "z-10 opacity-[0.40]"
+                isActive ? "z-20" : "z-10"
               )}
               style={{ transform: `translateX(${side * 58}%) scale(${isActive ? 1 : 0.82})` }}
             >
@@ -86,13 +84,32 @@ export function SwipeDeck<T>({
                   下面那顆覆蓋鈕上（inert 子樹本身的指標事件行為各家瀏覽器不一致，不要依賴）。 */}
               {/* 側卡加景深：卡面幾乎透明（票卡只擋得住約四分之一），不糊掉的話後卡的字
                   會穿過前卡跟前卡的字疊在一起。blur 下在內容這層、不下在外層 ——
-                  外層還包著切換鈕，一起糊掉會看不見鍵盤焦點框。 */}
+                  外層還包著切換鈕與下方那圈外框，一起糊掉會看不見鍵盤焦點框。
+
+                  **透明度也下在這一層**（原本在外層）：外層若被乘上 0.40，
+                  下面那圈用來宣告「後面還有一張卡」的外框會跟著淡到看不見。
+                  overflow-hidden 把 blur 溢出的暈邊裁回卡片形狀，外框才貼得住邊緣。 */}
               <div
                 inert={!isActive}
-                className={cn(!isActive && "pointer-events-none blur-[5px]")}
+                className={cn(
+                  "transition-opacity duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+                  !isActive && "pointer-events-none overflow-hidden rounded-card opacity-[0.40] blur-[5px]"
+                )}
               >
                 {renderItem(item, isActive)}
               </div>
+
+              {/* 側卡的實線外框。內容糊掉之後，卡片邊界跟著糊 → 讀起來像邊上的一團陰影，
+                  沒有人知道那是「另一張可以滑過來的卡」（業主 2026/9 回報）。
+                  框線刻意畫在**外層**、不吃 blur 也不吃上面那個 0.40，是這一疊唯一銳利的東西。
+                  還是太淡的話把 border-line 換成 border-white/30，不要去動內容的透明度 ——
+                  那一項的上限是「後卡的字不能透過前卡讀出來」。 */}
+              {!isActive && (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0 rounded-card border border-line"
+                />
+              )}
 
               {/* 切換入口：原本只有 <div> 上的 onClick，鍵盤完全沒有路徑。
                   改成覆蓋在側卡上的真按鈕 → 滑鼠點側卡、鍵盤 Tab 到它按 Enter 都能切換。 */}

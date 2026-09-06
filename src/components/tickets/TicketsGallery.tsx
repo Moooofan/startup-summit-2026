@@ -392,18 +392,34 @@ function TicketsPanel({
                 aria-hidden={!isActive}
                 className={cn(
                   // 手機縮窄 → 側邊卡露出可點；桌機固定寬
-                  "absolute w-[76vw] max-w-[360px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] sm:w-[360px]",
-                  isActive
-                    ? "z-20 scale-100 opacity-100"
-                    : // 側卡加景深：相框幾乎透明（只擋得住約四分之一），不糊掉的話
-                      // 側卡的字會穿過前卡跟前卡的字疊在一起。值與 ui/SwipeDeck 同步。
-                      "z-10 scale-[0.82] cursor-pointer opacity-[0.40] blur-[5px] hover:opacity-60"
+                  "group absolute w-[76vw] max-w-[360px] transition-all duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)] sm:w-[360px]",
+                  isActive ? "z-20 scale-100" : "z-10 scale-[0.82] cursor-pointer"
                 )}
                 style={{
                   transform: `translateX(${side * 58}%) scale(${isActive ? 1 : 0.82})`,
                 }}
               >
-                <TicketCard plan={p} interactive={isActive} />
+                {/* 景深與淡化下在內容這層、不下在外層 —— 外層還掛著下面那圈外框，
+                    一起淡掉就等於沒加。相框幾乎透明（只擋得住約四分之一），不糊掉的話
+                    側卡的字會穿過前卡跟前卡的字疊在一起。值與 ui/SwipeDeck 同步。 */}
+                <div
+                  className={cn(
+                    "transition-opacity duration-[600ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+                    !isActive &&
+                      "overflow-hidden rounded-[20px] opacity-[0.40] blur-[5px] group-hover:opacity-60"
+                  )}
+                >
+                  <TicketCard plan={p} interactive={isActive} />
+                </div>
+
+                {/* 側卡的實線外框：這一疊唯一銳利的東西，用來宣告「後面還有一張卡」。
+                    半徑對齊 TicketCard 的外相框（rounded-[20px]）。理由見 ui/SwipeDeck 的同一段。 */}
+                {!isActive && (
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 rounded-[20px] border border-line"
+                  />
+                )}
               </div>
             );
           })}
