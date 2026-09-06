@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { MoveRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { event } from "@/data/event";
 import { isPublicRoute } from "@/lib/config";
@@ -30,7 +31,13 @@ export function MobileCta() {
     >
       <div className="flex items-center justify-between gap-4 px-5 py-3">
         <div className="leading-tight">
-          <p className="font-display text-sm font-semibold text-ink">{event.dateLabel}</p>
+          {/* 箭頭畫成 SVG，寫法與 Hero 同一套（理由見 event.ts 的 dateFrom 註解） */}
+          <p className="font-display flex items-center gap-[0.35em] text-sm font-semibold text-ink">
+            {event.dateFrom}
+            <MoveRight aria-hidden strokeWidth={1.5} className="h-[1em] w-[1em] shrink-0" />
+            <span className="sr-only">至</span>
+            {event.dateTo}
+          </p>
           <p className="text-[16px] text-ink-3">早鳥 {event.tickets.currency}{event.tickets.earlyBird.toLocaleString()}／人</p>
         </div>
         <Link

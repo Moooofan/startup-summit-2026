@@ -10,7 +10,7 @@ export const event = {
   name: "台灣新創投資年會",
   fullName: "2026 第四屆台灣新創投資年會",
   subtitle: "雙峰論壇",
-  nameEn: "Taiwan Startup Investment Summit",
+  nameEn: "Taiwan Startup Investment Conference",
   year: 2026,
 
   tagline: "資本連結創新",
@@ -26,7 +26,11 @@ export const event = {
   /** ISO 8601（台北時間）— 給倒數計時與 Event JSON-LD 用 */
   startDate: "2026-10-14T09:00:00+08:00",
   endDate: "2026-10-15T17:00:00+08:00",
-  dateLabel: "10.14 ⟶ 10.15",
+  /** 短版日期的起訖兩端。中間的箭頭刻意不寫進字串 ——
+   *  `⟶`／`→` 都不在 Montserrat 的 latin 分片與 Noto Sans TC 裡，會掉到系統備援字型，
+   *  箭頭照那支字型的基線畫，跟數字對不齊且各裝置長相不一。分隔符改由元件畫成 SVG。 */
+  dateFrom: "10.14",
+  dateTo: "10.15",
   dateLabelLong: "2026 年 10 月 14 日（三）— 10 月 15 日（四）",
   timeLabel: "09:00 – 17:00",
 
