@@ -68,7 +68,10 @@ export const event = {
     name: "台灣新創投資社團",
     members: "5 萬名成員",
     host: "林文欽 Vincent",
-    hostTitle: "台大創創中心執行長",
+    /* 年會場合的身分，不是他的本職 —— 業主 2026/9 指示不用台大創創中心。
+       呼叫端已經自帶「主辦人：」前綴（Footer / Contact / TicketsGallery），
+       所以這裡寫社團創辦人而不是「年會主辦人」，免得變成「主辦人：⋯｜年會主辦人」。 */
+    hostTitle: "台灣新創投資社團 創辦人",
   },
 
   contact: {

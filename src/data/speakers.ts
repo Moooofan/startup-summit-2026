@@ -539,8 +539,10 @@ export const hostSpeaker: Speaker = {
     slug: "vincent-lin",
     name: "林文欽",
     nameEn: "Vincent Lin",
-    title: "執行長",
-    org: "台大創創中心",
+    // 業主 2026/9：年會場合他的身分是主辦方，不是台大代表 —— 頭銜一律走社團，
+    // 不用台大創創中心。bio 仍是簡報原文（見檔頭：逐字保留，不潤飾）。
+    title: "創辦人",
+    org: "台灣新創投資社團",
     day: "investor",
     track: "host",
     status: "confirmed",
