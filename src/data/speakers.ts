@@ -56,6 +56,19 @@ const allSpeakers: Speaker[] = [
     tags: ["韓國獨角獸", "IP 授權", "全球業務拓展", "Baby Shark"],
   },
   {
+    slug: "kelvin-kim",
+    name: "金東昊",
+    nameEn: "Kelvin Dongho Kim",
+    title: "創辦人兼執行長",
+    org: "Korea Credit Data（KCD）",
+    day: "founder",
+    track: "founder-keynote",
+    status: "confirmed",
+    photo: "/speakers/kelvin-kim.png",
+    bio: "韓國知名連續創業家，畢業於韓國科學英才學校，後就讀延世大學產業工程系。二○一一年在學期間共同創辦行動市調平台OpenSurvey，擔任執行長並成功退場。二○一六年，他創辦Korea Credit Data（KCD），推出小商家經營管理平台Cashnote，進一步布局支付、POS、信用評估及金融服務，服務範圍涵蓋韓國近兩百萬家信用卡商戶。KCD創立六年便成長為估值十億美元的獨角獸，並獲摩根士丹利、淡馬錫等國際機構投資。Kim亦曾入選富比士亞洲三十歲以下菁英，並獲選世界經濟論壇全球青年領袖，展現以數據科技賦能中小企業的卓越成就。",
+    tags: ["韓國獨角獸", "連續創業家", "小商家金融科技"],
+  },
+  {
     slug: "shen-shu-wei",
     name: "沈書緯",
     title: "創辦人兼執行長",
@@ -108,6 +121,19 @@ const allSpeakers: Speaker[] = [
   },
 
   // 《新IPO創業家Panel對談》
+  // 《走向資本市場》
+  {
+    slug: "tian-jian-zhong",
+    name: "田建中",
+    title: "上市二部經理",
+    org: "台灣證券交易所",
+    day: "founder",
+    track: "new-ipo",
+    status: "confirmed",
+    photo: "/speakers/tian-jian-zhong.jpg",
+    bio: "畢業於台灣大學會計學系，並取得政治大學會計研究所碩士，具備會計師、內部稽核師、證券分析師與美國 CFA 等專業資格。任職台灣證券交易所近 20 年，2023 年臺灣碳權交易所成立時借調出任首任總經理，兩年間推動國內外碳權上架、協助企業以合理成本取得碳權並避免碳權淪為炒作商品，是台灣碳交易制度的第一線推手。2025 年 9 月借調期滿歸建證交所，升任上市二部經理，兼具資本市場與永續議題的實務經驗。",
+    tags: ["資本市場", "上市輔導", "碳權交易"],
+  },
   {
     slug: "shen-li-ping",
     name: "沈立平",
@@ -484,6 +510,19 @@ const allSpeakers: Speaker[] = [
     tags: ["天使投資", "早期新創", "跨國企業治理", "女性領導者"],
   },
   {
+    slug: "chen-yi-rong",
+    name: "陳怡蓉",
+    nameEn: "Kate",
+    title: "執行長暨聯合創始人",
+    org: "識富天使會",
+    day: "investor",
+    track: "early-stage",
+    status: "confirmed",
+    photo: "/speakers/chen-yi-rong.jpg",
+    bio: "自 2015 年起經營新創社群 WorkFace Taipei 並擔任召集人，因觀察到台灣早期資金的缺口，於 2017 年共同創辦識富天使會，匯聚創業家、企業二代與高階經理人成為天使投資人。識富天使會目前會員超過 500 位、共同投資逾 50 家新創團隊，據點涵蓋台北、台中、台南、高雄、新加坡、東京與北京，並積極連結政府、企業、創投以及東南亞、日本與北美的投資資源，是台灣最大的國際化天使投資社群。",
+    tags: ["天使投資", "新創社群", "國際鏈結"],
+  },
+  {
     slug: "lin-bo-han",
     name: "林伯翰",
     nameEn: "Boice Lin",
@@ -509,6 +548,18 @@ const allSpeakers: Speaker[] = [
     photo: "/speakers/qu-zhi-hao.png",
     bio: "瞿志豪現任 ITIC 創新工業技術移轉總經理、TBMC 臺灣生物醫藥製造董事兼財務長，以及 Reizawa Capital 合夥人。他畢業於台大電機系與研究所，並擁有台大 EMBA 碩士學位。\n\n他是台灣著名的連續創業家與資深創投，1997 年共同創辦和信超媒體GigaMedia並出任執行副總兼技術長，成功帶領公司於美國 NASDAQ 上市。隨後他轉任創投，曾任橡子園創投Acorn Campus合夥人與生醫產業創新推動方案執行中心創新長。現亦於台大兼任教授，憑藉跨越科技、網路與生醫領域的深厚資歷，積極培育新創人才。",
     tags: ["連續創業家", "創投", "技術移轉", "生醫產業"],
+  },
+  {
+    slug: "han-zong-xian",
+    name: "韓宗憲",
+    title: "副總經理",
+    org: "ITIC 創新工業技術移轉公司",
+    day: "investor",
+    track: "deep-tech",
+    status: "confirmed",
+    photo: "/speakers/han-zong-xian.png",
+    bio: "成功大學材料科學與工程學系學士、碩士，交通大學財務金融碩士，政治大學科技管理與智慧財產研究所博士，具備材料科學、財務管理與科技管理的跨領域背景。曾任職聯華電子等半導體公司，歷練製程模組與整合、品管、客服及業務，投身創投後於 ITIC 歷任投資經理、資深經理與公司董事，現為副總經理，參與多檔跨國高科技創投基金的募集與管理，並擔任應材創新基金經理人，專注半導體、材料科技、AI 與深科技領域的股權投資。亦為工研院技術團隊「奈視科技」共同創辦人暨董事長，並於台灣師範大學開設創業學程。",
+    tags: ["半導體", "材料科技", "Deep Tech", "創投基金"],
   },
   {
     slug: "pan-yi-fan",

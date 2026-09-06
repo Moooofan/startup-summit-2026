@@ -46,3 +46,6 @@ next-env.d.ts
 
 # tooling artifacts
 .playwright-mcp/
+
+# 企劃／講者簡報：27MB 的二進位檔，內容已抽進 data/ 與 public/speakers/，不進版控
+source/*.pptx

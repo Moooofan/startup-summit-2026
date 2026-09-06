@@ -24,7 +24,7 @@ Next.js 15 App Router + React 19 + TypeScript + Tailwind v4 + motion + three。�
 ```bash
 npx tsc --noEmit  # Claude 可用（型別檢查）
 npm run lint      # Claude 可用（eslint，flat config + next/core-web-vitals）
-npm run build     # 由「使用者」執行；會預先渲染 37 個講者頁
+npm run build     # 由「使用者」執行；會預先渲染 41 個講者頁
 npm run dev       # 由「使用者」執行（--turbopack）
 ```
 
@@ -40,7 +40,7 @@ npm run dev       # 由「使用者」執行（--turbopack）
 | 檔案 | 內容 | 來源 |
 |---|---|---|
 | `data/event.ts` | 日期／地點／票價／主辦單位／`forums`／`stats` | 企劃 pptx |
-| `data/speakers.ts` | 38 位講者（對外 37，見下）+ `hostSpeaker` | **自簡報產生，見下方警告** |
+| `data/speakers.ts` | 42 位講者（對外 41，見下）+ `hostSpeaker` | **自簡報產生，見下方警告** |
 | `data/agenda.ts` | 兩天逐時段議程 + `findSpeakerSlot`／`talkCount`／`agendaMarkdown` | 議程總表 0902 xlsx |
 | `data/sponsors.ts` | 五級贊助方案、展位、`benefitRows` | 企劃 pptx |
 | `data/review.ts` | 歷屆回顧（第三屆 35 場議程／64 則媒體／贊助 logo） | 企劃 pptx + 網路查證 |
@@ -78,7 +78,7 @@ npm run dev       # 由「使用者」執行（--turbopack）
 - `/`（`app/page.tsx`）是六段單頁：Hero → FounderNote → About（內含 HomeAgenda）→ Tickets
   → SpeakersPreview → Faq。`app/page.tsx` 只排順序，區塊實作全在 `components/home/`。
 - `/about` `/speakers` `/agenda` `/tickets` `/sponsor` `/review`：各自獨立頁
-- `/speakers/[slug]`：`generateStaticParams()` 從 `speakers` 產生 37 頁靜態頁，
+- `/speakers/[slug]`：`generateStaticParams()` 從 `speakers` 產生 41 頁靜態頁，
   各自有 `generateMetadata` 與 PersonJsonLd，含上下位講者導覽
 
 ### 中文字型走 CDN，不是 next/font（重要）

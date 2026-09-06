@@ -24,8 +24,9 @@ import { forums, type ForumKey } from "./event";
  *
  * `slug` 對應 data/speakers.ts 的講者內頁；**只有 `speakers` 陣列裡真的有的人才填**。
  * 林文欽是 `hostSpeaker`、不在 `speakers` 陣列裡（沒有靜態頁），所以刻意不給 slug。
- * TODO: 0902 表上有六個人沒有介紹與照片、因此不在 speakers.ts，
- * 只顯示文字不連內頁：田建中、金東昊、陳怡蓉、韓宗憲，以及兩位分段主持人劉宥彤、張提提。
+ * TODO: 0902 表上原本有六個人沒有介紹與照片、因此不在 speakers.ts。
+ * 2026/9/6 的講者介紹簡報補上其中四位（田建中、金東昊、陳怡蓉、韓宗憲），已建內頁並接上 slug。
+ * 仍只顯示文字不連內頁的剩兩位分段主持人：劉宥彤、張提提 —— 該份簡報沒有他們的介紹與照片。
  */
 
 export interface AgendaSpeaker {
@@ -87,7 +88,7 @@ const founderDay: AgendaItem[] = [
     duration: "25min",
     topic: "韓國獨角獸案例 2",
     speakers: [
-      { name: "Kelvin Dongho Kim 金東昊", org: "Korea Credit Data 創辦人兼執行長" },
+      { name: "Kelvin Dongho Kim 金東昊", org: "Korea Credit Data 創辦人兼執行長", slug: "kelvin-kim" },
     ],
   },
   {
@@ -132,7 +133,9 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "11:25–11:45",
     duration: "20min",
-    speakers: [{ name: "田建中", org: "台灣證券交易所上市二部經理" }],
+    speakers: [
+      { name: "田建中", org: "台灣證券交易所上市二部經理", slug: "tian-jian-zhong" },
+    ],
   },
   {
     type: "talk",
@@ -349,7 +352,7 @@ const investorDay: AgendaItem[] = [
     type: "talk",
     time: "15:45–16:05",
     duration: "20min",
-    speakers: [{ name: "陳怡蓉", org: "識富天使會執行長" }],
+    speakers: [{ name: "陳怡蓉", org: "識富天使會執行長", slug: "chen-yi-rong" }],
   },
   {
     type: "talk",
@@ -376,7 +379,7 @@ const investorDay: AgendaItem[] = [
         org: "橡子園台灣區合夥人，前 ITIC 創新工業技術移轉總經理",
         slug: "qu-zhi-hao",
       },
-      { name: "韓宗憲", org: "ITIC 創投副總經理" },
+      { name: "韓宗憲", org: "ITIC 創投副總經理", slug: "han-zong-xian" },
       { name: "潘逸凡", org: "豐新資本合夥人", slug: "pan-yi-fan" },
       { name: "鞠志遠", org: "歐姆佳科技創辦人兼 CEO", slug: "ju-zhi-yuan" },
     ],
