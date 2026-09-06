@@ -35,7 +35,7 @@ export function About() {
           {/* 大標即本屆主軸，字串來自 event.theme —— 標題與下方第三段內文引用同一個常數，
               不在這裡另外補「 · 」之類的標點。標題只有 9 個字元，手機不需要強制折行，
               所以舊版那個 <br className="sm:hidden" /> 一併移除。 */}
-          <SectionHead eyebrow="ABOUT THE SUMMIT" ghost="SUMMIT" title={event.theme} />
+          <SectionHead eyebrow="ABOUT THE CONFERENCE" ghost="CONFERENCE" title={event.theme} />
         </Reveal>
 
         <Reveal delay={0.06}>

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
-import { MapPin } from "lucide-react";
+import { MapPin, MoveRight } from "lucide-react";
 import { event, forums } from "@/data/event";
 import { Cta } from "@/components/ui/Cta";
 import { OrbitRing } from "@/components/home/OrbitRing";
@@ -115,8 +115,18 @@ export function Hero() {
             <span className="font-display text-[clamp(2.2rem,6vw,3.5rem)] font-semibold tracking-[0.22em] text-brand-glow">
               2026
             </span>
-            <span className="font-display text-[clamp(1.1rem,3.4vw,1.6rem)] font-medium tracking-wide text-ink-2">
-              {event.dateLabel}
+            {/* 箭頭是畫的不是打的（理由見 event.ts 的 dateFrom 註解）。
+                inline-flex 容器的 baseline 取自第一個 flex item，也就是「10.14」——
+                與左側「2026」的 items-baseline 對齊因此不受影響。
+                圖示尺寸用 em，跟著 clamp 字級一起縮放。 */}
+            <span className="font-display inline-flex items-center gap-[0.35em] text-[clamp(1.1rem,3.4vw,1.6rem)] font-medium tracking-wide text-ink-2">
+              {event.dateFrom}
+              {/* 方框必須是正方形：lucide 是 24x24 viewBox、預設 xMidYMid meet，
+                  給非等比尺寸只會把箭頭縮到較短那邊再置中，兩側留一片空白。
+                  MoveRight 的軸線畫在 y=12（方框正中），所以 items-center 就對到數字的視覺中心。 */}
+              <MoveRight aria-hidden strokeWidth={1.5} className="h-[1em] w-[1em] shrink-0" />
+              <span className="sr-only">至</span>
+              {event.dateTo}
             </span>
           </motion.div>
 

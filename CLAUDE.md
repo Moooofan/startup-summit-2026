@@ -16,6 +16,8 @@ Next.js 15 App Router + React 19 + TypeScript + Tailwind v4 + motion + three。�
 - **全站禁用 emoji**：程式碼、註解、畫面文字、資料檔、commit 訊息一律不出現圖形化符號
   （警告三角、打勾、火焰、表情臉那類）。要強調就用文字或 `**粗體**`，不要用符號。
   排版標點不在此限，可以繼續用：`—` `·` `・` `｜` `※` `→` `⟶` `©` `®`。
+  但 `→` `⟶` **只能寫在註解裡**：兩者都不在 Montserrat 的 latin 分片與 Noto Sans TC 內，
+  放進畫面文字會掉到系統備援字型、與數字對不齊且各裝置長相不一（見 `data/event.ts` 的 `dateFrom`）。
   自我檢查（應無輸出）：
   `rg --pcre2 '[\x{1F000}-\x{1FAFF}\x{2600}-\x{27BF}\x{2B00}-\x{2BFF}\x{FE0F}]' src CLAUDE.md`
 
@@ -184,6 +186,8 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
 加工腳本沒有進版控（一次性、用 Pillow 做的）：
 - `og-v2.png` = `source/背景.jpg` 置中裁切成 1.905:1 再縮到 1200×630。標題、日期、logo 都在裁切範圍內。
   （合併兩條分支時另一版 `og-2026.jpg` 是同一張圖的 JPEG 輸出，已刪，別再各存一份）
+  **圖上仍印舊英文名「TAIWAN STARTUP INVESTMENT SUMMIT 2026」**（2026/9 已改為 CONFERENCE），
+  待向 VM 索取改字後的新稿；換圖時一併換檔名，並同步 `layout.tsx` 與 `JsonLd.tsx` 的引用。
 - `logo-mark-v2.png` = `logo-mark.png` 2 倍放大 + 彩度 ×1.42 + 亮度 ×1.20。Nav 與 Footer 共用。
   原檔偏灰（#905090／#8060a0／#60a0d0），深底上會混濁；加亮後貼近 KV 取樣值。
   解析度仍有限 —— **應向 VM 索取 SVG**。

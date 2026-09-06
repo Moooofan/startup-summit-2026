@@ -25,6 +25,9 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+/* 分頁圖示走 App Router 的檔案慣例（src/app/icon.png、apple-icon.png），所以 metadata 沒有 icons 欄位。
+   兩張都是 public/logo-mark-v2.png 的複本 —— 換 logo 時三份要一起換（Nav 與 Footer 吃 public 那份）。
+   原圖 472×448 非正方，縮成圖示時左右各留一點空白；正方版待向 VM 取得 SVG 後再做。 */
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
