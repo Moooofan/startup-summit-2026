@@ -176,8 +176,10 @@ export const friendModes = [
 ];
 
 /** 展場規劃 */
-export const venueZones = [
-  { zone: "A / B / C", name: "演講廳", detail: "600–700 席" },
+export const venueZones: { zone?: string; name: string; detail: string }[] = [
+  // 演講廳原本標「A / B / C 區」，業主 2026/9 指示不對外寫廳別 —— zone 留白，
+  // 呼叫端（sponsor/page.tsx）沒有 zone 就不印那一行，席次資訊照常保留。
+  { name: "演講廳", detail: "600–700 席" },
   { zone: "D", name: "交誼與餐飲區", detail: "茶敘、午餐與自由交流" },
   { zone: "E", name: "品牌攤位區", detail: "8–10 個贊助商展位" },
 ];

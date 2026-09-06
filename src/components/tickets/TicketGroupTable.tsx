@@ -29,7 +29,7 @@ export function TicketGroupTable() {
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <h3 className="text-[18px] font-medium text-ink">團報優惠</h3>
         <p className="text-[17px] text-ink-4">
-          {event.tickets.currency}／人・人數越多單價越低
+          {event.tickets.currency}／人
         </p>
       </div>
 

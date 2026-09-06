@@ -31,7 +31,7 @@ export function Tickets() {
               ghost="TICKETS"
               align="center"
               title="報名資訊"
-              lead={`${event.dateLabelLong}，${event.timeLabel}。兩日論壇於同一場地舉行。`}
+              lead={`${event.dateLabelLong}，${event.timeLabel}。`}
             />
           </Reveal>
 

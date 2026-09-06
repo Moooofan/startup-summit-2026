@@ -89,10 +89,6 @@ function ForumCard({ f }: { f: Forum }) {
 
         <p className="mt-5 text-[18px] leading-[1.9] text-ink-2">{f.description}</p>
 
-        <p className="mt-6 text-[17px] text-ink-3">
-          <span className="text-ink-4">主要聽眾｜</span>
-          {f.audience}
-        </p>
 
         {/* /agenda 隱藏期間不顯示這顆連結（見 lib/config 的 PUBLIC_ROUTES）。
             卡片上原本有四個主題軌 chips，2026/9 拿掉：議程已經就在兩張卡片正下方

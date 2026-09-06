@@ -109,8 +109,10 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
 兩顆 svg 的 `<defs>` 因為都用 `gradientUnits="userSpaceOnUse"`、座標綁死各自的 viewBox，
 **不能共用**，手機那組 id 一律加 `-m` 後綴（兩顆都在 DOM 裡，撞 id 會靜默取到前一個）。
 手機版各圖層的 alpha 刻意比桌機高：那一區同時壓著 scrim 與 screen 疊加的青色光暈。
-另外**首頁第一屏另有一層 `Hero.tsx` 的手機遮罩**（`from-bg via-bg/75 to-bg/20`，`md:hidden`），
-會把 KV 再遮掉約 68% —— 在首頁調背景強度前先確認你看的是不是那層。
+另外**首頁第一屏另有一層 `Hero.tsx` 的手機遮罩**（`md:hidden`）疊在上面 ——
+它原本是 `from-bg via-bg/75 to-bg/20`，頂端全不透明，等於把第一屏的背景整層關掉
+（KV 被遮掉約 68%，活動照也一起沒了）；2026/9 放鬆為 `from-bg/75 via-bg/45 to-bg/10`。
+**在首頁調背景強度前，先確認你看的是不是那層** —— 其他頁沒有它。
 
 色票**逐點取樣自 `source/背景.jpg`**（2026 主視覺原稿，深藍夜空 + 電光藍 + 青色高光）。
 所有 token 定義在 `src/app/globals.css` 的 `@theme` 區塊 —— **改色只改那裡**。

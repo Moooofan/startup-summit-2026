@@ -33,7 +33,7 @@ export function GET() {
 ${forums
   .map(
     (f) =>
-      `- ${f.dateLabel.replace(/ /g, "")}（${f.weekday}）${f.name}：主要聽眾為${f.audience}。${f.description}`
+      `- ${f.dateLabel.replace(/ /g, "")}（${f.weekday}）${f.name}：${f.description}`
   )
   .join("\n")}
 

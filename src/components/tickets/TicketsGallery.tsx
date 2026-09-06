@@ -289,7 +289,7 @@ function IntroPanel({ active, onNext }: { active: boolean; onNext: () => void })
           title="報名資訊"
           lead={
             <>
-              {event.dateLabelLong}，{event.timeLabel}。兩日論壇於同一場地舉行，分開售票、票價相同。
+              {event.dateLabelLong}，{event.timeLabel}。分開售票、票價相同。
             </>
           }
         />

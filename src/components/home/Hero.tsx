@@ -20,24 +20,6 @@ export function Hero() {
   const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -60]);
   const copyOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
 
-  /* 「查看詳情」的平滑捲動。只掛在這一顆按鈕上，不是全域行為 ——
-     globals.css 那條「全站不開 scroll-behavior: smooth」的禁令原封不動（理由見下方 CTA 註解）。
-
-     用 scrollIntoView 而不是 window.scrollTo：它會自動吃到 CSS 的 scroll-padding-top: 88px
-     與 FounderNote 自己的 [scroll-margin-top:-88px]（兩者相消 → 區塊上緣貼齊視窗頂、
-     深藍底延伸到導覽列後方，那是該區塊刻意的無縫設計）。落點因此與原生錨點跳轉、
-     以及 ScrollSnapController 的節點跳轉完全一致 —— 那支控制器用的也是同一個 API。
-
-     找不到元素就不 preventDefault，交還瀏覽器原生錨點跳轉（漸進增強，JS 壞掉照樣能用）。
-     刻意不碰 history：preventDefault 後網址不會多出 #founder，正好避開
-     「回上一頁的位置還原」那攤水，而這顆按鈕只是往下捲一屏，沒有需要被分享的落點。 */
-  const scrollToFounder = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const el = document.getElementById("founder");
-    if (!el) return;
-    e.preventDefault();
-    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
-  };
-
   // 進場更俐落：縮短 stagger 與 duration → 最後元素約 1.1s 就收尾（原本 1.57s）。
   // 這同時把玻璃環能安全掛載的「閘門」往前移 → 玻璃盤更早出現而不搶幀（見 OrbitRing 1150ms）。
   const rise = {
@@ -78,17 +60,25 @@ export function Hero() {
           </motion.div>
         </div>
 
-        {/* 手機版：光軌在文字正後方，加一層遮罩保住可讀性（z-[6] 蓋在環 z-[5] 之上） */}
+        {/* 手機版：光軌在文字正後方，加一層遮罩保住可讀性（z-[6] 蓋在環 z-[5] 之上）。
+
+            2026/9 由 from-bg / 75 / 20 放鬆到 75 / 45 / 10。原值頂端是**全不透明**的實色，
+            等於把第一屏的背景整層關掉 —— 不只光軌，連 HomeBackdrop 的活動照與
+            SiteBackdrop 的主視覺線構圖都一起沒了（實測 KV 的「4」被遮掉約 68%）。
+            照片提亮這件事若不動這層，在手機上等於沒做。
+
+            放鬆後量過最壞情況（最亮的一張活動照、遮罩最淡的底端）：
+            白字 8.2:1、ink-2 5.5:1，仍遠過 AA。可讀性不是這層的限制條件。 */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 z-[6] bg-gradient-to-b from-bg via-bg/75 to-bg/20 md:hidden"
+          className="pointer-events-none absolute inset-0 z-[6] bg-gradient-to-b from-bg/75 via-bg/45 to-bg/10 md:hidden"
         />
 
         {/* 文字區柔化：左側（文字所在）半透明遮罩，往右淡出 → 磚塊轉進文字區會變淡（非全透明），
             轉出去恢復原本透明度。z-[7] 介於環 z-5 與文字 z-10 之間 */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 left-0 z-[7] hidden w-[66%] bg-gradient-to-r from-bg/70 via-bg/35 to-transparent md:block"
+          className="pointer-events-none absolute inset-y-0 left-0 z-[7] hidden w-[66%] bg-gradient-to-r from-bg/62 via-bg/28 to-transparent md:block"
         />
 
       <motion.div style={{ y: copyY, opacity: copyOpacity }} className="shell relative z-10 py-8">
@@ -285,25 +275,24 @@ export function Hero() {
             >
               立即報名
             </Cta>
-            {/* 次要 CTA：業主 2026/9 由「歷屆回顧 → /review」改成「查看詳情 → 同頁的創辦人的話」，
-                第一屏的動線因此收斂成「報名」＋「往下看內容」兩件事。
+            {/* 次要 CTA：業主 2026/9 兩次改向 —— 先由「歷屆回顧 → /review」改成「創辦人的話」，
+                再改成現在的「活動介紹 → #about」。第一屏的動線是「報名」＋「往下看內容」兩件事，
+                而點「查看詳情」的人要的是活動本身，不是主辦人的個人敘事。
                 /review 仍有導覽列（桌機＋手機選單）與頁尾兩個常駐入口，不會變成孤島。
 
-                href 用裸的 #founder，與 layout.tsx 的 skip link（#main）一致 ——
+                href 用裸的 #about，與 layout.tsx 的 skip link（#main）一致 ——
                 站內同頁錨點就是這樣寫；帶斜線的 /#xxx 只用在跨頁指回首頁（如講者內頁的 /#agenda）。
 
-                這裡加了 JS 平滑捲動，與上方主 CTA 註解裡「不要改成 JS 平滑捲動」**不衝突**，
-                因為那條禁令的兩個理由在這裡都不成立：
-                1. 那條講的是**全域 CSS**（html 的 scroll-behavior）。我們沒動它，
-                   這只是掛在單一顆按鈕上的 handler，回上一頁的位置還原完全不受影響。
-                2. 那條講的是**距離**（Hero 到報名資訊隔了將近十個螢幕）。FounderNote 是
-                   首頁第二個區塊、就在 Hero 正下方，只有一屏，不會有「滑一兩秒、畫面糊掉」的問題。
-                捲動本身尊重 prefers-reduced-motion，見上方 scrollToFounder。 */}
+                **JS 平滑捲動隨這次改向一起拿掉了。** 它原本成立的理由是「只跳一屏」，
+                而 About 現在隔著整個 FounderNote（釘住式 scrollytelling，lg 有 100svh 的 sticky 欄，
+                實際兩三屏）—— 正好落進主 CTA 註解裡「長距離不要平滑捲動」那條：
+                滑一兩秒、中間畫面糊成一片，比直接跳更差。交回瀏覽器原生錨點跳轉，
+                導覽列的偏移由 globals.css 的 scroll-padding-top: 88px 處理，
+                落點與 ScrollSnapController 的節點跳轉一致。 */}
             <Cta
-              href="#founder"
+              href="#about"
               variant="gradient"
               size="lg"
-              onClick={scrollToFounder}
               className="[background-image:linear-gradient(110deg,rgb(22_34_78/0.82)_0%,rgb(16_26_64/0.72)_100%)] border-accent/55 hover:border-accent/85"
             >
               查看詳情

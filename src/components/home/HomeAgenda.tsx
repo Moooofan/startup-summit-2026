@@ -1,6 +1,6 @@
 import { Fragment } from "react";
 import { forums } from "@/data/event";
-import { agendaByDay, talkCount } from "@/data/agenda";
+import { agendaByDay } from "@/data/agenda";
 import { Reveal } from "@/components/ui/Reveal";
 import { AgendaTable, dayTone } from "@/components/home/AgendaTable";
 import { cn } from "@/lib/utils";
@@ -37,7 +37,6 @@ export function HomeAgenda() {
                 <span className="font-display text-base text-ink-3">
                   {f.dateLabel}（{f.weekday}）　{f.time}
                 </span>
-                <span className="ml-auto text-sm text-ink-4">{talkCount(items)} 場</span>
               </header>
             </Reveal>
 

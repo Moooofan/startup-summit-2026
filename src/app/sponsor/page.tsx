@@ -274,11 +274,17 @@ export default function SponsorPage() {
             <Reveal delay={0.14}>
               <ul className="mt-6 grid gap-px overflow-hidden rounded-card border border-line-soft bg-line-soft sm:grid-cols-3">
                 {venueZones.map((z) => (
-                  <li key={z.zone} className="bg-bg-soft px-5 py-5">
-                    <p className="font-display text-xs tracking-[0.18em] text-orbit-sky">
-                      {z.zone} 區
+                  <li key={z.name} className="bg-bg-soft px-5 py-5">
+                    {/* 沒有 zone 就整行不印 —— 演講廳不對外寫廳別（見 sponsors.ts）。
+                        留白會印出一個孤零零的「區」，比留著廳別更糟。 */}
+                    {z.zone && (
+                      <p className="font-display text-xs tracking-[0.18em] text-orbit-sky">
+                        {z.zone} 區
+                      </p>
+                    )}
+                    <p className={`text-[18px] font-medium text-ink ${z.zone ? "mt-2" : ""}`}>
+                      {z.name}
                     </p>
-                    <p className="mt-2 text-[18px] font-medium text-ink">{z.name}</p>
                     <p className="mt-1 text-[17px] leading-relaxed text-ink-4">{z.detail}</p>
                   </li>
                 ))}

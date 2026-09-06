@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { ChevronDown } from "lucide-react";
 import { forums } from "@/data/event";
-import { agendaByDay, talkCount } from "@/data/agenda";
+import { agendaByDay } from "@/data/agenda";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Reveal } from "@/components/ui/Reveal";
 import { AgendaTable, dayTone } from "@/components/home/AgendaTable";
@@ -68,8 +68,6 @@ function DayNode({
 }
 
 export function Agenda() {
-  const totalTalks = forums.reduce((n, f) => n + talkCount(agendaByDay(f.key)), 0);
-
   return (
     <section id="agenda" className="relative">
       {/* 開場大字報頁（同講者陣容） */}
@@ -80,7 +78,7 @@ export function Agenda() {
               className="md:mt-14"
               eyebrow="PROGRAM"
               ghost="AGENDA"
-              title={`兩天，${totalTalks} 場議程`}
+              title="兩天議程"
               lead="10/14 從創業實戰、新 IPO 對談走到 Edge AI 與 AI 軟體，10/15 從焦點創投與 CVC 談到生醫與半導體的投資判準。"
             />
           </Reveal>
@@ -121,7 +119,6 @@ export function Agenda() {
                     <span className="font-display text-base text-ink-3">
                       {f.dateLabel}（{f.weekday}）　{f.time}
                     </span>
-                    <span className="ml-auto text-sm text-ink-4">{talkCount(items)} 場</span>
                   </header>
                 </Reveal>
 
