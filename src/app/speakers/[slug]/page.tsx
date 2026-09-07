@@ -10,7 +10,7 @@ import { event, forums } from "@/data/event";
 import { Reveal } from "@/components/ui/Reveal";
 import { Cta } from "@/components/ui/Cta";
 import { BackLink } from "@/components/site/BackLink";
-import { PersonJsonLd } from "@/components/site/JsonLd";
+import { PersonJsonLd, BreadcrumbJsonLd } from "@/components/site/JsonLd";
 import { isPublicRoute } from "@/lib/config";
 
 export function generateStaticParams() {
@@ -61,6 +61,13 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
 
   return (
     <>
+      <BreadcrumbJsonLd
+        trail={[
+          { name: "首頁", path: "/" },
+          { name: "講者陣容", path: "/speakers" },
+          { name: s.name, path: `/speakers/${s.slug}` },
+        ]}
+      />
       <PersonJsonLd
         name={s.name}
         nameEn={s.nameEn}

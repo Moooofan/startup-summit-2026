@@ -13,6 +13,22 @@ function Ld({ data }: { data: object }) {
   );
 }
 
+/* Person.description 的長度上限取 300 字。直接 slice 會從中文句子正中間切斷
+   （實測有兩位講者被切在「等」「他聚焦早」這種半句上），送進 schema 會變成
+   讀不完的句子。改成退到最後一個句末標點，寧可短一點也要是完整句。 */
+function truncateAtSentence(text: string, max: number): string {
+  const flat = text.replace(/\s+/g, " ").trim();
+  if (flat.length <= max) return flat;
+  const head = flat.slice(0, max);
+  const cut = Math.max(
+    head.lastIndexOf("。"),
+    head.lastIndexOf("！"),
+    head.lastIndexOf("？"),
+  );
+  // 找不到句末標點（或句子過長導致切點太靠前）才退回硬切
+  return cut > max * 0.5 ? head.slice(0, cut + 1) : head;
+}
+
 const organization = {
   "@type": "Organization",
   "@id": `${site.url}/#organization`,
@@ -161,6 +177,128 @@ export function FaqJsonLd() {
   );
 }
 
+/* 麵包屑。/speakers/[slug] 是三層路由（首頁 → 講者陣容 → 某位講者），
+   SERP 有 BreadcrumbList 才會顯示路徑而不是裸網址。
+   name 用畫面上真正的導覽字樣，與頁面標題一致，避免標記與內容不符。 */
+export function BreadcrumbJsonLd({
+  trail,
+}: {
+  trail: { name: string; path: string }[];
+}) {
+  return (
+    <Ld
+      data={{
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: trail.map((t, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name: t.name,
+          item: t.path === "/" ? site.url : `${site.url}${t.path}`,
+        })),
+      }}
+    />
+  );
+}
+
+/* 講者陣容頁：CollectionPage + ItemList。
+   讓 Google 讀懂這一頁是「名錄」而不是一般內容頁，並把 41 個講者頁串成一組集合。
+   只放 url 不重複整份 Person（各講者頁自己有 Person，用 @id 交叉引用即可）。 */
+export function SpeakerListJsonLd({
+  people,
+}: {
+  people: { name: string; slug: string }[];
+}) {
+  return (
+    <Ld
+      data={{
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": `${site.url}/speakers#collection`,
+        url: `${site.url}/speakers`,
+        name: "講者陣容",
+        inLanguage: "zh-Hant-TW",
+        isPartOf: { "@id": `${site.url}/#website` },
+        about: { "@id": `${site.url}/#event` },
+        mainEntity: {
+          "@type": "ItemList",
+          numberOfItems: people.length,
+          itemListElement: people.map((p, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: p.name,
+            url: `${site.url}/speakers/${p.slug}`,
+          })),
+        },
+      }}
+    />
+  );
+}
+
+/* 歷屆回顧頁：CollectionPage + 各屆 Event。
+   歷屆是已結束的實體活動，Google 靠 startDate/endDate 判定已結束，
+   狀態仍是 EventScheduled（沒有「已完成」這個 eventStatus，取消才用 EventCancelled）。
+   startDate 只給到年份：editions 的 dateLabel 是給人看的中文字串
+   （「2025年10月1日（三）－10月2日（四）　09:00－17:10」），
+   硬解析成 ISO 8601 會在括號與全形空白上出錯，寧可只給年份這個確定為真的值。 */
+export function ReviewJsonLd({
+  pastEditions,
+}: {
+  pastEditions: {
+    no: number;
+    year: number;
+    venue: string;
+    venueAddress?: string;
+  }[];
+}) {
+  return (
+    <Ld
+      data={{
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": `${site.url}/review#collection`,
+        url: `${site.url}/review`,
+        name: "歷屆回顧",
+        inLanguage: "zh-Hant-TW",
+        isPartOf: { "@id": `${site.url}/#website` },
+        mainEntity: {
+          "@type": "ItemList",
+          numberOfItems: pastEditions.length,
+          itemListElement: pastEditions.map((e, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            item: {
+              "@type": "Event",
+              name: `${e.year} 第${e.no}屆台灣新創投資年會`,
+              startDate: String(e.year),
+              eventStatus: "https://schema.org/EventScheduled",
+              eventAttendanceMode:
+                "https://schema.org/OfflineEventAttendanceMode",
+              organizer: { "@id": `${site.url}/#organization` },
+              location: {
+                "@type": "Place",
+                name: e.venue,
+                address: e.venueAddress
+                  ? {
+                      "@type": "PostalAddress",
+                      streetAddress: e.venueAddress,
+                      addressLocality: "臺北市",
+                      addressCountry: "TW",
+                    }
+                  : {
+                      "@type": "PostalAddress",
+                      addressLocality: "臺北市",
+                      addressCountry: "TW",
+                    },
+              },
+            },
+          })),
+        },
+      }}
+    />
+  );
+}
+
 /** 講者頁：Person */
 export function PersonJsonLd({
   name,
@@ -189,7 +327,7 @@ export function PersonJsonLd({
         ...(nameEn ? { alternateName: nameEn } : {}),
         jobTitle: title,
         worksFor: { "@type": "Organization", name: org },
-        description: bio.slice(0, 300),
+        description: truncateAtSentence(bio, 300),
         image: `${site.url}${photo}`,
         url: `${site.url}/speakers/${slug}`,
         performerIn: { "@id": `${site.url}/#event` },
