@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { AgendaItem, AgendaSpeaker } from "@/data/agenda";
-import { cn } from "@/lib/utils";
 
 /** 日別色調：Day 1 藍 / Day 2 紫，全站一致。
  *  原本住在 TrackCards.tsx，2026/9 主題軌整組移除後搬到這裡，
@@ -38,10 +37,15 @@ export type DayTone = (typeof dayTone)[keyof typeof dayTone];
      「PRO360 達人網（7839）創辦人兼董事長」這種字串會被壓成十幾行。
    ========================================================================== */
 
-/** 簡報該欄留白時的對外說法（業主 2026/9 指定）。空欄不是版面 bug，是還沒公布。
- *  data/agenda.ts 的 agendaMarkdown()（llms.txt 用）刻意維持「講者待公布」：
- *  那份是給機器讀的事實檔，精確比行銷語氣重要。兩邊用詞不同是刻意的，不是漏改。 */
-const TBA = "陸續揭曉，敬請期待";
+/* 原本留白的欄位會印「陸續揭曉，敬請期待」，業主 2026/9 指示整句移除 ——
+   空欄就留空，不再用文案去填。三處呼叫點（手機卡的講題、表格的講題跨列格、
+   兩種版型共用的嘉賓欄）改成不輸出文字。
+
+   表格的講題欄**仍要輸出一個空的 <td>**：那格帶著 rowSpan、是這一欄的佔位，
+   拿掉會讓該列少一欄、後面的嘉賓欄整個位移。
+
+   給機器讀的 llms.txt 不受影響：data/agenda.ts 的 agendaMarkdown() 維持「講者待公布」，
+   那份是事實檔，欄位空白必須說出來，不能靜默。 */
 
 /** 一位講者：對得上 speakers.ts 的連內頁，其餘純文字（見 data/agenda.ts 的 slug 說明）。 */
 function SpeakerLine({ s }: { s: AgendaSpeaker }) {
@@ -79,8 +83,8 @@ function SpeakerLine({ s }: { s: AgendaSpeaker }) {
 }
 
 function Speakers({ list }: { list: AgendaSpeaker[] }) {
-  // 簡報這一列的嘉賓欄是空的 —— 據實說還沒公布，不猜人
-  if (list.length === 0) return <p className="text-[17px] text-ink-4">{TBA}</p>;
+  // 簡報這一列的嘉賓欄是空的 —— 留空，不猜人也不補文案（業主 2026/9）
+  if (list.length === 0) return null;
   return (
     <div className="space-y-1.5">
       {list.map((s, i) => (
@@ -153,16 +157,11 @@ function AgendaCards({ items }: { items: AgendaItem[] }) {
               </span>
               {item.duration && <span className="text-[16px] text-ink-4">{item.duration}</span>}
             </p>
-            {/* 一律渲染：沒講題時不能整行消失，而是換成淡灰的佔位字，
-                否則卡片看起來像少了一塊。真講題才加粗加深，兩者一眼分得出來。 */}
-            <p
-              className={cn(
-                "mt-2 text-[18px] leading-relaxed",
-                item.topic ? "font-medium text-ink" : "text-ink-4"
-              )}
-            >
-              {item.topic ?? TBA}
-            </p>
+            {/* 沒講題就整行不印。原本會印一行淡灰的佔位字撐住卡片，
+                業主 2026/9 指示拿掉那句文案 —— 留一個空段落只會多一段空白。 */}
+            {item.topic && (
+              <p className="mt-2 text-[18px] font-medium leading-relaxed text-ink">{item.topic}</p>
+            )}
             <div className="mt-2">
               <Speakers list={item.speakers} />
             </div>
@@ -268,12 +267,8 @@ function AgendaGrid({ items }: { items: AgendaItem[] }) {
                     {item.topic}
                   </td>
                 ) : tbaSpans[i] > 0 ? (
-                  <td
-                    rowSpan={tbaSpans[i]}
-                    className="px-5 py-4 align-middle text-[18px] leading-relaxed text-ink-4"
-                  >
-                    {TBA}
-                  </td>
+                  // 空格但保留 —— 帶 rowSpan，是這一欄的佔位（見檔頭）
+                  <td rowSpan={tbaSpans[i]} className="px-5 py-4" />
                 ) : null}
                 <td className="px-5 py-4 align-middle">
                   <Speakers list={item.speakers} />

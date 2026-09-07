@@ -187,7 +187,10 @@ export function Hero() {
             custom={3}
             className="mt-3 max-w-xl text-[18px] leading-[1.8] text-ink-2 md:text-base"
           >
-            兩天雙峰論壇，
+            {/* 這裡原本寫「兩天雙峰論壇，」，與上方眉標的「第四屆・雙峰論壇」在同一屏
+                重複兩次（業主 2026/9）。眉標是品牌標籤、留著；這句的任務是點出兩天各是什麼，
+                而它後面緊接著就把兩個論壇列出來了，那四個字純屬贅字。 */}
+            兩天，
             {/* /agenda 隱藏期間降級為純文字 —— 內容仍要讀得到，只是不再是連結。 */}
             {forums.map((f, i) => (
               <span key={f.key}>

@@ -11,7 +11,8 @@ import { forums, type ForumKey } from "./event";
  *
  * 轉錄原則（同 data/review.ts）：
  * - 講題、單位、職稱一律逐字保留原表寫法，不潤飾、不補字。
- * - 原表留白的欄位就留白（`time` / `topic` 省略），版面顯示「陸續揭曉，敬請期待」，**不要猜**。
+ * - 原表留白的欄位就留白（`time` / `topic` 省略），版面就跟著留空，**不要猜**。
+ *   （原本會顯示「陸續揭曉，敬請期待」，業主 2026/9 指示移除該句。）
  * - 時間統一改寫成 24 小時制（原表下午場寫「1:30-1:50」這種 12 小時制、且有
  *   「9:55:-10:15」「4:35:4:55」這類冒號筆誤）。這是同一個時刻的等值改寫，不是改事實。
  * - `duration` 保留原表印的數字，即使與起訖時間對不上（0902 只剩 14:10–14:40 那一列
@@ -73,7 +74,6 @@ const founderDay: AgendaItem[] = [
   {
     type: "group",
     title: "《焦點創業家分享》",
-    host: "劉宥彤 Amanda Liu／Startup Taiwan Island 計畫負責人",
   },
   {
     type: "talk",
@@ -101,7 +101,6 @@ const founderDay: AgendaItem[] = [
   {
     type: "group",
     title: "《焦點創業生態機構分享》",
-    host: "劉宥彤 Amanda Liu／Startup Taiwan Island 計畫負責人",
   },
   {
     type: "talk",
@@ -152,7 +151,7 @@ const founderDay: AgendaItem[] = [
 
   { type: "break", time: "12:25–13:30", duration: "65min", label: "午餐休息時間" },
 
-  { type: "group", title: "《併購與擴張》", host: "張提提／中華開發資本協理" },
+  { type: "group", title: "《併購與擴張》" },
   {
     type: "talk",
     time: "13:30–13:50",
@@ -202,7 +201,7 @@ const founderDay: AgendaItem[] = [
   { type: "break", time: "15:40–15:55", duration: "15min", label: "下午中場休息時間" },
 
   // E27:E33 的合併範圍蓋住本段與《年度新基金》，兩段共用同一位分段主持人
-  { type: "group", title: "《AI 軟體創業家分享》", host: "張提提／中華開發資本協理" },
+  { type: "group", title: "《AI 軟體創業家分享》" },
   {
     type: "talk",
     time: "15:55–16:15",
@@ -224,7 +223,7 @@ const founderDay: AgendaItem[] = [
     ],
   },
 
-  { type: "group", title: "《年度新基金》", host: "張提提／中華開發資本協理" },
+  { type: "group", title: "《年度新基金》" },
   {
     type: "talk",
     time: "16:55–17:15",
