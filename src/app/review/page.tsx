@@ -10,6 +10,7 @@ import { EditionTimeline } from "@/components/review/EditionTimeline";
 import { PastSpeakerRoster } from "@/components/review/PastSpeakerRoster";
 import { Testimonials } from "@/components/review/Testimonials";
 import { Cta } from "@/components/ui/Cta";
+import { BreadcrumbJsonLd, ReviewJsonLd } from "@/components/site/JsonLd";
 
 export const metadata: Metadata = {
   title: "歷屆回顧",
@@ -32,6 +33,20 @@ export default function ReviewPage() {
 
   return (
     <>
+      <ReviewJsonLd
+        pastEditions={chronological.map((e) => ({
+          no: e.no,
+          year: e.year,
+          venue: e.venue,
+          venueAddress: e.venueAddress,
+        }))}
+      />
+      <BreadcrumbJsonLd
+        trail={[
+          { name: "首頁", path: "/" },
+          { name: "歷屆回顧", path: "/review" },
+        ]}
+      />
       {/* 頁首 */}
       {/* overflow-x-clip 而非 overflow-hidden，**別順手改回去**：
           區塊光暈是 880px 高，這個頁首只有約 400px（pt-176 + SectionHead + pb），裝不下。

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Speakers } from "@/components/home/Speakers";
+import { speakers } from "@/data/speakers";
+import { BreadcrumbJsonLd, SpeakerListJsonLd } from "@/components/site/JsonLd";
 import { ScrollSnapController } from "@/components/home/ScrollSnapController";
 
 export const metadata: Metadata = {
@@ -12,6 +14,15 @@ export const metadata: Metadata = {
 export default function SpeakersPage() {
   return (
     <>
+      <SpeakerListJsonLd
+        people={speakers.map((s) => ({ name: s.name, slug: s.slug }))}
+      />
+      <BreadcrumbJsonLd
+        trail={[
+          { name: "首頁", path: "/" },
+          { name: "講者陣容", path: "/speakers" },
+        ]}
+      />
       <ScrollSnapController />
       <Speakers />
     </>
