@@ -92,12 +92,16 @@ npm run dev       # 由「使用者」執行（--turbopack）
 字重清單是 `300;400;500;700;900`。**300 不能拿掉** —— 主視覺的中文標題是細筆畫、大字距，
 Hero 主標與日別大標都吃 `font-light`；少了 300 瀏覽器會用 400 硬頂，字面立刻粗一級。
 
-### three.js 是漸進增強，且刻意延後掛載
+### three.js 是漸進增強
 
-`OrbitRing` 是入口：SSR 與首幀只顯示光暈 → 決策後桌機 + 支援 WebGL + 未關動效才動態
-`import()` `OrbitGlass`（`ssr:false`）；手機／關動效／不支援 → 純 CSS 的 `OrbitRingCss`。
-掛載刻意延到 Hero 進場動畫跑完（~1.1s）之後，否則造幾何會搶主執行緒把進場動畫卡住。
-`TicketGlass` / `TicketSheen` 同樣是 canvas。**動這些檔案時保留那些時序註解裡的理由。**
+`TicketGlass`（票卡玻璃板，入口是 `GlassBlock`）與 `TicketSheen`（票卡反光，入口是
+`Reflective`）都是 canvas：支援 WebGL 且未關動效才動態 `import()`（`ssr:false`），
+否則回退純 CSS。**動這些檔案時保留註解裡的理由。**
+
+首頁 Hero 右側原有一顆同機制的破碎玻璃環（`OrbitRing` 入口 + `OrbitGlass` WebGL 版
++ `OrbitRingCss` 回退），**2026/9 業主指示拿掉，三支檔案已刪除**。
+它的掛載刻意延到 Hero 進場動畫跑完（~1.1s）才開始（否則造幾何會搶主執行緒卡住進場動畫）
+—— 這條時序原則對日後任何要加進 Hero 的 canvas 仍然成立。
 
 ### 首頁捲動由 JS 獨佔，不是 CSS scroll-snap
 
@@ -165,19 +169,20 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
   小的那幾顆在深底上會讀成「黏在邊上的一團」而不是環境光。
   置中在大字報後方的節點光暈（`Agenda.tsx` / `Speakers.tsx` 的 `left-1/2 top-1/2`）
   不屬於這一套，別一起改
-- `OrbitGlass` 的折射底色（`new THREE.Color("#071a72")`）是「玻璃眼中的背景」，
-  WebGL 取樣不到 DOM —— 動到 layout 的霧色時必須連它一起改，否則玻璃環會變成不透明色盤
+- WebGL 元件的折射底色是「玻璃眼中的背景」，取樣不到 DOM —— 動到 layout 的霧色時必須
+  連它一起改，否則玻璃會變成不透明色盤（現在只剩 `TicketGlass`；已刪的 `OrbitGlass`
+  用的是 `new THREE.Color("#071a72")`）
 
 ### 深色版特有的坑（換版時逐一踩過）
 
 - **不能把淺色值直接反相**。`bg-black/8` 這種「白底上壓暗線」翻成深色版時，亮度階要略微
   提高（→ `border-white/10`）：人眼在暗底上對低對比亮線比在亮底上對低對比暗線更不敏感。
-- **WebGL 的 `background` 是「透過玻璃看到的世界」，不是卡片底色**。`OrbitGlass` 與
-  `TicketGlass` 若沿用淺色版的淡藍折射底，會變成深底上兩塊死白的板，且蓋掉上層白字。
-  現在都改成深藍量體，亮度改由 `Lightformer` 的高光提供。
+- **WebGL 的 `background` 是「透過玻璃看到的世界」，不是卡片底色**。`TicketGlass`
+  若沿用淺色版的淡藍折射底，會變成深底上一塊死白的板，且蓋掉上層白字。
+  現在改成深藍量體，亮度改由 `Lightformer` 的高光提供。
 - **暖色一律撤掉**。舊版的洋紅光暈、蜜桃／橘色玻璃碎塊、金色眉標在深靛底上都會變成
   一團與主視覺無關的暖光。改色時若看到 `#ff…` 開頭的暖色停，那是漏改的。
-- **遮罩要壓暗而非提亮**。Hero 標題後方那片擋住玻璃環的霧面片，淺色版是提亮，
+- **遮罩要壓暗而非提亮**。Hero 標題後方那片曾用來擋玻璃環的霧面片，淺色版是提亮，
   深色版照抄會變成一塊發光橢圓，比它要遮的東西還搶眼。
 
 ### 素材是加工過的，且產生器不在 repo 裡
@@ -205,7 +210,7 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
 
 - 事實一律以簡報為準；簡報沒寫的**不要編**，寫成「將於⋯⋯公布」並在該處留 `// TODO`
 - 講者 bio 逐字保留簡報原文，不潤飾
-- 動效一律尊重 `prefers-reduced-motion`（`Reveal`、`Hero`、`OrbitRing`、globals.css 都已處理）
+- 動效一律尊重 `prefers-reduced-motion`（`Reveal`、`Hero`、globals.css 都已處理）
 - 圖片換檔請一併換檔名（加 `-v2` 之類），否則會撞 next/image 快取
 - 註解用繁體中文，且**寫「為什麼」而非「做什麼」** —— 這個 codebase 的註解大量記錄踩過的坑，
   改動相關程式時要保留或更新那些理由，別刪掉

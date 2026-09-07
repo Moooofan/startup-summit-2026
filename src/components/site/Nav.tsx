@@ -93,16 +93,11 @@ export function Nav() {
             priority
             className="h-7 w-auto transition-transform duration-300 group-hover:scale-105 md:h-8"
           />
+          {/* 副標「2026 · 4TH」2026/9 業主指示刪除，只留站名一行。
+              leading-tight 保留：單行時它與 items-center 一起決定 logo 圖與文字的垂直對齊。 */}
           <span className="leading-tight">
             <span className="block text-[17px] font-bold tracking-wide text-ink md:text-sm">
               台灣新創投資年會
-            </span>
-            {/* 這行刻意不吃全站字級級距，維持原始的 10px。
-                它是 logo 的副標，字級一旦追上上方主標（17px）就變成階層倒置 ——
-                全站字級曾整條上調（10→12→14→16），這行被一起帶上去後又調了回來。
-                下次再做全域字級調整時，請把這行排除。 */}
-            <span className="font-display block text-[10px] tracking-[0.18em] text-ink-3">
-              2026 · 4TH
             </span>
           </span>
         </Link>

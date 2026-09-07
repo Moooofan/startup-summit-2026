@@ -604,7 +604,7 @@ function ContactPanel() {
 
         <p className="mt-7 flex items-start justify-center gap-2 text-center text-[17px] leading-relaxed text-ink-3 sm:mt-8">
           <Info size={14} className="mt-0.5 shrink-0 text-ink-4" aria-hidden />
-          主辦單位｜{event.organizer.name}・
+          主辦單位｜{event.organizer.name}・年會主辦人{" "}
           {event.organizer.host}　{event.organizer.hostTitle}
         </p>
       </div>
