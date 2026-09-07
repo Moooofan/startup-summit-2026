@@ -9,7 +9,6 @@ export const event = {
   editionLabel: "第四屆",
   name: "台灣新創投資年會",
   fullName: "2026 第四屆台灣新創投資年會",
-  subtitle: "雙峰論壇",
   nameEn: "Taiwan Startup Investment Conference",
   year: 2026,
 
@@ -138,7 +137,7 @@ export const stats = [
   // 只算已確認出席者（speakers.ts 會濾掉 status: "pending"）。
   // event.ts 不能 import speakers.ts（後者 import 本檔的 ForumKey，會循環），故手動同步。
   { value: "41", label: "已公布講者" },
-  { value: "2", label: "天雙峰論壇" },
+  { value: "2", label: "天論壇" },
   { value: "600+", label: "現場席次" },
   { value: "5 萬", label: "社團成員" },
 ];

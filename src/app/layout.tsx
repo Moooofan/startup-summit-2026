@@ -31,7 +31,7 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name}｜${event.subtitle}`,
+    default: site.name,
     template: `%s｜${event.fullName}`,
   },
   description: site.description,
@@ -50,13 +50,13 @@ export const metadata: Metadata = {
     locale: "zh_TW",
     url: site.url,
     siteName: site.name,
-    title: `${site.name}｜${event.subtitle}`,
+    title: site.name,
     description: site.description,
     images: [{ url: "/og-v2.png", width: 1200, height: 630, alt: site.name }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.name}｜${event.subtitle}`,
+    title: site.name,
     description: site.description,
     images: ["/og-v2.png"],
   },

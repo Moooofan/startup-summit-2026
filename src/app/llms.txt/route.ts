@@ -12,7 +12,7 @@ export const dynamic = "force-static";
 export function GET() {
   const byDay = (key: string) => speakers.filter((s) => s.day === key);
 
-  const body = `# ${event.fullName}・${event.subtitle}
+  const body = `# ${event.fullName}
 
 > ${event.nameEn}。${event.dateLabelLong}於${event.venue.name}舉行的兩日論壇：10/14 創辦人論壇、10/15 投資人論壇。由${event.organizer.name}（${event.organizer.members}）主辦，自 2023 年起每年舉辦，${event.year} 年為第 ${event.edition} 屆。
 

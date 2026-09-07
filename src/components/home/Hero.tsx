@@ -76,23 +76,10 @@ export function Hero() {
 
       <motion.div style={{ y: copyY, opacity: copyOpacity }} className="shell relative z-10 py-8">
         <div className="max-w-2xl">
-          {/* 1. 第四屆・雙峰論壇 —— 放大、去掉底框，改成 eyebrow 標籤 */}
-          <motion.div
-            variants={rise}
-            initial="hidden"
-            animate="show"
-            custom={0}
-            className="flex items-center gap-3"
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
-            </span>
-            <span className="font-display text-[clamp(0.95rem,2.3vw,1.45rem)] font-medium tracking-[0.3em] text-accent">
-              {event.editionLabel}・{event.subtitle}
-            </span>
-          </motion.div>
-
+          {/* 眉標「第四屆・雙峰論壇」整塊移除（業主 2026/9，同一輪指示「雙峰論壇」全站下架）。
+              連那顆脈動圓點一起拿掉 —— 它是這個眉標的一部分，單獨留著會變成一個沒有主詞的裝飾。
+              下方的進場 stagger 沿用原本的 custom 序號、刻意不重編：
+              序號只是延遲的乘數，重編會讓其餘每一行的進場時間全部位移。 */}
           {/* 2. 2026 · 10.14 → 15 */}
           <motion.div
             variants={rise}
@@ -187,10 +174,10 @@ export function Hero() {
             custom={3}
             className="mt-3 max-w-xl text-[18px] leading-[1.8] text-ink-2 md:text-base"
           >
-            {/* 這裡原本寫「兩天雙峰論壇，」，與上方眉標的「第四屆・雙峰論壇」在同一屏
-                重複兩次（業主 2026/9）。眉標是品牌標籤、留著；這句的任務是點出兩天各是什麼，
-                而它後面緊接著就把兩個論壇列出來了，那四個字純屬贅字。 */}
-            兩天，
+            {/* 這一行經過三輪削減（業主 2026/9）：「兩天雙峰論壇，」與上方眉標重複 →
+                改「兩天，」→ 眉標整塊移除後連前綴也拿掉 → 最後句號也去掉。
+                現在它是兩個論壇的並列標籤，不是句子 —— 標籤不收句點，
+                前面的主標已經說完這是什麼活動了。 */}
             {/* /agenda 隱藏期間降級為純文字 —— 內容仍要讀得到，只是不再是連結。 */}
             {forums.map((f, i) => (
               <span key={f.key}>
@@ -209,7 +196,6 @@ export function Hero() {
                 )}
               </span>
             ))}
-            。
           </motion.p>
 
           <motion.div
@@ -291,10 +277,12 @@ export function Hero() {
                 href 用裸的 #about，與 layout.tsx 的 skip link（#main）一致 ——
                 站內同頁錨點就是這樣寫；帶斜線的 /#xxx 只用在跨頁指回首頁（如講者內頁的 /#agenda）。
 
-                **JS 平滑捲動隨這次改向一起拿掉了。** 它原本成立的理由是「只跳一屏」，
-                而 About 現在隔著整個 FounderNote（釘住式 scrollytelling，lg 有 100svh 的 sticky 欄，
-                實際兩三屏）—— 正好落進主 CTA 註解裡「長距離不要平滑捲動」那條：
-                滑一兩秒、中間畫面糊成一片，比直接跳更差。交回瀏覽器原生錨點跳轉，
+                **這顆按鈕沒有 JS 平滑捲動**，走瀏覽器原生錨點跳轉。
+                拿掉的當下理由是「About 隔著整個 FounderNote，屬長距離」——
+                2026/9 首頁重新定序後 About 已經緊接在 Hero 下方，那個理由不再成立，
+                但也沒有加回去：原生跳轉在只跳一屏時本來就沒有問題，而站上的預設就是原生。
+                要加回平滑捲動不算違反主 CTA 那條禁令（那條針對全域 CSS 與長距離），
+                但請連同這段註解一起更新，別讓下一個人以為它是被刻意禁止的。
                 導覽列的偏移由 globals.css 的 scroll-padding-top: 88px 處理，
                 落點與 ScrollSnapController 的節點跳轉一致。 */}
             <Cta
