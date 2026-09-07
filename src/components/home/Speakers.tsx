@@ -168,6 +168,9 @@ export function Speakers() {
         <div className="shell relative w-full">
           <Reveal>
             <SectionHead
+              // 這支只被 /speakers 使用（首頁講者區塊是另一支 SpeakersPreview），
+              // 所以這裡就是該頁的主標 —— 用 h1。原本是預設的 h2，整頁沒有任何 h1。
+              as="h1"
               className="md:mt-16"
               eyebrow="SPEAKERS"
               ghost="LINE-UP"

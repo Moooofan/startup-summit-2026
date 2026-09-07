@@ -68,7 +68,7 @@ export function Contact() {
 
         <Reveal delay={0.16}>
           <p className="mt-8 text-sm leading-relaxed text-ink-3">
-            主辦單位｜{event.organizer.name}・
+            主辦單位｜{event.organizer.name}・年會主辦人{" "}
             {event.organizer.host}　{event.organizer.hostTitle}
           </p>
         </Reveal>

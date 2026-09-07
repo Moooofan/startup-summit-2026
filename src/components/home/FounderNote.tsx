@@ -71,10 +71,14 @@ export function FounderNote() {
             <Reveal delay={0.08}>
               <p className="mb-4 flex items-center gap-3 text-[16px] font-medium tracking-[0.24em] text-accent">
                 <span aria-hidden className="h-px w-8 bg-accent/60" />
-                FOUNDER&apos;S NOTE
+                HOST&apos;S NOTE
               </p>
+              {/* 業主 2026/9：他的對外身分改走「年會主辦人／台大創創中心執行長」，
+                  避開社團創辦人 —— 大標跟著從「創辦人的話」改成「主辦人的話」，
+                  否則標題與下方的 founderProfile.title 會各說各話。
+                  英文眉標 FOUNDER'S NOTE 一併改 HOST'S NOTE。 */}
               <h2 className="text-[clamp(1.75rem,4.2vw,2.5rem)] font-bold leading-tight text-ink">
-                創辦人的話
+                主辦人的話
               </h2>
             </Reveal>
 

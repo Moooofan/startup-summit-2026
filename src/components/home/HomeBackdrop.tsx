@@ -1,18 +1,20 @@
 /**
- * 首頁第一屏（Hero）專屬背景層 —— 左半滿版的歷屆活動照輪播，右緣是一條「/」斜線的撕紙邊。
+ * 首頁第一屏（Hero）專屬背景層 —— 左半滿版的歷屆活動照輪播，右緣是一條「/」斜線的乾淨分割。
  *
  * 只出現在 Hero：本元件由 Hero 以 absolute inset-0 掛在其內，捲到第二屏時隨 Hero 捲走 →
  * 之後回歸全站原本的水墨底。
  *
- * 形狀：左／下外擴超出畫面（滿版、切齊邊緣），右緣是斜線 —— 斜率呼應底圖那條
- * 「/」暗色斜浪（左下 → 右上）。右緣用 feTurbulence + feDisplacementMap 做成撕紙鋸齒。
+ * 形狀：左／下外擴超出畫面（滿版、切齊邊緣），右緣是一條乾淨的直斜線 —— 斜率取自主視覺
+ * 「4」左上那一撇（左下 → 右上）。
+ *
+ * 2026/9 業主：原本的「撕紙感」拿掉。舊版右緣是 feTurbulence + feDisplacementMap 打出的
+ * 鋸齒，外加一條 GRAY_GAP 寬的青色底襯露在照片右緣當「撕開的紙的底襯」——
+ * 兩者都已移除，現在就是一刀切的斜線分割。**別再把濾鏡加回來**：鋸齒與 KV 那組
+ * 等距直線／幾何線構圖是兩種材質語彙，放在同一屏會互相打架。
  *
  * 頂端刻意淡出（bd-fade）：導覽列是半透明的（未捲動時是 from-bg/90 → transparent 漸層），
  * 照片若一路鋪到 y=0 會透到 header 後面，看起來像背景長到標題列上。淡出後照片改從
  * 導覽列下方浮現。
- *
- * 層次：照片後方再墊一張「同形狀、右緣多外擴 GRAY_GAP」的灰色撕紙 → 沿右緣露出一條
- * 灰色鋸齒鑲邊，像撕開的紙有底襯。
  *
  * 輪播是純 CSS（.bd-slide，見 globals.css）—— 背景層維持 Server Component，
  * 不為了輪播把它變成 client；prefers-reduced-motion 下只顯示第一張。
@@ -37,9 +39,6 @@ const VB_H = 900;
 // 等於整條邊往右平移 220，斜線角度不會跟著變陡或變平。
 const TOP_RIGHT_X = 1260;
 const BOT_RIGHT_X = 650;
-const GRAY_GAP = 26; // 灰色底襯比照片右緣多外擴多少 → 露出的鑲邊寬度
-const TEAR_SCALE = 24; // 撕裂強度：位移越大鋸齒越明顯
-const GRAY = "#2f85d7"; // 鑲邊：淺底時是「紙的底襯」；深底上灰色只會合成成髒灰 → 改 KV 青，撕痕變成沿邊漏出的光
 const TINT = "#020867"; // 照片統一色：工作從「壓掉雜色照片的暖調」改成「把照片染進 KV 深場」
 const TINT_OPACITY = 0.26; // 統一色只負責讓照片與 KV 同色系，不再負責「把照片壓掉」（見 LAYER_OPACITY）
 /* 整層透明度。2026/9 由 0.24 提到 0.60（業主轉述 Allen 的要求：
@@ -57,9 +56,8 @@ const TINT_OPACITY = 0.26; // 統一色只負責讓照片與 KV 同色系，不�
    兩件事分開才不會愈調愈糊。 */
 const LAYER_OPACITY = 0.6;
 
-// 左／上／下外擴到畫面外，確保滿版且撕裂位移不會在邊緣露出破口
+// 左／上／下外擴到畫面外，確保滿版、邊緣不露破口
 const PHOTO_SHAPE = `-80,-60 ${TOP_RIGHT_X},-60 ${BOT_RIGHT_X},${VB_H + 60} -80,${VB_H + 60}`;
-const GRAY_SHAPE = `-80,-60 ${TOP_RIGHT_X + GRAY_GAP},-60 ${BOT_RIGHT_X + GRAY_GAP},${VB_H + 60} -80,${VB_H + 60}`;
 
 export function HomeBackdrop() {
   return (
@@ -74,28 +72,10 @@ export function HomeBackdrop() {
         preserveAspectRatio="xMidYMid slice"
         // brightness 的方向在深色版必須反過來：1.03 原本是防止照片在白霧上打出「暗洞」，
         // 深底上照片本來就是最亮的東西，再提亮會變成打出「亮洞」。
-        // 這個 filter 掛在 <svg> 上，會一併作用到 GRAY 與 TINT —— 四個值要一起看、一起截圖。
+        // 這個 filter 掛在 <svg> 上，會一併作用到 TINT —— 三個值要一起看、一起截圖。
         style={{ filter: "saturate(0.8) brightness(0.92)" }}
       >
         <defs>
-          {/* 撕紙邊緣濾鏡：亂數雜訊 → 位移貼在遮罩形狀上。filter 區域放大避免鋸齒被裁掉 */}
-          <filter id="bd-tear" x="-15%" y="-10%" width="130%" height="120%">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.016 0.032"
-              numOctaves={3}
-              seed={12}
-              result="noise"
-            />
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="noise"
-              scale={TEAR_SCALE}
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
-
           {/* 頂端淡出：讓照片從半透明導覽列下方才浮現（白=顯示、黑=隱藏） */}
           <linearGradient id="bd-vfade" x1="0" y1="0" x2="0" y2={VB_H} gradientUnits="userSpaceOnUse">
             <stop offset="0" stopColor="#000" />
@@ -106,17 +86,14 @@ export function HomeBackdrop() {
             <rect x="-120" y="-120" width={VB_W + 240} height={VB_H + 240} fill="url(#bd-vfade)" />
           </mask>
 
-          {/* 照片的撕紙遮罩形狀 */}
+          {/* 照片的斜線遮罩形狀 */}
           <mask id="bd-shape" maskUnits="userSpaceOnUse" x="-120" y="-120" width={VB_W + 240} height={VB_H + 240}>
-            <polygon points={PHOTO_SHAPE} fill="#fff" filter="url(#bd-tear)" />
+            <polygon points={PHOTO_SHAPE} fill="#fff" />
           </mask>
         </defs>
 
         <g mask="url(#bd-fade)">
-          {/* 灰色底襯（右緣多外擴 → 露出撕紙鑲邊），墊在照片後方 */}
-          <polygon points={GRAY_SHAPE} fill={GRAY} filter="url(#bd-tear)" />
-
-          {/* 照片，整組裁進撕紙形狀。兩張以上才輪播。 */}
+          {/* 照片，整組裁進斜線形狀。兩張以上才輪播。 */}
           <g mask="url(#bd-shape)">
             {PHOTOS.map((src, i) => (
               <image
@@ -128,7 +105,7 @@ export function HomeBackdrop() {
                 className={PHOTOS.length > 1 ? "bd-slide" : undefined}
                 x={-80}
                 y={-60}
-                width={TOP_RIGHT_X + GRAY_GAP + 160}
+                width={TOP_RIGHT_X + 160}
                 height={VB_H + 120}
                 preserveAspectRatio="xMidYMid slice"
                 style={

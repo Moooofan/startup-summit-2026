@@ -6,7 +6,6 @@ import { motion, useScroll, useTransform, useReducedMotion } from "motion/react"
 import { MapPin, MoveRight } from "lucide-react";
 import { event, forums } from "@/data/event";
 import { Cta } from "@/components/ui/Cta";
-import { OrbitRing } from "@/components/home/OrbitRing";
 import { FlipClock } from "@/components/home/FlipClock";
 import { HomeBackdrop } from "@/components/home/HomeBackdrop";
 import { isPublicRoute, REGISTER_URL } from "@/lib/config";
@@ -16,12 +15,12 @@ export function Hero() {
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
 
-  // 文字區塊與玻璃環共用同一組捲動位移/淡出 → 兩者永遠平行、一起移動，不獨立漂移
+  // 文字區塊的捲動位移/淡出（玻璃環移除前與它共用同一組值，故仍是單一來源）
   const copyY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -60]);
   const copyOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
 
   // 進場更俐落：縮短 stagger 與 duration → 最後元素約 1.1s 就收尾（原本 1.57s）。
-  // 這同時把玻璃環能安全掛載的「閘門」往前移 → 玻璃盤更早出現而不搶幀（見 OrbitRing 1150ms）。
+  // （此處原本還連動 OrbitRing 的掛載閘門，玻璃環 2026/9 移除後只剩進場節奏這一個用途。）
   const rise = {
     hidden: { opacity: 0, y: 22 },
     show: (i: number) => ({
@@ -36,7 +35,7 @@ export function Hero() {
         ref={ref}
         className="grain relative flex min-h-[100svh] snap-start items-center overflow-hidden pt-[72px] md:pt-[88px] [scroll-margin-top:-88px]"
       >
-        {/* 首頁第一屏專屬：左半滿版歷屆活動照 + 右緣撕紙斜線（只在 Hero，捲走即回歸原背景） */}
+        {/* 首頁第一屏專屬：左半滿版歷屆活動照 + 右緣斜線分割（只在 Hero，捲走即回歸原背景） */}
         <HomeBackdrop />
 
         {/* 底層光暈 */}
@@ -46,24 +45,16 @@ export function Hero() {
           <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-bg to-transparent" />
         </div>
 
-        {/* KV 光軌 —— 破碎玻璃環：absolute 在 section 內，並套用與文字相同的 copyY / copyOpacity
-            → 與文字區塊永遠平行、一起移動與淡出，不獨立漂移。z-[5] 低於文字 z-10。
-            外層做置中定位、copyY 放中層（避免與 -translate-y-1/2 的 transform 打架），淡出放內層 */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute right-[-60%] top-1/2 z-[5] h-[104vw] w-[104vw] -translate-y-1/2 opacity-70 md:right-[-8%] md:h-[112vh] md:w-[112vh] md:opacity-100 lg:right-[-1%] lg:h-[116vh] lg:w-[116vh]"
-        >
-          <motion.div style={{ y: copyY }} className="h-full w-full">
-            <motion.div style={{ opacity: copyOpacity }} className="h-full w-full">
-              <OrbitRing />
-            </motion.div>
-          </motion.div>
-        </div>
+        {/* 這裡原本是 KV 光軌（破碎玻璃環 OrbitRing，z-[5]，右側半出血）——
+            業主 2026/9 指示拿掉，元件連同 WebGL 版 OrbitGlass 與 CSS 回退 OrbitRingCss 一併刪除。
+            下方兩層遮罩（手機 z-[6]、桌機左側 z-[7]）刻意留著：它們遮的不只是玻璃環，
+            還有 HomeBackdrop 的活動照，是文字可讀性的來源（對比實測值見各自註解）。 */}
 
-        {/* 手機版：光軌在文字正後方，加一層遮罩保住可讀性（z-[6] 蓋在環 z-[5] 之上）。
+        {/* 手機版：活動照在文字正後方，加一層遮罩保住可讀性。
+            （原本也負責壓住玻璃環，環拿掉後仍要留 —— 照片本身就需要這層。）
 
             2026/9 由 from-bg / 75 / 20 放鬆到 75 / 45 / 10。原值頂端是**全不透明**的實色，
-            等於把第一屏的背景整層關掉 —— 不只光軌，連 HomeBackdrop 的活動照與
+            等於把第一屏的背景整層關掉 —— HomeBackdrop 的活動照與
             SiteBackdrop 的主視覺線構圖都一起沒了（實測 KV 的「4」被遮掉約 68%）。
             照片提亮這件事若不動這層，在手機上等於沒做。
 
@@ -74,8 +65,8 @@ export function Hero() {
           className="pointer-events-none absolute inset-0 z-[6] bg-gradient-to-b from-bg/75 via-bg/45 to-bg/10 md:hidden"
         />
 
-        {/* 文字區柔化：左側（文字所在）半透明遮罩，往右淡出 → 磚塊轉進文字區會變淡（非全透明），
-            轉出去恢復原本透明度。z-[7] 介於環 z-5 與文字 z-10 之間 */}
+        {/* 文字區柔化：左側（文字所在）半透明遮罩，往右淡出 → 背後的活動照在文字區變淡
+            （非全透明），往右恢復原本亮度。z-[7] 在背景與文字 z-10 之間 */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-y-0 left-0 z-[7] hidden w-[66%] bg-gradient-to-r from-bg/62 via-bg/28 to-transparent md:block"
@@ -132,9 +123,10 @@ export function Hero() {
 
           {/* 3. 台灣新創投資年會。
 
-              這裡曾經有一片圓弧霧面玻璃（radial 暗片 + backdrop-blur），夾在玻璃環 z-5 與文字之間，
-              用來遮住標題後方的光軌。深色改版後移除，**別再加回來** —— 兩個成因都是「局部遮蔽」
-              本身的性質，調參數救不回：
+              這裡曾經有一片圓弧霧面玻璃（radial 暗片 + backdrop-blur），夾在背景與文字之間，
+              用來遮住標題後方的玻璃環。深色改版後移除（環本身 2026/9 也已拿掉），
+              **別再加回來** —— 兩個成因都是「局部遮蔽」本身的性質，調參數救不回，
+              而且對現在留下的活動照一樣成立：
 
               1. backdrop-filter 只作用在元素**範圍內** → 背後的照片在片內模糊、片外清晰，
                  那道接縫就是一圈看得見的膠囊形邊界。淺色版時背後是均勻白霧，模糊與否看不出差別，
@@ -143,8 +135,9 @@ export function Hero() {
                  遮蔽只能改由顏色承擔；而一塊夠深的色斑蓋在 HomeBackdrop 的活動照上，
                  就會把左側那些人臉壓暗成一個明顯的橢圓 —— 業主 2026/9 指出的正是這個。
 
-              要壓住光軌，請改調下方 z-[7] 那層**滿高度**的文字遮罩：它右端已是 to-transparent，
-              怎麼調都不會產生邊界。全域漸層讀起來是環境明暗，局部色塊讀起來是一個物件。 */}
+              要壓住標題後方的背景，請改調下方 z-[7] 那層**滿高度**的文字遮罩：
+              它右端已是 to-transparent，怎麼調都不會產生邊界。
+              全域漸層讀起來是環境明暗，局部色塊讀起來是一個物件。 */}
           <motion.div
             variants={rise}
             initial="hidden"
@@ -164,8 +157,8 @@ export function Hero() {
           </motion.div>
 
           {/* 主標語（取代原本的 tagline 句）：點出「社群出身、年度最大規模」的定位。
-              custom 用 2.6（非整數）刻意夾在標題 2 與下段 3 之間，讓進場多這一段仍不會把
-              最後一個元素推過 OrbitRing 的掛載閘門（~1150ms，見上方 rise 註解）。 */}
+              custom 用 2.6（非整數）刻意夾在標題 2 與下段 3 之間，讓進場多這一段仍不會
+              把整串 stagger 拖長（原因見上方 rise 註解）。 */}
           <motion.p
             variants={rise}
             initial="hidden"

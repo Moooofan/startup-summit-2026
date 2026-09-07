@@ -15,13 +15,13 @@ import type { Mesh } from "three";
    TicketGlass — 報名頁票卡背後的「真玻璃板」（WebGL / react-three-fiber）
    參考 pmndrs「inter-epoxy-resin」：用 drei MeshTransmissionMaterial 做真折射 + 色散，
    由自帶的 <Lightformer> 現場打光（完全離線，不拉外部 HDRI）。
-   材質對齊首頁玻璃圓環（OrbitGlass）：亮面 resin（低 roughness、ior 1.5、色散）
+   材質沿用首頁玻璃圓環（OrbitGlass，2026/9 已刪除）那組值：亮面 resin（低 roughness、ior 1.5、色散）
    + 藍色折射底 background → 通透玻璃感（非霧面奶白）。WebGL 透射看不到 DOM，
    故用 background 當折射底（別移除，否則變黑）；深色版該值已改成深藍量體，
    理由見 Slab 內的註解。玻璃板隨時間緩慢擺動 → 反光低頻掃過。
    ========================================================================== */
 
-// 亮面藍調樹脂（比霧面版更清透，貼近圓環質感）
+// 亮面藍調樹脂（比霧面版更清透）
 const MATERIAL_PROPS = {
   transmission: 0.98,
   thickness: 0.8,

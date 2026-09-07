@@ -19,9 +19,9 @@ export const event = {
   /** 本屆主軸（業主 2026/9 提供）。與 tagline「資本連結創新」分工：
    *  tagline 是年會這個品牌的長期定位，theme 是「今年這一屆」要談的題目，每屆會換。
    *  下游：首頁 About 的區塊大標與內文各引用一次、llms.txt 的活動事實區段。
-   *  中間的「 · 」前後各留一個半形空格 —— 大標與內文吃的是同一個字串，
-   *  不要在呼叫端各自補標點，否則兩處的寫法會慢慢分岔。 */
-  theme: "等待黎明 · 擁抱變革",
+   *  原為「等待黎明 · 擁抱變革」，業主 2026/9 刪去前半，只留「擁抱變革」——
+   *  大標與內文吃的是同一個字串，不要在呼叫端各自補標點或補回前半。 */
+  theme: "擁抱變革",
 
   /** ISO 8601（台北時間）— 給倒數計時與 Event JSON-LD 用 */
   startDate: "2026-10-14T09:00:00+08:00",
@@ -62,7 +62,7 @@ export const event = {
       { people: 1, label: "1 人", earlyBird: 2500, full: 3000 },
       { people: 2, label: "2 人", earlyBird: 2200, full: 2700 },
       { people: 5, label: "5 人", earlyBird: 2000, full: 2500 },
-      { people: 10, label: "10 人", earlyBird: 1500, full: 2000 },
+      { people: 10, label: "10 人", earlyBird: 1600, full: 2000 },
     ],
     // 報名連結見 lib/config.ts 的 REGISTER_URL（2026/9 已接上 Accupass 活動頁）
     note: "早鳥票數量有限，售完為止",
@@ -72,10 +72,12 @@ export const event = {
     name: "台灣新創投資社團",
     members: "5 萬名成員",
     host: "林文欽 Vincent",
-    /* 年會場合的身分，不是他的本職 —— 業主 2026/9 指示不用台大創創中心。
-       呼叫端已經自帶「主辦人：」前綴（Footer / Contact / TicketsGallery），
-       所以這裡寫社團創辦人而不是「年會主辦人」，免得變成「主辦人：⋯｜年會主辦人」。 */
-    hostTitle: "台灣新創投資社團 創辦人",
+    /* 對外頭銜走台大創創中心，不寫社團身分（業主 2026/9 改口：先前指示不用台大，
+       現在反過來 —— 內文提到他的地方一律「年會主辦人：林文欽／台大創創中心執行長」，
+       避開「台灣新創投資社團創辦人」）。
+       呼叫端已自帶「主辦人：」前綴（Footer / Contact / TicketsGallery），
+       所以這裡只放本職頭銜，免得變成「主辦人：⋯｜年會主辦人」。 */
+    hostTitle: "台大創創中心 執行長",
   },
 
   contact: {

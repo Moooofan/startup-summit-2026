@@ -26,7 +26,7 @@ export function GET() {
 - 團報單價（${event.tickets.currency}／人）：${event.tickets.groupTiers
     .map((t) => `${t.label} 早鳥 ${t.earlyBird.toLocaleString()}／正常 ${t.full.toLocaleString()}`)
     .join("；")}
-- 主辦：${event.organizer.name}｜主辦人 ${founderProfile.name}（${founderProfile.title}）
+- 主辦：${event.organizer.name}｜年會主辦人 ${founderProfile.name}（${event.organizer.hostTitle}）
 - 會後另有 ${event.dinner.name}
 
 ## 兩日論壇
@@ -65,7 +65,7 @@ ${editions
 ## 主要頁面
 ${[
   { path: "/", label: "首頁", desc: "活動主視覺與入口" },
-  { path: "/about", label: "關於年會", desc: "活動總覽、創辦人的話、會場地點、常見問題" },
+  { path: "/about", label: "關於年會", desc: "活動總覽、主辦人的話、會場地點、常見問題" },
   { path: "/speakers", label: "講者陣容", desc: `${speakers.length} 位講者` },
   { path: "/agenda", label: "論壇主題", desc: "兩天十二條主題軌" },
   { path: "/tickets", label: "報名資訊", desc: "票價與權益" },

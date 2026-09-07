@@ -17,13 +17,18 @@ import { HomeAgenda } from "@/components/home/HomeAgenda";
  * 刻意不寫死：社團人數與屆數每年都會動，寫死就得記得回來改這一段。
  */
 const intro = [
-  "AI、半導體供應鏈與資本市場都在重排，創辦人和投資人得比以前更早下判斷。台上的講者走過創業、募資、上市櫃、併購與海外擴張，他們要談的是當下手上有哪些資訊、憑什麼做了那個決定，以及後來證明哪裡看錯了。",
-  `年會從 2023 年辦到現在，來的是台灣的早期投資人與創業者，主辦的${event.organizer.name}有 ${event.organizer.members}。今年是${event.editionLabel}，一樣以「${event.subtitle}」進行 —— 一天給創辦人，一天給投資人。`,
-  `今年的主軸是「${event.theme}」。面對局勢快速變化，過去熟悉的方法可能已經不再適用，而新的方向也還在摸索中。這兩天的議程，想和大家一起聊聊，在這樣的時刻，我們該怎麼看、怎麼判斷，也該為接下來的變化做好哪些準備。`,
-  "議程之外的時間也算數 —— 中場、午餐與茶敘都留給現場的創業家和投資人彼此認識。",
+  "AI、半導體供應鏈與資本市場都在重構，創辦人和投資人得比以前更早下判斷。台上的講者們走過創業、募資、上市櫃、併購與海外擴張，他們將分享如怎麼用當時擁有的資訊，做出關鍵決策，以及在決策後如何審視自己的判斷。",
+  `年會從 2023 年辦到現在，來的是台灣的早期投資人與創業者，而主辦的${event.organizer.name}有 ${event.organizer.members}。今年是${event.editionLabel}，一樣以「${event.subtitle}」進行 —— 一天給創辦人，一天給投資人。`,
+  `今年的主軸是「${event.theme}」，面對局勢快速變化，過去熟悉的規則可能已不再適用，而新的方向也尚未明朗。這兩天的議程，想和大家一起聊聊，在這樣的時刻，我們該怎麼分析和判斷，對於未來的變化又該如何布局。`,
+  "另外，議程之外的時間 —— 中場、午餐與茶敘都會留給現場的創業家和投資人彼此認識與交流。",
 ];
 
-export function About() {
+/**
+ * 這支同時被首頁與 /about 使用，所以標題層級要由呼叫端決定：
+ * 首頁的主標是 Hero，這裡只是其中一個區塊（h2）；/about 則以本區塊為頁面主標（h1）。
+ * 寫死任一邊都會出錯 —— 首頁會冒出第二個 h1，/about 則整頁沒有 h1。
+ */
+export function About({ as = "h2" }: { as?: "h1" | "h2" } = {}) {
   return (
     <section
       id="about"
@@ -33,9 +38,10 @@ export function About() {
       <div className="shell">
         <Reveal>
           {/* 大標即本屆主軸，字串來自 event.theme —— 標題與下方第三段內文引用同一個常數，
-              不在這裡另外補「 · 」之類的標點。標題只有 9 個字元，手機不需要強制折行，
+              不在這裡另外補「 · 」之類的標點。標題只有四個字（2026/9 由九字的
+              「等待黎明 · 擁抱變革」縮短而來），手機更不需要強制折行，
               所以舊版那個 <br className="sm:hidden" /> 一併移除。 */}
-          <SectionHead eyebrow="ABOUT THE CONFERENCE" ghost="CONFERENCE" title={event.theme} />
+          <SectionHead as={as} eyebrow="ABOUT THE CONFERENCE" ghost="CONFERENCE" title={event.theme} />
         </Reveal>
 
         <Reveal delay={0.06}>

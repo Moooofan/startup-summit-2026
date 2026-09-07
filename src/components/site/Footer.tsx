@@ -86,7 +86,8 @@ export function Footer() {
       <div className="border-t border-line-soft">
         <div className="shell flex flex-col gap-3 py-6 text-xs text-ink-4 sm:flex-row sm:items-center sm:justify-between">
           <p>© {event.year} {event.organizer.name}. All rights reserved.</p>
-          <p>主辦人：{event.organizer.host}｜{event.organizer.hostTitle}</p>
+          {/* 業主 2026/9：前綴要寫「年會主辦人」而非「主辦人」，頭銜走台大創創中心 */}
+          <p>年會主辦人：{event.organizer.host}｜{event.organizer.hostTitle}</p>
         </div>
       </div>
     </footer>
