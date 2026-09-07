@@ -1,0 +1,1114 @@
+{
+  "captured_at": "2026-09-07T05:25:39.309Z",
+  "base": "https://www.tsic.tw",
+  "note": "以 curl 經公司 proxy 擷取；claude-seo 內建 fetch 受 SSRF 防護擋住 proxy 私有 IP",
+  "pages": [
+    {
+      "url": "https://www.tsic.tw",
+      "status_code": 200,
+      "title": "2026 第四屆台灣新創投資年會｜雙峰論壇",
+      "meta_description": "2026 第四屆台灣新創投資年會・雙峰論壇。10/14 創辦人論壇、10/15 投資人論壇，41 位創業家與機構投資人齊聚華南金控國際會議中心。",
+      "canonical": "https://www.tsic.tw",
+      "meta_robots": "index, follow",
+      "h1": [
+        "台灣新創投資年會"
+      ],
+      "h2": [
+        "創辦人的話",
+        "等待黎明 · 擁抱變革",
+        "報名資訊",
+        "常見問題",
+        "聯絡"
+      ],
+      "h3": [
+        "經歷",
+        "創辦人論壇",
+        "投資人論壇",
+        "創辦人論壇",
+        "投資人論壇",
+        "創辦人論壇",
+        "投資人論壇",
+        "團報優惠"
+      ],
+      "schema_types": [
+        "@graph[Organization,WebSite]",
+        "Event",
+        "FAQPage"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": "https://www.tsic.tw/#organization",
+              "name": "台灣新創投資社團",
+              "url": "https://www.tsic.tw",
+              "description": "台灣最大的新創投資公開社群，成員逾 5 萬名成員，每年主辦台灣新創投資年會。",
+              "sameAs": [
+                "https://www.facebook.com/groups/1169347120648777/"
+              ],
+              "founder": {
+                "@type": "Person",
+                "name": "林文欽",
+                "alternateName": "Vincent Lin",
+                "jobTitle": "台灣新創投資社團 創辦人"
+              }
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://www.tsic.tw/#website",
+              "url": "https://www.tsic.tw",
+              "name": "2026 第四屆台灣新創投資年會",
+              "description": "2026 第四屆台灣新創投資年會・雙峰論壇。10/14 創辦人論壇、10/15 投資人論壇，41 位創業家與機構投資人齊聚華南金控國際會議中心。",
+              "inLanguage": "zh-Hant-TW",
+              "publisher": {
+                "@id": "https://www.tsic.tw/#organization"
+              }
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Event",
+          "@id": "https://www.tsic.tw/#event",
+          "name": "2026 第四屆台灣新創投資年會",
+          "alternateName": "Taiwan Startup Investment Conference",
+          "description": "2026 第四屆台灣新創投資年會・雙峰論壇。10/14 創辦人論壇、10/15 投資人論壇，41 位創業家與機構投資人齊聚華南金控國際會議中心。",
+          "startDate": "2026-10-14T09:00:00+08:00",
+          "endDate": "2026-10-15T17:00:00+08:00",
+          "eventStatus": "https://schema.org/EventScheduled",
+          "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+          "inLanguage": "zh-Hant-TW",
+          "url": "https://www.tsic.tw",
+          "image": [
+            "https://www.tsic.tw/og-v2.png"
+          ],
+          "location": {
+            "@type": "Place",
+            "name": "華南金控國際會議中心 2F 國際會議廳",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "臺北市",
+              "addressCountry": "TW"
+            }
+          },
+          "organizer": {
+            "@id": "https://www.tsic.tw/#organization"
+          },
+          "maximumAttendeeCapacity": 700,
+          "offers": [
+            {
+              "@type": "Offer",
+              "name": "早鳥票（單日・1 人）",
+              "price": 2500,
+              "priceCurrency": "TWD",
+              "availability": "https://schema.org/InStock",
+              "url": "https://www.accupass.com/event/2608171137481477207040",
+              "validThrough": "2026-10-14T09:00:00+08:00"
+            },
+            {
+              "@type": "Offer",
+              "name": "一般票（單日・1 人）",
+              "price": 3000,
+              "priceCurrency": "TWD",
+              "availability": "https://schema.org/InStock",
+              "url": "https://www.accupass.com/event/2608171137481477207040",
+              "validThrough": "2026-10-14T09:00:00+08:00"
+            }
+          ],
+          "performer": [
+            {
+              "@type": "Person",
+              "name": "李昇圭",
+              "jobTitle": "聯合創辦人暨執行副總裁（EVP）",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "Pinkfong"
+              },
+              "url": "https://www.tsic.tw/speakers/ryan-lee"
+            },
+            {
+              "@type": "Person",
+              "name": "金東昊",
+              "jobTitle": "創辦人兼執行長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "Korea Credit Data（KCD）"
+              },
+              "url": "https://www.tsic.tw/speakers/kelvin-kim"
+            },
+            {
+              "@type": "Person",
+              "name": "沈書緯",
+              "jobTitle": "創辦人兼執行長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "犀動智能（Aiello）"
+              },
+              "url": "https://www.tsic.tw/speakers/shen-shu-wei"
+            },
+            {
+              "@type": "Person",
+              "name": "吳貴融",
+              "jobTitle": "大中華區新創技術副總",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "Google Cloud"
+              },
+              "url": "https://www.tsic.tw/speakers/kj-wu"
+            },
+            {
+              "@type": "Person",
+              "name": "林志垚",
+              "jobTitle": "董事長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "AAMA 創業者共創平台基金會"
+              },
+              "url": "https://www.tsic.tw/speakers/lin-zhi-yao"
+            },
+            {
+              "@type": "Person",
+              "name": "程九如",
+              "jobTitle": "合夥人",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "AppWorks 之初創投"
+              },
+              "url": "https://www.tsic.tw/speakers/cheng-jiu-ru"
+            },
+            {
+              "@type": "Person",
+              "name": "田建中",
+              "jobTitle": "上市二部經理",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "台灣證券交易所"
+              },
+              "url": "https://www.tsic.tw/speakers/tian-jian-zhong"
+            },
+            {
+              "@type": "Person",
+              "name": "沈立平",
+              "jobTitle": "副總經理",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "益鼎創投"
+              },
+              "url": "https://www.tsic.tw/speakers/shen-li-ping"
+            },
+            {
+              "@type": "Person",
+              "name": "吳侑勳",
+              "jobTitle": "創辦人兼董事長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "東聯互動（7738）"
+              },
+              "url": "https://www.tsic.tw/speakers/wu-you-xun"
+            },
+            {
+              "@type": "Person",
+              "name": "吳明蔚",
+              "jobTitle": "創辦人暨執行長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "奧義智慧（7823）"
+              },
+              "url": "https://www.tsic.tw/speakers/wu-ming-wei"
+            },
+            {
+              "@type": "Person",
+              "name": "李倫家",
+              "jobTitle": "創辦人兼董事長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "PRO360 達人網（7839）"
+              },
+              "url": "https://www.tsic.tw/speakers/li-lun-jia"
+            },
+            {
+              "@type": "Person",
+              "name": "黃懷恩",
+              "jobTitle": "執行長兼總經理",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "欣新網（2949）"
+              },
+              "url": "https://www.tsic.tw/speakers/huang-huai-en"
+            },
+            {
+              "@type": "Person",
+              "name": "許郁婷",
+              "jobTitle": "共同創辦人暨執行長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "股感媒體集團"
+              },
+              "url": "https://www.tsic.tw/speakers/xu-yu-ting"
+            },
+            {
+              "@type": "Person",
+              "name": "宋捷仁",
+              "jobTitle": "創辦人兼執行長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "USPACE 悠勢科技"
+              },
+              "url": "https://www.tsic.tw/speakers/song-jie-ren"
+            },
+            {
+              "@type": "Person",
+              "name": "楊本豫",
+              "jobTitle": "董事長室顧問",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "友達光電集團"
+              },
+              "url": "https://www.tsic.tw/speakers/yang-ben-yu"
+            },
+            {
+              "@type": "Person",
+              "name": "丘立全",
+              "jobTitle": "共同創辦人兼執行長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "啟雲科技"
+              },
+              "url": "https://www.tsic.tw/speakers/qiu-li-quan"
+            },
+            {
+              "@type": "Person",
+              "name": "鄒大智",
+              "jobTitle": "財務長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "凌華科技（ADLINK）"
+              },
+              "url": "https://www.tsic.tw/speakers/zou-da-zhi"
+            },
+            {
+              "@type": "Person",
+              "name": "趙新民",
+              "jobTitle": "智慧製造服務處資深總監",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "宇沛永續"
+              },
+              "url": "https://www.tsic.tw/speakers/zhao-xin-min"
+            },
+            {
+              "@type": "Person",
+              "name": "鍾哲民",
+              "jobTitle": "創辦人兼執行長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "MoBagel 行動貝果"
+              },
+              "url": "https://www.tsic.tw/speakers/adams-chung"
+            },
+            {
+              "@type": "Person",
+              "name": "薛覲",
+              "jobTitle": "共同創辦人暨執行長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "漸強實驗室"
+              },
+              "url": "https://www.tsic.tw/speakers/xue-jin"
+            },
+            {
+              "@type": "Person",
+              "name": "朱宜振",
+              "jobTitle": "共同創辦人暨營運長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "IrisGo.AI"
+              },
+              "url": "https://www.tsic.tw/speakers/zhu-yi-zhen"
+            },
+            {
+              "@type": "Person",
+              "name": "李信宜",
+              "jobTitle": "總經理兼 Vurbo.ai 共同創辦人",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "愛比科技（6858）"
+              },
+              "url": "https://www.tsic.tw/speakers/li-xin-yi"
+            },
+            {
+              "@type": "Person",
+              "name": "程淑芬",
+              "jobTitle": "合夥人（前國泰金控投資長）",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "宏齊永續與氣候基金"
+              },
+              "url": "https://www.tsic.tw/speakers/sophia-cheng"
+            },
+            {
+              "@type": "Person",
+              "name": "江旻峻",
+              "jobTitle": "總經理",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "台大校友創投 NTU.VC"
+              },
+              "url": "https://www.tsic.tw/speakers/jiang-minjun"
+            },
+            {
+              "@type": "Person",
+              "name": "吳思本",
+              "jobTitle": "企業投資辦公室副總經理",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "緯創資通"
+              },
+              "url": "https://www.tsic.tw/speakers/eric-wu"
+            },
+            {
+              "@type": "Person",
+              "name": "彭志強",
+              "jobTitle": "總經理",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "宏誠創投 UMC Capital"
+              },
+              "url": "https://www.tsic.tw/speakers/peng-zhiqiang"
+            },
+            {
+              "@type": "Person",
+              "name": "李一平",
+              "jobTitle": "科技基金執行合夥人",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "台杉投資 Taiwania Capital"
+              },
+              "url": "https://www.tsic.tw/speakers/li-yiping"
+            },
+            {
+              "@type": "Person",
+              "name": "彭適辰",
+              "jobTitle": "資深合夥人",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "美商中經合集團"
+              },
+              "url": "https://www.tsic.tw/speakers/sean-peng"
+            },
+            {
+              "@type": "Person",
+              "name": "黃峻樑",
+              "jobTitle": "創辦人暨管理合夥人",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "峻盛資本"
+              },
+              "url": "https://www.tsic.tw/speakers/huang-junliang"
+            },
+            {
+              "@type": "Person",
+              "name": "高誌廷",
+              "jobTitle": "總經理",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "普訊創新 WK Innovation"
+              },
+              "url": "https://www.tsic.tw/speakers/allen-kao"
+            },
+            {
+              "@type": "Person",
+              "name": "Poseidon Ho",
+              "jobTitle": "創始合夥人暨 CEO",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "Outliers Fund"
+              },
+              "url": "https://www.tsic.tw/speakers/poseidon-ho"
+            },
+            {
+              "@type": "Person",
+              "name": "前田南",
+              "jobTitle": "總裁暨副會長／台灣樂天醫藥股份有限公司 (Rakuten Medical Taiwan, Inc.) 董事長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "樂天醫藥 Rakuten Medical"
+              },
+              "url": "https://www.tsic.tw/speakers/minami-maeda"
+            },
+            {
+              "@type": "Person",
+              "name": "林傳恩",
+              "jobTitle": "總經理暨共同創辦人",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "杉盛資本"
+              },
+              "url": "https://www.tsic.tw/speakers/lin-chuanen"
+            },
+            {
+              "@type": "Person",
+              "name": "方俊傑",
+              "jobTitle": "創辦人暨執行長",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "AVA Angels"
+              },
+              "url": "https://www.tsic.tw/speakers/fang-junjie"
+            },
+            {
+              "@type": "Person",
+              "name": "簡丹",
+              "jobTitle": "董事長暨合夥人",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "台安傑天使俱樂部（Taipei Angels）"
+              },
+              "url": "https://www.tsic.tw/speakers/jian-dan"
+            },
+            {
+              "@type": "Person",
+              "name": "陳怡蓉",
+              "jobTitle": "執行長暨聯合創始人",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "識富天使會"
+              },
+              "url": "https://www.tsic.tw/speakers/chen-yi-rong"
+            },
+            {
+              "@type": "Person",
+              "name": "林伯翰",
+              "jobTitle": "創辦人",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "一春資本"
+              },
+              "url": "https://www.tsic.tw/speakers/lin-bo-han"
+            },
+            {
+              "@type": "Person",
+              "name": "瞿志豪",
+              "jobTitle": "台灣區合夥人（前 ITIC 創新工業技術移轉總經理）",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "橡子園創投（Acorn Campus）"
+              },
+              "url": "https://www.tsic.tw/speakers/qu-zhi-hao"
+            },
+            {
+              "@type": "Person",
+              "name": "韓宗憲",
+              "jobTitle": "副總經理",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "ITIC 創新工業技術移轉公司"
+              },
+              "url": "https://www.tsic.tw/speakers/han-zong-xian"
+            },
+            {
+              "@type": "Person",
+              "name": "潘逸凡",
+              "jobTitle": "合夥人暨投資審議委員",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "豐新資本"
+              },
+              "url": "https://www.tsic.tw/speakers/pan-yi-fan"
+            },
+            {
+              "@type": "Person",
+              "name": "鞠志遠",
+              "jobTitle": "創辦人兼CEO",
+              "worksFor": {
+                "@type": "Organization",
+                "name": "歐姆佳科技"
+              },
+              "url": "https://www.tsic.tw/speakers/ju-zhi-yuan"
+            }
+          ],
+          "subEvent": [
+            {
+              "@type": "Event",
+              "name": "2026 第四屆台灣新創投資年會・創辦人論壇",
+              "description": "議程分為 Edge AI、AI 軟體、半導體硬科技三條路線。談論當公司從草創走向資本市場，或是到了考慮併購或海外擴張的節點，該如何進行關鍵決策。",
+              "startDate": "2026-10-14T09:00:00+08:00",
+              "endDate": "2026-10-14T17:00:00+08:00",
+              "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+              "eventStatus": "https://schema.org/EventScheduled",
+              "location": {
+                "@type": "Place",
+                "name": "華南金控國際會議中心",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "臺北市",
+                  "addressCountry": "TW"
+                }
+              }
+            },
+            {
+              "@type": "Event",
+              "name": "2026 第四屆台灣新創投資年會・投資人論壇",
+              "description": "談論在硬科技、AI 與生醫領域中，正在經歷哪些市場變化，投資人又該如何辨別機會與風險，做出長期有利的決斷，展望未來的資本動態。",
+              "startDate": "2026-10-15T09:00:00+08:00",
+              "endDate": "2026-10-15T17:00:00+08:00",
+              "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+              "eventStatus": "https://schema.org/EventScheduled",
+              "location": {
+                "@type": "Place",
+                "name": "華南金控國際會議中心",
+                "address": {
+                  "@type": "PostalAddress",
+                  "addressLocality": "臺北市",
+                  "addressCountry": "TW"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "年會什麼時候、在哪裡舉辦？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "2026 年 10 月 14 日（三）與 10 月 15 日（四），兩天皆為 09:00–17:00，地點在華南金控國際會議中心 2F 國際會議廳。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "兩天的論壇有什麼不同？我該參加哪一天？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "10/14 是創辦人論壇，內容聚焦創業實戰、IPO 經驗與 Edge AI、AI 軟體、硬科技等技術主題。10/15 是投資人論壇，聚焦資本配置、AI 與生醫投資判準。兩天主題獨立、分開售票，可只參加其中一天，也歡迎完整參與。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "票價是多少？有早鳥優惠嗎？團報有折扣嗎？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "採單日票制，10/14 與 10/15 分開售票、票價相同。早鳥票 1 人 NT$2,500，一般票 1 人 NT$3,000。團報另有級距：早鳥票 2 人 NT$2,200、5 人 NT$2,000、10 人 NT$1,500；一般票 2 人 NT$2,700、5 人 NT$2,500、10 人 NT$2,000（皆為每人單價）。早鳥數量有限，售完為止。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "要怎麼報名？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "報名已開放，點選頁面上的「立即報名」即可前往 Accupass 售票頁完成購票。單日票制，10/14 與 10/15 分開售票，兩天都要參加請分別購買。也歡迎追蹤「台灣新創投資社團」取得最新消息。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "詳細議程什麼時候公布？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "兩天的逐時段議程已公布於本頁。其中少數場次的講者與時段仍在確認中，並依現場流程保留調整彈性，最終以主辦方公告為準。"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "退票規定是什麼？",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "退票與轉讓規定以售票頁面的活動說明為準。"
+              }
+            }
+          ]
+        }
+      ],
+      "open_graph": {
+        "og:title": "2026 第四屆台灣新創投資年會｜雙峰論壇",
+        "og:description": "2026 第四屆台灣新創投資年會・雙峰論壇。10/14 創辦人論壇、10/15 投資人論壇，41 位創業家與機構投資人齊聚華南金控國際會議中心。",
+        "og:url": "https://www.tsic.tw",
+        "og:site_name": "2026 第四屆台灣新創投資年會",
+        "og:locale": "zh_TW",
+        "og:image": "https://www.tsic.tw/og-v2.png",
+        "og:image:width": "1200",
+        "og:image:height": "630",
+        "og:image:alt": "2026 第四屆台灣新創投資年會",
+        "og:type": "website"
+      },
+      "html_hash": "a246b1b53b93abd768f91ba2c6c7a34440401ed0fb591368467b4dd19551af1c",
+      "schema_hash": "28e7beffee68fd4de4dea391fc50d5f08aea460a7dcc6b864f39a2b2e6d2a567"
+    },
+    {
+      "url": "https://www.tsic.tw/speakers",
+      "status_code": 200,
+      "title": "講者陣容｜2026 第四屆台灣新創投資年會",
+      "meta_description": "41 位講者，兩天分場登台 —— 從剛掛牌的創業家、Edge AI 與 AI 軟體團隊，到管理國際基金的機構投資人。",
+      "canonical": "https://www.tsic.tw/speakers",
+      "meta_robots": "index, follow",
+      "h1": [],
+      "h2": [
+        "41 位講者，兩天分場登台",
+        "聯絡"
+      ],
+      "h3": [
+        "創辦人論壇",
+        "創辦人論壇",
+        "投資人論壇",
+        "投資人論壇"
+      ],
+      "schema_types": [
+        "CollectionPage",
+        "BreadcrumbList"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "@id": "https://www.tsic.tw/speakers#collection",
+          "url": "https://www.tsic.tw/speakers",
+          "name": "講者陣容",
+          "inLanguage": "zh-Hant-TW",
+          "isPartOf": {
+            "@id": "https://www.tsic.tw/#website"
+          },
+          "about": {
+            "@id": "https://www.tsic.tw/#event"
+          },
+          "mainEntity": {
+            "@type": "ItemList",
+            "numberOfItems": 41,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "李昇圭",
+                "url": "https://www.tsic.tw/speakers/ryan-lee"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "金東昊",
+                "url": "https://www.tsic.tw/speakers/kelvin-kim"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "沈書緯",
+                "url": "https://www.tsic.tw/speakers/shen-shu-wei"
+              },
+              {
+                "@type": "ListItem",
+                "position": 4,
+                "name": "吳貴融",
+                "url": "https://www.tsic.tw/speakers/kj-wu"
+              },
+              {
+                "@type": "ListItem",
+                "position": 5,
+                "name": "林志垚",
+                "url": "https://www.tsic.tw/speakers/lin-zhi-yao"
+              },
+              {
+                "@type": "ListItem",
+                "position": 6,
+                "name": "程九如",
+                "url": "https://www.tsic.tw/speakers/cheng-jiu-ru"
+              },
+              {
+                "@type": "ListItem",
+                "position": 7,
+                "name": "田建中",
+                "url": "https://www.tsic.tw/speakers/tian-jian-zhong"
+              },
+              {
+                "@type": "ListItem",
+                "position": 8,
+                "name": "沈立平",
+                "url": "https://www.tsic.tw/speakers/shen-li-ping"
+              },
+              {
+                "@type": "ListItem",
+                "position": 9,
+                "name": "吳侑勳",
+                "url": "https://www.tsic.tw/speakers/wu-you-xun"
+              },
+              {
+                "@type": "ListItem",
+                "position": 10,
+                "name": "吳明蔚",
+                "url": "https://www.tsic.tw/speakers/wu-ming-wei"
+              },
+              {
+                "@type": "ListItem",
+                "position": 11,
+                "name": "李倫家",
+                "url": "https://www.tsic.tw/speakers/li-lun-jia"
+              },
+              {
+                "@type": "ListItem",
+                "position": 12,
+                "name": "黃懷恩",
+                "url": "https://www.tsic.tw/speakers/huang-huai-en"
+              },
+              {
+                "@type": "ListItem",
+                "position": 13,
+                "name": "許郁婷",
+                "url": "https://www.tsic.tw/speakers/xu-yu-ting"
+              },
+              {
+                "@type": "ListItem",
+                "position": 14,
+                "name": "宋捷仁",
+                "url": "https://www.tsic.tw/speakers/song-jie-ren"
+              },
+              {
+                "@type": "ListItem",
+                "position": 15,
+                "name": "楊本豫",
+                "url": "https://www.tsic.tw/speakers/yang-ben-yu"
+              },
+              {
+                "@type": "ListItem",
+                "position": 16,
+                "name": "丘立全",
+                "url": "https://www.tsic.tw/speakers/qiu-li-quan"
+              },
+              {
+                "@type": "ListItem",
+                "position": 17,
+                "name": "鄒大智",
+                "url": "https://www.tsic.tw/speakers/zou-da-zhi"
+              },
+              {
+                "@type": "ListItem",
+                "position": 18,
+                "name": "趙新民",
+                "url": "https://www.tsic.tw/speakers/zhao-xin-min"
+              },
+              {
+                "@type": "ListItem",
+                "position": 19,
+                "name": "鍾哲民",
+                "url": "https://www.tsic.tw/speakers/adams-chung"
+              },
+              {
+                "@type": "ListItem",
+                "position": 20,
+                "name": "薛覲",
+                "url": "https://www.tsic.tw/speakers/xue-jin"
+              },
+              {
+                "@type": "ListItem",
+                "position": 21,
+                "name": "朱宜振",
+                "url": "https://www.tsic.tw/speakers/zhu-yi-zhen"
+              },
+              {
+                "@type": "ListItem",
+                "position": 22,
+                "name": "李信宜",
+                "url": "https://www.tsic.tw/speakers/li-xin-yi"
+              },
+              {
+                "@type": "ListItem",
+                "position": 23,
+                "name": "程淑芬",
+                "url": "https://www.tsic.tw/speakers/sophia-cheng"
+              },
+              {
+                "@type": "ListItem",
+                "position": 24,
+                "name": "江旻峻",
+                "url": "https://www.tsic.tw/speakers/jiang-minjun"
+              },
+              {
+                "@type": "ListItem",
+                "position": 25,
+                "name": "吳思本",
+                "url": "https://www.tsic.tw/speakers/eric-wu"
+              },
+              {
+                "@type": "ListItem",
+                "position": 26,
+                "name": "彭志強",
+                "url": "https://www.tsic.tw/speakers/peng-zhiqiang"
+              },
+              {
+                "@type": "ListItem",
+                "position": 27,
+                "name": "李一平",
+                "url": "https://www.tsic.tw/speakers/li-yiping"
+              },
+              {
+                "@type": "ListItem",
+                "position": 28,
+                "name": "彭適辰",
+                "url": "https://www.tsic.tw/speakers/sean-peng"
+              },
+              {
+                "@type": "ListItem",
+                "position": 29,
+                "name": "黃峻樑",
+                "url": "https://www.tsic.tw/speakers/huang-junliang"
+              },
+              {
+                "@type": "ListItem",
+                "position": 30,
+                "name": "高誌廷",
+                "url": "https://www.tsic.tw/speakers/allen-kao"
+              },
+              {
+                "@type": "ListItem",
+                "position": 31,
+                "name": "Poseidon Ho",
+                "url": "https://www.tsic.tw/speakers/poseidon-ho"
+              },
+              {
+                "@type": "ListItem",
+                "position": 32,
+                "name": "前田南",
+                "url": "https://www.tsic.tw/speakers/minami-maeda"
+              },
+              {
+                "@type": "ListItem",
+                "position": 33,
+                "name": "林傳恩",
+                "url": "https://www.tsic.tw/speakers/lin-chuanen"
+              },
+              {
+                "@type": "ListItem",
+                "position": 34,
+                "name": "方俊傑",
+                "url": "https://www.tsic.tw/speakers/fang-junjie"
+              },
+              {
+                "@type": "ListItem",
+                "position": 35,
+                "name": "簡丹",
+                "url": "https://www.tsic.tw/speakers/jian-dan"
+              },
+              {
+                "@type": "ListItem",
+                "position": 36,
+                "name": "陳怡蓉",
+                "url": "https://www.tsic.tw/speakers/chen-yi-rong"
+              },
+              {
+                "@type": "ListItem",
+                "position": 37,
+                "name": "林伯翰",
+                "url": "https://www.tsic.tw/speakers/lin-bo-han"
+              },
+              {
+                "@type": "ListItem",
+                "position": 38,
+                "name": "瞿志豪",
+                "url": "https://www.tsic.tw/speakers/qu-zhi-hao"
+              },
+              {
+                "@type": "ListItem",
+                "position": 39,
+                "name": "韓宗憲",
+                "url": "https://www.tsic.tw/speakers/han-zong-xian"
+              },
+              {
+                "@type": "ListItem",
+                "position": 40,
+                "name": "潘逸凡",
+                "url": "https://www.tsic.tw/speakers/pan-yi-fan"
+              },
+              {
+                "@type": "ListItem",
+                "position": 41,
+                "name": "鞠志遠",
+                "url": "https://www.tsic.tw/speakers/ju-zhi-yuan"
+              }
+            ]
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "首頁",
+              "item": "https://www.tsic.tw"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "講者陣容",
+              "item": "https://www.tsic.tw/speakers"
+            }
+          ]
+        }
+      ],
+      "open_graph": {
+        "og:title": "2026 第四屆台灣新創投資年會｜雙峰論壇",
+        "og:description": "2026 第四屆台灣新創投資年會・雙峰論壇。10/14 創辦人論壇、10/15 投資人論壇，41 位創業家與機構投資人齊聚華南金控國際會議中心。",
+        "og:url": "https://www.tsic.tw",
+        "og:site_name": "2026 第四屆台灣新創投資年會",
+        "og:locale": "zh_TW",
+        "og:image": "https://www.tsic.tw/og-v2.png",
+        "og:image:width": "1200",
+        "og:image:height": "630",
+        "og:image:alt": "2026 第四屆台灣新創投資年會",
+        "og:type": "website"
+      },
+      "html_hash": "8326bc578afa87992a5d203dab6057cbf3ed874377738a28c14c116f4c1afbcd",
+      "schema_hash": "1469cd2a9fa39a00bebecc728a7ad062e328ed7671e8590b420a57924bffc706"
+    },
+    {
+      "url": "https://www.tsic.tw/review",
+      "status_code": 200,
+      "title": "歷屆回顧｜2026 第四屆台灣新創投資年會",
+      "meta_description": "台灣新創投資年會歷屆回顧：從 2023 年首屆走到 2026 年第四屆，各屆主題、規模、講者名單與媒體露出紀錄。",
+      "canonical": "https://www.tsic.tw/review",
+      "meta_robots": "index, follow",
+      "h1": [
+        "三屆走下來，留下的不只是一場活動"
+      ],
+      "h2": [
+        "各屆講者名單與主題",
+        "媒體報導",
+        "2026 第四屆台灣新創投資年會",
+        "聯絡"
+      ],
+      "h3": [
+        "第一屆20235 場",
+        "第二屆202426 場",
+        "第三屆202529 場"
+      ],
+      "schema_types": [
+        "CollectionPage",
+        "BreadcrumbList"
+      ],
+      "schema": [
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "@id": "https://www.tsic.tw/review#collection",
+          "url": "https://www.tsic.tw/review",
+          "name": "歷屆回顧",
+          "inLanguage": "zh-Hant-TW",
+          "isPartOf": {
+            "@id": "https://www.tsic.tw/#website"
+          },
+          "mainEntity": {
+            "@type": "ItemList",
+            "numberOfItems": 3,
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                  "@type": "Event",
+                  "name": "2023 第1屆台灣新創投資年會",
+                  "startDate": "2023",
+                  "eventStatus": "https://schema.org/EventScheduled",
+                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                  "organizer": {
+                    "@id": "https://www.tsic.tw/#organization"
+                  },
+                  "location": {
+                    "@type": "Place",
+                    "name": "南山 Plaza（AWS 會議廳）",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "台北市信義區松仁路 100 號",
+                      "addressLocality": "臺北市",
+                      "addressCountry": "TW"
+                    }
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@type": "Event",
+                  "name": "2024 第2屆台灣新創投資年會",
+                  "startDate": "2024",
+                  "eventStatus": "https://schema.org/EventScheduled",
+                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                  "organizer": {
+                    "@id": "https://www.tsic.tw/#organization"
+                  },
+                  "location": {
+                    "@type": "Place",
+                    "name": "台大集思會議中心 蘇格拉底廳",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "台北市羅斯福路四段 85 號 B1",
+                      "addressLocality": "臺北市",
+                      "addressCountry": "TW"
+                    }
+                  }
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "item": {
+                  "@type": "Event",
+                  "name": "2025 第3屆台灣新創投資年會",
+                  "startDate": "2025",
+                  "eventStatus": "https://schema.org/EventScheduled",
+                  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+                  "organizer": {
+                    "@id": "https://www.tsic.tw/#organization"
+                  },
+                  "location": {
+                    "@type": "Place",
+                    "name": "政大公企中心 A 棟 2 樓國際會議廳",
+                    "address": {
+                      "@type": "PostalAddress",
+                      "streetAddress": "台北市大安區金華街 187 號",
+                      "addressLocality": "臺北市",
+                      "addressCountry": "TW"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "首頁",
+              "item": "https://www.tsic.tw"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "歷屆回顧",
+              "item": "https://www.tsic.tw/review"
+            }
+          ]
+        }
+      ],
+      "open_graph": {
+        "og:title": "2026 第四屆台灣新創投資年會｜雙峰論壇",
+        "og:description": "2026 第四屆台灣新創投資年會・雙峰論壇。10/14 創辦人論壇、10/15 投資人論壇，41 位創業家與機構投資人齊聚華南金控國際會議中心。",
+        "og:url": "https://www.tsic.tw",
+        "og:site_name": "2026 第四屆台灣新創投資年會",
+        "og:locale": "zh_TW",
+        "og:image": "https://www.tsic.tw/og-v2.png",
+        "og:image:width": "1200",
+        "og:image:height": "630",
+        "og:image:alt": "2026 第四屆台灣新創投資年會",
+        "og:type": "website"
+      },
+      "html_hash": "58e46c7e58319f9adbee74e9aa663504f766ddb6be8304b9c9933a50f312de55",
+      "schema_hash": "62c6f16952e67d54cab6b5727e581ce1e478caa2e61ef3783e358e17bb01a0e4"
+    }
+  ]
+}
