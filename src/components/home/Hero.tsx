@@ -35,7 +35,9 @@ export function Hero() {
         ref={ref}
         className="grain relative flex min-h-[100svh] snap-start items-center overflow-hidden pt-[72px] md:pt-[88px] [scroll-margin-top:-88px]"
       >
-        {/* 首頁第一屏專屬：左半滿版歷屆活動照 + 右緣斜線分割（只在 Hero，捲走即回歸原背景） */}
+        {/* 首頁第一屏專屬：滿版歷屆活動照（只在 Hero，捲走即回歸全站 KV 背景）。
+            2026/9 業主：第一屏不要主視覺 —— 這一層是不透明的，等於把 SiteBackdrop 的
+            KV 線構圖整個蓋掉，理由與「別把 opacity 加回來」的警告見 HomeBackdrop 檔頭。 */}
         <HomeBackdrop />
 
         {/* 底層光暈 */}
@@ -54,8 +56,8 @@ export function Hero() {
             （原本也負責壓住玻璃環，環拿掉後仍要留 —— 照片本身就需要這層。）
 
             2026/9 由 from-bg / 75 / 20 放鬆到 75 / 45 / 10。原值頂端是**全不透明**的實色，
-            等於把第一屏的背景整層關掉 —— HomeBackdrop 的活動照與
-            SiteBackdrop 的主視覺線構圖都一起沒了（實測 KV 的「4」被遮掉約 68%）。
+            等於把第一屏的背景整層關掉（當時連 SiteBackdrop 的 KV 也一起沒了；
+            第一屏改滿版照片後 KV 本來就不露出，但這層對照片的影響一樣成立）。
             照片提亮這件事若不動這層，在手機上等於沒做。
 
             放鬆後量過最壞情況（最亮的一張活動照、遮罩最淡的底端）：

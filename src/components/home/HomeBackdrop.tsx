@@ -1,133 +1,73 @@
 /**
- * 首頁第一屏（Hero）專屬背景層 —— 左半滿版的歷屆活動照輪播，右緣是一條「/」斜線的乾淨分割。
+ * 首頁第一屏（Hero）專屬背景層 —— 滿版的歷屆活動照。
  *
  * 只出現在 Hero：本元件由 Hero 以 absolute inset-0 掛在其內，捲到第二屏時隨 Hero 捲走 →
- * 之後回歸全站原本的水墨底。
+ * 之後回歸全站的 SiteBackdrop（KV 線構圖）。
  *
- * 形狀：左／下外擴超出畫面（滿版、切齊邊緣），右緣是一條乾淨的直斜線 —— 斜率取自主視覺
- * 「4」左上那一撇（左下 → 右上）。
+ * ## 2026/9 業主：改滿版，且第一屏不要主視覺
  *
- * 2026/9 業主：原本的「撕紙感」拿掉。舊版右緣是 feTurbulence + feDisplacementMap 打出的
- * 鋸齒，外加一條 GRAY_GAP 寬的青色底襯露在照片右緣當「撕開的紙的底襯」——
- * 兩者都已移除，現在就是一刀切的斜線分割。**別再把濾鏡加回來**：鋸齒與 KV 那組
- * 等距直線／幾何線構圖是兩種材質語彙，放在同一屏會互相打架。
+ * 舊版是「左半照片 + 右緣一條斜線分割」，照片只佔畫面約六成寬，右半露出 SiteBackdrop 的
+ * KV 線構圖（更早之前那條分割還是撕紙鋸齒，也已移除）。現在照片鋪滿整屏，
+ * 並且**不透明**，等於把第一屏的 KV 整個蓋掉。
  *
- * 頂端刻意淡出（bd-fade）：導覽列是半透明的（未捲動時是 from-bg/90 → transparent 漸層），
- * 照片若一路鋪到 y=0 會透到 header 後面，看起來像背景長到標題列上。淡出後照片改從
- * 導覽列下方浮現。
+ * 這裡有一個關鍵改動：**LAYER_OPACITY 拿掉了**。舊版整層是 0.6 半透明，
+ * 靠「透出下方 KV」與線構圖合成 —— 那正是現在不要的效果。要蓋住 KV，這一層就必須不透明；
+ * 半透明的照片疊在線構圖上永遠會透出線條，調到 0.9 也還看得見。
+ * 所以照片改為滿版滿透明度，壓暗與統一色改由下方 SCRIM 與 TINT 負責。
  *
- * 輪播是純 CSS（.bd-slide，見 globals.css）—— 背景層維持 Server Component，
- * 不為了輪播把它變成 client；prefers-reduced-motion 下只顯示第一張。
+ * **別把 opacity 加回來**：那會讓 KV 的斜筆與弧帶重新浮上來，等於改回舊版。
+ * 覺得照片太搶，調 SCRIM_* 或 TINT_OPACITY，不要調整層透明度。
+ *
+ * 形狀：不再有遮罩形狀，就是一張 object-cover 的滿版圖。SVG 與 polygon 遮罩一併移除 ——
+ * 沒有斜線要切之後，用 next/image 比手刻 SVG <image> 更好：會走圖片最佳化與 srcset，
+ * 首屏這張是 LCP 元素，priority 讓它排進 preload。
+ *
+ * 頂端刻意淡出（見 SCRIM 的 from-bg）：導覽列是半透明的（未捲動時是 from-bg/90 → transparent），
+ * 照片若一路以原亮度鋪到 y=0 會透到 header 後面，看起來像背景長到標題列上。
+ *
+ * 可讀性：Hero 另有兩層遮罩疊在本層之上（手機 z-[6] 的垂直漸層、桌機 z-[7] 的左側漸層），
+ * 文字對比的實測值記在那兩處的註解裡。動本檔的壓暗值時要連那兩層一起看。
  */
 
-/* 首頁第一屏的底圖。2026/9 業主指定固定為第三屆主講照，不再輪播 ——
-   原本是五張歷屆活動照淡入淡出（大合照／觀眾席／舞台）。
+import Image from "next/image";
 
-   陣列與輪播機制刻意保留：只要放回兩張以上就會自動恢復輪播（見下方 PHOTOS.length 判斷），
-   要換圖也只改這裡。CYCLE_SECONDS 在單張時不生效。 */
-const PHOTOS = ["/review/third-edition-keynote-hofeipeng.jpg"];
+/* 首頁第一屏的底圖。2026/9 業主指定固定為第三屆主講照。
+   換圖只改這裡；輪播版本（五張淡入淡出）已隨滿版改版一併移除 ——
+   滿版之後照片是第一屏的主體，換圖時的跳動比左半小圖明顯得多。 */
+const PHOTO = "/review/third-edition-keynote-hofeipeng.jpg";
 
-const CYCLE_SECONDS = 30; // 一輪走完所有照片的總時間（單張時不生效）
+/* 統一色：把雜色照片染進 KV 的深靛色系，讓第一屏與其他頁的底色仍是同一支藍。
+   滿版之後它的份量比舊版重（舊版只作用在左半的六成寬），所以由 0.26 降到 0.22 ——
+   同樣的 alpha 鋪滿整屏會比只鋪一角看起來更重。 */
+const TINT = "#020867";
+const TINT_OPACITY = 0.22;
 
-// viewBox 用橫幅比例（貼近桌機 Hero）→ slice 裁切少，斜線角度比較接近設定值
-const VB_W = 1600;
-const VB_H = 900;
-
-// 右緣斜線：頂端 x=1260、底端 x=650 → 由右上到左下的「/」斜率。
-// 佔畫面寬 79%（頂）到 41%（底）、平均約 60% —— 原本是 65%/27%（平均 46%），
-// 視覺上「不到一半」，業主要求放大到過半。頂底差維持 610 不變，
-// 等於整條邊往右平移 220，斜線角度不會跟著變陡或變平。
-const TOP_RIGHT_X = 1260;
-const BOT_RIGHT_X = 650;
-const TINT = "#020867"; // 照片統一色：工作從「壓掉雜色照片的暖調」改成「把照片染進 KV 深場」
-const TINT_OPACITY = 0.26; // 統一色只負責讓照片與 KV 同色系，不再負責「把照片壓掉」（見 LAYER_OPACITY）
-/* 整層透明度。2026/9 由 0.24 提到 0.60（業主轉述 Allen 的要求：
-   「還是要有一張去年照片，才容易有活動信任感」）——
-   0.24 配上 0.38 的統一色之後，照片其實只剩一層藍霧，看不出是活動現場，
-   等於這一層的目的完全落空。
-
-   提亮前先量過，可讀性不是限制條件：把五張照片左側 55%（文字所在區）的平均色算出來，
-   最亮的一張是 stage-keynote-venture-plus.jpg 的 rgb(167 178 210)。以它當最壞情況，
-   疊完統一色、本層透明度與 Hero 的左側 scrim 之後，白字仍有 15:1、ink-2 有 10:1；
-   手機最暴露的那一點（Hero 遮罩底端）也還有 8.2:1 / 5.5:1，都遠過 AA。
-   原本的 0.24 給到 18:1 —— 那是為了一個並不存在的對比問題把照片犧牲掉。
-
-   要再調就改這個數字，別去動統一色：統一色負責的是「與 KV 同色系」，
-   兩件事分開才不會愈調愈糊。 */
-const LAYER_OPACITY = 0.6;
-
-// 左／上／下外擴到畫面外，確保滿版、邊緣不露破口
-const PHOTO_SHAPE = `-80,-60 ${TOP_RIGHT_X},-60 ${BOT_RIGHT_X},${VB_H + 60} -80,${VB_H + 60}`;
+/* 壓暗漸層。舊版這件事由「整層 0.6 透明度」順便完成，滿版不透明之後必須自己來。
+   由上而下：頂端貼齊導覽列（實色）→ 中段留給照片 → 底端再收回實色接住下一區塊。
+   左右向另有 Hero 的 z-[7] 那層負責文字區，這裡只管垂直向。 */
+const SCRIM = "linear-gradient(to bottom, rgb(5 10 43 / 0.92) 0%, rgb(5 10 43 / 0.45) 26%, rgb(5 10 43 / 0.42) 62%, rgb(5 10 43 / 0.96) 100%)";
 
 export function HomeBackdrop() {
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
-      style={{ opacity: LAYER_OPACITY }}
-    >
-      <svg
-        className="h-full w-full"
-        viewBox={`0 0 ${VB_W} ${VB_H}`}
-        preserveAspectRatio="xMidYMid slice"
-        // brightness 的方向在深色版必須反過來：1.03 原本是防止照片在白霧上打出「暗洞」，
-        // 深底上照片本來就是最亮的東西，再提亮會變成打出「亮洞」。
-        // 這個 filter 掛在 <svg> 上，會一併作用到 TINT —— 三個值要一起看、一起截圖。
+    <div aria-hidden className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      {/* 滿版照片。sizes="100vw" —— 它就是整個視窗寬，不是某個欄位裡的圖。
+          brightness 略降：深色版裡照片本來就是第一屏最亮的東西，
+          不壓一階會在深靛底上打出一塊「亮洞」。saturate 降低則是為了讓 TINT 染得上色。 */}
+      <Image
+        src={PHOTO}
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
         style={{ filter: "saturate(0.8) brightness(0.92)" }}
-      >
-        <defs>
-          {/* 頂端淡出：讓照片從半透明導覽列下方才浮現（白=顯示、黑=隱藏） */}
-          <linearGradient id="bd-vfade" x1="0" y1="0" x2="0" y2={VB_H} gradientUnits="userSpaceOnUse">
-            <stop offset="0" stopColor="#000" />
-            <stop offset="0.17" stopColor="#fff" />
-            <stop offset="1" stopColor="#fff" />
-          </linearGradient>
-          <mask id="bd-fade" maskUnits="userSpaceOnUse" x="-120" y="-120" width={VB_W + 240} height={VB_H + 240}>
-            <rect x="-120" y="-120" width={VB_W + 240} height={VB_H + 240} fill="url(#bd-vfade)" />
-          </mask>
+      />
 
-          {/* 照片的斜線遮罩形狀 */}
-          <mask id="bd-shape" maskUnits="userSpaceOnUse" x="-120" y="-120" width={VB_W + 240} height={VB_H + 240}>
-            <polygon points={PHOTO_SHAPE} fill="#fff" />
-          </mask>
-        </defs>
+      {/* 統一色 */}
+      <div className="absolute inset-0" style={{ backgroundColor: TINT, opacity: TINT_OPACITY }} />
 
-        <g mask="url(#bd-fade)">
-          {/* 照片，整組裁進斜線形狀。兩張以上才輪播。 */}
-          <g mask="url(#bd-shape)">
-            {PHOTOS.map((src, i) => (
-              <image
-                key={src}
-                href={src}
-                /* 只有一張時**不能**掛 .bd-slide：那組 keyframes 是為輪播寫的
-                   （0% 透明 → 3% 顯示 → 22% 又淡回透明 → 100% 維持透明），
-                   單張掛上去會變成「閃一下就消失、每 30 秒再閃一次」。 */
-                className={PHOTOS.length > 1 ? "bd-slide" : undefined}
-                x={-80}
-                y={-60}
-                width={TOP_RIGHT_X + 160}
-                height={VB_H + 120}
-                preserveAspectRatio="xMidYMid slice"
-                style={
-                  {
-                    "--bd-cycle": `${CYCLE_SECONDS}s`,
-                    "--bd-delay": `${(i * CYCLE_SECONDS) / PHOTOS.length}s`,
-                  } as React.CSSProperties
-                }
-              />
-            ))}
-            {/* 靛藍調色：把雜色照片統一到全站冷色調 */}
-            <rect
-              x="-120"
-              y="-120"
-              width={VB_W + 240}
-              height={VB_H + 240}
-              fill={TINT}
-              opacity={TINT_OPACITY}
-            />
-          </g>
-        </g>
-      </svg>
+      {/* 垂直壓暗 */}
+      <div className="absolute inset-0" style={{ backgroundImage: SCRIM }} />
     </div>
   );
 }
