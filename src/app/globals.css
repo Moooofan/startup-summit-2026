@@ -403,16 +403,6 @@
 @keyframes marquee-left  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
 @keyframes marquee-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 
-/* 首頁 Hero 背景的歷屆活動照輪播：多張同位置疊放，靠 opacity 交叉淡入淡出。
-   五張各佔 20% 週期，這裡讓每張亮到 22% 才收 → 與下一張重疊 2%，交接時不會出現空檔。 */
-@keyframes bd-slide {
-  0%   { opacity: 0; }
-  3%   { opacity: 1; }
-  18%  { opacity: 1; }
-  22%  { opacity: 0; }
-  100% { opacity: 0; }
-}
-
 @keyframes float-y {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-14px); }
@@ -491,13 +481,6 @@
     animation-play-state: paused;
   }
 
-  /* 背景輪播單張：週期共用 --bd-cycle，各張的錯開時間由行內 --bd-delay 指定。 */
-  .bd-slide {
-    opacity: 0;
-    animation: bd-slide var(--bd-cycle, 30s) linear infinite;
-    animation-delay: var(--bd-delay, 0s);
-  }
-
   .animate-kv-breathe { animation: kv-breathe 11s var(--ease-out-soft) infinite; }
 
   @media (prefers-reduced-motion: reduce) {
@@ -508,11 +491,6 @@
       transform: none !important;
     }
     .marquee-viewport { overflow-x: auto; }
-
-    /* 同樣的坑：0.01ms 會讓輪播瞬間停在 100%（opacity: 0）＝ 整片背景照片消失。
-       必須明確關掉動畫，並只留第一張當靜態背景。 */
-    .bd-slide { animation: none !important; opacity: 0; }
-    .bd-slide:first-of-type { opacity: 1; }
   }
 
   .animate-nudge-r { animation: nudge-r 1.8s var(--ease-out-soft) infinite; }

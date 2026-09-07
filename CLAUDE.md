@@ -158,7 +158,8 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
 - 深色版換色的兩條規則方向相反：**有顏色的填色 alpha 要上調**（疊色在近黑上幾乎沒變化）、
   **白色描邊與 inset 高光要下調**（白線在深底會變成刺眼線框）。
   黑白疊層互換時 alpha 不能 1:1 照搬 —— 依 ΔL* 對齊，`bg-black/[0.03]` 對應的是 `bg-white/[0.025]`
-- `.marquee-viewport` 與 `HomeBackdrop` 的 `#000`／`#fff` 是**亮度遮罩不是塗色**，改了整層會消失
+- `.marquee-viewport` 的 `#000`／`#fff` 是**亮度遮罩不是塗色**，改了整層會消失
+  （`HomeBackdrop` 原本也有一組，2026/9 改滿版照片後已無 SVG 遮罩）
 - **區塊光暈是一整套，共 9 顆**（Hero ×2、Tickets ×2、Speakers 開場、review、sponsor、
   speakers 內頁、TicketsGallery）：尺寸統一在 58–70vw / 上限 800–900px，
   峰值 alpha 統一 `0.07`、中間停 `0.025`，收邊一律 `transparent 72%`。
