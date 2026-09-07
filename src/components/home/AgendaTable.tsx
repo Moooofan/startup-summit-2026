@@ -267,8 +267,17 @@ function AgendaGrid({ items }: { items: AgendaItem[] }) {
                     {item.topic}
                   </td>
                 ) : tbaSpans[i] > 0 ? (
-                  // 空格但保留 —— 帶 rowSpan，是這一欄的佔位（見檔頭）
-                  <td rowSpan={tbaSpans[i]} className="px-5 py-4" />
+                  /* 沒講題的連續段，合併成一格並放一個破折號。
+                     整格全空會讓那一欄看起來像渲染失敗（業主 2026/9 回報「空掉看起來怪怪的」），
+                     但也不能放回「陸續揭曉，敬請期待」那句文案 —— 那是同一輪指示要拿掉的。
+                     破折號是表格慣例的「此欄無值」記號，不是行銷語句，兩個要求都滿足。
+                     aria-hidden：對螢幕閱讀器來說，這一欄沒有內容就該是沉默的，
+                     念出一個破折號只是噪音。 */
+                  <td rowSpan={tbaSpans[i]} className="px-5 py-4 align-middle">
+                    <span aria-hidden className="text-[18px] text-ink-4">
+                      —
+                    </span>
+                  </td>
                 ) : null}
                 <td className="px-5 py-4 align-middle">
                   <Speakers list={item.speakers} />
