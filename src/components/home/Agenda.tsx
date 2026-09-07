@@ -75,6 +75,8 @@ export function Agenda() {
         <div className="shell relative w-full">
           <Reveal>
             <SectionHead
+              // 這支只被 /agenda 使用，故此處即該頁主標（原為預設 h2，整頁無 h1）
+              as="h1"
               className="md:mt-14"
               eyebrow="PROGRAM"
               ghost="AGENDA"

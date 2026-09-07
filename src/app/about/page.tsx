@@ -23,7 +23,7 @@ export default function AboutPage() {
     <>
       <FaqJsonLd />
       <ScrollSnapController />
-      <About />
+      <About as="h1" />
       <FounderNote />
       <Venue />
       <Faq />

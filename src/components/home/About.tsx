@@ -23,7 +23,12 @@ const intro = [
   "議程之外的時間也算數 —— 中場、午餐與茶敘都留給現場的創業家和投資人彼此認識。",
 ];
 
-export function About() {
+/**
+ * 這支同時被首頁與 /about 使用，所以標題層級要由呼叫端決定：
+ * 首頁的主標是 Hero，這裡只是其中一個區塊（h2）；/about 則以本區塊為頁面主標（h1）。
+ * 寫死任一邊都會出錯 —— 首頁會冒出第二個 h1，/about 則整頁沒有 h1。
+ */
+export function About({ as = "h2" }: { as?: "h1" | "h2" } = {}) {
   return (
     <section
       id="about"
@@ -35,7 +40,7 @@ export function About() {
           {/* 大標即本屆主軸，字串來自 event.theme —— 標題與下方第三段內文引用同一個常數，
               不在這裡另外補「 · 」之類的標點。標題只有 9 個字元，手機不需要強制折行，
               所以舊版那個 <br className="sm:hidden" /> 一併移除。 */}
-          <SectionHead eyebrow="ABOUT THE CONFERENCE" ghost="CONFERENCE" title={event.theme} />
+          <SectionHead as={as} eyebrow="ABOUT THE CONFERENCE" ghost="CONFERENCE" title={event.theme} />
         </Reveal>
 
         <Reveal delay={0.06}>
