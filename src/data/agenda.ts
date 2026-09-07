@@ -25,9 +25,9 @@ import { forums, type ForumKey } from "./event";
  *
  * `slug` 對應 data/speakers.ts 的講者內頁；**只有 `speakers` 陣列裡真的有的人才填**。
  * 林文欽是 `hostSpeaker`、不在 `speakers` 陣列裡（沒有靜態頁），所以刻意不給 slug。
- * TODO: 0902 表上原本有六個人沒有介紹與照片、因此不在 speakers.ts。
- * 2026/9/6 的講者介紹簡報補上其中四位（田建中、金東昊、陳怡蓉、韓宗憲），已建內頁並接上 slug。
- * 仍只顯示文字不連內頁的剩兩位分段主持人：劉宥彤、張提提 —— 該份簡報沒有他們的介紹與照片。
+ * 0902 表上原本有六個人沒有介紹與照片、因此不在 speakers.ts。2026/9/6 的講者介紹簡報
+ * 補上其中四位（田建中、金東昊、陳怡蓉、韓宗憲），已建內頁並接上 slug；
+ * 另兩位（劉宥彤、張提提）是分段主持人，而分段主持人整欄已移除，這個缺口因此不存在了。
  */
 
 export interface AgendaSpeaker {
@@ -42,8 +42,10 @@ export interface AgendaSpeaker {
 }
 
 export type AgendaItem =
-  /** 分段標題列（原表的《…》整列橫幅），host = 該段的分段主持人 */
-  | { type: "group"; title: string; host?: string }
+  /* 分段標題列（原表的《…》整列橫幅）。
+     原本還有 host（分段主持人），2026/9 依官方版議程表（source/1.jpg、2.jpg）整欄移除 ——
+     那兩張表根本沒有這一欄，先前的值來自 0902 內部工作表。 */
+  | { type: "group"; title: string }
   /** 休息／用餐／結束這類流程列 */
   | { type: "break"; time?: string; duration?: string; label: string }
   | {
@@ -77,15 +79,18 @@ const founderDay: AgendaItem[] = [
   },
   {
     type: "talk",
-    time: "09:05–09:30",
-    duration: "25min",
+    /* 官方版議程表（source/1.jpg）為 09:05-09:35 / 09:35-09:55，與 0902 工作表的
+       25min + 25min 不同 —— 依官方版更正。duration 改成由起訖時間推算：
+       官方版沒有長度欄，而留著 0902 的 25min 會與 30 分鐘的區間自相矛盾。 */
+    time: "09:05–09:35",
+    duration: "30min",
     topic: "韓國獨角獸案例 1",
     speakers: [{ name: "Ryan Lee 李昇圭", org: "Pinkfong 聯合創辦人", slug: "ryan-lee" }],
   },
   {
     type: "talk",
-    time: "09:30–09:55",
-    duration: "25min",
+    time: "09:35–09:55",
+    duration: "20min",
     topic: "韓國獨角獸案例 2",
     speakers: [
       { name: "Kelvin Dongho Kim 金東昊", org: "Korea Credit Data 創辦人兼執行長", slug: "kelvin-kim" },
@@ -126,7 +131,6 @@ const founderDay: AgendaItem[] = [
   {
     type: "group",
     title: "《走向資本市場》",
-    host: "沈立平 Robin／益鼎創投副總經理",
   },
   {
     type: "talk",
@@ -176,7 +180,6 @@ const founderDay: AgendaItem[] = [
   {
     type: "group",
     title: "《Edge AI 趨勢對談》",
-    host: "楊本豫／友達光電集團董事長室顧問",
   },
   {
     type: "talk",
@@ -365,7 +368,6 @@ const investorDay: AgendaItem[] = [
   {
     type: "group",
     title: "《半導體硬科技投資趨勢 Panel》",
-    host: "瞿志豪／橡子園台灣區合夥人",
   },
   {
     type: "talk",
@@ -449,7 +451,7 @@ export function agendaMarkdown(): string {
       const head = `### ${f.dateLabel.replace(/ /g, "")}（${f.weekday}）${f.name}`;
       const rows = d.items.map((i) => {
         if (i.type === "group") {
-          return `**${i.title}**${i.host ? `（主持：${i.host}）` : ""}`;
+          return `**${i.title}**`;
         }
         const time = i.time ?? "時間待定";
         if (i.type === "break") return `- ${time}：${i.label}`;

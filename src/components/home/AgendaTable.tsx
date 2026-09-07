@@ -26,9 +26,9 @@ export type DayTone = (typeof dayTone)[keyof typeof dayTone];
 /* ==========================================================================
    逐時段議程表 —— 業主 2026/9：「議程用表格式」。
 
-   欄位對應簡報原表：時間（長度收在時間下方的小字）／演講主題／演講嘉賓。
-   原表還有一欄「分段主持人」，那一欄在原表是跨列合併的 —— 攤平成每一列重印一次會很冗，
-   所以改掛在該段的分段標題列上（`group.host`），語意一樣、視覺乾淨。
+   欄位對應官方版議程表：時間（長度收在時間下方的小字）／演講主題／演講嘉賓。
+   0902 內部工作表另有一欄「分段主持人」，曾以 `group.host` 掛在分段標題列右側；
+   2026/9 業主提供的官方版（source/1.jpg、2.jpg）沒有這一欄，整組已移除。
 
    版型分兩套（同 review/PastSpeakerRoster 與 app/sponsor 的做法），兩者吃同一份 items：
    - md 以上：三欄表格。
@@ -115,12 +115,9 @@ function GroupHead({ item }: { item: Extract<AgendaItem, { type: "group" }> }) {
           與 Day 2 的 day2，免得看起來還在標日別。
           深色版用 brand-bright 而非 brand：brand 是給大面積色塊當底的深藍，
           對頁底只有 1.63:1，拿來當文字會直接看不見。 */}
+      {/* 這一列原本還會在標題右側印「主持｜某某」。2026/9 依官方版議程表整欄移除
+          （source/1.jpg、2.jpg 沒有分段主持人這一欄），分段標題現在只有標題本身。 */}
       <span className="text-[18px] font-bold text-brand-bright">{item.title}</span>
-      {item.host && (
-        <span className="mt-1 block text-[16px] text-ink-4 sm:mt-0 sm:ml-3 sm:inline">
-          主持｜{item.host}
-        </span>
-      )}
     </>
   );
 }
