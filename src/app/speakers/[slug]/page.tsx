@@ -170,20 +170,6 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
 
                 <p className="mt-4 text-lg text-orbit-sky">{s.org}</p>
                 <p className="mt-1 text-[18px] text-ink-2">{s.title}</p>
-
-
-                {s.tags && s.tags.length > 0 && (
-                  <ul className="mt-7 flex flex-wrap gap-2">
-                    {s.tags.map((t) => (
-                      <li
-                        key={t}
-                        className="rounded-pill border border-line-soft px-3 py-1 text-[17px] text-ink-3"
-                      >
-                        {t}
-                      </li>
-                    ))}
-                  </ul>
-                )}
               </Reveal>
 
               <Reveal delay={0.12}>

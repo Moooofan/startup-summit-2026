@@ -305,7 +305,7 @@ const investorDay: AgendaItem[] = [
       { name: "Poseidon Ho", org: "Outliers Fund 創始合夥人暨 CEO", slug: "poseidon-ho" },
     ],
   },
-  // 同上：Poseidon Ho 12:10 結束、前田南 13:30 開始，中間 80 分鐘，與原表印的 80min 吻合
+  // 同上：Poseidon Ho 12:10 結束、前田陽 13:30 開始，中間 80 分鐘，與原表印的 80min 吻合
   { type: "break", time: "12:10–13:30", duration: "80min", label: "午餐休息" },
 
   { type: "group", title: "《生醫投資趨勢》" },
@@ -314,9 +314,11 @@ const investorDay: AgendaItem[] = [
     time: "13:30–14:00",
     duration: "30min",
     speakers: [
+      // 姓名與職稱不照 0902 原表（原印「前田南／總裁暨副會長」）—— 業主 2026/9/8 已更正。
+      // 檔頭「逐字保留原表寫法」是為了防止我們自己臆造，不是要在業主更正後留著已知的錯字。
       {
-        name: "前田南 Minami Maeda",
-        org: "樂天醫藥 Rakuten Medical 總裁暨副會長",
+        name: "前田陽 Minami Maeda",
+        org: "樂天醫藥 Rakuten Medical 執行長",
         slug: "minami-maeda",
       },
     ],
