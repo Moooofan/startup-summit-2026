@@ -80,6 +80,26 @@ export function Footer() {
               </a>
             </li>
           </ul>
+
+          {/* 媒體聯絡另起一組而不是併進上面那個 ul：記者要找的窗口與報名洽詢不是同一個信箱，
+              沒有標題分組會被讀成「主辦的第三個聯絡方式」。
+              機構與人名同一列、信箱獨立一列：兩者擠一行在 320px（內容寬 280px）必折，
+              而折點會落在信箱中間。 */}
+          <h2 className="mt-8 text-xs font-semibold tracking-[0.16em] text-ink-4">媒體聯絡</h2>
+          <ul className="mt-5 space-y-1 text-sm text-ink-2">
+            <li>
+              {event.contact.media.org}　{event.contact.media.name}
+            </li>
+            <li>
+              {/* break-words 同上方信箱：欄位變窄時這是唯一不可自然斷行的長字串 */}
+              <a
+                href={`mailto:${event.contact.media.email}`}
+                className="break-words transition-colors hover:text-ink"
+              >
+                {event.contact.media.email}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
 
