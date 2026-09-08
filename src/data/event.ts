@@ -82,6 +82,14 @@ export const event = {
   contact: {
     email: "2026tsic@gmail.com",
     sponsorEmail: "2026tsic@gmail.com",
+    /** 媒體聯絡窗口（公關代理商，業主 2026/9 提供）。與 email 分開列：
+        那支收報名與一般洽詢，這支只給記者，混用會讓兩邊都收到不該收的信。
+        呼叫端自帶「媒體聯絡」標題（同 organizer.hostTitle 的分工），這裡只放事實。 */
+    media: {
+      org: "VM 布爾喬亞",
+      name: "林晏賢",
+      email: "Allen@vocalmiddle.com",
+    },
   },
 
   /** 會後場次 */
