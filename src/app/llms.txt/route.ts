@@ -24,8 +24,12 @@ export function GET() {
 - 規模：${event.capacity.seats} 席，${event.capacity.attendance}
 - 票價：單日票（10/14 與 10/15 分開售票、價格相同）。早鳥票 ${event.tickets.currency}${event.tickets.earlyBird.toLocaleString()}／人、一般票 ${event.tickets.currency}${event.tickets.full.toLocaleString()}／人（皆為 1 人價）
 - 團報單價（${event.tickets.currency}／人）：${event.tickets.groupTiers
-    .map((t) => `${t.label} 早鳥 ${t.earlyBird.toLocaleString()}／正常 ${t.full.toLocaleString()}`)
+    .map(
+      (t) =>
+        `${t.name} ${t.label} 早鳥 ${t.earlyBird.toLocaleString()}／正常 ${t.full.toLocaleString()}`
+    )
     .join("；")}
+- ${event.tickets.sponsorTicket.name}：${event.tickets.currency}${event.tickets.sponsorTicket.price.toLocaleString()}／張，唯一可通行 10/14 與 10/15 兩日的票
 - 主辦：${event.organizer.name}｜年會主辦人 ${founderProfile.name}（${event.organizer.hostTitle}）
 - 會後另有 ${event.dinner.name}
 

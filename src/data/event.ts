@@ -57,14 +57,26 @@ export const event = {
      * 業主給的兩張表（創辦人論壇／投資人論壇）數字完全相同，故只列一份，
      * 不依 ForumKey 拆開；日後若兩天價格分歧，才需要改成 Record<ForumKey, …>。
      */
+    /* `name` 是業主 2026/9/8 票價總覽上的正式票種名（原簡報寫「永續影響力套票」，
+       業主指示站上一律改寫成「新創機構／天使會團體套票」）。
+       5 人與 10 人共用同一個 name 是刻意的 —— 那是同一種套票的兩個級距。 */
     groupTiers: [
-      { people: 1, label: "1 人", earlyBird: 2500, full: 3000 },
-      { people: 2, label: "2 人", earlyBird: 2200, full: 2700 },
-      { people: 5, label: "5 人", earlyBird: 2000, full: 2500 },
-      { people: 10, label: "10 人", earlyBird: 1600, full: 2000 },
+      { people: 1, label: "1 人", name: "單人票", earlyBird: 2500, full: 3000 },
+      { people: 2, label: "2 人", name: "雙人票", earlyBird: 2200, full: 2700 },
+      { people: 5, label: "5 人", name: "新創機構／天使會團體套票", earlyBird: 2000, full: 2500 },
+      { people: 10, label: "10 人", name: "新創機構／天使會團體套票", earlyBird: 1600, full: 2000 },
     ],
     // 報名連結見 lib/config.ts 的 REGISTER_URL（2026/9 已接上 Accupass 活動頁）
     note: "早鳥票數量有限，售完為止",
+    /* 個人贊助票（業主 2026/9/8 票價總覽的第三張表）——
+       **全站唯一一張跨兩天的票**，其餘票種一律單日。不分早鳥／正常，只有單一價。
+       兩日說明刻意不在這裡寫死論壇名：event 定義在 forums 之前，取不到；
+       且站上論壇名只有 forums[].name 一個出處，由呼叫端組才不會分岔。 */
+    sponsorTicket: {
+      name: "個人贊助票",
+      price: 10000,
+      // TODO: 票價總覽只載明名稱與單價，含括權益與張數上限未載明，需主辦方提供
+    },
   },
 
   organizer: {
