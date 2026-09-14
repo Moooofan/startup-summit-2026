@@ -323,18 +323,24 @@ const investorDay: AgendaItem[] = [
       },
     ],
   },
-  // 這兩列原表只寫單位、沒寫姓名
+  // 0902 原表這兩列只寫單位、沒寫姓名（台杉／中華開發生技基金主管），
+  // 業主 2026/9/14 補上實際講者與講題，整段換掉。
   {
     type: "talk",
     time: "14:00–14:25",
     duration: "25min",
-    speakers: [{ name: "台杉投資生技基金主管" }],
+    topic: "生醫投資趨勢解析",
+    speakers: [
+      { name: "瞿志豪", org: "橡子園創投台灣合夥人", slug: "qu-zhi-hao" },
+    ],
   },
   {
     type: "talk",
     time: "14:25–14:50",
     duration: "25min",
-    speakers: [{ name: "中華開發資本生技基金主管" }],
+    speakers: [
+      { name: "林傳恩", org: "杉盛資本總經理暨共同創辦人", slug: "lin-chuanen" },
+    ],
   },
 
   { type: "break", time: "14:50–15:05", duration: "15min", label: "下午中場休息時間" },
@@ -379,7 +385,7 @@ const investorDay: AgendaItem[] = [
     speakers: [
       {
         name: "瞿志豪",
-        org: "橡子園台灣區合夥人，前 ITIC 創新工業技術移轉總經理",
+        org: "橡子園創投台灣合夥人",
         slug: "qu-zhi-hao",
       },
       { name: "韓宗憲", org: "ITIC 創投副總經理", slug: "han-zong-xian" },
