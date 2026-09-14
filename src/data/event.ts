@@ -9,7 +9,6 @@ export const event = {
   editionLabel: "第四屆",
   name: "台灣新創投資年會",
   fullName: "2026 第四屆台灣新創投資年會",
-  subtitle: "雙峰論壇",
   nameEn: "Taiwan Startup Investment Conference",
   year: 2026,
 
@@ -58,14 +57,26 @@ export const event = {
      * 業主給的兩張表（創辦人論壇／投資人論壇）數字完全相同，故只列一份，
      * 不依 ForumKey 拆開；日後若兩天價格分歧，才需要改成 Record<ForumKey, …>。
      */
+    /* `name` 是業主 2026/9/8 票價總覽上的正式票種名（原簡報寫「永續影響力套票」，
+       業主指示站上一律改寫成「新創機構／天使會團體套票」）。
+       5 人與 10 人共用同一個 name 是刻意的 —— 那是同一種套票的兩個級距。 */
     groupTiers: [
-      { people: 1, label: "1 人", earlyBird: 2500, full: 3000 },
-      { people: 2, label: "2 人", earlyBird: 2200, full: 2700 },
-      { people: 5, label: "5 人", earlyBird: 2000, full: 2500 },
-      { people: 10, label: "10 人", earlyBird: 1600, full: 2000 },
+      { people: 1, label: "1 人", name: "單人票", earlyBird: 2500, full: 3000 },
+      { people: 2, label: "2 人", name: "雙人票", earlyBird: 2200, full: 2700 },
+      { people: 5, label: "5 人", name: "新創機構／天使會團體套票", earlyBird: 2000, full: 2500 },
+      { people: 10, label: "10 人", name: "新創機構／天使會團體套票", earlyBird: 1600, full: 2000 },
     ],
     // 報名連結見 lib/config.ts 的 REGISTER_URL（2026/9 已接上 Accupass 活動頁）
     note: "早鳥票數量有限，售完為止",
+    /* 個人贊助票（業主 2026/9/8 票價總覽的第三張表）——
+       **全站唯一一張跨兩天的票**，其餘票種一律單日。不分早鳥／正常，只有單一價。
+       兩日說明刻意不在這裡寫死論壇名：event 定義在 forums 之前，取不到；
+       且站上論壇名只有 forums[].name 一個出處，由呼叫端組才不會分岔。 */
+    sponsorTicket: {
+      name: "個人贊助票",
+      price: 10000,
+      // TODO: 票價總覽只載明名稱與單價，含括權益與張數上限未載明，需主辦方提供
+    },
   },
 
   organizer: {
@@ -83,6 +94,14 @@ export const event = {
   contact: {
     email: "2026tsic@gmail.com",
     sponsorEmail: "2026tsic@gmail.com",
+    /** 媒體聯絡窗口（公關代理商，業主 2026/9 提供）。與 email 分開列：
+        那支收報名與一般洽詢，這支只給記者，混用會讓兩邊都收到不該收的信。
+        呼叫端自帶「媒體聯絡」標題（同 organizer.hostTitle 的分工），這裡只放事實。 */
+    media: {
+      org: "VM 布爾喬亞",
+      name: "林晏賢",
+      email: "Allen@vocalmiddle.com",
+    },
   },
 
   /** 會後場次 */
@@ -138,7 +157,7 @@ export const stats = [
   // 只算已確認出席者（speakers.ts 會濾掉 status: "pending"）。
   // event.ts 不能 import speakers.ts（後者 import 本檔的 ForumKey，會循環），故手動同步。
   { value: "41", label: "已公布講者" },
-  { value: "2", label: "天雙峰論壇" },
+  { value: "2", label: "天論壇" },
   { value: "600+", label: "現場席次" },
   { value: "5 萬", label: "社團成員" },
 ];

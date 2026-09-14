@@ -11,7 +11,8 @@ import { forums, type ForumKey } from "./event";
  *
  * 轉錄原則（同 data/review.ts）：
  * - 講題、單位、職稱一律逐字保留原表寫法，不潤飾、不補字。
- * - 原表留白的欄位就留白（`time` / `topic` 省略），版面顯示「陸續揭曉，敬請期待」，**不要猜**。
+ * - 原表留白的欄位就留白（`time` / `topic` 省略），版面就跟著留空，**不要猜**。
+ *   （原本會顯示「陸續揭曉，敬請期待」，業主 2026/9 指示移除該句。）
  * - 時間統一改寫成 24 小時制（原表下午場寫「1:30-1:50」這種 12 小時制、且有
  *   「9:55:-10:15」「4:35:4:55」這類冒號筆誤）。這是同一個時刻的等值改寫，不是改事實。
  * - `duration` 保留原表印的數字，即使與起訖時間對不上（0902 只剩 14:10–14:40 那一列
@@ -24,9 +25,9 @@ import { forums, type ForumKey } from "./event";
  *
  * `slug` 對應 data/speakers.ts 的講者內頁；**只有 `speakers` 陣列裡真的有的人才填**。
  * 林文欽是 `hostSpeaker`、不在 `speakers` 陣列裡（沒有靜態頁），所以刻意不給 slug。
- * TODO: 0902 表上原本有六個人沒有介紹與照片、因此不在 speakers.ts。
- * 2026/9/6 的講者介紹簡報補上其中四位（田建中、金東昊、陳怡蓉、韓宗憲），已建內頁並接上 slug。
- * 仍只顯示文字不連內頁的剩兩位分段主持人：劉宥彤、張提提 —— 該份簡報沒有他們的介紹與照片。
+ * 0902 表上原本有六個人沒有介紹與照片、因此不在 speakers.ts。2026/9/6 的講者介紹簡報
+ * 補上其中四位（田建中、金東昊、陳怡蓉、韓宗憲），已建內頁並接上 slug；
+ * 另兩位（劉宥彤、張提提）是分段主持人，而分段主持人整欄已移除，這個缺口因此不存在了。
  */
 
 export interface AgendaSpeaker {
@@ -41,8 +42,10 @@ export interface AgendaSpeaker {
 }
 
 export type AgendaItem =
-  /** 分段標題列（原表的《…》整列橫幅），host = 該段的分段主持人 */
-  | { type: "group"; title: string; host?: string }
+  /* 分段標題列（原表的《…》整列橫幅）。
+     原本還有 host（分段主持人），2026/9 依官方版議程表（source/1.jpg、2.jpg）整欄移除 ——
+     那兩張表根本沒有這一欄，先前的值來自 0902 內部工作表。 */
+  | { type: "group"; title: string }
   /** 休息／用餐／結束這類流程列 */
   | { type: "break"; time?: string; duration?: string; label: string }
   | {
@@ -73,19 +76,21 @@ const founderDay: AgendaItem[] = [
   {
     type: "group",
     title: "《焦點創業家分享》",
-    host: "劉宥彤 Amanda Liu／Startup Taiwan Island 計畫負責人",
   },
   {
     type: "talk",
-    time: "09:05–09:30",
-    duration: "25min",
+    /* 官方版議程表（source/1.jpg）為 09:05-09:35 / 09:35-09:55，與 0902 工作表的
+       25min + 25min 不同 —— 依官方版更正。duration 改成由起訖時間推算：
+       官方版沒有長度欄，而留著 0902 的 25min 會與 30 分鐘的區間自相矛盾。 */
+    time: "09:05–09:35",
+    duration: "30min",
     topic: "韓國獨角獸案例 1",
     speakers: [{ name: "Ryan Lee 李昇圭", org: "Pinkfong 聯合創辦人", slug: "ryan-lee" }],
   },
   {
     type: "talk",
-    time: "09:30–09:55",
-    duration: "25min",
+    time: "09:35–09:55",
+    duration: "20min",
     topic: "韓國獨角獸案例 2",
     speakers: [
       { name: "Kelvin Dongho Kim 金東昊", org: "Korea Credit Data 創辦人兼執行長", slug: "kelvin-kim" },
@@ -101,7 +106,6 @@ const founderDay: AgendaItem[] = [
   {
     type: "group",
     title: "《焦點創業生態機構分享》",
-    host: "劉宥彤 Amanda Liu／Startup Taiwan Island 計畫負責人",
   },
   {
     type: "talk",
@@ -127,7 +131,6 @@ const founderDay: AgendaItem[] = [
   {
     type: "group",
     title: "《走向資本市場》",
-    host: "沈立平 Robin／益鼎創投副總經理",
   },
   {
     type: "talk",
@@ -152,7 +155,7 @@ const founderDay: AgendaItem[] = [
 
   { type: "break", time: "12:25–13:30", duration: "65min", label: "午餐休息時間" },
 
-  { type: "group", title: "《併購與擴張》", host: "張提提／中華開發資本協理" },
+  { type: "group", title: "《併購與擴張》" },
   {
     type: "talk",
     time: "13:30–13:50",
@@ -177,7 +180,6 @@ const founderDay: AgendaItem[] = [
   {
     type: "group",
     title: "《Edge AI 趨勢對談》",
-    host: "楊本豫／友達光電集團董事長室顧問",
   },
   {
     type: "talk",
@@ -202,7 +204,7 @@ const founderDay: AgendaItem[] = [
   { type: "break", time: "15:40–15:55", duration: "15min", label: "下午中場休息時間" },
 
   // E27:E33 的合併範圍蓋住本段與《年度新基金》，兩段共用同一位分段主持人
-  { type: "group", title: "《AI 軟體創業家分享》", host: "張提提／中華開發資本協理" },
+  { type: "group", title: "《AI 軟體創業家分享》" },
   {
     type: "talk",
     time: "15:55–16:15",
@@ -224,7 +226,7 @@ const founderDay: AgendaItem[] = [
     ],
   },
 
-  { type: "group", title: "《年度新基金》", host: "張提提／中華開發資本協理" },
+  { type: "group", title: "《年度新基金》" },
   {
     type: "talk",
     time: "16:55–17:15",
@@ -303,7 +305,7 @@ const investorDay: AgendaItem[] = [
       { name: "Poseidon Ho", org: "Outliers Fund 創始合夥人暨 CEO", slug: "poseidon-ho" },
     ],
   },
-  // 同上：Poseidon Ho 12:10 結束、前田南 13:30 開始，中間 80 分鐘，與原表印的 80min 吻合
+  // 同上：Poseidon Ho 12:10 結束、前田陽 13:30 開始，中間 80 分鐘，與原表印的 80min 吻合
   { type: "break", time: "12:10–13:30", duration: "80min", label: "午餐休息" },
 
   { type: "group", title: "《生醫投資趨勢》" },
@@ -312,9 +314,11 @@ const investorDay: AgendaItem[] = [
     time: "13:30–14:00",
     duration: "30min",
     speakers: [
+      // 姓名與職稱不照 0902 原表（原印「前田南／總裁暨副會長」）—— 業主 2026/9/8 已更正。
+      // 檔頭「逐字保留原表寫法」是為了防止我們自己臆造，不是要在業主更正後留著已知的錯字。
       {
-        name: "前田南 Minami Maeda",
-        org: "樂天醫藥 Rakuten Medical 總裁暨副會長",
+        name: "前田陽 Minami Maeda",
+        org: "樂天醫藥 Rakuten Medical 執行長",
         slug: "minami-maeda",
       },
     ],
@@ -366,7 +370,6 @@ const investorDay: AgendaItem[] = [
   {
     type: "group",
     title: "《半導體硬科技投資趨勢 Panel》",
-    host: "瞿志豪／橡子園台灣區合夥人",
   },
   {
     type: "talk",
@@ -450,7 +453,7 @@ export function agendaMarkdown(): string {
       const head = `### ${f.dateLabel.replace(/ /g, "")}（${f.weekday}）${f.name}`;
       const rows = d.items.map((i) => {
         if (i.type === "group") {
-          return `**${i.title}**${i.host ? `（主持：${i.host}）` : ""}`;
+          return `**${i.title}**`;
         }
         const time = i.time ?? "時間待定";
         if (i.type === "break") return `- ${time}：${i.label}`;

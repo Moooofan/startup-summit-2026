@@ -1,24 +1,29 @@
 import { Hero } from "@/components/home/Hero";
 import { About } from "@/components/home/About";
-import { FounderNote } from "@/components/home/FounderNote";
 import { SpeakersPreview } from "@/components/home/SpeakersPreview";
 import { Tickets } from "@/components/home/Tickets";
+import { FounderNote } from "@/components/home/FounderNote";
 import { Faq } from "@/components/home/Faq";
 import { ScrollSnapController } from "@/components/home/ScrollSnapController";
 import { SiteJsonLd, EventJsonLd, FaqJsonLd } from "@/components/site/JsonLd";
 import { speakers } from "@/data/speakers";
 
 /**
- * 首頁（2026/9 業主重新定序的單頁結構）：
- *   1. Hero            —— 主視覺
- *   2. 創辦人的話        —— FounderNote
- *   3. 年會概覽＋今年議程  —— About（兩張論壇卡，卡片下方接 HomeAgenda 的主題軌與講者）
- *   4. 報名資訊         —— Tickets（票價、團報級距、報名連結）
- *   5. 講者陣容         —— SpeakersPreview（兩排移動式講者卡，已拿掉 LINE-UP 大字報）
- *   6. 常見問題         —— Faq
+ * 首頁（2026/9 業主第二次定序）。左邊是業主給的名稱，右邊是實作：
+ *   1. 活動基本資訊 ＋ 2. 活動倒數  —— Hero（標題、日期、場地、報名鈕、翻牌倒數同一屏）
+ *   3. 活動介紹                 —— About
+ *   4. 兩日議程                 —— HomeAgenda（**掛在 About 內部**，見 About.tsx）
+ *   5. 講者照片牆               —— SpeakersPreview（兩排移動式講者卡）
+ *   6. 報名資訊（售票）          —— Tickets（票價、團報級距、報名連結）
+ *   7. 創辦人介紹               —— FounderNote
+ *   8. QA                     —— Faq
  *
- * 順序是業主定的：議程看完馬上接報名（轉換點），講者陣容往後放。
- * 要換順序只改這裡的 JSX 即可，各區塊不互相依賴。
+ * 與前一版的差別有兩處：創辦人介紹從第 2 位移到報名之後（原本一進站就先看主辦人的個人敘事），
+ * 講者照片牆移到報名之前（原本是「議程 → 報名」直接收單，現在讓陣容先當說服材料）。
+ * 前一版註解寫的「議程看完馬上接報名（轉換點），講者陣容往後放」已經**不再成立**，勿據此還原。
+ *
+ * 要換順序只改這裡的 JSX，各區塊不互相依賴；但 4 是 3 的子節點，
+ * 要把議程單獨挪走得先把 <HomeAgenda /> 從 About.tsx 拉出來。
  *
  * 這些區塊原本散在 /about、/speakers、/tickets；那些分頁的程式碼與路由都還在，
  * 只是目前從導覽列隱藏（見 lib/config 的 PUBLIC_ROUTES），所以這裡是「共用」而非「搬走」。
@@ -46,10 +51,10 @@ export default function HomePage() {
       <FaqJsonLd />
 
       <Hero />
-      <FounderNote />
       <About />
-      <Tickets />
       <SpeakersPreview />
+      <Tickets />
+      <FounderNote />
       <Faq />
     </>
   );

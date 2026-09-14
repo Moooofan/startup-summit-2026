@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { AgendaItem, AgendaSpeaker } from "@/data/agenda";
-import { cn } from "@/lib/utils";
 
 /** 日別色調：Day 1 藍 / Day 2 紫，全站一致。
  *  原本住在 TrackCards.tsx，2026/9 主題軌整組移除後搬到這裡，
@@ -27,9 +26,9 @@ export type DayTone = (typeof dayTone)[keyof typeof dayTone];
 /* ==========================================================================
    逐時段議程表 —— 業主 2026/9：「議程用表格式」。
 
-   欄位對應簡報原表：時間（長度收在時間下方的小字）／演講主題／演講嘉賓。
-   原表還有一欄「分段主持人」，那一欄在原表是跨列合併的 —— 攤平成每一列重印一次會很冗，
-   所以改掛在該段的分段標題列上（`group.host`），語意一樣、視覺乾淨。
+   欄位對應官方版議程表：時間（長度收在時間下方的小字）／演講主題／演講嘉賓。
+   0902 內部工作表另有一欄「分段主持人」，曾以 `group.host` 掛在分段標題列右側；
+   2026/9 業主提供的官方版（source/1.jpg、2.jpg）沒有這一欄，整組已移除。
 
    版型分兩套（同 review/PastSpeakerRoster 與 app/sponsor 的做法），兩者吃同一份 items：
    - md 以上：三欄表格。
@@ -38,10 +37,15 @@ export type DayTone = (typeof dayTone)[keyof typeof dayTone];
      「PRO360 達人網（7839）創辦人兼董事長」這種字串會被壓成十幾行。
    ========================================================================== */
 
-/** 簡報該欄留白時的對外說法（業主 2026/9 指定）。空欄不是版面 bug，是還沒公布。
- *  data/agenda.ts 的 agendaMarkdown()（llms.txt 用）刻意維持「講者待公布」：
- *  那份是給機器讀的事實檔，精確比行銷語氣重要。兩邊用詞不同是刻意的，不是漏改。 */
-const TBA = "陸續揭曉，敬請期待";
+/* 原本留白的欄位會印「陸續揭曉，敬請期待」，業主 2026/9 指示整句移除 ——
+   空欄就留空，不再用文案去填。三處呼叫點（手機卡的講題、表格的講題跨列格、
+   兩種版型共用的嘉賓欄）改成不輸出文字。
+
+   表格的講題欄**仍要輸出一個空的 <td>**：那格帶著 rowSpan、是這一欄的佔位，
+   拿掉會讓該列少一欄、後面的嘉賓欄整個位移。
+
+   給機器讀的 llms.txt 不受影響：data/agenda.ts 的 agendaMarkdown() 維持「講者待公布」，
+   那份是事實檔，欄位空白必須說出來，不能靜默。 */
 
 /** 一位講者：對得上 speakers.ts 的連內頁，其餘純文字（見 data/agenda.ts 的 slug 說明）。 */
 function SpeakerLine({ s }: { s: AgendaSpeaker }) {
@@ -79,8 +83,8 @@ function SpeakerLine({ s }: { s: AgendaSpeaker }) {
 }
 
 function Speakers({ list }: { list: AgendaSpeaker[] }) {
-  // 簡報這一列的嘉賓欄是空的 —— 據實說還沒公布，不猜人
-  if (list.length === 0) return <p className="text-[17px] text-ink-4">{TBA}</p>;
+  // 簡報這一列的嘉賓欄是空的 —— 留空，不猜人也不補文案（業主 2026/9）
+  if (list.length === 0) return null;
   return (
     <div className="space-y-1.5">
       {list.map((s, i) => (
@@ -111,12 +115,9 @@ function GroupHead({ item }: { item: Extract<AgendaItem, { type: "group" }> }) {
           與 Day 2 的 day2，免得看起來還在標日別。
           深色版用 brand-bright 而非 brand：brand 是給大面積色塊當底的深藍，
           對頁底只有 1.63:1，拿來當文字會直接看不見。 */}
+      {/* 這一列原本還會在標題右側印「主持｜某某」。2026/9 依官方版議程表整欄移除
+          （source/1.jpg、2.jpg 沒有分段主持人這一欄），分段標題現在只有標題本身。 */}
       <span className="text-[18px] font-bold text-brand-bright">{item.title}</span>
-      {item.host && (
-        <span className="mt-1 block text-[16px] text-ink-4 sm:mt-0 sm:ml-3 sm:inline">
-          主持｜{item.host}
-        </span>
-      )}
     </>
   );
 }
@@ -153,16 +154,11 @@ function AgendaCards({ items }: { items: AgendaItem[] }) {
               </span>
               {item.duration && <span className="text-[16px] text-ink-4">{item.duration}</span>}
             </p>
-            {/* 一律渲染：沒講題時不能整行消失，而是換成淡灰的佔位字，
-                否則卡片看起來像少了一塊。真講題才加粗加深，兩者一眼分得出來。 */}
-            <p
-              className={cn(
-                "mt-2 text-[18px] leading-relaxed",
-                item.topic ? "font-medium text-ink" : "text-ink-4"
-              )}
-            >
-              {item.topic ?? TBA}
-            </p>
+            {/* 沒講題就整行不印。原本會印一行淡灰的佔位字撐住卡片，
+                業主 2026/9 指示拿掉那句文案 —— 留一個空段落只會多一段空白。 */}
+            {item.topic && (
+              <p className="mt-2 text-[18px] font-medium leading-relaxed text-ink">{item.topic}</p>
+            )}
             <div className="mt-2">
               <Speakers list={item.speakers} />
             </div>
@@ -268,11 +264,16 @@ function AgendaGrid({ items }: { items: AgendaItem[] }) {
                     {item.topic}
                   </td>
                 ) : tbaSpans[i] > 0 ? (
-                  <td
-                    rowSpan={tbaSpans[i]}
-                    className="px-5 py-4 align-middle text-[18px] leading-relaxed text-ink-4"
-                  >
-                    {TBA}
+                  /* 沒講題的連續段，合併成一格並放一個破折號。
+                     整格全空會讓那一欄看起來像渲染失敗（業主 2026/9 回報「空掉看起來怪怪的」），
+                     但也不能放回「陸續揭曉，敬請期待」那句文案 —— 那是同一輪指示要拿掉的。
+                     破折號是表格慣例的「此欄無值」記號，不是行銷語句，兩個要求都滿足。
+                     aria-hidden：對螢幕閱讀器來說，這一欄沒有內容就該是沉默的，
+                     念出一個破折號只是噪音。 */
+                  <td rowSpan={tbaSpans[i]} className="px-5 py-4 align-middle">
+                    <span aria-hidden className="text-[18px] text-ink-4">
+                      —
+                    </span>
                   </td>
                 ) : null}
                 <td className="px-5 py-4 align-middle">

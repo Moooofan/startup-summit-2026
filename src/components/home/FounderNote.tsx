@@ -15,7 +15,8 @@ export function FounderNote() {
   return (
     <section
       id="founder"
-      /* snap-start + snap-always：從上一段（About 黑底）吸過來時一次到位。
+      /* snap-start + snap-always：從上一段吸過來時一次到位
+         （2026/9 換序後上一段是 Tickets，不再是 About —— 兩者都是深底，這層的行為不變）。
          scroll-margin-top:-88px 抵銷全域 scroll-padding-top，讓深藍底吸到視窗最頂、
          填滿導覽列後方 → 與上一段無區隔。整段高度 > 一頁 → 屬「大吸附區」，
          內部（右欄）可平順捲動，不會被中途吸附。 */

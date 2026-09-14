@@ -10,8 +10,18 @@ export function Faq() {
       <div aria-hidden className="hairline absolute inset-x-0 top-0 h-px" />
       <div className="shell">
         <div className="lg:grid lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:gap-20">
-          {/* 左：整段釘住、靠上對齊（貼齊右側 FAQ 頂端），右側 FAQ 捲動時左側不動 */}
-          <div className="lg:sticky lg:top-0 lg:flex lg:h-[100svh] lg:flex-col lg:justify-start lg:self-start lg:pt-[120px]">
+          {/* 左：整段釘住、靠上對齊（貼齊右側 FAQ 頂端），右側 FAQ 捲動時左側不動。
+
+              **高度不能寫死。** 這裡原本是 lg:h-[100svh]：grid 的列高取兩欄的較大者，
+              所以只要右欄的問答清單比一個螢幕矮，列高就被這一欄撐成滿屏，
+              FAQ 底下到頁尾之間會空出一大截（2026/9 刪掉兩題、剩六題之後就發生了）。
+              改成由內容自己決定高度 —— sticky 不需要固定高度，top-0 就足以釘住；
+              原本的 flex/justify-start 是配合那個固定高度做的垂直對齊，一起拿掉。
+              視覺不變：pt-[120px] 仍然把標題往下推到與右欄頂端齊平。
+
+              註：FounderNote 有外觀相同但**不能照搬**的一段 —— 它是 justify-center，
+              垂直置中確實需要一個高度，那裡的 h-[100svh] 要留著。 */}
+          <div className="lg:sticky lg:top-0 lg:self-start lg:pt-[120px]">
             <Reveal>
               <SectionHead eyebrow="FAQ" ghost="FAQ" title="常見問題" />
               <p className="mt-6 text-[18px] leading-[1.9] text-ink-2">

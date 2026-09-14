@@ -42,12 +42,12 @@ export function Footer() {
               320px 的上限等於自己少用 30px；md 兩欄各 320px 是 no-op，
               lg 的品牌欄約 599px（1.4fr）才真的被這個上限收住。 */}
           <p className="mt-5 text-sm leading-relaxed text-ink-3 md:max-w-xs">
-            {/* 中文沒有詞界，預設任何字元邊界都能斷 ——「雙峰論壇」會被拆成「雙峰 ／ 論壇」。
-                活動全名與副標各自鎖成整體後，放不下時只會斷在中間的「・」之後。
-                只鎖這三段、不整段 nowrap：nowrap 撐不下時會溢出而非斷行，footer 的
-                overflow-hidden 會把字裁掉。三段在 320px（內容寬 280px）都放得下。 */}
-            <span className="whitespace-nowrap">{event.fullName}</span>・
-            <span className="whitespace-nowrap">{event.subtitle}</span>
+            {/* 中文沒有詞界，預設任何字元邊界都能斷 ——「台灣新創投資年會」會被拆在半途。
+                活動全名鎖成整體後就不會被腰斬。
+                不整段 nowrap：nowrap 撐不下時會溢出而非斷行，footer 的 overflow-hidden
+                會把字裁掉。兩段在 320px（內容寬 280px）都放得下。
+                （副標「雙峰論壇」2026/9 全站下架，原本它與全名之間有一個「・」。） */}
+            <span className="whitespace-nowrap">{event.fullName}</span>
             <br />
             <span className="whitespace-nowrap">{dateCompact}</span>
           </p>
@@ -77,6 +77,26 @@ export function Footer() {
                 className="transition-colors hover:text-ink"
               >
                 台灣新創投資社團
+              </a>
+            </li>
+          </ul>
+
+          {/* 媒體聯絡另起一組而不是併進上面那個 ul：記者要找的窗口與報名洽詢不是同一個信箱，
+              沒有標題分組會被讀成「主辦的第三個聯絡方式」。
+              機構與人名同一列、信箱獨立一列：兩者擠一行在 320px（內容寬 280px）必折，
+              而折點會落在信箱中間。 */}
+          <h2 className="mt-8 text-xs font-semibold tracking-[0.16em] text-ink-4">媒體聯絡</h2>
+          <ul className="mt-5 space-y-1 text-sm text-ink-2">
+            <li>
+              {event.contact.media.org}　{event.contact.media.name}
+            </li>
+            <li>
+              {/* break-words 同上方信箱：欄位變窄時這是唯一不可自然斷行的長字串 */}
+              <a
+                href={`mailto:${event.contact.media.email}`}
+                className="break-words transition-colors hover:text-ink"
+              >
+                {event.contact.media.email}
               </a>
             </li>
           </ul>
