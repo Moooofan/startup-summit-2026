@@ -318,7 +318,7 @@ const investorDay: AgendaItem[] = [
       // 檔頭「逐字保留原表寫法」是為了防止我們自己臆造，不是要在業主更正後留著已知的錯字。
       {
         name: "前田陽 Minami Maeda",
-        org: "樂天醫藥 Rakuten Medical 執行長",
+        org: "樂天醫藥執行長 Rakuten Medical CEO",
         slug: "minami-maeda",
       },
     ],
@@ -331,7 +331,7 @@ const investorDay: AgendaItem[] = [
     duration: "25min",
     topic: "生醫投資趨勢解析",
     speakers: [
-      { name: "瞿志豪", org: "橡子園創投台灣合夥人", slug: "qu-zhi-hao" },
+      { name: "瞿志豪", org: "橡子園台灣合夥人", slug: "qu-zhi-hao" },
     ],
   },
   {
@@ -385,7 +385,7 @@ const investorDay: AgendaItem[] = [
     speakers: [
       {
         name: "瞿志豪",
-        org: "橡子園創投台灣合夥人",
+        org: "橡子園台灣合夥人",
         slug: "qu-zhi-hao",
       },
       { name: "韓宗憲", org: "ITIC 創投副總經理", slug: "han-zong-xian" },
