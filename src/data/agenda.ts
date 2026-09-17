@@ -79,18 +79,17 @@ const founderDay: AgendaItem[] = [
   },
   {
     type: "talk",
-    /* 官方版議程表（source/1.jpg）為 09:05-09:35 / 09:35-09:55，與 0902 工作表的
-       25min + 25min 不同 —— 依官方版更正。duration 改成由起訖時間推算：
-       官方版沒有長度欄，而留著 0902 的 25min 會與 30 分鐘的區間自相矛盾。 */
-    time: "09:05–09:35",
-    duration: "30min",
+    /* 官方版議程表（source/1.jpg）印 09:05-09:35 / 09:35-09:55，但業主 2026-09-17
+       指示改回各 25 分鐘（09:05-09:30 / 09:30-09:55），與 0902 工作表一致。 */
+    time: "09:05–09:30",
+    duration: "25min",
     topic: "韓國獨角獸案例 1",
     speakers: [{ name: "Ryan Lee 李昇圭", org: "Pinkfong 聯合創辦人", slug: "ryan-lee" }],
   },
   {
     type: "talk",
-    time: "09:35–09:55",
-    duration: "20min",
+    time: "09:30–09:55",
+    duration: "25min",
     topic: "韓國獨角獸案例 2",
     speakers: [
       { name: "Kelvin Dongho Kim 金東昊", org: "Korea Credit Data 創辦人兼執行長", slug: "kelvin-kim" },
