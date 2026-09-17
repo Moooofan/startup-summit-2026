@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { SectionHead } from "@/components/ui/SectionHead";
 import { Cta } from "@/components/ui/Cta";
-import { NotFoundRecovery } from "@/components/site/NotFoundRecovery";
 
 /**
  * 全站 404。
@@ -10,12 +9,14 @@ import { NotFoundRecovery } from "@/components/site/NotFoundRecovery";
  * 沒有任何出路 —— 從 Facebook 內建瀏覽器點進來的人連返回鍵都不一定看得到。
  * 這裡至少給中文說明與回到主要頁面的連結。
  *
+ * 「網址尾巴黏到標點或隱形字元」那種 404 由 src/middleware.ts 在伺服器端直接轉址修掉，
+ * 不會走到這裡；會看到這頁的是真正不存在的網址（打錯字、已下架的講者頁）。
+ *
  * Next.js 會自動替 404 回應加上 noindex，這裡不必再設 metadata。
  */
 export default function NotFound() {
   return (
     <section className="grain relative overflow-x-clip pb-24 pt-[132px] md:pb-32 md:pt-[176px]">
-      <NotFoundRecovery />
       <div className="shell relative">
         <SectionHead
           as="h1"
