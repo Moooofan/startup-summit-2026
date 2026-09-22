@@ -83,7 +83,14 @@ const founderDay: AgendaItem[] = [
        指示改回各 25 分鐘（09:05-09:30 / 09:30-09:55），與 0902 工作表一致。 */
     time: "09:05–09:30",
     duration: "25min",
-    topic: "韓國獨角獸案例 1",
+    /* 0916 rounddown 補上真正的講題，取代 0902 表的分類標籤「韓國獨角獸案例 1」。
+       原表把 Entrepreneurs／Entrepreneur 拼成 "Entreprenuers"／"Entreprenuer"，
+       業主 2026/9 指示用正確拼法 —— 檔頭「逐字保留原表寫法」是為了防止我們自己臆造，
+       不是要把已知的錯字印上官網（同「前田南 → 前田陽」的處理）。
+       破折號前後也補了空格：原表 "Venus- Bridging" 只有後方有空格。
+       前綴 "Title: " 是欄位標示、不是講題本身，故不收。 */
+    topic:
+      "Entrepreneurs from Mars, Investors from Venus - Bridging the Gap: Lessons from Both Sides of the Table as an Entrepreneur & Investor",
     speakers: [{ name: "Ryan Lee 李昇圭", org: "Pinkfong 聯合創辦人", slug: "ryan-lee" }],
   },
   {
@@ -300,6 +307,7 @@ const investorDay: AgendaItem[] = [
     type: "talk",
     time: "11:45–12:10",
     duration: "25min",
+    topic: "美國太空軍商兩用科技投資趨勢",
     speakers: [
       { name: "Poseidon Ho", org: "Outliers Fund 創始合夥人暨 CEO", slug: "poseidon-ho" },
     ],
@@ -310,8 +318,9 @@ const investorDay: AgendaItem[] = [
   { type: "group", title: "《生醫投資趨勢》" },
   {
     type: "talk",
-    time: "13:30–14:00",
-    duration: "30min",
+    /* 0916 rounddown 把這場由 30min 收成 25min，為後面新增的 Panel 讓出時間。 */
+    time: "13:30–13:55",
+    duration: "25min",
     speakers: [
       // 姓名與職稱不照 0902 原表（原印「前田南／總裁暨副會長」）—— 業主 2026/9/8 已更正。
       // 檔頭「逐字保留原表寫法」是為了防止我們自己臆造，不是要在業主更正後留著已知的錯字。
@@ -322,53 +331,58 @@ const investorDay: AgendaItem[] = [
       },
     ],
   },
-  // 0902 原表這兩列只寫單位、沒寫姓名（台杉／中華開發生技基金主管），
-  // 業主 2026/9/14 補上實際講者與講題，整段換掉。
+  /* 0902 原表這兩列只寫單位、沒寫姓名（台杉／中華開發生技基金主管），業主 2026/9/14
+     補上實際講者與講題。0916 rounddown 再改成訪問形式：兩場獨立演講併成一場 40 分鐘的
+     四人 Panel，原本各自登台的瞿志豪與林傳恩成為與談人，前田陽接著自己的 keynote 續場。
+     這是本次改版讓 10/15 下午整個時程往前位移的起點。 */
   {
     type: "talk",
-    time: "14:00–14:25",
-    duration: "25min",
-    topic: "生醫投資趨勢解析",
+    time: "13:55–14:35",
+    duration: "40min",
+    topic: "生醫投資新趨勢",
     speakers: [
+      // 黃立鑫是本次新增，rounddown 只給姓名與職稱、沒有簡介與照片 ——
+      // 依慣例不給 slug，議程顯示文字但不連內頁（同田建中等人補資料前的處理）。
+      { name: "黃立鑫", org: "台杉投資生技基金執行合夥人", moderator: true },
+      {
+        name: "前田陽 Minami Maeda",
+        org: "樂天醫藥執行長 Rakuten Medical CEO",
+        slug: "minami-maeda",
+      },
       { name: "瞿志豪", org: "橡子園台灣合夥人", slug: "qu-zhi-hao" },
-    ],
-  },
-  {
-    type: "talk",
-    time: "14:25–14:50",
-    duration: "25min",
-    speakers: [
       { name: "林傳恩", org: "杉盛資本總經理暨共同創辦人", slug: "lin-chuanen" },
     ],
   },
 
-  { type: "break", time: "14:50–15:05", duration: "15min", label: "下午中場休息時間" },
-
   { type: "group", title: "《蛻變中的早期投資機構》" },
   {
     type: "talk",
-    time: "15:05–15:25",
+    time: "14:35–14:55",
     duration: "20min",
     speakers: [{ name: "方俊傑", org: "AVA Angels 創辦人暨執行長", slug: "fang-junjie" }],
   },
   {
     type: "talk",
-    time: "15:25–15:45",
+    time: "14:55–15:15",
     duration: "20min",
     speakers: [{ name: "簡丹", org: "台安傑天使俱樂部董事長暨合夥人", slug: "jian-dan" }],
   },
   {
     type: "talk",
-    time: "15:45–16:05",
+    time: "15:15–15:35",
     duration: "20min",
     speakers: [{ name: "陳怡蓉", org: "識富天使會執行長", slug: "chen-yi-rong" }],
   },
   {
     type: "talk",
-    time: "16:05–16:25",
+    time: "15:35–15:55",
     duration: "20min",
     speakers: [{ name: "林伯翰", org: "一春資本創辦人", slug: "lin-bo-han" }],
   },
+
+  /* 下午中場休息 0916 rounddown 移到《蛻變中的早期投資機構》之後
+     （原本在生醫與蛻變之間）—— 生醫改 Panel 之後那個位置已經沒有空檔。 */
+  { type: "break", time: "15:55–16:10", duration: "15min", label: "下午中場休息時間" },
 
   // 瞿志豪在原表同時出現在「演講嘉賓」與「分段主持人」兩欄，但嘉賓欄沒有 Moderator 前綴
   // （同一份表的另外兩個 Panel 都有寫）—— 因此主持身分只掛在 host，不加 moderator 旗標。
@@ -378,8 +392,9 @@ const investorDay: AgendaItem[] = [
   },
   {
     type: "talk",
-    time: "16:25–17:05",
-    duration: "40min",
+    /* 0916 rounddown：起訖前移、長度由 40min 加到 50min。 */
+    time: "16:10–17:00",
+    duration: "50min",
     topic: "半導體投資 Panel 對談",
     speakers: [
       {
