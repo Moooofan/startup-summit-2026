@@ -64,6 +64,9 @@ export const event = {
       { people: 1, label: "1 人", name: "單人票", earlyBird: 2500, full: 3000 },
       { people: 2, label: "2 人", name: "雙人票", earlyBird: 2200, full: 2700 },
       { people: 5, label: "5 人", name: "新創機構／天使會團體套票", earlyBird: 2000, full: 2500 },
+      /* 早鳥 1600：source/年會rounddown.xlsx 的票價工作表仍寫 1500，那張是舊的
+         （該檔主要是議程用）。業主 2026/9 確認以 2026/9/8 票價總覽的 1600 為準 ——
+         下次拿 rounddown 對帳時不要把這裡當成差異改回去。 */
       { people: 10, label: "10 人", name: "新創機構／天使會團體套票", earlyBird: 1600, full: 2000 },
     ],
     // 報名連結見 lib/config.ts 的 REGISTER_URL（2026/9 已接上 Accupass 活動頁）

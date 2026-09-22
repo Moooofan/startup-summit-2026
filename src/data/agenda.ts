@@ -25,6 +25,9 @@ import { forums, type ForumKey } from "./event";
  *
  * `slug` 對應 data/speakers.ts 的講者內頁；**只有 `speakers` 陣列裡真的有的人才填**。
  * 林文欽是 `hostSpeaker`、不在 `speakers` 陣列裡（沒有靜態頁），所以刻意不給 slug。
+ * 他在議程兩處的頭銜寫「主辦人」，與 event.ts 的 `hostTitle`、founder.ts 與
+ * source/年會rounddown.xlsx 的「台大創創中心執行長」**刻意不同**（業主 2026/9 確認）：
+ * 這兩列的講題已經是「主辦人致歡迎辭」，頭銜再寫一次單位是重複。對帳時別改回去。
  * 0902 表上原本有六個人沒有介紹與照片、因此不在 speakers.ts。2026/9/6 的講者介紹簡報
  * 補上其中四位（田建中、金東昊、陳怡蓉、韓宗憲），已建內頁並接上 slug；
  * 另兩位（劉宥彤、張提提）是分段主持人，而分段主持人整欄已移除，這個缺口因此不存在了。
