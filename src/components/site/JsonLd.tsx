@@ -202,7 +202,7 @@ export function BreadcrumbJsonLd({
 }
 
 /* 講者陣容頁：CollectionPage + ItemList。
-   讓 Google 讀懂這一頁是「名錄」而不是一般內容頁，並把 41 個講者頁串成一組集合。
+   讓 Google 讀懂這一頁是「名錄」而不是一般內容頁，並把 40 個講者頁串成一組集合。
    只放 url 不重複整份 Person（各講者頁自己有 Person，用 @id 交叉引用即可）。 */
 export function SpeakerListJsonLd({
   people,
