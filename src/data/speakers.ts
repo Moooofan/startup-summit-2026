@@ -12,8 +12,8 @@
  * 韓宗憲（ITIC 創投），與兩位分段主持人劉宥彤、張提提 —— 他們只出現在議程表上，
  * 沒有介紹與照片，向主辦方索取後才上站。
  *
- * 反過來，朱宜振（IrisGo.AI）留在這裡但 0902 議程總表上沒有他的場次 ——
- * 講者內頁的場次膠囊會自動不渲染（findSpeakerSlot 回 undefined），是否仍出席待業主確認。
+ * 反過來，朱宜振（IrisGo.AI）0902 議程總表上沒有他的場次，業主 2026/9 指示從講者陣容移除 ——
+ * 設為 pending 而非刪除，萬一回鍋只要改回 confirmed。
  */
 import type { ForumKey } from "./event";
 
@@ -287,7 +287,7 @@ const allSpeakers: Speaker[] = [
     org: "IrisGo.AI",
     day: "founder",
     track: "ai-software",
-    status: "confirmed",
+    status: "pending",
     photo: "/speakers/zhu-yi-zhen.jpg",
     bio: "畢業於成功大學化學系，求學時曾創立「夢之大地BBS」。他擁有超過20年軟硬體整合與互聯網經驗，曾任職於凌華（ADLINK）、Kontron 等工業電腦大廠，隨後成為連續創業家，曾創辦南星加速器與區塊鏈新創 BiiLabs。如今他帶領 IrisGo.AI 切入 AI PC 賽道，打造本地端 AI 總管，更成功獲得矽谷 AI 大神吳恩達（Andrew Ng）旗下 AI Fund 的投資。",
   },

@@ -18,7 +18,7 @@ import { Cta } from "@/components/ui/Cta";
 export const metadata: Metadata = {
   title: "贊助方案",
   description:
-    "2026 第四屆台灣新創投資年會贊助方案：旗艦、領航、同航三級主贊助，以及攤位贊助與友情贊助。600+ 現場席次、41 位講者、5 萬人社群曝光。",
+    "2026 第四屆台灣新創投資年會贊助方案：旗艦、領航、同航三級主贊助，以及攤位贊助與友情贊助。600+ 現場席次、40 位講者、5 萬人社群曝光。",
   alternates: { canonical: "/sponsor" },
   // 本頁目前不在 PUBLIC_ROUTES（業主 2026/8 指示暫時隱藏）：導覽列與 sitemap 都不給入口，
   // 但路由仍打得開。少了這行，外部連結一旦指過來就會被索引成沒有入口的孤兒頁
