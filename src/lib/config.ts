@@ -52,3 +52,15 @@ export function isExternalHref(href: string): boolean {
 }
 
 export const SPONSOR_CONTACT = "mailto:2026tsic@gmail.com?subject=2026%20台灣新創投資年會%20贊助洽談";
+
+/**
+ * Google 服務帳號：ray@noise-and-signal.com（2026/9 串接）。
+ *
+ * - `GA_MEASUREMENT_ID`：GA4 帳戶「NoiseAndSignal」底下的資源「2026 台灣新創投資年會 tsic.tw」，
+ *   網頁串流 https://www.tsic.tw。gtag 只在 production 載入（見 layout.tsx），本機開發不灌假流量。
+ * - `GSC_VERIFICATION`：Search Console「網址前置字元」資源 https://www.tsic.tw/ 的 HTML 標記驗證碼，
+ *   由 layout.tsx 的 metadata.verification 輸出成 <meta name="google-site-verification">。
+ *   驗證通過後**這個 meta 也不能拿掉**，Google 會定期重驗，拿掉就失去擁有權。
+ */
+export const GA_MEASUREMENT_ID = "G-63L3G41SKX";
+export const GSC_VERIFICATION = "lcm-H0fFaflJStAGeTGQs7T7URX0_b8SECzQ07LSCas";

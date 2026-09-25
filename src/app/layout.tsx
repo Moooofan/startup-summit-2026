@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
-import { site } from "@/lib/config";
+import Script from "next/script";
+import { site, GA_MEASUREMENT_ID, GSC_VERIFICATION } from "@/lib/config";
 import { event } from "@/data/event";
 import { Nav } from "@/components/site/Nav";
 import { Footer } from "@/components/site/Footer";
@@ -62,6 +63,7 @@ export const metadata: Metadata = {
   },
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
+  verification: { google: GSC_VERIFICATION },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -92,6 +94,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Nav />
         <main id="main">{children}</main>
         <Footer />
+        {/* GA4：只在 production 載入，避免本機 dev 的瀏覽灌進正式報表。
+            afterInteractive 讓 gtag 不擋首屏與 Hero 進場動畫。 */}
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4" strategy="afterInteractive">
+              {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`}
+            </Script>
+          </>
+        )}
       </body>
     </html>
   );
