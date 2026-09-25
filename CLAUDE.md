@@ -82,6 +82,12 @@ npm run dev       # 由「使用者」執行（--turbopack）
 - `/about` `/speakers` `/agenda` `/tickets` `/sponsor` `/review`：各自獨立頁
 - `/speakers/[slug]`：`generateStaticParams()` 從 `speakers` 產生 40 頁靜態頁，
   各自有 `generateMetadata` 與 PersonJsonLd，含上下位講者導覽
+- `src/middleware.ts`：網址尾巴黏到標點（`/review。`）或夾帶隱形字元（`/review` + U+FFFC）
+  時直接 307 轉到乾淨路徑，規則在 `lib/cleanPath.ts`。來由是 Facebook 貼文連結 404
+  （從 Apple 備忘錄複製的文案會夾帶 U+FFFC）。**必須在伺服器端轉，不能改回 404 頁用 JS 補救**：
+  Facebook 抓預覽卡不跑 JS。新增路由或靜態檔時，路徑維持純 ASCII、結尾不要是標點，
+  否則會被當成髒網址轉走
+- `app/not-found.tsx`：中文 404 頁，只處理真正不存在的網址（打錯字、已下架講者頁）
 
 ### 中文字型走 CDN，不是 next/font（重要）
 
