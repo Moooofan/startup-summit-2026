@@ -67,7 +67,14 @@ export function SiteJsonLd() {
             // 對 AI 搜尋引擎整理「誰做了這個網站」時特別有用。
             creator: {
               "@type": "Organization",
+              // @id 必須與 noise-and-signal.com 首頁 Organization 的 @id 逐字相同
+              // （2026/9 實際抓取確認過）。搜尋引擎是靠這個 @id 把兩個網站上的
+              // 同一個實體接起來的，改動任一邊都要兩邊一起改，否則關聯直接斷掉。
+              "@id": "https://noise-and-signal.com/#organization",
+              // 對方官網以「諾訊科技」為 name、"Noise & Signal" 為 alternateName；
+              // 這裡反過來，因為頁尾顯示的是英文名。以 @id 為準，名稱誰主誰次不影響合併。
               name: "Noise & Signal",
+              alternateName: "諾訊科技",
               url: "https://noise-and-signal.com/",
             },
           },

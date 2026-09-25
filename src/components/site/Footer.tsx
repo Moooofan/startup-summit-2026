@@ -109,17 +109,20 @@ export function Footer() {
           {/* 業主 2026/9：前綴要寫「年會主辦人」而非「主辦人」，頭銜走台大創創中心 */}
           <p>年會主辦人：{event.organizer.host}｜{event.organizer.hostTitle}</p>
           <p>
-            Designed by{" "}
+            網站設計：
             <a
-              href="https://noise-and-signal.com/"
+              href="https://noise-and-signal.com/cases/tsic-2026"
               target="_blank"
               /* 刻意只有 noopener 沒有 noreferrer：noreferrer 會連 Referer 標頭一起拿掉，
                  對方的分析工具就看不到流量是從這裡來的。設計師的署名連結要讓來源看得見。
-                 安全性由 noopener 負責（新分頁無法透過 window.opener 操作本頁）。 */
+                 安全性由 noopener 負責（新分頁無法透過 window.opener 操作本頁）。
+
+                 連到案例頁而非首頁：那一頁的內容就是這個網站，連過去的人看到的是相關作品，
+                 對雙方都比丟到首頁有意義。 */
               rel="noopener"
               className="transition-colors hover:text-ink"
             >
-              Noise &amp; Signal
+              諾訊科技 Noise &amp; Signal
             </a>
           </p>
         </div>
