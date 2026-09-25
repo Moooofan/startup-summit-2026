@@ -108,6 +108,20 @@ export function Footer() {
           <p>© {event.year} {event.organizer.name}. All rights reserved.</p>
           {/* 業主 2026/9：前綴要寫「年會主辦人」而非「主辦人」，頭銜走台大創創中心 */}
           <p>年會主辦人：{event.organizer.host}｜{event.organizer.hostTitle}</p>
+          <p>
+            Designed by{" "}
+            <a
+              href="https://noise-and-signal.com/"
+              target="_blank"
+              /* 刻意只有 noopener 沒有 noreferrer：noreferrer 會連 Referer 標頭一起拿掉，
+                 對方的分析工具就看不到流量是從這裡來的。設計師的署名連結要讓來源看得見。
+                 安全性由 noopener 負責（新分頁無法透過 window.opener 操作本頁）。 */
+              rel="noopener"
+              className="transition-colors hover:text-ink"
+            >
+              Noise &amp; Signal
+            </a>
+          </p>
         </div>
       </div>
     </footer>

@@ -62,6 +62,14 @@ export function SiteJsonLd() {
             description: site.description,
             inLanguage: "zh-Hant-TW",
             publisher: { "@id": `${site.url}/#organization` },
+            // 設計團隊。頁尾的署名連結只是一條 HTML 連結，搜尋引擎要自己推敲關係；
+            // 這裡用 schema.org 的 creator 把「本站由誰設計」寫成明確的實體關聯，
+            // 對 AI 搜尋引擎整理「誰做了這個網站」時特別有用。
+            creator: {
+              "@type": "Organization",
+              name: "Noise & Signal",
+              url: "https://noise-and-signal.com/",
+            },
           },
         ],
       }}
