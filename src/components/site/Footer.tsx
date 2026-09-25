@@ -109,7 +109,7 @@ export function Footer() {
           {/* 業主 2026/9：前綴要寫「年會主辦人」而非「主辦人」，頭銜走台大創創中心 */}
           <p>年會主辦人：{event.organizer.host}｜{event.organizer.hostTitle}</p>
           <p>
-            網站設計：
+            Designed by{" "}
             <a
               href="https://noise-and-signal.com/cases/tsic-2026"
               target="_blank"
@@ -122,7 +122,7 @@ export function Footer() {
               rel="noopener"
               className="transition-colors hover:text-ink"
             >
-              諾訊科技 Noise &amp; Signal
+              Noise &amp; Signal
             </a>
           </p>
         </div>
