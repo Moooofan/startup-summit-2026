@@ -20,6 +20,7 @@ const allLinks = [
   { href: "/tickets", label: "報名資訊" },
   { href: "/sponsor", label: "贊助方案" },
   { href: "/review", label: "歷屆回顧" },
+  { href: "/notes", label: "精華筆記" },
 ];
 
 const links = allLinks.filter((l) => isPublicRoute(l.href));

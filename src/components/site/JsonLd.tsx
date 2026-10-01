@@ -314,6 +314,74 @@ export function ReviewJsonLd({
   );
 }
 
+/* 精華筆記列表頁：CollectionPage + ItemList（同 SpeakerListJsonLd 的做法） */
+export function NoteListJsonLd({ items }: { items: { title: string; slug: string }[] }) {
+  return (
+    <Ld
+      data={{
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        "@id": `${site.url}/notes#collection`,
+        url: `${site.url}/notes`,
+        name: "精華筆記",
+        inLanguage: "zh-Hant-TW",
+        isPartOf: { "@id": `${site.url}/#website` },
+        mainEntity: {
+          "@type": "ItemList",
+          numberOfItems: items.length,
+          itemListElement: items.map((n, i) => ({
+            "@type": "ListItem",
+            position: i + 1,
+            name: n.title,
+            url: `${site.url}/notes/${n.slug}`,
+          })),
+        },
+      }}
+    />
+  );
+}
+
+/* 精華筆記內頁：Article。文章是與會者的轉載稿：author 是原作者，publisher 才是主辦單位；
+   isBasedOn 指回 Facebook 原文，讓搜尋引擎知道這是授權轉載而不是原創首發。 */
+export function ArticleJsonLd({
+  title,
+  summary,
+  slug,
+  date,
+  author,
+  sourceUrl,
+  image,
+}: {
+  title: string;
+  summary: string;
+  slug: string;
+  date: string;
+  author: string;
+  sourceUrl: string;
+  image?: string;
+}) {
+  return (
+    <Ld
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "@id": `${site.url}/notes/${slug}#article`,
+        headline: title,
+        description: summary,
+        datePublished: date,
+        inLanguage: "zh-Hant-TW",
+        url: `${site.url}/notes/${slug}`,
+        mainEntityOfPage: `${site.url}/notes/${slug}`,
+        ...(image ? { image: `${site.url}${image}` } : {}),
+        author: { "@type": "Person", name: author },
+        publisher: { "@id": `${site.url}/#organization` },
+        isBasedOn: sourceUrl,
+        isPartOf: { "@id": `${site.url}/#website` },
+      }}
+    />
+  );
+}
+
 /** 講者頁：Person */
 export function PersonJsonLd({
   name,
