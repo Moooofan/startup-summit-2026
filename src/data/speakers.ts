@@ -466,7 +466,11 @@ const allSpeakers: Speaker[] = [
     slug: "jian-dan",
     name: "簡丹",
     title: "董事長暨合夥人",
-    org: "台安傑天使俱樂部（Taipei Angels）",
+    /* 業主 2026/10 指示機構名改為「台安傑國際天使投資」。括號裡的英文名一併拿掉 ——
+       業主給的新名稱沒有附英文，而 Taipei Angels 是舊名「台安傑天使俱樂部」的對應英文，
+       留著可能已經不是這家機構現在的英文名。要補回英文請先向業主確認。
+       bio 裡的「加入台安傑後」是簡稱、不是機構全名，故不動。 */
+    org: "台安傑國際天使投資",
     day: "investor",
     track: "early-stage",
     status: "confirmed",

@@ -84,8 +84,11 @@ npm run dev       # 由「使用者」執行（--turbopack）
 - `/speakers/[slug]`：`generateStaticParams()` 從 `speakers` 產生 40 頁靜態頁，
   各自有 `generateMetadata` 與 PersonJsonLd，含上下位講者導覽
 - `/notes` 與 `/notes/[slug]`：精華筆記列表（依屆別分組）與內頁，吃 `data/notes.ts` 導出的 `notes`
-  （已濾掉 `status: "draft"`）。每篇帶 `author`／`edition`／`sourceUrl`；`sourceUrl` 只進 Article JSON-LD 的 `isBasedOn`，
-  畫面上不顯示原文連結與授權聲明（業主 2026/10 指示拿掉）。
+  （已濾掉 `status: "draft"`）。每篇帶 `author`／`edition`／`sourceUrl`。`sourceUrl` 進 Article JSON-LD 的
+  `isBasedOn`，畫面上則是**內頁的作者名本身連到原文**（業主 2026/10；在那之前整頁不放原文連結，
+  後來改口成「署名即出處」）。授權聲明仍然不顯示。
+  **列表卡的作者名不能比照辦理** —— `NoteCard` 整張卡是一個 `<Link>`，裡面再放 `<a>` 是巢狀連結，
+  瀏覽器會把 DOM 拆開；那裡維持純文字。
   圖片放 `public/notes/<slug>/`，是貼文的縮圖尺寸，內頁以 `w-fit` 原寸顯示、不放大。
   內文相鄰的圖片會併成兩欄並排；封面若也列在內文圖片中，頁首不重複顯示。
   導覽列、sitemap、llms.txt 與兩頁的 noindex 都跟著 `PUBLIC_ROUTES` 裡的 `"/notes"` 走。

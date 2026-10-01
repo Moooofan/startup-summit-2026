@@ -100,7 +100,8 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "09:30–09:55",
     duration: "25min",
-    topic: "韓國獨角獸案例 2",
+    // 「韓國獨角獸案例 2」是 0902 表的分類標籤、不是講題，業主 2026/10 指示拿掉。
+    // 同段的案例 1 已於 0916 換成真講題，這一則的真講題尚未提供。
     speakers: [
       { name: "Kelvin Dongho Kim 金東昊", org: "Korea Credit Data 創辦人兼執行長", slug: "kelvin-kim" },
     ],
@@ -126,12 +127,14 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "10:35–10:55",
     duration: "20min",
+    topic: "AAMA 的變與不變：把信任圈擴大，讓創業者走得更遠",
     speakers: [{ name: "林志垚", org: "AAMA 台北搖籃計劃董事長", slug: "lin-zhi-yao" }],
   },
   {
     type: "talk",
     time: "10:55–11:15",
     duration: "20min",
+    topic: "以變革擁抱變革",
     speakers: [{ name: "程九如", org: "AppWorks 之初創投合夥人", slug: "cheng-jiu-ru" }],
   },
 
@@ -169,6 +172,7 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "13:30–13:50",
     duration: "20min",
+    topic: "欣新網的併購與擴張",
     speakers: [{ name: "黃懷恩", org: "欣新網執行長兼總經理", slug: "huang-huai-en" }],
   },
   {
@@ -182,6 +186,7 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "14:10–14:40",
     duration: "20min",
+    topic: "創業戰爭：資產到資本，如何把最紅海的市場打造跨國科技平台",
     speakers: [{ name: "宋捷仁", org: "USPACE 創辦人兼執行長", slug: "song-jie-ren" }],
   },
 
@@ -230,6 +235,9 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "16:35–16:55",
     duration: "20min",
+    // 「AI聽懂」中英之間沒有空格，與同一句的「AI 新創」不一致 —— 業主 2026/10 給的原文
+    // 就是這樣，照抄不補字（見檔頭轉錄原則），是否補空格待業主確認。
+    topic: "從佛光山到護國神山台積電，一套 AI聽懂七種行話軟硬整合的台灣 AI 新創實戰",
     speakers: [
       { name: "李信宜", org: "愛比科技總經理兼 Vurbo.ai 共同創辦人", slug: "li-xin-yi" },
     ],
@@ -240,7 +248,7 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "16:55–17:15",
     duration: "20min",
-    topic: "宏齊永續與氣候基金",
+    // 原本的「宏齊永續與氣候基金」只是重複講者所屬的基金名、不是講題，業主 2026/10 指示拿掉。
     speakers: [
       { name: "程淑芬", org: "宏齊永續與氣候基金合夥人，前國泰金控投資長", slug: "sophia-cheng" },
     ],
@@ -249,7 +257,7 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "17:15–17:35",
     duration: "20min",
-    topic: "台大校友創投",
+    topic: "不只是一張支票：台大校友創投陪你走第一哩路",
     speakers: [{ name: "江旻峻", org: "台大校友創投總經理", slug: "jiang-minjun" }],
   },
 ];
@@ -368,7 +376,7 @@ const investorDay: AgendaItem[] = [
     type: "talk",
     time: "14:55–15:15",
     duration: "20min",
-    speakers: [{ name: "簡丹", org: "台安傑天使俱樂部董事長暨合夥人", slug: "jian-dan" }],
+    speakers: [{ name: "簡丹", org: "台安傑國際天使投資董事長暨合夥人", slug: "jian-dan" }],
   },
   {
     type: "talk",

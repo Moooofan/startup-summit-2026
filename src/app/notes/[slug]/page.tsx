@@ -92,8 +92,25 @@ export default async function NotePage({ params }: { params: Promise<{ slug: str
                 {n.title}
               </h1>
               {/* summary 是內文開頭的原句，內頁不再印一次（只給列表卡與 meta description） */}
+              {/* 作者名連到原文（業主 2026/10）。原本整頁不放原文連結，現在改成掛在作者名上 ——
+                  不是獨立一行的「原文連結」，而是署名本身就是出處。
+
+                  只有內頁能這樣做：列表卡（NoteCard）整張卡是一個 <Link>，在裡面再放 <a>
+                  會變成巢狀連結，HTML 不允許、瀏覽器解析時會把它拆開。那裡維持純文字。
+
+                  用原生 <a> 而非 next/link：站外網址沒有預先載入可言，與 Hero 的地圖連結、
+                  Footer 的社團連結同一個慣例。aria-label 說明去向 ——
+                  只念「詹益鑑」螢幕閱讀器使用者不會知道那是一個往站外的連結。 */}
               <p className="mt-5 text-[18px] text-ink-2">
-                <span className="font-medium text-orbit-sky">{n.author}</span>
+                <a
+                  href={n.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`在 Facebook 閱讀 ${n.author} 的原文`}
+                  className="font-medium text-orbit-sky underline-offset-4 transition-colors hover:text-brand-lift hover:underline"
+                >
+                  {n.author}
+                </a>
                 <span className="mx-2 text-ink-4">・</span>
                 <span className="font-display tracking-wide text-ink-3">{formatNoteDate(n.date)}</span>
               </p>
