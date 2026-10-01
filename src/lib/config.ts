@@ -30,8 +30,11 @@ export const REGISTER_READY = true;
  * 直接輸入網址仍然打得開 —— 這是刻意的，方便後續繼續施工與內部預覽。
  *
  * 要恢復完整站台：把 PUBLIC_ROUTES 改回包含全部路徑即可，不需要改任何元件。
+ *
+ * "/notes"（精華筆記）2026/10 上架。它的導覽列項目、sitemap、llms.txt 區段與兩頁的 noindex
+ * 都跟著這個清單走，要臨時下架只需從這裡拿掉。
  */
-export const PUBLIC_ROUTES = ["/", "/speakers", "/review"] as const;
+export const PUBLIC_ROUTES = ["/", "/speakers", "/review", "/notes"] as const;
 
 /** 某條路徑目前是否對外可見（供導覽列／頁尾／sitemap 過濾用）。 */
 export function isPublicRoute(href: string): boolean {

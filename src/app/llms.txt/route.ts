@@ -4,6 +4,7 @@ import { agendaMarkdown } from "@/data/agenda";
 import { tiers } from "@/data/sponsors";
 import { editions } from "@/data/review";
 import { founderProfile } from "@/data/founder";
+import { notes, noteEditionLabel } from "@/data/notes";
 import { site, isPublicRoute } from "@/lib/config";
 
 export const dynamic = "force-static";
@@ -65,7 +66,17 @@ ${editions
   )
   .join("\n")}
 詳見 [歷屆回顧](${site.url}/review)。
-
+${
+  // /notes 未對外或還沒有文章時整段不輸出，不留空標題
+  isPublicRoute("/notes") && notes.length > 0
+    ? `\n## 精華筆記\n歷屆與會者的年會筆記與心得，經作者授權轉載。\n${notes
+        .map(
+          (n) =>
+            `- [${n.title}](${site.url}/notes/${n.slug})：${n.author}，${noteEditionLabel(n.edition)}，${n.date}`
+        )
+        .join("\n")}\n`
+    : ""
+}
 ## 主要頁面
 ${[
   { path: "/", label: "首頁", desc: "活動主視覺與入口" },
@@ -75,6 +86,7 @@ ${[
   { path: "/tickets", label: "報名資訊", desc: "票價與權益" },
   { path: "/sponsor", label: "贊助方案", desc: "五級贊助方案與展位規格" },
   { path: "/review", label: "歷屆回顧", desc: "第三屆完整議程、媒體報導與合作夥伴" },
+  { path: "/notes", label: "精華筆記", desc: "歷屆與會者的年會筆記與心得" },
 ]
   .filter((p) => isPublicRoute(p.path))
   .map((p) => `- [${p.label}](${site.url}${p.path === "/" ? "/" : p.path})：${p.desc}`)

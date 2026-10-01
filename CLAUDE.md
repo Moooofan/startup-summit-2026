@@ -48,6 +48,7 @@ npm run dev       # 由「使用者」執行（--turbopack）
 | `data/review.ts` | 歷屆回顧（第三屆 35 場議程／64 則媒體／贊助 logo） | 企劃 pptx + 網路查證 |
 | `data/founder.ts` | 林文欽介紹與引言 | 企劃 pptx + 公開發言 |
 | `data/faq.ts` | 常見問題 | 人工撰寫 |
+| `data/notes.ts` | 精華筆記：歷屆與會者的 Facebook 貼文，經授權全文轉載（區塊陣列） | VM 整理的授權名單 xlsx + 貼文原文，逐字轉錄 |
 | `data/speakerPhotoFocus.ts` | 少數爛照片的 `object-position` 校正 | 人工 |
 | `lib/config.ts` | 網域、Accupass 連結、贊助信箱 | **上線前必改** |
 
@@ -82,6 +83,13 @@ npm run dev       # 由「使用者」執行（--turbopack）
 - `/about` `/speakers` `/agenda` `/tickets` `/sponsor` `/review`：各自獨立頁
 - `/speakers/[slug]`：`generateStaticParams()` 從 `speakers` 產生 40 頁靜態頁，
   各自有 `generateMetadata` 與 PersonJsonLd，含上下位講者導覽
+- `/notes` 與 `/notes/[slug]`：精華筆記列表（依屆別分組）與內頁，吃 `data/notes.ts` 導出的 `notes`
+  （已濾掉 `status: "draft"`）。每篇帶 `author`／`edition`／`sourceUrl`；`sourceUrl` 只進 Article JSON-LD 的 `isBasedOn`，
+  畫面上不顯示原文連結與授權聲明（業主 2026/10 指示拿掉）。
+  圖片放 `public/notes/<slug>/`，是貼文的縮圖尺寸，內頁以 `w-fit` 原寸顯示、不放大。
+  內文相鄰的圖片會併成兩欄並排；封面若也列在內文圖片中，頁首不重複顯示。
+  導覽列、sitemap、llms.txt 與兩頁的 noindex 都跟著 `PUBLIC_ROUTES` 裡的 `"/notes"` 走。
+  內文的 `→` 照原文留在資料裡，由 `NoteBody` 換成圖示輸出
 
 ### 中文字型走 CDN，不是 next/font（重要）
 
@@ -150,18 +158,13 @@ CSS 的 `scroll-snap-type` **刻意沒開**（會和 JS 打架，也會吃掉「
   同值 —— **兩邊要一起改**，否則同一種材質會出現兩種線距
 - `.text-kv`（近白→淡藍漸層 + 藍光暈）與 `.text-fade` 目前**全站沒有呼叫點**，備而未用
 - `.glass` 的 blur 半徑是**捲動效能主因**，已從 14 調到 8，不要調回去
-- **玻璃卡的「玻璃感」不要靠邊框或亮帶去做**（試過漸層邊框＋鏡面稜線＋斜向亮帶，業主評為「生硬」）。
-  站上認可的做法是論壇卡那套：`.glass` + `overflow-hidden` + 卡外角落一顆
-  `h-64 w-64 rounded-full blur-3xl` 的彩色光暈被裁進來（見 `ForumCards.tsx` 的 `ForumCard`
-  與 `FounderNote.tsx` 的引言卡）。理由是背景那層深藍霧幾乎不透光，`backdrop-filter`
-  沒東西可折射，光只能由卡片自己帶進來
 - 深色版換色的兩條規則方向相反：**有顏色的填色 alpha 要上調**（疊色在近黑上幾乎沒變化）、
   **白色描邊與 inset 高光要下調**（白線在深底會變成刺眼線框）。
   黑白疊層互換時 alpha 不能 1:1 照搬 —— 依 ΔL* 對齊，`bg-black/[0.03]` 對應的是 `bg-white/[0.025]`
 - `.marquee-viewport` 的 `#000`／`#fff` 是**亮度遮罩不是塗色**，改了整層會消失
   （`HomeBackdrop` 原本也有一組，2026/9 改滿版照片後已無 SVG 遮罩）
-- **區塊光暈是一整套，共 9 顆**（Hero ×2、Tickets ×2、Speakers 開場、review、sponsor、
-  speakers 內頁、TicketsGallery）：尺寸統一在 58–70vw / 上限 800–900px，
+- **區塊光暈是一整套，共 10 顆**（Hero ×2、Tickets ×2、Speakers 開場、review、sponsor、
+  speakers 內頁、TicketsGallery、notes 列表）：尺寸統一在 58–70vw / 上限 800–900px，
   峰值 alpha 統一 `0.07`、中間停 `0.025`，收邊一律 `transparent 72%`。
   光暈高達 880px，**放它的容器若比它矮（例如 /review、/sponsor 的頁首）不能用
   `overflow-hidden`**，否則會在區塊底部切出一條水平硬邊 —— 要用 `overflow-x-clip`

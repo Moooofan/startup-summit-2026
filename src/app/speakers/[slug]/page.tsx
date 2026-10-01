@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Calendar, MapPin } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin } from "lucide-react";
 import { speakers, getSpeaker } from "@/data/speakers";
 import { photoFocus } from "@/data/speakerPhotoFocus";
 import { findSpeakerSlot } from "@/data/agenda";
@@ -10,6 +10,7 @@ import { event, forums } from "@/data/event";
 import { Reveal } from "@/components/ui/Reveal";
 import { Cta } from "@/components/ui/Cta";
 import { BackLink } from "@/components/site/BackLink";
+import { PrevNextNav } from "@/components/site/PrevNextNav";
 import { PersonJsonLd, BreadcrumbJsonLd } from "@/components/site/JsonLd";
 import { isPublicRoute } from "@/lib/config";
 
@@ -196,45 +197,13 @@ export default async function SpeakerPage({ params }: { params: Promise<{ slug: 
 
           {/* 上下一位 */}
           <Reveal delay={0.1}>
-            <nav
-              aria-label="其他講者"
-              className="mt-20 grid gap-4 border-t border-line-soft pt-10 sm:grid-cols-2"
-            >
-              {prev ? (
-                <Link
-                  href={`/speakers/${prev.slug}`}
-                  replace
-                  className="glass group flex items-center gap-4 rounded-card p-5 transition-colors hover:border-white/22"
-                >
-                  <ArrowLeft size={16} className="shrink-0 text-ink-4" />
-                  <span className="min-w-0">
-                    <span className="block text-[16px] text-ink-4">上一位</span>
-                    <span className="mt-0.5 block truncate text-[18px] font-medium text-ink">
-                      {prev.name}
-                    </span>
-                    <span className="block truncate text-[17px] text-ink-3">{prev.org}</span>
-                  </span>
-                </Link>
-              ) : (
-                <span />
-              )}
-              {next && (
-                <Link
-                  href={`/speakers/${next.slug}`}
-                  replace
-                  className="glass group flex items-center justify-end gap-4 rounded-card p-5 text-right transition-colors hover:border-white/22 sm:col-start-2"
-                >
-                  <span className="min-w-0">
-                    <span className="block text-[16px] text-ink-4">下一位</span>
-                    <span className="mt-0.5 block truncate text-[18px] font-medium text-ink">
-                      {next.name}
-                    </span>
-                    <span className="block truncate text-[17px] text-ink-3">{next.org}</span>
-                  </span>
-                  <ArrowRight size={16} className="shrink-0 text-ink-4" />
-                </Link>
-              )}
-            </nav>
+            <PrevNextNav
+              ariaLabel="其他講者"
+              prevLabel="上一位"
+              nextLabel="下一位"
+              prev={prev && { href: `/speakers/${prev.slug}`, title: prev.name }}
+              next={next && { href: `/speakers/${next.slug}`, title: next.name }}
+            />
           </Reveal>
         </div>
       </article>
