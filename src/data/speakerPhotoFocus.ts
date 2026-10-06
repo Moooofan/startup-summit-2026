@@ -9,9 +9,7 @@
  */
 const overrides: Record<string, string> = {
   "adams-chung": "85% 26%", // 簡報用的是演講投影片，人在右緣
-  "fang-junjie": "25% 20%", // AVA Angels 辦公室招牌照，人在左側
   "wu-you-xun": "82% 50%", // 東聯互動辦公室橫幅照，人在右側、招牌在左（3:4 裁切只留一半寬）
-  "li-lun-jia": "62% 48%", // PRO360 上櫃背板照，人像偏小
 };
 
 /** 預設略高於中心，符合人像構圖 */

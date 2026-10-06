@@ -149,7 +149,7 @@ const founderDay: AgendaItem[] = [
     time: "11:25–11:45",
     duration: "20min",
     speakers: [
-      { name: "田建中", org: "台灣證券交易所上市二部經理", slug: "tian-jian-zhong" },
+      { name: "田建中", org: "臺灣證券交易所上市二部經理", slug: "tian-jian-zhong" },
     ],
   },
   {
@@ -160,7 +160,7 @@ const founderDay: AgendaItem[] = [
     speakers: [
       { name: "沈立平", org: "益鼎創投副總經理", slug: "shen-li-ping", moderator: true },
       { name: "吳侑勳", org: "東聯互動（7738）創辦人兼董事長", slug: "wu-you-xun" },
-      { name: "吳明蔚", org: "奧義智慧（7823）創辦人兼執行長", slug: "wu-ming-wei" },
+      { name: "吳明蔚", org: "奧義賽博（7823）創辦人兼執行長", slug: "wu-ming-wei" },
       { name: "李倫家", org: "PRO360 達人網（7839）創辦人兼董事長", slug: "li-lun-jia" },
     ],
   },
@@ -179,7 +179,7 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "13:50–14:10",
     duration: "20min",
-    speakers: [{ name: "許郁婷", org: "股感媒體集團共同創辦人暨執行長", slug: "xu-yu-ting" }],
+    speakers: [{ name: "許郁婷", org: "股感集團共同創辦人暨執行長", slug: "xu-yu-ting" }],
   },
   // 原表這一列印 20min，但起訖是 30min —— 照印不改（見檔頭轉錄原則），待業主校對
   {
@@ -209,7 +209,7 @@ const founderDay: AgendaItem[] = [
     topic: "《Edge AI 企業家 Panel 對談》",
     speakers: [
       { name: "楊本豫", org: "友達光電集團董事長室顧問", slug: "yang-ben-yu", moderator: true },
-      { name: "丘立全", org: "啟雲科技共同創辦人兼執行長", slug: "qiu-li-quan" },
+      { name: "丘立全", org: "啟雲科技董事長暨執行長", slug: "qiu-li-quan" },
       { name: "鄒大智", org: "ADLink 凌華科技財務長", slug: "zou-da-zhi" },
       { name: "趙新民", org: "宇沛永續智慧製造服務處資深總監", slug: "zhao-xin-min" },
     ],
@@ -239,7 +239,7 @@ const founderDay: AgendaItem[] = [
     // 就是這樣，照抄不補字（見檔頭轉錄原則），是否補空格待業主確認。
     topic: "從佛光山到護國神山台積電，一套 AI聽懂七種行話軟硬整合的台灣 AI 新創實戰",
     speakers: [
-      { name: "李信宜", org: "愛比科技總經理兼 Vurbo.ai 共同創辦人", slug: "li-xin-yi" },
+      { name: "李信宜", org: "愛比科技 IPEVO 總經理兼 Vurbo.ai 共同創辦人", slug: "li-xin-yi" },
     ],
   },
 
@@ -250,7 +250,7 @@ const founderDay: AgendaItem[] = [
     duration: "20min",
     // 原本的「宏齊永續與氣候基金」只是重複講者所屬的基金名、不是講題，業主 2026/10 指示拿掉。
     speakers: [
-      { name: "程淑芬", org: "宏齊永續與氣候基金合夥人，前國泰金控投資長", slug: "sophia-cheng" },
+      { name: "程淑芬", org: "宏齊永續與氣候有限合夥資深合夥人，前國泰金控投資長", slug: "sophia-cheng" },
     ],
   },
   {
@@ -312,7 +312,7 @@ const investorDay: AgendaItem[] = [
     type: "talk",
     time: "11:20–11:45",
     duration: "25min",
-    speakers: [{ name: "高誌廷", org: "普訊創新總經理", slug: "allen-kao" }],
+    speakers: [{ name: "高誌廷", org: "普訊創新合夥人兼總經理、AZ Venture Limited 董事長", slug: "allen-kao" }],
   },
   {
     type: "talk",
@@ -388,7 +388,7 @@ const investorDay: AgendaItem[] = [
     type: "talk",
     time: "15:35–15:55",
     duration: "20min",
-    speakers: [{ name: "林伯翰", org: "一春資本創辦人", slug: "lin-bo-han" }],
+    speakers: [{ name: "林伯翰", org: "一春資本創辦人暨管理合夥人", slug: "lin-bo-han" }],
   },
 
   /* 下午中場休息 0916 rounddown 移到《蛻變中的早期投資機構》之後
