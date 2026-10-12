@@ -79,7 +79,7 @@ const allSpeakers: Speaker[] = [
     day: "founder",
     track: "founder-keynote",
     status: "confirmed",
-    photo: "/speakers/shen-shu-wei.jpg",
+    photo: "/speakers/shen-shu-wei-v2.jpg",
     bio: "曾任職於高通（Qualcomm），並於 Google 任職六年、領導 Google Assistant 亞洲團隊，參與多項 AI 與智慧裝置專案。2019 年創立犀動智能（Aiello），從旅宿場景起步，逐步將語音 AI Agent、知識管理與流程自動化技術拓展至跨產業企業應用。透過將語音與文字等非結構化互動轉化為可分析的企業數據，協助企業提升服務效率與顧客體驗。目前已成功導入九大市場三百家以上企業，並持續拓展海外與跨產業市場。",
   },
 
@@ -148,12 +148,12 @@ const allSpeakers: Speaker[] = [
     slug: "wu-you-xun",
     name: "吳侑勳",
     title: "創辦人兼董事長",
-    org: "東聯互動（7738）",
+    org: "東聯互動",
     day: "founder",
     track: "new-ipo",
     status: "confirmed",
     photo: "/speakers/wu-you-xun.jpg",
-    bio: "東聯互動（7738）創辦人兼董事長吳侑勳深耕電信與軟體數據服務逾20年。他曾任電信產業主管，因長期觀察到移工跨國小額匯兌的痛點，於2016年捨棄高薪創業。他帶領團隊突破嚴格金融監理，打造合法便利的跨境金融平台，並兼任一卡通公司董事，成功帶領公司成為台灣跨境金融與移工匯兌領頭羊。",
+    bio: "東聯互動創辦人兼董事長吳侑勳深耕電信與軟體數據服務逾20年。他曾任電信產業主管，因長期觀察到移工跨國小額匯兌的痛點，於2016年捨棄高薪創業。他帶領團隊突破嚴格金融監理，打造合法便利的跨境金融平台，並兼任一卡通公司董事，成功帶領公司成為台灣跨境金融與移工匯兌領頭羊。",
   },
   {
     slug: "wu-ming-wei",
@@ -187,8 +187,8 @@ const allSpeakers: Speaker[] = [
     day: "founder",
     track: "ma-global",
     status: "confirmed",
-    photo: "/speakers/huang-huai-en.png",
-    bio: "黃懷恩是電商代營運龍頭欣新網(2949)執行長兼總經理。他曾將連年虧損、員工流失過半的企業，在接任後推動轉型，運用大數據與AI技術，提供品牌從行銷、系統、客服到倉儲物流的一條龍服務。他成功帶領欣新網逆勢突圍並掛牌上市，成為服務超過兩百家國際知名品牌的幕後推手。目前更積極將成功經驗複製到日本及東南亞市場，目標打造亞洲AI零售基礎建設。",
+    photo: "/speakers/huang-huai-en-v2.jpg",
+    bio: "黃懷恩是電商代營運龍頭欣新網執行長兼總經理。他曾將連年虧損、員工流失過半的企業，在接任後推動轉型，運用大數據與AI技術，提供品牌從行銷、系統、客服到倉儲物流的一條龍服務。他成功帶領欣新網逆勢突圍並掛牌上市，成為服務超過兩百家國際知名品牌的幕後推手。目前更積極將成功經驗複製到日本及東南亞市場，目標打造亞洲AI零售基礎建設。",
   },
   {
     slug: "xu-yu-ting",
@@ -356,7 +356,7 @@ const allSpeakers: Speaker[] = [
     day: "investor",
     track: "institutional",
     status: "confirmed",
-    photo: "/speakers/peng-zhiqiang.jpg",
+    photo: "/speakers/peng-zhiqiang-v2.jpg",
     bio: "彭志強現任聯電旗下宏誠創投（UMC Capital）總經理，管理聯電創投資產。他畢業於中央化工系，並取得美國匹茲堡大學工業工程碩士與交大科技管理博士。他曾任兆遠科技總經理，具備成功帶領公司 IPO 的高科技實務資歷。彭志強深耕創投多年，專注投資半導體、資通訊與高科技領域，他憑藉深厚的半導體供應鏈與 B2B 商模經驗，積極引導新創團隊對接產業資源。",
   },
   {
@@ -367,7 +367,7 @@ const allSpeakers: Speaker[] = [
     day: "investor",
     track: "institutional",
     status: "confirmed",
-    photo: "/speakers/li-yiping.png",
+    photo: "/speakers/li-yiping-v2.jpg",
     bio: "李一平目前為台杉投資科技基金執行合夥人，負責科技基金台美投資佈局及策略規劃，台杉投資自2018年成立至今，科技基金已成功募集三檔基金，合計超過4億美元，並已完成48個投資項目，涵蓋台美半導體，軟體，AI及Robotics各領域。加入台杉投資前，李先生曾服務於H&Q Asia Pacific（漢鼎亞太集團）18年並出任董事總經理及漢鼎臺灣總經理，長期深耕美國及大中華地區科技新創投資。",
   },
   {
@@ -482,7 +482,7 @@ const allSpeakers: Speaker[] = [
     day: "investor",
     track: "early-stage",
     status: "confirmed",
-    photo: "/speakers/jian-dan.jpg",
+    photo: "/speakers/jian-dan-v2.jpg",
     bio: "具深厚科技產業背景，在國際級IT企業累積逾二十年高階管理與銷售實戰歷練，曾歷任Check Point台灣區總經理、Autodesk台灣區總經理，以及台灣微軟業務經理。成立台安傑國際天使投資後，協助早期新創團隊健全商務模式、媒合關鍵資源，是推動台灣早期天使投資與新創生態圈國際化發展的重要女性領導者。",
   },
   {
@@ -494,7 +494,7 @@ const allSpeakers: Speaker[] = [
     day: "investor",
     track: "early-stage",
     status: "confirmed",
-    photo: "/speakers/chen-yi-rong.jpg",
+    photo: "/speakers/chen-yi-rong-v2.jpg",
     bio: "畢業於清華大學經濟系，並取得政治大學IMBA學位。自2015年起投入創業與投資生態圈，並於2017年共同創辦識富，長期專注於企業家社群、創業投資與跨境資源整合。\n\n識富從新創投資出發，匯聚企業家、企業二代與高階經理人，至今累積超過500位會員，並共同投資逾50家新創與成長型企業。近年進一步從投資社群，發展為企業家的投資與資源平台，聚焦創業投資、企業成長、跨境資源與家族傳承。",
   },
   {
@@ -506,7 +506,7 @@ const allSpeakers: Speaker[] = [
     day: "investor",
     track: "early-stage",
     status: "confirmed",
-    photo: "/speakers/lin-bo-han.jpg",
+    photo: "/speakers/lin-bo-han-v2.jpg",
     bio: "林伯翰（Boice Lin）為台灣少數兼具「跨國外商高管」與「三家知名新創出場/上市」實戰經驗的指標性操盤手。職涯由 IBM 起步，曾任電通 Merkle 台灣總經理，並先後擔任 TutorABC 營銷副總、Appier 全球資深副總及 Gogolook 商務長，具備極深厚的 B2B 與 B2C 跨界實績。憑藉清大天使會前會長的早期生態號召力，加上外商及新創的實戰經驗，他發起成立台灣首支 Operator-Led（操盤手型）投資人社群，成員包含高階經理人及海外擴張黑手黨(新創二把手)，並建立Revenue Intelligence Architecture 增長架構及獨特的Spring Credit來讓會員貢獻。相較於傳統財務型創投，他聚焦營收增長與商業操盤，以「親身戰略賦能 + 資金挹注」雙輪驅動，協助新創團隊突破商業瓶頸、實現規模化出海。",
   },
 
