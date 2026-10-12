@@ -94,7 +94,7 @@ const founderDay: AgendaItem[] = [
        前綴 "Title: " 是欄位標示、不是講題本身，故不收。 */
     topic:
       "Entrepreneurs from Mars, Investors from Venus - Bridging the Gap: Lessons from Both Sides of the Table as an Entrepreneur & Investor",
-    speakers: [{ name: "Ryan Lee 李昇圭", org: "Pinkfong 聯合創辦人", slug: "ryan-lee" }],
+    speakers: [{ name: "Ryan Lee 李昇圭", org: "Pinkfong 聯合創辦人暨執行副總裁", slug: "ryan-lee" }],
   },
   {
     type: "talk",
@@ -128,7 +128,7 @@ const founderDay: AgendaItem[] = [
     time: "10:35–10:55",
     duration: "20min",
     topic: "AAMA 的變與不變：把信任圈擴大，讓創業者走得更遠",
-    speakers: [{ name: "林志垚", org: "AAMA 台北搖籃計劃董事長", slug: "lin-zhi-yao" }],
+    speakers: [{ name: "林志垚", org: "AAMA 董事長", slug: "lin-zhi-yao" }],
   },
   {
     type: "talk",
@@ -159,9 +159,9 @@ const founderDay: AgendaItem[] = [
     topic: "《新 IPO 創業家 Panel 對談》",
     speakers: [
       { name: "沈立平", org: "益鼎創投副總經理", slug: "shen-li-ping", moderator: true },
-      { name: "吳侑勳", org: "東聯互動（7738）創辦人兼董事長", slug: "wu-you-xun" },
-      { name: "吳明蔚", org: "奧義賽博（7823）創辦人兼執行長", slug: "wu-ming-wei" },
-      { name: "李倫家", org: "PRO360 達人網（7839）創辦人兼董事長", slug: "li-lun-jia" },
+      { name: "吳侑勳", org: "東聯互動創辦人兼董事長", slug: "wu-you-xun" },
+      { name: "吳明蔚", org: "奧義賽博創辦人兼執行長", slug: "wu-ming-wei" },
+      { name: "李倫家", org: "PRO360 達人網創辦人兼董事長", slug: "li-lun-jia" },
     ],
   },
 
@@ -382,7 +382,7 @@ const investorDay: AgendaItem[] = [
     type: "talk",
     time: "15:15–15:35",
     duration: "20min",
-    speakers: [{ name: "陳怡蓉", org: "識富天使會執行長", slug: "chen-yi-rong" }],
+    speakers: [{ name: "陳怡蓉", org: "識富天使會執行長暨聯合創始人", slug: "chen-yi-rong" }],
   },
   {
     type: "talk",
@@ -413,7 +413,7 @@ const investorDay: AgendaItem[] = [
         org: "橡子園台灣合夥人",
         slug: "qu-zhi-hao",
       },
-      { name: "韓宗憲", org: "ITIC 創投副總經理", slug: "han-zong-xian" },
+      { name: "韓宗憲", org: "ITIC 創新工業技術移轉公司副總經理", slug: "han-zong-xian" },
       { name: "潘逸凡", org: "豐新資本合夥人", slug: "pan-yi-fan" },
       { name: "鞠志遠", org: "歐姆佳科技創辦人兼 CEO", slug: "ju-zhi-yuan" },
     ],
