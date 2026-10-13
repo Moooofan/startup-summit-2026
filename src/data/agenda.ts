@@ -4,6 +4,7 @@ import { forums, type ForumKey } from "./event";
  * 2026 第四屆年會的逐時段議程表。
  *
  * 事實來源：《第四屆臺灣新創年會_議程總表_0902.xlsx》（業主 2026/9/5 提供）工作表 1。
+ * 講題欄以 2026/10/14 的《年會rounddown.xlsx》為準（該版只動講題，時間與人員未變）。
  * 這一版是真正的 Excel 表格 —— 前一版 0817 的議程在簡報裡是**圖片**、只能肉眼判讀；
  * 0902 改由儲存格逐格讀出，時間與人名的轉錄風險小得多。原表的「分段主持人」欄是
  * 跨列合併的（例如 E4:E11 一格同時涵蓋《焦點創業家分享》與《焦點創業生態機構分享》兩段），
@@ -86,22 +87,15 @@ const founderDay: AgendaItem[] = [
        指示改回各 25 分鐘（09:05-09:30 / 09:30-09:55），與 0902 工作表一致。 */
     time: "09:05–09:30",
     duration: "25min",
-    /* 0916 rounddown 補上真正的講題，取代 0902 表的分類標籤「韓國獨角獸案例 1」。
-       原表把 Entrepreneurs／Entrepreneur 拼成 "Entreprenuers"／"Entreprenuer"，
-       業主 2026/9 指示用正確拼法 —— 檔頭「逐字保留原表寫法」是為了防止我們自己臆造，
-       不是要把已知的錯字印上官網（同「前田南 → 前田陽」的處理）。
-       破折號前後也補了空格：原表 "Venus- Bridging" 只有後方有空格。
-       前綴 "Title: " 是欄位標示、不是講題本身，故不收。 */
-    topic:
-      "Entrepreneurs from Mars, Investors from Venus - Bridging the Gap: Lessons from Both Sides of the Table as an Entrepreneur & Investor",
+    // 1014 rounddown 改為中文題，取代 0916 的英文原題 "Entrepreneurs from Mars, Investors from Venus"。
+    topic: "創業家來自火星，投資人來自金星？從創業與投資雙重視角看彼此的認知差距",
     speakers: [{ name: "Ryan Lee 李昇圭", org: "Pinkfong 聯合創辦人暨執行副總裁", slug: "ryan-lee" }],
   },
   {
     type: "talk",
     time: "09:30–09:55",
     duration: "25min",
-    // 「韓國獨角獸案例 2」是 0902 表的分類標籤、不是講題，業主 2026/10 指示拿掉。
-    // 同段的案例 1 已於 0916 換成真講題，這一則的真講題尚未提供。
+    topic: "打破成見：中小企業數據如何吸引華爾街投資與主權資本",
     speakers: [
       { name: "Kelvin Dongho Kim 金東昊", org: "Korea Credit Data 創辦人兼執行長", slug: "kelvin-kim" },
     ],
@@ -121,6 +115,8 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "10:15–10:35",
     duration: "20min",
+    // 原表「利用AI實現」中英無空格，依站內其他講題慣例補上。
+    topic: "Google Cloud 如何協助新創企業利用 AI 實現海外佈局與商業成功",
     speakers: [{ name: "吳貴融（KJ Wu）", org: "Google Cloud 大中華區新創技術副總", slug: "kj-wu" }],
   },
   {
@@ -148,6 +144,8 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "11:25–11:45",
     duration: "20min",
+    // 原表儲存格是兩行，依楊本豫那列的做法用「／」併成一行。
+    topic: "臺灣證券交易所／打造亞洲創新企業上市首選平臺",
     speakers: [
       { name: "田建中", org: "臺灣證券交易所上市二部經理", slug: "tian-jian-zhong" },
     ],
@@ -179,6 +177,7 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "13:50–14:10",
     duration: "20min",
+    topic: "股感新經濟生態系，用數據驅動永續創新",
     speakers: [{ name: "許郁婷", org: "股感集團共同創辦人暨執行長", slug: "xu-yu-ting" }],
   },
   // 原表這一列印 20min，但起訖是 30min —— 照印不改（見檔頭轉錄原則），待業主校對
@@ -229,15 +228,16 @@ const founderDay: AgendaItem[] = [
     type: "talk",
     time: "16:15–16:35",
     duration: "20min",
+    topic: "從台灣走向亞洲：AI 軟體公司的產品進化與國際化實戰",
     speakers: [{ name: "薛覲", org: "漸強實驗室共同創辦人暨執行長", slug: "xue-jin" }],
   },
   {
     type: "talk",
     time: "16:35–16:55",
     duration: "20min",
-    // 「AI聽懂」中英之間沒有空格，與同一句的「AI 新創」不一致 —— 業主 2026/10 給的原文
-    // 就是這樣，照抄不補字（見檔頭轉錄原則），是否補空格待業主確認。
-    topic: "從佛光山到護國神山台積電，一套 AI聽懂七種行話軟硬整合的台灣 AI 新創實戰",
+    // 1014 rounddown 的寫法，取代業主 2026/10/1 給的「從佛光山到護國神山台積電，一套 AI聽懂…」。
+    // 「AI : 」前後的半形空格照原表。
+    topic: "從佛光山到護國神山。客製化 AI : 聽懂七種產業行話軟硬整合的台灣 AI 新創實戰",
     speakers: [
       { name: "李信宜", org: "愛比科技 IPEVO 總經理兼 Vurbo.ai 共同創辦人", slug: "li-xin-yi" },
     ],
@@ -277,12 +277,14 @@ const investorDay: AgendaItem[] = [
     type: "talk",
     time: "09:05–09:30",
     duration: "25min",
+    topic: "創新而永續",
     speakers: [{ name: "吳思本", org: "緯創資通企業投資辦公室副總經理", slug: "eric-wu" }],
   },
   {
     type: "talk",
     time: "09:30–09:55",
     duration: "25min",
+    topic: "企業創投：策略對齊與營運卓越",
     speakers: [
       { name: "彭志強", org: "UMC Capital 宏誠創投總經理", slug: "peng-zhiqiang" },
     ],
@@ -291,12 +293,14 @@ const investorDay: AgendaItem[] = [
     type: "talk",
     time: "09:55–10:20",
     duration: "25min",
+    topic: "台杉投資科技基金投資策略分享",
     speakers: [{ name: "李一平", org: "台杉投資科技基金執行合夥人", slug: "li-yiping" }],
   },
   {
     type: "talk",
     time: "10:20–10:45",
     duration: "25min",
+    topic: "人工智能市場趨勢與投資機會",
     speakers: [{ name: "彭適辰", org: "美商中經合集團資深合夥人", slug: "sean-peng" }],
   },
   // 原表這一列的時間欄是空的，只印了長度。時間由前後兩場推算：彭適辰 10:45 結束、
@@ -306,19 +310,22 @@ const investorDay: AgendaItem[] = [
     type: "talk",
     time: "10:55–11:20",
     duration: "25min",
+    topic: "超越資本：回歸創投的初心與價值",
     speakers: [{ name: "黃峻樑", org: "峻盛資本創辦人暨管理合夥人", slug: "huang-junliang" }],
   },
   {
     type: "talk",
     time: "11:20–11:45",
     duration: "25min",
+    topic: "穿越週期的陪伴 普訊集團37年的信念與反思",
     speakers: [{ name: "高誌廷", org: "普訊創新合夥人兼總經理、AZ Venture Limited 董事長", slug: "allen-kao" }],
   },
   {
     type: "talk",
     time: "11:45–12:10",
     duration: "25min",
-    topic: "美國太空軍商兩用科技投資趨勢",
+    // 1014 rounddown 改題，舊題為「美國太空軍商兩用科技投資趨勢」。
+    topic: "一場科幻啟發的太空革命，如何通過數據與 AI 找出異類投資機會？",
     speakers: [
       { name: "Poseidon Ho", org: "Outliers Fund 創始合夥人暨 CEO", slug: "poseidon-ho" },
     ],
@@ -332,6 +339,8 @@ const investorDay: AgendaItem[] = [
     /* 0916 rounddown 把這場由 30min 收成 25min，為後面新增的 Panel 讓出時間。 */
     time: "13:30–13:55",
     duration: "25min",
+    // 原表全形冒號後多一個半形空格，視為排版雜訊去掉。
+    topic: "戰勝癌症：當前進展與未來方向",
     speakers: [
       // 姓名與職稱不照 0902 原表（原印「前田南／總裁暨副會長」）—— 業主 2026/9/8 已更正。
       // 檔頭「逐字保留原表寫法」是為了防止我們自己臆造，不是要在業主更正後留著已知的錯字。
@@ -370,18 +379,21 @@ const investorDay: AgendaItem[] = [
     type: "talk",
     time: "14:35–14:55",
     duration: "20min",
+    topic: "跨越市場邊界，探索機會，控制風險",
     speakers: [{ name: "方俊傑", org: "AVA Angels 創辦人暨執行長", slug: "fang-junjie" }],
   },
   {
     type: "talk",
     time: "14:55–15:15",
     duration: "20min",
+    topic: "從外商 GM 到天使投資人，那些用真金白銀換來的事",
     speakers: [{ name: "簡丹", org: "台安傑國際天使投資董事長暨合夥人", slug: "jian-dan" }],
   },
   {
     type: "talk",
     time: "15:15–15:35",
     duration: "20min",
+    topic: "從投一家公司，到配置一個未來。企業家投資社群的進化",
     speakers: [{ name: "陳怡蓉", org: "識富天使會執行長暨聯合創始人", slug: "chen-yi-rong" }],
   },
   {
